@@ -37,4 +37,18 @@ public class UserDAO extends DBContext {
         }
             return null;
     }
+    
+    public void changePassword(String hashedPassword, int userID){
+        try {
+            String sql = "update [user] set password = ? where UserID = ? ";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, hashedPassword);
+            ps.setInt(2, userID);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
 }

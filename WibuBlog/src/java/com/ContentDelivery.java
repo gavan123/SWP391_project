@@ -2,7 +2,7 @@ package com;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import model.Account;
+import model.User;
 import utility.Email;
 
 public class ContentDelivery {
@@ -21,10 +21,10 @@ public class ContentDelivery {
         Email.sendMail(senderName, toAddress, subject, content);
     }
 
-    public static void sendPasswordResetRequest(String toAddress, Account account, String code) {
+    public static void sendPasswordResetRequest(String toAddress, User account, String code) {
         String subject = "Password reset request for account " + account.getUsername();
 
-        String content = "Hi " + account.getDisplayName() + ",\n\n";
+        String content = "Hi " + account.getFullName()+ ",\n\n";
         content += "We have received a request to reset the password for your account " + account.getUsername() + "\n";
         content += "To reset your password, use the code below:\n\n";
         content += code;

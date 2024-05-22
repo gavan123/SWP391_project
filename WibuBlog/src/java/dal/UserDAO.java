@@ -12,7 +12,7 @@ import model.User;
 
 
 public class UserDAO extends DBContext {
-    public ArrayList<User> getUserEmail (String email){
+    public ArrayList<User> getUserByEmail (String email){
         try {
             String sql = "select * from [user] where email = ?";
             PreparedStatement ps = connection.prepareStatement(sql);

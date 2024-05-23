@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -38,7 +39,7 @@ public class VerificationRegister extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet VerificationRegister</title>");            
+            out.println("<title>Servlet VerificationRegister</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet VerificationRegister at " + request.getContextPath() + "</h1>");
@@ -47,27 +48,32 @@ public class VerificationRegister extends HttpServlet {
         }
     }
 
-    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String verificationCode = request.getParameter("code");
-        String codeEntered = request.getParameter("codeEntered");
-        if (codeEntered.equals(verificationCode)){
-            
-        }
-        HttpSession session = request.getSession();
-        User user = (User)session.getAttribute("newUser");
-    }
-
-   
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        UserDAO ud = new UserDAO();
+        String verificationCode = request.getParameter("template");
+        String input = request.getParameter("response");
+        if (input.equals(verificationCode)) {
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("newUser");
+            ud.addUser(user);
+            session.setAttribute("userid", ud.getUserByEmail(user.getEmail()).getUserId());
+            session.removeAttribute("temporary");
+            request.getRequestDispatcher("home.jsp").forward(request, response);
+        } else {
+            request.setAttribute("template", verificationCode);
+            request.getRequestDispatcher("authenticateRegister.jsp").forward(request, response);
+        }
+
+    }
+
     @Override
     public String getServletInfo() {
         return "Short description";

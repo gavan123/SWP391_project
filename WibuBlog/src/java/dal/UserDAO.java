@@ -83,8 +83,8 @@ public class UserDAO extends DBContext {
             return false;
         }
     }
-    
-    public void changePassword(String hashedPassword, int userID){
+
+    public void changePassword(String hashedPassword, int userID) {
         try {
             String sql = "update [user] set password = ? where UserID = ? ";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -95,14 +95,10 @@ public class UserDAO extends DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
-<<<<<<< Updated upstream
-    
-}
-=======
-    public User getUserByUsername(String username){
+
+    public User getUserByUsername(String username) {
         try {
             String sql = "select from [user] where username = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -125,5 +121,8 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-}    
->>>>>>> Stashed changes
+    
+    public void addUser(User user) {
+        
+    }
+}

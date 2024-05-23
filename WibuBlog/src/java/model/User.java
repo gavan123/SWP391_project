@@ -19,7 +19,7 @@ public class User {
     private String fullName;
     private int rankId;
 
-    public User(int aInt, String string, String string1, int aInt1, int aInt2) {
+    public User() {
     }
 
     public User(int userId, String username, String passwordHash, int roleId, int point, String status, String email, String fullName, int rankId) {

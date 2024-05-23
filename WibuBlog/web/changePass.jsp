@@ -14,7 +14,9 @@
     </head>
     <body>
         <h1>Change Password</h1>
-        
+        <c:if test="${not empty errorMessage}">
+            <p style="color:red;">${errorMessage}</p>
+        </c:if>
         <form action="ResetPassword" method="post">
             <div>
                 <label for="username">UserID:</label>

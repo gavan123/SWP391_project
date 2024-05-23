@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.User;
 import security.Hash;
 
 /**
@@ -38,7 +39,7 @@ public class ResetPassword extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ResetPassword</title>");            
+            out.println("<title>Servlet ResetPassword</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet ResetPassword at " + request.getContextPath() + "</h1>");
@@ -72,20 +73,19 @@ public class ResetPassword extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {       
+            throws ServletException, IOException {
+        UserDAO userDAO = new UserDAO();
+        int userID = Integer.parseInt(request.getParameter("userID"));
         String newPassword = request.getParameter("newPassword");
-        if (newPassword.equals(request.getParameter("newConfirmedPassword"))){
+        
+        if (newPassword.equals(request.getParameter("newConfirmedPassword"))) {
             String hashedPassword = Hash.getHash(newPassword);
-            int userID = Integer.parseInt(request.getParameter("userID"));
-            UserDAO userDAO = new UserDAO();
             userDAO.changePassword(hashedPassword, userID);
             String message = "Password changed sucessfully please re-login.";
-            request.getRequestDispatcher("Login.jsp").forward(request, response);
-        }
-        else{
-            int userID = Integer.parseInt(request.getParameter("userID"));
+            request.getRequestDispatcher("index.html").forward(request, response);
+        } else {
             String errorMessage = "Confirmed password incorrect, please try again!";
-            request.getRequestDispatcher("ForgotPassword2.jsp").forward(request, response);
+            request.getRequestDispatcher("changePass.jsp").forward(request, response);
         }
     }
 

@@ -4,7 +4,6 @@
  */
 package controller;
 
-import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,64 +11,66 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import security.Hash;
+import jakarta.servlet.http.HttpSession;
+import model.User;
 
 /**
  *
  * @author mindc
  */
-@WebServlet(name = "ResetPassword", urlPatterns = {"/ResetPassword"})
-public class ResetPassword extends HttpServlet {
+@WebServlet(name = "VerificationRegister", urlPatterns = {"/VerificationRegister"})
+public class VerificationRegister extends HttpServlet {
 
-   
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-           
+            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ResetPassword</title>");            
+            out.println("<title>Servlet VerificationRegister</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ResetPassword at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet VerificationRegister at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
-   
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String verificationCode = request.getParameter("code");
+        String codeEntered = request.getParameter("codeEntered");
+        if (codeEntered.equals(verificationCode)){
+            
+        }
+        HttpSession session = request.getSession();
+        User user = (User)session.getAttribute("newUser");
+    }
+
+   
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
     
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {       
-        String newPassword = request.getParameter("newPassword");
-        if (newPassword.equals(request.getParameter("newConfirmedPassword"))){
-            String hashedPassword = Hash.getHash(newPassword);
-            int userID = Integer.parseInt(request.getParameter("userID"));
-            UserDAO userDAO = new UserDAO();
-            userDAO.changePassword(hashedPassword, userID);
-            String message = "Password changed sucessfully please re-login.";
-            request.getRequestDispatcher("Login.jsp").forward(request, response);
-        }
-        else{
-            int userID = Integer.parseInt(request.getParameter("userID"));
-            String errorMessage = "Confirmed password incorrect, please try again!";
-            request.getRequestDispatcher("ForgotPassword2.jsp").forward(request, response);
-        }
-    }
-
-  
-    @Override
     public String getServletInfo() {
         return "Short description";
-    }
+    }// </editor-fold>
 
 }

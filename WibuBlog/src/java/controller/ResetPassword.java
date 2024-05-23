@@ -85,6 +85,7 @@ public class ResetPassword extends HttpServlet {
             request.getRequestDispatcher("index.html").forward(request, response);
         } else {
             String errorMessage = "Confirmed password incorrect, please try again!";
+             request.setAttribute("errorMessage", errorMessage);
             request.getRequestDispatcher("changePass.jsp").forward(request, response);
         }
     }

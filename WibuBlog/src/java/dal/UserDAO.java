@@ -83,8 +83,8 @@ public class UserDAO extends DBContext {
             return false;
         }
     }
-    
-    public void changePassword(String hashedPassword, int userID){
+
+    public void changePassword(String hashedPassword, int userID) {
         try {
             String sql = "update [user] set password = ? where UserID = ? ";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -95,6 +95,35 @@ public class UserDAO extends DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+    }
+
+    public User getUserByUsername(String username) {
+        try {
+            String sql = "select from [user] where username = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                User user = new User(rs.getInt("UserID"),
+                        rs.getString("Username"),
+                        rs.getString("Password"),
+                        rs.getInt("RoleID"),
+                        rs.getInt("Point"),
+                        rs.getString("Status"),
+                        rs.getString("Email"),
+                        rs.getString("Fullname"),
+                        rs.getInt("RankID"));
+                return user;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+   
+    public void addUser(User user) {
         
     }
-}    
+}
+

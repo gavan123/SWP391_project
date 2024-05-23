@@ -54,7 +54,7 @@ public class ForgotPassword extends HttpServlet {
             String errorMessage = "This email does not exist!";
             request.setAttribute(errorMessage, "errorMessage");
             request.setAttribute(email, "email");
-            request.getRequestDispatcher("forgetpassword.jsp").forward(request, response);
+            request.getRequestDispatcher("ForgetPassword.jsp").forward(request, response);
         }
     }
 
@@ -68,7 +68,7 @@ public class ForgotPassword extends HttpServlet {
         
         if (input.equals(verificationCode)) {
             request.setAttribute(email, "email");
-            request.getRequestDispatcher("resetpassword.jsp").forward(request, response);
+            request.getRequestDispatcher("ResetPassword.jsp").forward(request, response);
         } else {
             String errorMessage = "Incorrect verification code.";
             request.setAttribute(errorMessage, "errorMessage");

@@ -11,7 +11,7 @@ import utility.Email;
  * @author admin
  */
 public class ContentDelivery {
-    public void sendVerificationCode(String from, String to, String code) {
+    public static void sendVerificationCode(String from, String to, String code) {
         Email.sendMail(from, to, "Verification code", code);
     }
 }

@@ -15,8 +15,8 @@
             </c:if>
             <form action="register" method="post" class="form-signup">
                 <h1 class="h3 mb-3 font-weight-normal" style="text-align: center">Register</h1>
-                <input name="user" type="text" id="user-name" class="form-control" placeholder="User name" required="" autofocus=""><br>
-                <input name="pass" type="password" id="user-pass" class="form-control" placeholder="Password" required autofocus=""><br>
+                <input name="user" type="text" id="username" class="form-control" placeholder="Username" required="" autofocus=""><br>
+                <input name="pass" type="password" id="userpass" class="form-control" placeholder="Password" required autofocus=""><br>
                 <input name="email" type="email" id="email" class="form-control" placeholder="Email" required="" autofocus=""><br>
                 <input name="fullName" type="text" id="fullName" class="form-control" placeholder="Full Name" required="" autofocus=""><br>
                 <div class="form-check">

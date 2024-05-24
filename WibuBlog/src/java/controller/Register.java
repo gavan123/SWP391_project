@@ -82,7 +82,7 @@ public class Register extends HttpServlet {
             session.setAttribute("temporary", true);
 
             // Forward the request to authenticateRegister.jsp
-            request.getRequestDispatcher("verifyemail.jsp").forward(request, response);
+            request.getRequestDispatcher("verificationRegister.jsp").forward(request, response);
         }
     }
 }

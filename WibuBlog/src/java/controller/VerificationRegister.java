@@ -69,7 +69,7 @@ public class VerificationRegister extends HttpServlet {
             request.getRequestDispatcher("home.jsp").forward(request, response);
         } else {
             request.setAttribute("template", verificationCode);
-            request.getRequestDispatcher("verifyemail.jsp").forward(request, response);
+            request.getRequestDispatcher("verificationRegister.jsp").forward(request, response);
         }
 
     }

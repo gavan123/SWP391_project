@@ -97,19 +97,13 @@ public class Login extends HttpServlet {
 //            }
             if (userRole != null) {
                 switch (userRole) {
-                    case "Admin":
-                        response.sendRedirect("Admin.jsp");
-                        break;
-                    case "Mod":
-                        response.sendRedirect("Mod.jsp");
-                        break;
-                    case "Member":
-                        response.sendRedirect("Member.jsp");
-                        break;
-                    default:
+                    case "Admin" -> response.sendRedirect("Admin.jsp");
+                    case "Mod" -> response.sendRedirect("Mod.jsp");
+                    case "Member" -> response.sendRedirect("Member.jsp");
+                    default -> {
                         request.setAttribute("errorMessage", "User role not recognized.");
                         request.getRequestDispatcher("Login.jsp").forward(request, response);
-                        break;
+                    }
                 }
             }
         } else {

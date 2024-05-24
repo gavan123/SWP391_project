@@ -4,18 +4,20 @@
  */
 package controller;
 
-
 import dal.LoginDAO;
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.User;
 import org.apache.tomcat.util.buf.MessageBytes;
 import security.Hash;
 
@@ -57,7 +59,6 @@ public class Login extends HttpServlet {
         request.getRequestDispatcher("Login.jsp").forward(request, response);
     }
 
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -78,17 +79,38 @@ public class Login extends HttpServlet {
         String userRole = dao.getUserRole(username);
 
         if (hashedPassword != null && hashedPassword.equals(hashedInputPassword)) {
+            HttpSession session = request.getSession();
+            UserDAO userdao = new UserDAO();
+            User user = userdao.getUserByUsername(username);
+            session.setAttribute("user", user);
 
-            if (userRole != null && userRole.equals("Admin")) {
-                // Redirect to Admin
-                response.sendRedirect("Admin.jsp");
-            } else if (userRole != null && userRole.equals("Mod")) {
-                // Redirect to Mod
-                response.sendRedirect("Mod.jsp");
-            } else if (userRole != null && userRole.equals("Member")) {
-                // Redirect to guest Member
-                response.sendRedirect("Member.jsp");
-
+//            if (userRole != null && userRole.equals("Admin")) {
+//                // Redirect to Admin
+//                response.sendRedirect("Admin.jsp");
+//            } else if (userRole != null && userRole.equals("Mod")) {
+//                // Redirect to Mod
+//                response.sendRedirect("Mod.jsp");
+//            } else if (userRole != null && userRole.equals("Member")) {
+//                // Redirect to guest Member
+//                response.sendRedirect("Member.jsp");
+//
+//            }
+            if (userRole != null) {
+                switch (userRole) {
+                    case "Admin":
+                        response.sendRedirect("Admin.jsp");
+                        break;
+                    case "Mod":
+                        response.sendRedirect("Mod.jsp");
+                        break;
+                    case "Member":
+                        response.sendRedirect("Member.jsp");
+                        break;
+                    default:
+                        request.setAttribute("errorMessage", "User role not recognized.");
+                        request.getRequestDispatcher("Login.jsp").forward(request, response);
+                        break;
+                }
             }
         } else {
             request.setAttribute("errorMessage", "Login failed! Invalid username or password.");

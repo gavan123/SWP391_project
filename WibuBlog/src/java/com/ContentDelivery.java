@@ -16,4 +16,9 @@ public class ContentDelivery {
         Email.sendMail(from, to, "Verification code", code);
 
     }
+    
+    public static void sendVerificationCode(String to, String code) {
+        Email.sendMail("wibi", to, "Verification code", code);
+
+    }
 }

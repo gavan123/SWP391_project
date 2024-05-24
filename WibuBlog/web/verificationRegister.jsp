@@ -1,28 +1,54 @@
-<%-- 
-    Document   : verifyemail
-    Created on : 3 Mar 2024, 13:42:45
-    Author     : admin
---%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page import="java.util.List"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Verify your email</title>
-        <link rel="stylesheet" href="css/stylesheet.css">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Wibi Burotsugu - Verify Email</title>
+
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+
+        <!-- Core CSS -->
+        <link href="assets/css/app.min.css" rel="stylesheet">
     </head>
+
     <body>
-        <p>A 6-digit verification code has been sent to your email. Please enter the code below to complete the verification process: </p>
-        
-        <form action="verificationRegister" method="post">
-            <input type="text" id="usernameField" name="username" required="required" hidden="hidden" >
-            <input type="text" name="template" hidden="hidden" required="required" value="<%= request.getAttribute("template") %>">
-            <label for="responseField"><input type="text" name="response" id="responseField" required="required"></label>
-            <p style="color : red">${requestScope.error}</p>
-            <button type="submit">Submit</button>
-        </form>
+        <div class="app">
+            <div class="container-fluid p-h-0 p-v-20 bg full-height d-flex" style="background-image: url('assets/images/others/login-3.png')">
+                <div class="d-flex flex-column justify-content-between w-100">
+                    <div class="container d-flex h-100">
+                        <div class="row align-items-center w-100">
+                            <div class="col-md-7 col-lg-5 m-h-auto">
+                                <div class="card shadow-lg">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center justify-content-end m-b-30">
+                                            <h2 class="m-b-0">Verify Email</h2>
+                                        </div>
+                                        <form action="verificationRegister" method="post">
+                                            <input type="text" id="usernameField" name="username" required="required" hidden="hidden" >
+                                            <input type="text" name="template" hidden="hidden" required="required" value="<%= request.getAttribute("template") %>">
+                                            <div class="form-group">
+                                                <label class="font-weight-semibold" for="responseField">Enter verification code:</label>
+                                                <input type="text" class="form-control" id="responseField" name="response" required>
+                                            </div>
+                                            <p style="color : red">${requestScope.error}</p>
+                                            <button class="btn btn-primary" type="submit">Submit</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Core Vendors JS -->
+        <script src="assets/js/vendors.min.js"></script>
+
+        <!-- Core JS -->
+        <script src="assets/js/app.min.js"></script>
     </body>
+
 </html>

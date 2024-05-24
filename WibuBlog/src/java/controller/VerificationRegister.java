@@ -19,7 +19,7 @@ import model.User;
  *
  * @author mindc
  */
-@WebServlet(name = "VerificationRegister", urlPatterns = {"/VerificationRegister"})
+@WebServlet(name = "VerificationRegister", urlPatterns = {"/verificationRegister"})
 public class VerificationRegister extends HttpServlet {
 
     /**

@@ -7,9 +7,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page import="java.util.List"%>
-<%@page import="model.Product"%>
-<%@page import="model.Account"%>
-<%@page import="dal.AccountDAO"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -20,8 +17,8 @@
     <body>
         <p>A 6-digit verification code has been sent to your email. Please enter the code below to complete the verification process: </p>
         
-        <form action="VerificationRegister" method="post">
-            <input type="text" id="usernameField" name="username" required="required" hidden="hidden" value="<%= a.getUsername() %>">
+        <form action="verificationRegister" method="post">
+            <input type="text" id="usernameField" name="username" required="required" hidden="hidden" >
             <input type="text" name="template" hidden="hidden" required="required" value="<%= request.getAttribute("template") %>">
             <label for="responseField"><input type="text" name="response" id="responseField" required="required"></label>
             <p style="color : red">${requestScope.error}</p>

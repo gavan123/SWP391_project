@@ -20,7 +20,7 @@
     <body>
         <p>A 6-digit verification code has been sent to your email. Please enter the code below to complete the verification process: </p>
         
-        <form action="verifyemail" method="post">
+        <form action="VerificationRegister" method="post">
             <input type="text" id="usernameField" name="username" required="required" hidden="hidden" value="<%= a.getUsername() %>">
             <input type="text" name="template" hidden="hidden" required="required" value="<%= request.getAttribute("template") %>">
             <label for="responseField"><input type="text" name="response" id="responseField" required="required"></label>

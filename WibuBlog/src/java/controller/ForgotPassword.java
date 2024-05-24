@@ -40,20 +40,32 @@ public class ForgotPassword extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String email = request.getParameter("email");
-        UserDAO ud = new UserDAO();
 
-        if (ud.emailExists(email)) {
+        // Retrieve the email parameter from the request
+        String email = request.getParameter("email");
+        UserDAO userDao = new UserDAO();
+
+        // Check if the email exists in the database
+        if (userDao.emailExists(email)) {
+            // Generate a verification code
             String verificationCode = KeyGenerator.generateVerificationCode();
+
+            // Send the verification code to the user's email
             ContentDelivery.sendVerificationCode(email, verificationCode);
+
+            // Set email and verification code as request attributes
             request.setAttribute("email", email);
             request.setAttribute("template", verificationCode);
+
+            // Forward the request to Authenticate.jsp
             request.getRequestDispatcher("Authenticate.jsp").forward(request, response);
         } else {
+            // If the email does not exist, set an error message
             String errorMessage = "This email does not exist!";
-            request.setAttribute(errorMessage, "errorMessage");
-            request.setAttribute(email, "email");
+            request.setAttribute("errorMessage", errorMessage);
+            request.setAttribute("email", email);
+
+            // Forward the request to ForgotPassword.jsp
             request.getRequestDispatcher("ForgotPassword.jsp").forward(request, response);
         }
     }
@@ -61,18 +73,22 @@ public class ForgotPassword extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
+        // Retrieve parameters from the request
         String email = request.getParameter("email");
         String verificationCode = request.getParameter("template");
         String input = request.getParameter("response");
-        
+
+        // Check if the input verification code matches the expected verification code
         if (input.equals(verificationCode)) {
-            request.setAttribute(email, "email");
+            // If verification is successful, forward to ResetPassword.jsp
+            request.setAttribute("email", email);
             request.getRequestDispatcher("ResetPassword.jsp").forward(request, response);
         } else {
+            // If verification fails, set an error message and forward to Authenticate.jsp
             String errorMessage = "Incorrect verification code.";
-            request.setAttribute(errorMessage, "errorMessage");
-            request.setAttribute(email, "email");
+            request.setAttribute("errorMessage", errorMessage);
+            request.setAttribute("email", email);
             request.setAttribute("template", verificationCode);
             request.getRequestDispatcher("Authenticate.jsp").forward(request, response);
         }

@@ -33,7 +33,7 @@ public class Register extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String email = request.getParameter("email");
-        String fullName = request.getParameter("fullName");
+        String fullName = request.getParameter("fullname");
         UserDAO ud = new UserDAO();
         if (ud.emailExists(email)) {
             String errorMessage = "This email existed!";

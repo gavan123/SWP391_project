@@ -11,7 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import com.ContentDelivery;
+
 import utility.KeyGenerator;
 import dal.UserDAO;
 import model.User;
@@ -46,15 +46,15 @@ public class ForgotPassword extends HttpServlet {
 
         if (ud.emailExists(email)) {
             String verificationCode = KeyGenerator.generateVerificationCode();
-            ContentDelivery.sendVerificationCode("Verification code", email, verificationCode);
+            ContentDelivery.sendVerificationCode(email, verificationCode);
             request.setAttribute("email", email);
             request.setAttribute("template", verificationCode);
-            request.getRequestDispatcher("authenticate.jsp").forward(request, response);
+            request.getRequestDispatcher("Authenticate.jsp").forward(request, response);
         } else {
             String errorMessage = "This email does not exist!";
             request.setAttribute(errorMessage, "errorMessage");
             request.setAttribute(email, "email");
-            request.getRequestDispatcher("ForgetPassword.jsp").forward(request, response);
+            request.getRequestDispatcher("ForgotPassword.jsp").forward(request, response);
         }
     }
 
@@ -74,7 +74,7 @@ public class ForgotPassword extends HttpServlet {
             request.setAttribute(errorMessage, "errorMessage");
             request.setAttribute(email, "email");
             request.setAttribute("template", verificationCode);
-            request.getRequestDispatcher("authenticate.jsp").forward(request, response);
+            request.getRequestDispatcher("Authenticate.jsp").forward(request, response);
         }
 
     }

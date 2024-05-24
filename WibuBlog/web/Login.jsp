@@ -1,17 +1,17 @@
 
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Enlink - Admin Dashboard Template</title>
-
+        <title>Login</title>
         <!-- Favicon -->
         <link rel="shortcut icon" href="assets/images/logo/favicon.png">
-
         <!-- page css -->
-
         <!-- Core css -->
         <link href="assets/css/app.min.css" rel="stylesheet">
 
@@ -26,15 +26,18 @@
                             <div class="col-md-7 col-lg-5 m-h-auto">
                                 <div class="card shadow-lg">
                                     <div class="card-body">
+                                        <c:if test="${not empty errorMessage}">
+                                            <p style="color:red">${errorMessage}</p>
+                                        </c:if>
                                         <div class="d-flex align-items-center justify-content-end m-b-30">
                                             <h2 class="m-b-0">Sign In</h2>
                                         </div>
-                                        <form>
+                                            <form action="login" method="post">
                                             <div class="form-group">
                                                 <label class="font-weight-semibold" for="userName">Username:</label>
                                                 <div class="input-affix">
                                                     <i class="prefix-icon anticon anticon-user"></i>
-                                                    <input type="text" class="form-control" id="userName" placeholder="Username">
+                                                    <input type="text" name="username" class="form-control" id="userName" placeholder="Username" required="">
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -42,7 +45,7 @@
                                                 <a class="float-right font-size-13 text-muted" href="ForgotPassword.jsp">Forget Password?</a>
                                                 <div class="input-affix m-b-10">
                                                     <i class="prefix-icon anticon anticon-lock"></i>
-                                                    <input type="password" class="form-control" id="password" placeholder="Password">
+                                                    <input type="password" name="password" class="form-control" id="password" placeholder="Password" required="">
                                                 </div>
                                             </div>
                                             <div class="form-group">

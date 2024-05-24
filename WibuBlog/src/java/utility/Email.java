@@ -15,6 +15,8 @@ public class Email {
 
     private static final String username = "noreply.pmarket@gmail.com";
     private static final String password = "ujdr bcbp ujuq yhkt";
+//    private static final String username = "anhnhhe163247@fpt.edu.vn";
+//    private static final String password = "uptx rpjz bhry jztw";
 
     private static void sendMailTLS(String senderName, String toAddress, String subject, String text) throws UnsupportedEncodingException {
 
@@ -94,7 +96,7 @@ public class Email {
             uee.printStackTrace();
         }
     }
-    
+
     public static void sendMail(String fromAddress, String toAddress, String subject, String text, boolean legacyAuthMode) {
         if (legacyAuthMode) {
             try {

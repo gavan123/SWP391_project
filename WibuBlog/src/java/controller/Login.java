@@ -9,22 +9,19 @@ import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.User;
-import org.apache.tomcat.util.buf.MessageBytes;
 import security.Hash;
 
 /**
  *
  * @author minht
  */
+@WebServlet(name = "LoginController", urlPatterns = {"/login"})
 public class Login extends HttpServlet {
 
     /**
@@ -69,7 +66,6 @@ public class Login extends HttpServlet {
         if (username == null || password == null) {
             request.setAttribute("errorMessage", "Username or password is empty!");
             request.getRequestDispatcher("Login.jsp").forward(request, response);
-            return;
         }
 
         String hashedInputPassword = Hash.getHash(password);
@@ -97,9 +93,9 @@ public class Login extends HttpServlet {
 //            }
             if (userRole != null) {
                 switch (userRole) {
-                    case "Admin" -> response.sendRedirect("Admin.jsp");
-                    case "Mod" -> response.sendRedirect("Mod.jsp");
-                    case "Member" -> response.sendRedirect("Member.jsp");
+                    case "Admin" -> response.sendRedirect("home.jsp");
+                    case "Mod" -> response.sendRedirect("home.jsp");
+                    case "Member" -> response.sendRedirect("home.jsp");
                     default -> {
                         request.setAttribute("errorMessage", "User role not recognized.");
                         request.getRequestDispatcher("Login.jsp").forward(request, response);

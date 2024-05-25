@@ -22,6 +22,10 @@
                 <label for="username">UserID:</label>
                 <input type="text" id="username" name="userID" required>
             </div>
+             <div>
+                <label for="newPassword">Old Password:</label>
+                <input type="password" id="oldPassword" name="oldPassword" required>
+            </div>
             <div>
                 <label for="newPassword">New Password:</label>
                 <input type="password" id="newPassword" name="newPassword" required>

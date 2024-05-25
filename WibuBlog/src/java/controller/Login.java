@@ -4,25 +4,24 @@
  */
 package controller;
 
-
 import dal.LoginDAO;
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.tomcat.util.buf.MessageBytes;
+import jakarta.servlet.http.HttpSession;
+import model.User;
 import security.Hash;
 
 /**
  *
  * @author minht
  */
+@WebServlet(name = "LoginController", urlPatterns = {"/login"})
 public class Login extends HttpServlet {
 
     /**
@@ -57,7 +56,6 @@ public class Login extends HttpServlet {
         request.getRequestDispatcher("Login.jsp").forward(request, response);
     }
 
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -68,7 +66,6 @@ public class Login extends HttpServlet {
         if (username == null || password == null) {
             request.setAttribute("errorMessage", "Username or password is empty!");
             request.getRequestDispatcher("Login.jsp").forward(request, response);
-            return;
         }
 
         String hashedInputPassword = Hash.getHash(password);
@@ -78,17 +75,32 @@ public class Login extends HttpServlet {
         String userRole = dao.getUserRole(username);
 
         if (hashedPassword != null && hashedPassword.equals(hashedInputPassword)) {
+            HttpSession session = request.getSession();
+            UserDAO userdao = new UserDAO();
+            User user = userdao.getUserByUsername(username);
+            session.setAttribute("user", user);
 
-            if (userRole != null && userRole.equals("Admin")) {
-                // Redirect to Admin
-                response.sendRedirect("Admin.jsp");
-            } else if (userRole != null && userRole.equals("Mod")) {
-                // Redirect to Mod
-                response.sendRedirect("Mod.jsp");
-            } else if (userRole != null && userRole.equals("Member")) {
-                // Redirect to guest Member
-                response.sendRedirect("Member.jsp");
-
+//            if (userRole != null && userRole.equals("Admin")) {
+//                // Redirect to Admin
+//                response.sendRedirect("Admin.jsp");
+//            } else if (userRole != null && userRole.equals("Mod")) {
+//                // Redirect to Mod
+//                response.sendRedirect("Mod.jsp");
+//            } else if (userRole != null && userRole.equals("Member")) {
+//                // Redirect to guest Member
+//                response.sendRedirect("Member.jsp");
+//
+//            }
+            if (userRole != null) {
+                switch (userRole) {
+                    case "Admin" -> response.sendRedirect("home.jsp");
+                    case "Mod" -> response.sendRedirect("home.jsp");
+                    case "Member" -> response.sendRedirect("home.jsp");
+                    default -> {
+                        request.setAttribute("errorMessage", "User role not recognized.");
+                        request.getRequestDispatcher("Login.jsp").forward(request, response);
+                    }
+                }
             }
         } else {
             request.setAttribute("errorMessage", "Login failed! Invalid username or password.");

@@ -59,6 +59,10 @@ public class User {
         return passwordHash.equals(hash);
     }
 
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
     public int getRoleId() {
         return roleId;
     }

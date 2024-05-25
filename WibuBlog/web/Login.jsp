@@ -1,14 +1,21 @@
 
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Enlink - Admin Dashboard Template</title>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Login</title>
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+        <!-- page css -->
+        <!-- Core css -->
+        <link href="assets/css/app.min.css" rel="stylesheet">
 
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+    </head>
 
     <!-- page css -->
 
@@ -16,9 +23,6 @@
     <link href="assets/css/app.min.css" rel="stylesheet">
 
 </head>
-
-<body>
-   
     <body>
         <div class="app">
             <div class="container-fluid p-h-0 p-v-20 bg full-height d-flex" style="background-image: url('assets/images/others/login-3.png')">
@@ -54,23 +58,34 @@
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <span class="font-size-13 text-muted">
                                                         Don't have an account? 
+
                                                         <a class="small" href="Register.jsp"> Register</a>
+
+
                                                     </span>
                                                     <button class="btn btn-primary">Sign In</button>
                                                 </div>
                                             </div>
                                         </form>
-                                   
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    
-    <!-- Core Vendors JS -->
-    <script src="assets/js/vendors.min.js"></script>
 
-    <!-- page js -->
 
-    <!-- Core JS -->
-    <script src="assets/js/app.min.js"></script>
+        <!-- Core Vendors JS -->
+        <script src="assets/js/vendors.min.js"></script>
 
-</body>
+        <!-- page js -->
+
+        <!-- Core JS -->
+        <script src="assets/js/app.min.js"></script>
+
+    </body>
 
 </html>

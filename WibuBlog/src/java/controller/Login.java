@@ -59,50 +59,52 @@ public class Login extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+// Retrieve the username and password from the request parameters
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
+// Check if the username or password is empty and set an error message if true
         if (username == null || password == null) {
             request.setAttribute("errorMessage", "Username or password is empty!");
             request.getRequestDispatcher("Login.jsp").forward(request, response);
         }
 
+// Hash the input password using a utility class
         String hashedInputPassword = Hash.getHash(password);
 
+// Create a DAO object to interact with the database
         LoginDAO dao = new LoginDAO();
+
+// Retrieve the hashed password and user role from the database for the given username
         String hashedPassword = dao.getHashedPassword(username);
         String userRole = dao.getUserRole(username);
 
+// Check if the hashed password from the database matches the hashed input password
         if (hashedPassword != null && hashedPassword.equals(hashedInputPassword)) {
+            // Create a session and set the user attribute if the login is successful
             HttpSession session = request.getSession();
             UserDAO userdao = new UserDAO();
             User user = userdao.getUserByUsername(username);
             session.setAttribute("user", user);
 
-//            if (userRole != null && userRole.equals("Admin")) {
-//                // Redirect to Admin
-//                response.sendRedirect("Admin.jsp");
-//            } else if (userRole != null && userRole.equals("Mod")) {
-//                // Redirect to Mod
-//                response.sendRedirect("Mod.jsp");
-//            } else if (userRole != null && userRole.equals("Member")) {
-//                // Redirect to guest Member
-//                response.sendRedirect("Member.jsp");
-//
-//            }
+            // Redirect the user to the appropriate home page based on their role
             if (userRole != null) {
                 switch (userRole) {
-                    case "Admin" -> response.sendRedirect("home.jsp");
-                    case "Mod" -> response.sendRedirect("home.jsp");
-                    case "Member" -> response.sendRedirect("home.jsp");
+                    case "Admin" ->
+                        response.sendRedirect("Home.jsp");
+                    case "Mod" ->
+                        response.sendRedirect("Home.jsp");
+                    case "Member" ->
+                        response.sendRedirect("Home.jsp");
                     default -> {
+                        // Set an error message if the user role is not recognized
                         request.setAttribute("errorMessage", "User role not recognized.");
                         request.getRequestDispatcher("Login.jsp").forward(request, response);
                     }
                 }
             }
         } else {
+            // Set an error message if the login fails due to invalid username or password
             request.setAttribute("errorMessage", "Login failed! Invalid username or password.");
             request.getRequestDispatcher("Login.jsp").forward(request, response);
         }

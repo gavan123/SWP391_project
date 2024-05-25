@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jspT/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -54,7 +54,7 @@
                                                 <div class="d-flex align-items-center justify-content-between p-t-15">
                                                     <div class="checkbox">
                                                         <input type="checkbox" class="form-check-input" id="agreed" name="agreed" required>
-                                                        <label for="agreed"><span>I have read the <a href="terms.jsp">agreement</a></span></label>
+                                                        <label for="agreed"><span>I have read the <a href="Terms.jsp">agreement</a></span></label>
                                                     </div>
                                                     <button class="btn btn-primary" type="submit"><i class="fas fa-user-plus"></i> Sign Up</button>
                                                 </div>

@@ -76,13 +76,13 @@ public class ResetPassword extends HttpServlet {
                 // Set error message for password mismatch
                 String errorMessage = "Confirmed password incorrect, please try again!";
                 request.setAttribute("errorMessage", errorMessage);
-                request.getRequestDispatcher("changePass.jsp").forward(request, response);
+                request.getRequestDispatcher("ChangePass.jsp").forward(request, response);
             }
         } else {
             // Set error message for incorrect old password
             String errorMessage = "Old password is incorrect, please try again!";
             request.setAttribute("errorMessage", errorMessage);
-            request.getRequestDispatcher("changePass.jsp").forward(request, response);
+            request.getRequestDispatcher("ChangePass.jsp").forward(request, response);
         }
     }
 

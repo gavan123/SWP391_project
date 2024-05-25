@@ -84,17 +84,17 @@ public class VerificationRegister extends HttpServlet {
                 session.removeAttribute("temporary");
 
                 // Forward the request to home.jsp
-                request.getRequestDispatcher("home.jsp").forward(request, response);
+                request.getRequestDispatcher("Home.jsp").forward(request, response);
             } else {
                 // If no new user found in session, redirect to an error page or show an error message
                 request.setAttribute("errorMessage", "No user found in session.");
-                request.getRequestDispatcher("error.jsp").forward(request, response);
+                request.getRequestDispatcher("index.html").forward(request, response);
             }
         } else {
             // If verification fails, set the verification code as a request attribute and forward back to verification page
             request.setAttribute("template", expectedVerificationCode);
             request.setAttribute("errorMessage", "Verification code does not match.");
-            request.getRequestDispatcher("verificationRegister.jsp").forward(request, response);
+            request.getRequestDispatcher("VerificationRegister.jsp").forward(request, response);
         }
     }
 

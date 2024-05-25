@@ -66,20 +66,20 @@ public class Register extends HttpServlet {
         } // If all validations pass
         else {
             // Generate a verification code
-            String verificationCode = KeyGenerator.generateVerificationCode();
+            verificationCode = KeyGenerator.generateVerificationCode();
             // Send verification code to the user's email
-            ContentDelivery.sendVerificationCode("test", email, verificationCode);
+            ContentDelivery.sendVerificationCode("AnimeBlogBro", email, verificationCode);
 
             // Create a new User object
-            User user = new User(0, username, password, 3, 0, "active", email, fullName, 1);
+            User user = new User(username, password, 3, 0, "active", email, fullName, 1);
 
             // Set the new user as a request attribute
-            request.setAttribute("newUser", user);
+            //request.setAttribute("newUser", user);
 
             // Get the current session and set user attributes
             HttpSession session = request.getSession();
-            session.setAttribute("user", user);
-            session.setAttribute("temporary", true);
+            session.setAttribute("newUser", user);
+            session.setAttribute("temporary", verificationCode);
 
             // Forward the request to authenticateRegister.jsp
             request.getRequestDispatcher("VerificationRegister.jsp").forward(request, response);

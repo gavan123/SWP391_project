@@ -22,6 +22,17 @@ public class User {
     public User() {
     }
 
+    public User(String username, String passwordHash, int roleId, int point, String status, String email, String fullName, int rankId) {
+        this.username = username;
+        this.passwordHash = passwordHash;
+        this.roleId = roleId;
+        this.point = point;
+        this.status = status;
+        this.email = email;
+        this.fullName = fullName;
+        this.rankId = rankId;
+    }
+
     public User(int userId, String username, String passwordHash, int roleId, int point, String status, String email, String fullName, int rankId) {
         this.userId = userId;
         this.username = username;

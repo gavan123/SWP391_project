@@ -26,8 +26,6 @@
                                             <h2 class="m-b-0">Verify Email</h2>
                                         </div>
                                         <form action="verificationRegister" method="post">
-                                            <input type="text" id="usernameField" name="username" required="required" hidden="hidden" >
-                                            <input type="text" name="template" hidden="hidden" required="required" value="<%= request.getAttribute("template") %>">
                                             <div class="form-group">
                                                 <label class="font-weight-semibold" for="responseField">Enter verification code:</label>
                                                 <input type="text" class="form-control" id="responseField" name="response" required>

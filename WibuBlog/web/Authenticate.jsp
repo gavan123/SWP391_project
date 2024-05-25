@@ -36,7 +36,7 @@
                                             <label class="font-weight-semibold" for="code">Enter verification code</label>
                                             <div class="input-affix">
                                                 <i class="prefix-icon anticon anticon-user"></i>
-                                                <input type="text" class="form-control" id="code" placeholder="Enter code here" oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="6" name="code">
+                                                <input type="text" class="form-control" name="code" id="code" placeholder="Enter code here" oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="6" required="">
                                                 <input type="hidden" value="${email}" name="email">
                                             </div>
                                         </div>                                     

@@ -32,12 +32,18 @@
                                     </div>
                                     <form action="ForgotPassword" method="post">
                                         <div class="form-group">
-                                            <label class="font-weight-semibold" for="userName">Enter verification code</label>
+                                              
+                                            <label class="font-weight-semibold" for="userName">Enter verification code</label>                                         
                                             <div class="input-affix">
                                                 <i class="prefix-icon anticon anticon-user"></i>
-                                                <input type="text" class="form-control" id="userName" placeholder="Enter code here" oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="6" name="email">
+                                                <input type="text" class="form-control" id="userName" placeholder="Enter code here" oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="6" name="response">
                                                 <input type="hidden" value="${email}" name="email">
+                                                <input type="hidden" value="${template}" name="template">
+                                                
                                             </div>
+                                                <% if (request.getAttribute("errorMessage") != null) { %>
+                                            <p style="color: red"><%=request.getAttribute("errorMessage")%></p>
+                                            <%}%>
                                         </div>                                     
                                         <div class="form-group">
                                             <div class="d-flex align-items-center justify-content-between">

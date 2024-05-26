@@ -27,8 +27,7 @@
                         <div class="col-md-7 col-lg-5 m-h-auto">
                             <div class="card shadow-lg">
                                 <div class="card-body">
-                                    <div class="d-flex align-items-center justify-content-between m-b-30">
-                                        <img class="img-fluid" alt="" src="assets/images/logo/logo.png">
+                                    <div class="d-flex align-items-center justify-content-end m-b-30">
                                         <h2 class="m-b-0">Authenticate</h2>
                                     </div>
                                     <form action="forgotAuthenthicate" method="post">

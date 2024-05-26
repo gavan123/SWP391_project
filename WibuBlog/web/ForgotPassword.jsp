@@ -33,7 +33,7 @@
                                         <div class="d-flex align-items-center justify-content-end m-b-30">
                                             <h2 class="m-b-0">Forget Password</h2>
                                         </div>
-                                        <form action="ForgotPassword" method="get">
+                                        <form action="ForgotPassword" method="post">
                                             <div class="form-group">
                                                 <label class="font-weight-semibold" for="userName">Email</label>
                                                 <div class="input-affix">

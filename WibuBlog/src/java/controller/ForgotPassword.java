@@ -16,6 +16,7 @@ import utility.KeyGenerator;
 import dal.UserDAO;
 import model.User;
 import com.ContentDelivery;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet(name = "ForgotPassword", urlPatterns = {"/ForgotPassword"})
 public class ForgotPassword extends HttpServlet {
@@ -55,6 +56,8 @@ public class ForgotPassword extends HttpServlet {
 
             // Set email and verification code as request attributes
             request.setAttribute("email", email);
+            HttpSession session = request.getSession();
+            session.setAttribute("template", verificationCode);
             request.setAttribute("template", verificationCode);
 
             // Forward the request to Authenticate.jsp

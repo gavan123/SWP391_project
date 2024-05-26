@@ -63,14 +63,14 @@ public class VerificationRegister extends HttpServlet {
         // Retrieve the verification code and user input from the request
         String expectedVerificationCode = request.getParameter("template");
         String userInputCode = request.getParameter("response");
-
+        
         // Check if the input verification code matches the expected verification code
         if (userInputCode != null && userInputCode.equals(expectedVerificationCode)) {
             // Get the current session
             HttpSession session = request.getSession();
 
             // Retrieve the new user from the session
-            User newUser = (User) session.getAttribute("newUser");
+            User newUser = (User)session.getAttribute("newUser");
 
             if (newUser != null) {
                 // Add the new user to the database
@@ -82,13 +82,14 @@ public class VerificationRegister extends HttpServlet {
 
                 // Remove the temporary attribute from the session
                 session.removeAttribute("temporary");
-
+                session.removeAttribute("newUser");
+                request.setAttribute("message", "Account signed up successfully, please re-login");
                 // Forward the request to home.jsp
-                request.getRequestDispatcher("Home.jsp").forward(request, response);
+                request.getRequestDispatcher("Login.jsp").forward(request, response);
             } else {
                 // If no new user found in session, redirect to an error page or show an error message
                 request.setAttribute("errorMessage", "No user found in session.");
-                request.getRequestDispatcher("index.html").forward(request, response);
+                request.getRequestDispatcher("VerificationRegister.jsp").forward(request, response);
             }
         } else {
             // If verification fails, set the verification code as a request attribute and forward back to verification page

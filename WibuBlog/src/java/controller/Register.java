@@ -76,7 +76,6 @@ public class Register extends HttpServlet {
             // Set the new user as a request attribute
             session.setAttribute("newUser", user);
             // Get the current session and set user attributes       
-            session.setAttribute("user", user);
             session.setAttribute("temporary", true);
             request.setAttribute("template", verificationCode);
             request.setAttribute("email", email);

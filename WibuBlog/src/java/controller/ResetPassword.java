@@ -44,6 +44,7 @@ public class ResetPassword extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        request.getRequestDispatcher("ChangePass.jsp").forward(request, response);
     }
 
     @Override

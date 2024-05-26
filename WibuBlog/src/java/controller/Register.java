@@ -29,6 +29,12 @@ public class Register extends HttpServlet {
     private String verificationCode = "";
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("register.jsp").forward(request, response);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Retrieve parameters from the request
@@ -36,7 +42,7 @@ public class Register extends HttpServlet {
         String password = request.getParameter("password");
         String email = request.getParameter("email");
         String fullName = request.getParameter("fullname");
-        
+
         // Create an instance of UserDAO for database operations
         UserDAO ud = new UserDAO();
 
@@ -64,13 +70,12 @@ public class Register extends HttpServlet {
             String errorMessage = "Invalid password! Password must contain 8-50 characters, one uppercase, one lowercase, and one special character.";
             request.setAttribute("errorMessage", errorMessage);
             request.getRequestDispatcher("register.jsp").forward(request, response);
-        } 
-        else {
+        } else {
             HttpSession session = request.getSession();
             // Generate a verification code
             String verificationCode = KeyGenerator.generateVerificationCode();
             // Send verification code to the user's email
-            ContentDelivery.sendVerificationCode("test", email, verificationCode);        
+            ContentDelivery.sendVerificationCode("test", email, verificationCode);
             // Create a new User object
             User user = new User(0, username, Hash.getHash(password), 3, 0, "active", email, fullName, 1);
             // Set the new user as a request attribute

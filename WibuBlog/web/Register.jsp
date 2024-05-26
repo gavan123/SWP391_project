@@ -44,7 +44,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="font-weight-semibold" for="fullName">Full name:</label>
-                                                <input type="text" name="fullname"class="form-control" id="fullName" placeholder="fullName">
+                                                <input type="text" name="fullname"class="form-control" id="fullName" placeholder="Full Name">
                                             </div>
                                             <div class="form-group">
                                                 <label class="font-weight-semibold" for="password">Password:</label>

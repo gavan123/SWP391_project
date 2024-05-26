@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -30,12 +30,16 @@
                                         <img class="img-fluid" alt="" src="assets/images/logo/logo.png">
                                         <h2 class="m-b-0">Reset Password</h2>
                                     </div>
-                                    <form>
+                                    <form action="ResetPassword" method="post">
+                                         <c:if test="${errorMessage != null}">
+                                                <p style="color: red">${errorMessage}</p>
+                                            </c:if>
+                                                <input type="hidden" value="${email}" name="email">
                                         <div class="form-group">
                                             <label class="font-weight-semibold" for="userName">New password:</label>
                                             <div class="input-affix">
                                                  <i class="prefix-icon anticon anticon-lock"></i>
-                                                 <input type="password" class="form-control" id="userName" placeholder="new password" name="newPassword">
+                                                 <input type="password" class="form-control" id="userName" placeholder="New password" name="newPassword">
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -48,7 +52,7 @@
                                         <div class="form-group">
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <span class="font-size-13 text-muted">                                                 
-                                                    <a class="small" href=""> Return to homepage</a>
+                                                    <a class="small" href="Login.jsp"> Return to login</a>
                                                 </span>
                                                 <button class="btn btn-primary">Next</button>
                                             </div>

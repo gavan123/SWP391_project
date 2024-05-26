@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -33,6 +33,9 @@
                                     <form action="ForgotPassword" method="get">
                                         <div class="form-group">
                                             <label class="font-weight-semibold" for="userName">Email</label>
+                                            <c:if test="${errorMessage != null}">
+                                                <p style="color: red">${errorMessage}</p>
+                                            </c:if>
                                             <div class="input-affix">
                                                 <i class="prefix-icon anticon anticon-user"></i>
                                                 <input type="text" class="form-control" id="userName" placeholder="Email" name="email">
@@ -41,7 +44,7 @@
                                         <div class="form-group">
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <span class="font-size-13 text-muted">                                                    
-                                                    <a class="small" href="">Return to login</a>
+                                                    <a class="small" href="Login.jsp">Return to login</a>
                                                 </span>
                                                     <button class="btn btn-primary">Next</button>
                                             </div>

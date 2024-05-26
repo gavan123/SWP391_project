@@ -37,6 +37,9 @@
                                         </c:if>
                                         <div class="d-flex align-items-center justify-content-end m-b-30">
                                             <h2 class="m-b-0">Sign In</h2>
+                                            <c:if test="${message != null}">
+                                                <p style="color: green">${message}</p>
+                                            </c:if>
                                         </div>
                                             <form action="login" method="post">
                                             <div class="form-group">
@@ -58,12 +61,9 @@
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <span class="font-size-13 text-muted">
                                                         Don't have an account? 
-
-                                                        <a class="small" href="Register.jsp"> Register</a>
-
-
+                                                        <a class="small" href="register.jsp"> Register</a>
                                                     </span>
-                                                    <button class="btn btn-primary">Sign In</button>
+                                                    <button class="btn btn-primary" type="submit">Sign In</button>
                                                 </div>
                                             </div>
                                         </form>

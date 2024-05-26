@@ -97,14 +97,28 @@ public class UserDAO extends DBContext {
         }
 
     }
+    
+     public void changePassword(String hashedPassword, String email) {
+        try {
+            String sql = "update [user] set password = ? where email = ? ";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, hashedPassword);
+            ps.setString(2, email);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
 
     public User getUserByUsername(String username) {
         try {
-            String sql = "select from [user] where username = ?";
+            String sql = "select * from [user] where username = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
+            rs.next();
                 User user = new User(rs.getInt("UserID"),
                         rs.getString("Username"),
                         rs.getString("Password"),
@@ -115,7 +129,7 @@ public class UserDAO extends DBContext {
                         rs.getString("Fullname"),
                         rs.getInt("RankID"));
                 return user;
-            }
+            
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -123,7 +137,18 @@ public class UserDAO extends DBContext {
     }
    
     public void addUser(User user) {
-        
+        try {
+            String sql = "insert into [user] values ( ?, ?, 3, 0,'active',?, ?, 1)";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, user.getUsername());
+            ps.setString(2,user.getPasswordHash());
+            ps.setString(3,user.getEmail());
+            ps.setString(4,user.getFullName());
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
 

@@ -1,4 +1,6 @@
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,7 +34,9 @@
                                     </div>
                                     <form action="ForgotPassword" method="post">
                                         <div class="form-group">
-                                              
+                                             <c:if test="${email != null}">
+                                                <p style="color: blue">a verification code has been sent to ${email}, please login to your email and prompt the code</p>
+                                            </c:if>
                                             <label class="font-weight-semibold" for="userName">Enter verification code</label>                                         
                                             <div class="input-affix">
                                                 <i class="prefix-icon anticon anticon-user"></i>
@@ -48,7 +52,7 @@
                                         <div class="form-group">
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <span class="font-size-13 text-muted">                                                    
-                                                    <a class="small" href="">Return to login</a>
+                                                    <a class="small" href="Login.jsp">Return to login</a>
                                                 </span>
                                                     <button class="btn btn-primary">Next</button>
                                             </div>

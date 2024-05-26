@@ -3,8 +3,8 @@
     Created on : May 23, 2024, 4:51:02 PM
     Author     : user
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>

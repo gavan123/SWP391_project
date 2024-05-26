@@ -121,9 +121,34 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-   
-    public void addUser(User user) {
-        
-    }
-}
 
+    public void addUser(User user) {
+        PreparedStatement ps = null;
+        try {
+            String sql = "INSERT INTO [user] (Username, Password, RoleID, Point, Status, Email, Fullname, RankID) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPasswordHash());
+            ps.setInt(3, user.getRoleId());
+            ps.setInt(4, user.getPoint());
+            ps.setString(5, user.getStatus());
+            ps.setString(6, user.getEmail());
+            ps.setString(7, user.getFullName());
+            ps.setInt(8, user.getRankId());
+
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException ex) {
+                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+
+}

@@ -52,7 +52,7 @@
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <span class="font-size-13 text-muted">
                                                         Don't have an account? 
-                                                        <a class="small" href="register.jsp"> Register</a>
+                                                        <a class="small" href="Register.jsp"> Register</a>
                                                     </span>
                                                     <button class="btn btn-primary">Sign In</button>
                                                 </div>

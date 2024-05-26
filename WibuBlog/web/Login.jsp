@@ -17,6 +17,12 @@
 
     </head>
 
+    <!-- page css -->
+
+    <!-- Core css -->
+    <link href="assets/css/app.min.css" rel="stylesheet">
+
+</head>
     <body>
         <div class="app">
             <div class="container-fluid p-h-0 p-v-20 bg full-height d-flex" style="background-image: url('assets/images/others/login-3.png')">
@@ -31,6 +37,9 @@
                                         </c:if>
                                         <div class="d-flex align-items-center justify-content-end m-b-30">
                                             <h2 class="m-b-0">Sign In</h2>
+                                            <c:if test="${message != null}">
+                                                <p style="color: green">${message}</p>
+                                            </c:if>
                                         </div>
                                             <form action="login" method="post">
                                             <div class="form-group">
@@ -54,7 +63,7 @@
                                                         Don't have an account? 
                                                         <a class="small" href="Register.jsp"> Register</a>
                                                     </span>
-                                                    <button class="btn btn-primary">Sign In</button>
+                                                    <button class="btn btn-primary" type="submit">Sign In</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -66,6 +75,7 @@
                 </div>
             </div>
         </div>
+
 
 
         <!-- Core Vendors JS -->

@@ -27,7 +27,7 @@ public class UserDAO extends DBContext {
                         rs.getString("Email"),
                         rs.getString("Fullname"),
                         rs.getInt("RankID"),
-                        rs.getString("ProfilePictureURL"),
+                        rs.getString("ProfilePhoto"),
                         rs.getString("PhoneNumber"),
                         rs.getTimestamp("DateOfBirth").toLocalDateTime(),
                         rs.getTimestamp("CreationDate").toLocalDateTime());
@@ -56,7 +56,7 @@ public class UserDAO extends DBContext {
                         rs.getString("Email"),
                         rs.getString("Fullname"),
                         rs.getInt("RankID"),
-                        rs.getString("ProfilePictureURL"),
+                        rs.getString("ProfilePhoto"),
                         rs.getString("PhoneNumber"),
                         rs.getTimestamp("DateOfBirth").toLocalDateTime(),
                         rs.getTimestamp("CreationDate").toLocalDateTime());
@@ -105,7 +105,7 @@ public class UserDAO extends DBContext {
 
     public User getUserByUsername(String username) {
         try {
-            String sql = "select from [user] where username = ?";
+            String sql = "select *from [user] where username = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, username);
             ResultSet rs = ps.executeQuery();
@@ -118,7 +118,11 @@ public class UserDAO extends DBContext {
                         rs.getString("Status"),
                         rs.getString("Email"),
                         rs.getString("Fullname"),
-                        rs.getInt("RankID"));
+                        rs.getInt("RankID"),
+                        rs.getString("ProfilePhoto"),
+                        rs.getString("PhoneNumber"),
+                        rs.getTimestamp("DateOfBirth").toLocalDateTime(),
+                        rs.getTimestamp("CreationDate").toLocalDateTime());
                 return user;
             }
         } catch (SQLException ex) {

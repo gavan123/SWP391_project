@@ -90,15 +90,12 @@ public class Login extends HttpServlet {
             if (userRole != null) {
                 switch (userRole) {
                     case "Admin":
-                        request.setAttribute("userID", user.getUserId());
                         request.getRequestDispatcher("Home.jsp").forward(request, response);
                         break;
                     case "Mod":
-                        request.setAttribute("userID", user.getUserId());
                         request.getRequestDispatcher("Home.jsp").forward(request, response);
                         break;
                     case "Member":
-                        request.setAttribute("userID", user.getUserId());
                         request.getRequestDispatcher("Home.jsp").forward(request, response);
                         break;
                     default:

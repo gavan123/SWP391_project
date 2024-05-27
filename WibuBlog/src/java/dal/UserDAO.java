@@ -11,14 +11,16 @@ import model.User;
 public class UserDAO extends DBContext {
 
     public User getUserByEmail(String email) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
-            User user = null;
             String sql = "SELECT * FROM [user] WHERE email = ?";
-            PreparedStatement ps = connection.prepareStatement(sql);
+            ps = connection.prepareStatement(sql);
             ps.setString(1, email);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             if (rs.next()) {
-                user = new User(rs.getInt("UserID"),
+                return new User(
+                        rs.getInt("UserID"),
                         rs.getString("Username"),
                         rs.getString("Password"),
                         rs.getInt("RoleID"),
@@ -32,22 +34,26 @@ public class UserDAO extends DBContext {
                         rs.getTimestamp("DateOfBirth").toLocalDateTime(),
                         rs.getTimestamp("CreationDate").toLocalDateTime());
             }
-            return user;
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
         }
         return null;
     }
 
     public User getUserById(int userId) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
-            User user = null;
             String sql = "SELECT * FROM [user] WHERE UserID = ?";
-            PreparedStatement ps = connection.prepareStatement(sql);
+            ps = connection.prepareStatement(sql);
             ps.setInt(1, userId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             if (rs.next()) {
-                user = new User(rs.getInt("UserID"),
+                return new User(
+                        rs.getInt("UserID"),
                         rs.getString("Username"),
                         rs.getString("Password"),
                         rs.getInt("RoleID"),
@@ -61,56 +67,61 @@ public class UserDAO extends DBContext {
                         rs.getTimestamp("DateOfBirth").toLocalDateTime(),
                         rs.getTimestamp("CreationDate").toLocalDateTime());
             }
-            return user;
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
         }
         return null;
     }
 
     public boolean emailExists(String email) {
-        int count = 0;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
             String sql = "SELECT COUNT(UserID) as matching_ids FROM [user] WHERE email = ?";
-            PreparedStatement ps = connection.prepareStatement(sql);
+            ps = connection.prepareStatement(sql);
             ps.setString(1, email);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                count = rs.getInt("matching_ids");
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("matching_ids") == 1;
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
         }
-
-        if (count == 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return false;
     }
 
     public void changePassword(String hashedPassword, int userID) {
+        PreparedStatement ps = null;
         try {
             String sql = "update [user] set password = ? where UserID = ? ";
-            PreparedStatement ps = connection.prepareStatement(sql);
+            ps = connection.prepareStatement(sql);
             ps.setString(1, hashedPassword);
             ps.setInt(2, userID);
             ps.execute();
-            ps.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closePreparedStatement(ps);
         }
-
     }
 
     public User getUserByUsername(String username) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         try {
-            String sql = "select *from [user] where username = ?";
-            PreparedStatement ps = connection.prepareStatement(sql);
+            String sql = "select * from [user] where username = ?";
+            ps = connection.prepareStatement(sql);
             ps.setString(1, username);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                User user = new User(rs.getInt("UserID"),
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return new User(
+                        rs.getInt("UserID"),
                         rs.getString("Username"),
                         rs.getString("Password"),
                         rs.getInt("RoleID"),
@@ -123,10 +134,12 @@ public class UserDAO extends DBContext {
                         rs.getString("PhoneNumber"),
                         rs.getTimestamp("DateOfBirth").toLocalDateTime(),
                         rs.getTimestamp("CreationDate").toLocalDateTime());
-                return user;
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
         }
         return null;
     }
@@ -150,13 +163,7 @@ public class UserDAO extends DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            closePreparedStatement(ps);
         }
     }
 

@@ -24,12 +24,12 @@ public class User {
     private String profilePhoto;
     private String phoneNumber;
     private LocalDateTime dateOfBirth;
-    private LocalDateTime CreationDate;
+    private LocalDateTime creationDate;
 
     public User() {
     }
 
-    public User(int userId, String username, String passwordHash, int roleId, int point, String status, String email, String fullName, int rankId, String profilePhoto, String phoneNumber, LocalDateTime dateOfBirth, LocalDateTime CreationDate) {
+    public User(int userId, String username, String passwordHash, int roleId, int point, String status, String email, String fullName, int rankId, String profilePhoto, String phoneNumber, LocalDateTime dateOfBirth, LocalDateTime creationDate) {
         this.userId = userId;
         this.username = username;
         this.passwordHash = passwordHash;
@@ -42,8 +42,9 @@ public class User {
         this.profilePhoto = profilePhoto;
         this.phoneNumber = phoneNumber;
         this.dateOfBirth = dateOfBirth;
-        this.CreationDate = CreationDate;
+        this.creationDate = creationDate;
     }
+
 
     public User(int userId, String username, String fullName, String profilePhoto, String phoneNumber, LocalDateTime dateOfBirth) {
         this.userId = userId;
@@ -182,11 +183,13 @@ public class User {
     }
 
     public LocalDateTime getCreationDate() {
-        return CreationDate;
+        return creationDate;
     }
 
-    public void setCreationDate(LocalDateTime CreationDate) {
-        this.CreationDate = CreationDate;
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
     }
+
+    
 
 }

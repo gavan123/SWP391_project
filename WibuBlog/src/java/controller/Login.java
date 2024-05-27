@@ -89,19 +89,14 @@ public class Login extends HttpServlet {
             // Redirect the user to the appropriate home page based on their role
             if (userRole != null) {
                 switch (userRole) {
-                    case "Admin":
-                        request.getRequestDispatcher("Home.jsp").forward(request, response);
-                        break;
-                    case "Mod":
-                        request.getRequestDispatcher("Home.jsp").forward(request, response);
-                        break;
-                    case "Member":
-                        request.getRequestDispatcher("Home.jsp").forward(request, response);
-                        break;
-                    default:
+                    case "Admin" -> request.getRequestDispatcher("Home.jsp").forward(request, response);
+                    case "Mod" -> request.getRequestDispatcher("Home.jsp").forward(request, response);
+                    case "Member" -> request.getRequestDispatcher("Home.jsp").forward(request, response);
+                    default -> {
                         // Set an error message if the user role is not recognized
                         request.setAttribute("errorMessage", "User role not recognized.");
                         request.getRequestDispatcher("Login.jsp").forward(request, response);
+                    }
                 }
             }
         } else {

@@ -6,6 +6,8 @@ package dal;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +23,7 @@ public class DBContext {
     public DBContext() {
         try {
             String user = "sa";
-            String pass = "sa";
+            String pass = "123";
             String url = "jdbc:sqlserver://localhost\\SQLEXPRESS:1433;databaseName=SWP391_SU24";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url, user, pass);
@@ -29,10 +31,30 @@ public class DBContext {
             Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-     public static void main(String[] args) {
+
+    protected void closePreparedStatement(PreparedStatement ps) {
+        if (ps != null) {
+            try {
+                ps.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    protected void closeResultSet(ResultSet rs) {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
         DBContext db = new DBContext();
         System.out.println(db);
     }
-    
+
 }

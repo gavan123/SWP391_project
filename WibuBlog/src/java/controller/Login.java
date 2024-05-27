@@ -85,17 +85,22 @@ public class Login extends HttpServlet {
             HttpSession session = request.getSession();
             UserDAO userdao = new UserDAO();
             User user = userdao.getUserByUsername(username);
-            session.setAttribute("user", user);
-            // Redirect the user to the appropriate home page based on their role
-            if (userRole != null) {
-                switch (userRole) {
-                    case "Admin" -> request.getRequestDispatcher("Home.jsp").forward(request, response);
-                    case "Mod" -> request.getRequestDispatcher("Home.jsp").forward(request, response);
-                    case "Member" -> request.getRequestDispatcher("Home.jsp").forward(request, response);
-                    default -> {
-                        // Set an error message if the user role is not recognized
-                        request.setAttribute("errorMessage", "User role not recognized.");
-                        request.getRequestDispatcher("Login.jsp").forward(request, response);
+            if (user != null) {
+                session.setAttribute("user", user);
+                // Redirect the user to the appropriate home page based on their role
+                if (userRole != null) {
+                    switch (userRole) {
+                        case "Admin" ->
+                            request.getRequestDispatcher("Home.jsp").forward(request, response);
+                        case "Mod" ->
+                            request.getRequestDispatcher("Home.jsp").forward(request, response);
+                        case "Member" ->
+                            request.getRequestDispatcher("Home.jsp").forward(request, response);
+                        default -> {
+                            // Set an error message if the user role is not recognized
+                            request.setAttribute("errorMessage", "User role not recognized.");
+                            request.getRequestDispatcher("Login.jsp").forward(request, response);
+                        }
                     }
                 }
             }

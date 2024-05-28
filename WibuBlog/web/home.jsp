@@ -3,6 +3,7 @@
     Created on : May 23, 2024, 4:51:02 PM
     Author     : user
 --%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -28,6 +29,9 @@
             <c:otherwise>
                 <h2>Welcome, <c:out value="${user.username}" />!</h2>
                 <p>Full Name: <c:out value="${user.fullName}" /></p>
+                 <form action="ChangePassword" method="get">
+                    <button type="submit" class="btn btn-primary">Change Password</button>
+                </form>
                 <form action="logout" method="get">
                     <button type="submit" class="btn btn-primary">Logout</button>
                 </form>

@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.User;
 import security.Hash;
 
@@ -48,9 +49,10 @@ public class ChangePassword extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        HttpSession session = request.getSession();
+        User userSession = (User) session.getAttribute("user");
         // Retrieve parameters from the request
-        int userID = Integer.parseInt(request.getParameter("userID"));
+        int userID = userSession.getUserId();
         String oldPassword = request.getParameter("oldPassword");
         String newPassword = request.getParameter("newPassword");
         String newConfirmedPassword = request.getParameter("newConfirmedPassword");

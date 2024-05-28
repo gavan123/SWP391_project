@@ -4,7 +4,7 @@
  */
 package controller;
 
-import com.ContentDelivery;
+import utility.ContentDelivery;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

@@ -60,6 +60,7 @@ public class Logout extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session != null) {
+//            session.removeAttribute("user");
             session.invalidate();
         }
         // Redirect the user to the home page

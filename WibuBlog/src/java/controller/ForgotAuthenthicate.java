@@ -4,7 +4,7 @@
  */
 package controller;
 
-import com.ContentDelivery;
+import utility.ContentDelivery;
 import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;

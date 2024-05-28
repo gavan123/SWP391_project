@@ -14,7 +14,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import utility.KeyGenerator;
 import dal.UserDAO;
-import model.User;
 import utility.ContentDelivery;
 import jakarta.servlet.http.HttpSession;
 

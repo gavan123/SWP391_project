@@ -37,13 +37,6 @@
                                         </div>
                                         <form action="ChangePassword" method="post">
                                             <div class="form-group">
-                                                <label class="font-weight-semibold" for="username">UserID:</label>
-                                                <div class="input-affix">
-                                                    <i class="prefix-icon anticon anticon-user"></i>
-                                                    <input type="text" name="userID" class="form-control" id="username" placeholder="UserID" required>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
                                                 <label class="font-weight-semibold" for="oldPassword">Old Password:</label>
                                                 <div class="input-affix">
                                                     <i class="prefix-icon anticon anticon-lock"></i>

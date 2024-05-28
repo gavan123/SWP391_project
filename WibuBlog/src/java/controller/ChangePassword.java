@@ -43,49 +43,56 @@ public class ChangePassword extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("ChangePass.jsp").forward(request, response);
+        request.getRequestDispatcher("changePass.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Get the session from the request
         HttpSession session = request.getSession();
+
+        // Check if the user is logged in by checking the session
+        if (session.getAttribute("user") == null) {
+            String errorMessage = "session expire!";
+            request.setAttribute("errorMessage", errorMessage);
+            request.getRequestDispatcher("Login.jsp").forward(request, response);
+            return;
+        }
+
+        // User is logged in, continue with the password change process
         User userSession = (User) session.getAttribute("user");
-        // Retrieve parameters from the request
-        int userID = userSession.getUserId();
+
+        // Get information from the request
         String oldPassword = request.getParameter("oldPassword");
         String newPassword = request.getParameter("newPassword");
         String newConfirmedPassword = request.getParameter("newConfirmedPassword");
 
-        // Hash the old password
-        String oldPasswordHash = Hash.getHash(oldPassword);
-
-        // Initialize UserDAO to interact with the database
-        UserDAO userDAO = new UserDAO();
-        User user = userDAO.getUserById(userID);
-
         // Check if the old password is correct
-        if (oldPasswordHash.equals(user.getPasswordHash())) {
-            // Check if the new password matches the confirmed password
-            if (newPassword.equals(newConfirmedPassword)) {
-                // Hash the new password and update it in the database
-                String hashedNewPassword = Hash.getHash(newPassword);
-                userDAO.changePassword(hashedNewPassword, userID);
-
-                // Forward to the index page after successful password change
-                request.getRequestDispatcher("Login.jsp").forward(request, response);
-            } else {
-                // Set error message for password mismatch
-                String errorMessage = "Confirmed password incorrect, please try again!";
-                request.setAttribute("errorMessage", errorMessage);
-                request.getRequestDispatcher("ChangePass.jsp").forward(request, response);
-            }
-        } else {
-            // Set error message for incorrect old password
+        if (!userSession.getPasswordHash().equals(Hash.getHash(oldPassword))) {
+            // If the old password is incorrect, send error message and return to the change password page
             String errorMessage = "Old password is incorrect, please try again!";
             request.setAttribute("errorMessage", errorMessage);
             request.getRequestDispatcher("ChangePass.jsp").forward(request, response);
+            return;
         }
+
+        // Check if the new password and confirmed password match
+        if (!newPassword.equals(newConfirmedPassword)) {
+            // If the new password does not match, send error message and return to the change password page
+            String errorMessage = "Confirmed password incorrect, please try again!";
+            request.setAttribute("errorMessage", errorMessage);
+            request.getRequestDispatcher("ChangePass.jsp").forward(request, response);
+            return;
+        }
+
+        // Old password is correct and new password matches, proceed with updating the new password in the database
+        String hashedNewPassword = Hash.getHash(newPassword);
+        UserDAO userDAO = new UserDAO();
+        userDAO.changePassword(hashedNewPassword, userSession.getUserId());
+
+        // Redirect to the login page after successful password change
+        response.sendRedirect("Login.jsp");
     }
 
     @Override

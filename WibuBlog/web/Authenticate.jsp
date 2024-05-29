@@ -42,7 +42,7 @@
                                         <div class="form-group">
                                             <div class="d-flex align-items-center justify-content-between">
                                                 <span class="font-size-13 text-muted">                                                    
-                                                    <a class="small" href="">Return to login</a>
+                                                    <a class="small" href="login">Return to login</a>
                                                 </span>
                                                     <button class="btn btn-primary">Next</button>
                                             </div>

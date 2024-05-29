@@ -20,7 +20,7 @@ import validation.Validator;
  *
  * @author mindc
  */
-@WebServlet(name = "ResetPassword", urlPatterns = {"/ResetPassword"})
+@WebServlet(name = "ResetPassword", urlPatterns = {"/resetPassword"})
 public class ResetPassword extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -44,7 +44,7 @@ public class ResetPassword extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        request.getRequestDispatcher("ChangePass.jsp").forward(request, response);
+        request.getRequestDispatcher("ResetPassword.jsp").forward(request, response);
     }
 
     @Override

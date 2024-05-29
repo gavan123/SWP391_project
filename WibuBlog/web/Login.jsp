@@ -51,7 +51,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="font-weight-semibold" for="password">Password:</label>
-                                                <a class="float-right font-size-13 text-muted" href="ForgotPassword.jsp">Forget Password?</a>
+                                                <a class="float-right font-size-13 text-muted" href="forgotPassword">Forget Password?</a>
                                                 <div class="input-affix m-b-10">
                                                     <i class="prefix-icon anticon anticon-lock"></i>
                                                     <input type="password" name="password" class="form-control" id="password" placeholder="Password" required="">
@@ -61,7 +61,7 @@
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <span class="font-size-13 text-muted">
                                                         Don't have an account? 
-                                                        <a class="small" href="Register.jsp"> Register</a>
+                                                        <a class="small" href="register"> Register</a>
                                                     </span>
                                                     <button class="btn btn-primary" type="submit">Sign In</button>
                                                 </div>

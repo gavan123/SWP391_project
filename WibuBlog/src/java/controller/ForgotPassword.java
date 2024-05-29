@@ -17,7 +17,7 @@ import dal.UserDAO;
 import utility.ContentDelivery;
 import jakarta.servlet.http.HttpSession;
 
-@WebServlet(name = "ForgotPassword", urlPatterns = {"/ForgotPassword"})
+@WebServlet(name = "ForgotPassword", urlPatterns = {"/forgotPassword"})
 public class ForgotPassword extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

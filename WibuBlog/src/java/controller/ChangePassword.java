@@ -20,7 +20,7 @@ import security.Hash;
  *
  * @author mindc
  */
-@WebServlet(name = "ChangePassword", urlPatterns = {"/ChangePassword"})
+@WebServlet(name = "ChangePassword", urlPatterns = {"/changePassword"})
 public class ChangePassword extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -43,7 +43,7 @@ public class ChangePassword extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("changePass.jsp").forward(request, response);
+        request.getRequestDispatcher("ChangePass.jsp").forward(request, response);
     }
 
     @Override

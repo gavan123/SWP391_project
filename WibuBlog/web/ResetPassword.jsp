@@ -30,7 +30,7 @@
                                         <img class="img-fluid" alt="" src="assets/images/logo/logo.png">
                                         <h2 class="m-b-0">Reset Password</h2>
                                     </div>
-                                    <form action="ResetPassword" method="post">
+                                    <form action="resetPassword" method="post">
                                          <c:if test="${errorMessage != null}">
                                                 <p style="color: red">${errorMessage}</p>
                                             </c:if>

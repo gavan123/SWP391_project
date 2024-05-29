@@ -35,7 +35,7 @@
                                         <div class="d-flex align-items-center justify-content-end m-b-30">
                                             <h2 class="m-b-0">Change Password</h2>
                                         </div>
-                                        <form action="ChangePassword" method="post">
+                                        <form action="changePassword" method="post">
                                             <div class="form-group">
                                                 <label class="font-weight-semibold" for="oldPassword">Old Password:</label>
                                                 <div class="input-affix">

@@ -22,6 +22,9 @@
                             <div class="col-md-7 col-lg-5 m-h-auto">
                                 <div class="card shadow-lg">
                                     <div class="card-body">
+                                        <c:if test="${not empty errorMessage}">
+                                            <p style="color:red">${errorMessage}</p>
+                                        </c:if>
                                         <div class="d-flex align-items-center justify-content-end m-b-30">
                                             <h2 class="m-b-0">Verify Email</h2>
                                         </div>

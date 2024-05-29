@@ -57,31 +57,27 @@ public class VerificationRegister extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
         // Create an instance of UserDAO for database operations
         UserDAO userDao = new UserDAO();
 
         // Retrieve the verification code and user input from the request
-        String expectedVerificationCode = request.getParameter("template");
+        String expectedVerificationCode = (String) session.getAttribute("template");
         String userInputCode = request.getParameter("response");
-        
+
         // Check if the input verification code matches the expected verification code
         if (userInputCode != null && userInputCode.equals(expectedVerificationCode)) {
-            // Get the current session
-            HttpSession session = request.getSession();
 
             // Retrieve the new user from the session
-            User newUser = (User)session.getAttribute("newUser");
+            User newUser = (User) session.getAttribute("newUser");
 
             if (newUser != null) {
                 // Add the new user to the database
                 userDao.addUser(newUser);
 
-                // Retrieve the user ID from the database and set it in the session
-                int userId = userDao.getUserByEmail(newUser.getEmail()).getUserId();
-                session.setAttribute("userid", userId);
-
                 // Remove the temporary attribute from the session
                 session.removeAttribute("temporary");
+                session.removeAttribute("template");
                 session.removeAttribute("newUser");
                 request.setAttribute("message", "Account signed up successfully, please re-login");
                 // Forward the request to home.jsp
@@ -93,7 +89,7 @@ public class VerificationRegister extends HttpServlet {
             }
         } else {
             // If verification fails, set the verification code as a request attribute and forward back to verification page
-            request.setAttribute("template", expectedVerificationCode);
+            session.setAttribute("template", expectedVerificationCode);
             request.setAttribute("errorMessage", "Verification code does not match.");
             request.getRequestDispatcher("VerificationRegister.jsp").forward(request, response);
         }

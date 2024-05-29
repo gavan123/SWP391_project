@@ -57,13 +57,12 @@ public class ForgotPassword extends HttpServlet {
             String verificationCode = KeyGenerator.generateVerificationCode();
 
             // Send the verification code to the user's email
-            ContentDelivery.sendVerificationCode(email, verificationCode);
+            ContentDelivery.sendVerificationCode("Wibu", email, verificationCode);
 
             // Set email and verification code as request attributes
             request.setAttribute("email", email);
             HttpSession session = request.getSession();
             session.setAttribute("template", verificationCode);
-            request.setAttribute("template", verificationCode);
 
             // Forward the request to Authenticate.jsp
             request.getRequestDispatcher("Authenticate.jsp").forward(request, response);

@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.User;
 import security.Hash;
+import validation.Validator;
 
 /**
  *
@@ -77,6 +78,14 @@ public class ChangePassword extends HttpServlet {
             return;
         }
 
+        // If password is invalid, set error message and forward to ResetPassword.jsp
+        if (!Validator.passwordRegex(newPassword) || !Validator.passwordRegex(newConfirmedPassword)) {
+            String errorMessage = "Invalid password! Password must contain 8-50 characters, one uppercase, one lowercase, and one special character.";
+            request.setAttribute("errorMessage", errorMessage);
+            request.getRequestDispatcher("ChangePass.jsp").forward(request, response);
+            return;
+        }
+
         // Check if the new password and confirmed password match
         if (!newPassword.equals(newConfirmedPassword)) {
             // If the new password does not match, send error message and return to the change password page
@@ -91,8 +100,8 @@ public class ChangePassword extends HttpServlet {
         UserDAO userDAO = new UserDAO();
         userDAO.changePassword(hashedNewPassword, userSession.getUserId());
 
-        // Redirect to the login page after successful password change
-        response.sendRedirect("Login.jsp");
+        request.setAttribute("message", "Password changed successfully, please login again!");
+        request.getRequestDispatcher("Login.jsp").forward(request, response);
     }
 
     @Override

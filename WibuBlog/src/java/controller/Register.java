@@ -51,25 +51,25 @@ public class Register extends HttpServlet {
             // If email exists, set error message and forward to Register.jsp
             String errorMessage = "This email existed!";
             request.setAttribute("errorMessage", errorMessage);
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("Register.jsp").forward(request, response);
         } // Check if the username already exists in the database
         else if (ud.getUserByUsername(username) != null) {
             // If username exists, set error message and forward to Register.jsp
             String errorMessage = "This username existed!";
             request.setAttribute("errorMessage", errorMessage);
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("Register.jsp").forward(request, response);
         } // Validate username using regex
         else if (!Validator.usernameRegex(username)) {
             // If username is invalid, set error message and forward to Register.jsp
             String errorMessage = "Invalid username! Please enter at least 4-20 characters, alphabetic numbers and characters.";
             request.setAttribute("errorMessage", errorMessage);
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("Register.jsp").forward(request, response);
         } // Validate password using regex
         else if (!Validator.passwordRegex(password)) {
             // If password is invalid, set error message and forward to Register.jsp
             String errorMessage = "Invalid password! Password must contain 8-50 characters, one uppercase, one lowercase, and one special character.";
             request.setAttribute("errorMessage", errorMessage);
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("Register.jsp").forward(request, response);
         } else {
             HttpSession session = request.getSession();
             // Generate a verification code
@@ -82,7 +82,7 @@ public class Register extends HttpServlet {
             session.setAttribute("newUser", user);
             // Get the current session and set user attributes       
             session.setAttribute("temporary", true);
-            request.setAttribute("template", verificationCode);
+            session.setAttribute("template", verificationCode);
             request.setAttribute("email", email);
             // Forward the request to authenticateRegister.jsp
             request.getRequestDispatcher("VerificationRegister.jsp").forward(request, response);

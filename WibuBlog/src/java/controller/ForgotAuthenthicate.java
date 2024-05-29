@@ -81,34 +81,23 @@ public class ForgotAuthenthicate extends HttpServlet {
         UserDAO userDao = new UserDAO();
         HttpSession session = request.getSession();
 
-        // Retrieve verification code from session and email from session or request
+        // Retrieve verification code from session and email from request
         String expectedVerificationCode = (String) session.getAttribute("template");
-        String email = (String) session.getAttribute("email");
-
+        String email = request.getParameter("email");
         String userInputCode = request.getParameter("code");
-        User user = userDao.getUserByEmail(email);
 
         if (userInputCode != null && userInputCode.equals(expectedVerificationCode)) {
-            // Generate a new password
-            String newPassword = KeyGenerator.generateVerificationCode();
-
-            // Send the new password via email
-            ContentDelivery.sendNewPassword(email, newPassword);
-
-            // Hash the new password
-            String hashedNewPassword = Hash.getHash(newPassword);
-
-            // Update the new password in the database
-            userDao.changePassword(hashedNewPassword, user.getUserId());
-            // Remove sessions
+            // Verification code matches
             session.removeAttribute("template");
-            session.removeAttribute("email");
-            // Redirect the user to the login page
-            response.sendRedirect("Login.jsp");
+            request.setAttribute("email", email);
+            request.getRequestDispatcher("ResetPassword.jsp").forward(request, response);
         } else {
-            // If the verification code is incorrect, redirect the user to re-enter the verification code
-            response.sendRedirect("Authenticate.jsp");
+            // Verification code does not match
+            request.setAttribute("email", email);
+            request.setAttribute("errorMessage", "Verification code does not match.");
+            request.getRequestDispatcher("Authenticate.jsp").forward(request, response);
         }
+
     }
 
     /**

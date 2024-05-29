@@ -8,7 +8,7 @@
         <title>Register</title>
 
         <!-- Favicon -->
-        <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+        <link rel="shortcut icon" href="">
 
         <!-- page css -->
 

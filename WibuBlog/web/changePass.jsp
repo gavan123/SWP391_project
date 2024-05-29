@@ -14,7 +14,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Change Password</title>
         <!-- Favicon -->
-        <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+        <link rel="shortcut icon" href="">
         <!-- page css -->
         <!-- Core css -->
         <link href="assets/css/app.min.css" rel="stylesheet">

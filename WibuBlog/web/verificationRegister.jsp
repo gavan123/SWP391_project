@@ -7,7 +7,7 @@
         <title>Wibi Burotsugu - Verify Email</title>
 
         <!-- Favicon -->
-        <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+        <link rel="shortcut icon" href="">
 
         <!-- Core CSS -->
         <link href="assets/css/app.min.css" rel="stylesheet">

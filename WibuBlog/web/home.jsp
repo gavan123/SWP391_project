@@ -24,8 +24,8 @@
             <c:otherwise>
                 <h2>Welcome, <c:out value="${user.username}" />!</h2>
                 <p>Full Name: <c:out value="${user.fullName}" /></p>
-                <p>Full Name: <c:out value="${user.fullName}" /></p>
-                <p>Full Name: <c:out value="${user.fullName}" /></p>
+                <p>Point: <c:out value="${user.point}" /></p>
+                <p>Phone : <c:out value="${user.phoneNumber}" /></p>
                 <form action="changePassword" method="get" class="form-button m-2">
                     <button type="submit" class="btn btn-primary ">Change Password</button>
                 </form>

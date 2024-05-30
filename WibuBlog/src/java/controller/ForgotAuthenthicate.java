@@ -94,7 +94,7 @@ public class ForgotAuthenthicate extends HttpServlet {
         } else {
             // Verification code does not match
             request.setAttribute("email", email);
-            request.setAttribute("errorMessage", "Verification code does not match.");
+            request.setAttribute("errorMessage", "Verification code does not match or timeout");
             request.getRequestDispatcher("Authenticate.jsp").forward(request, response);
         }
 

@@ -63,7 +63,7 @@ public class ForgotPassword extends HttpServlet {
             request.setAttribute("email", email);
             HttpSession session = request.getSession();
             session.setAttribute("template", verificationCode);
-
+            session.setMaxInactiveInterval(60);
             // Forward the request to Authenticate.jsp
             request.getRequestDispatcher("Authenticate.jsp").forward(request, response);
         } else {

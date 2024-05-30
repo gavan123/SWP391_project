@@ -83,6 +83,7 @@ public class Register extends HttpServlet {
             // Get the current session and set user attributes       
             session.setAttribute("temporary", true);
             session.setAttribute("template", verificationCode);
+            session.setMaxInactiveInterval(3 * 60);
             request.setAttribute("email", email);
             // Forward the request to authenticateRegister.jsp
             request.getRequestDispatcher("VerificationRegister.jsp").forward(request, response);

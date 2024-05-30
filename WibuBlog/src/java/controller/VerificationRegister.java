@@ -90,7 +90,7 @@ public class VerificationRegister extends HttpServlet {
         } else {
             // If verification fails, set the verification code as a request attribute and forward back to verification page
             session.setAttribute("template", expectedVerificationCode);
-            request.setAttribute("errorMessage", "Verification code does not match.");
+            request.setAttribute("errorMessage", "Verification code does not match or timeout.");
             request.getRequestDispatcher("VerificationRegister.jsp").forward(request, response);
         }
     }

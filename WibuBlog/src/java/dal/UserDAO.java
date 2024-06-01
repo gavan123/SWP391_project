@@ -1,5 +1,6 @@
 package dal;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,7 +9,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.User;
 
-public class UserDAO extends DBContext {
+public class UserDAO extends DBContext implements Runnable {
+
+    public UserDAO() {
+    }
+
+    public UserDAO(Connection connection) {
+        this.connection = connection;
+    }
 
     public User getUserByEmail(String email) {
         PreparedStatement ps = null;
@@ -167,15 +175,17 @@ public class UserDAO extends DBContext {
         }
     }
 
-    public boolean updateProfile(int userId, String username, String fullName, LocalDateTime dateOfBirth) {
+    public boolean updateProfile(int userId, String username, String fullName, String phoneNumber, LocalDateTime dateOfBirth) {
         PreparedStatement ps = null;
         try {
-            String sql = "UPDATE [user] SET Username = ?, Fullname = ?, DateOfBirth = ? WHERE UserID = ?";
+            String sql = "UPDATE [user] SET Username = ?, "
+                    + "Fullname = ?, PhoneNumber = ?, DateOfBirth = ? WHERE UserID = ?";
             ps = connection.prepareStatement(sql);
             ps.setString(1, username);
             ps.setString(2, fullName);
-            ps.setTimestamp(3, java.sql.Timestamp.valueOf(dateOfBirth));
-            ps.setInt(4, userId);
+            ps.setString(3, phoneNumber);
+            ps.setTimestamp(4, java.sql.Timestamp.valueOf(dateOfBirth));
+            ps.setInt(5, userId);
             int rowsUpdated = ps.executeUpdate();
             return rowsUpdated > 0;
         } catch (SQLException ex) {
@@ -203,6 +213,22 @@ public class UserDAO extends DBContext {
         }
     }
 
+    public boolean deactiveAccount(int userId) {
+        PreparedStatement ps = null;
+        try {
+            String sql = "UPDATE [user] SET Status = 'deactive' WHERE UserID = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } finally {
+            closePreparedStatement(ps);
+        }
+    }
+
     public boolean updateProfilePhoto(int userId, String profilePhoto) {
         PreparedStatement ps = null;
         try {
@@ -220,4 +246,31 @@ public class UserDAO extends DBContext {
         }
     }
 
+    @Override
+    public void run() {
+        PreparedStatement ps = null;
+        try {
+            String sql = "UPDATE [user] SET "
+                    + "Username = null, "
+                    + "PasswordHash = null, "
+                    + "RoleId = null, "
+                    + "Point = null, "
+                    + "Status = null, "
+                    + "Email = null, "
+                    + "Fullname = null, "
+                    + "RankId = null, "
+                    + "ProfilePhoto = null, "
+                    + "PhoneNumber = null "
+                    + "WHERE Status = 'deactive' AND deactivation_date <= DATEADD(day, -7, CURRENT_TIMESTAMP)";
+            ps = connection.prepareStatement(sql);
+            int rowsUpdated = ps.executeUpdate();
+            if (rowsUpdated > 0) {
+                Logger.getLogger(UserDAO.class.getName()).log(Level.INFO, "Updated {0} accounts", rowsUpdated);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closePreparedStatement(ps);
+        }
+    }
 }

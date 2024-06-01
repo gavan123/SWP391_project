@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,13 +12,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.User;
 
 /**
  *
  * @author ADMIN
  */
-@WebServlet(name = "Profile", urlPatterns = {"/profile"})
-public class Profile extends HttpServlet {
+@WebServlet(name = "DeleteAccount", urlPatterns = {"/deleteAccount"})
+public class DeleteAccount extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,10 +39,10 @@ public class Profile extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Profile</title>");            
+            out.println("<title>Servlet DeleteAccount</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Profile at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet DeleteAccount at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -57,8 +60,7 @@ public class Profile extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        request.getRequestDispatcher("Profile.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -72,7 +74,34 @@ public class Profile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("Profile.jsp").forward(request, response);
+        HttpSession session = request.getSession();
+
+        // Check if the user is logged in by checking the session
+        if (session.getAttribute("user") == null) {
+            String errorMessage = "session expire!";
+            request.setAttribute("errorMessage", errorMessage);
+            request.getRequestDispatcher("Login.jsp").forward(request, response);
+            return;
+        }
+
+        // User is logged in, continue with the deactivation process
+        User userSession = (User) session.getAttribute("user");
+
+        UserDAO userDao = new UserDAO();
+        boolean isDeactivated = userDao.deactiveAccount(userSession.getUserId());
+
+        if (isDeactivated) {
+            // Deactivation successful, forward to a success page or log out the user
+            session.invalidate(); // Invalidate the session after deactivation
+            String errorMessage = "Account deactivation failed!";
+            request.setAttribute("errorMessage", errorMessage);
+            request.getRequestDispatcher("Login.jsp").forward(request, response);
+        } else {
+            // Deactivation failed, forward to an error page
+            String errorMessage = "Account deactivation failed!";
+            request.setAttribute("errorMessage", errorMessage);
+            request.getRequestDispatcher("Home.jsp").forward(request, response);
+        }
     }
 
     /**

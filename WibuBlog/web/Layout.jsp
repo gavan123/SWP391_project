@@ -13,6 +13,7 @@
         <!-- Favicon -->
         <link rel="shortcut icon" href="">
         <link href="assets/css/app.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
     </head>
     <body>
         <div class="app">
@@ -114,62 +115,7 @@
                                     </div>
                                 </div>
                             </li>
-                            <li class="dropdown dropdown-animated scale-left">
-                                <div class="pointer" data-toggle="dropdown">
-                                    <div class="avatar avatar-image  m-h-10 m-r-15">
-                                        <img src="assets/images/avatars/thumb-3.jpg"  alt="">
-                                    </div>
-                                </div>
-                                <div class="p-b-15 p-t-20 dropdown-menu pop-profile">
-                                    <div class="p-h-20 p-b-15 m-b-10 border-bottom">
-                                        <div class="d-flex m-r-50">
-                                            <div class="avatar avatar-lg avatar-image">
-                                                <img src="assets/images/avatars/thumb-3.jpg" alt="">
-                                            </div>
-                                            <div class="m-l-10">
-                                                <p class="m-b-0 text-dark font-weight-semibold">Marshall Nichols</p>
-                                                <p class="m-b-0 opacity-07">UI/UX Desinger</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a href="javascript:void(0);" class="dropdown-item d-block p-h-15 p-v-10">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div>
-                                                <i class="anticon opacity-04 font-size-16 anticon-user"></i>
-                                                <span class="m-l-10">Edit Profile</span>
-                                            </div>
-                                            <i class="anticon font-size-10 anticon-right"></i>
-                                        </div>
-                                    </a>
-                                    <a href="javascript:void(0);" class="dropdown-item d-block p-h-15 p-v-10">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div>
-                                                <i class="anticon opacity-04 font-size-16 anticon-lock"></i>
-                                                <span class="m-l-10">Account Setting</span>
-                                            </div>
-                                            <i class="anticon font-size-10 anticon-right"></i>
-                                        </div>
-                                    </a>
-                                    <a href="javascript:void(0);" class="dropdown-item d-block p-h-15 p-v-10">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div>
-                                                <i class="anticon opacity-04 font-size-16 anticon-project"></i>
-                                                <span class="m-l-10">Projects</span>
-                                            </div>
-                                            <i class="anticon font-size-10 anticon-right"></i>
-                                        </div>
-                                    </a>
-                                    <a href="javascript:void(0);" class="dropdown-item d-block p-h-15 p-v-10">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div>
-                                                <i class="anticon opacity-04 font-size-16 anticon-logout"></i>
-                                                <span class="m-l-10">Logout</span>
-                                            </div>
-                                            <i class="anticon font-size-10 anticon-right"></i>
-                                        </div>
-                                    </a>
-                                </div>
-                            </li>
+                            <jsp:include page="${param.accountHeader}" />
                             <li>
                                 <a href="javascript:void(0);" data-toggle="modal" data-target="#quick-view">
                                     <i class="anticon anticon-appstore"></i>
@@ -181,139 +127,7 @@
                 <!-- Header END -->
 
                 <!-- Side Nav START -->
-                <div class="side-nav">
-                    <div class="side-nav-inner">
-                        <ul class="side-nav-menu scrollable">
-                            <li class="nav-item dropdown">
-                                <a class="dropdown-toggle" href="javascript:void(0);">
-                                    <span class="icon-holder">
-                                        <i class="anticon anticon-dashboard"></i>
-                                    </span>
-                                    <span class="title">Dashboard</span>
-                                    <span class="arrow">
-                                        <i class="arrow-icon"></i>
-                                    </span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="">Default</a>
-                                    </li>
-                                    <li>
-                                        <a href="">CRM</a>
-                                    </li>
-                                    <li>
-                                        <a href="">E-commerce</a>
-                                    </li>
-                                    <li>
-                                        <a href="">Projects</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="dropdown-toggle" href="javascript:void(0);">
-                                    <span class="icon-holder">
-                                        <i class="anticon anticon-build"></i>
-                                    </span>
-                                    <span class="title">UI Elements</span>
-                                    <span class="arrow">
-                                        <i class="arrow-icon"></i>
-                                    </span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="">Avatar</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="dropdown-toggle" href="javascript:void(0);">
-                                    <span class="icon-holder">
-                                        <i class="anticon anticon-hdd"></i>
-                                    </span>
-                                    <span class="title">Components</span>
-                                    <span class="arrow">
-                                        <i class="arrow-icon"></i>
-                                    </span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="">Accordion</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="dropdown-toggle" href="javascript:void(0);">
-                                    <span class="icon-holder">
-                                        <i class="anticon anticon-form"></i>
-                                    </span>
-                                    <span class="title">Forms</span>
-                                    <span class="arrow">
-                                        <i class="arrow-icon"></i>
-                                    </span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="">Form Elements</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="dropdown-toggle" href="javascript:void(0);">
-                                    <span class="icon-holder">
-                                        <i class="anticon anticon-table"></i>
-                                    </span>
-                                    <span class="title">Tables</span>
-                                    <span class="arrow">
-                                        <i class="arrow-icon"></i>
-                                    </span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="">Basic Table</a>
-                                    </li>
-                                    <li>
-                                        <a href="">Data Table</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown open">
-                                <a class="dropdown-toggle" href="javascript:void(0);">
-                                    <span class="icon-holder">
-                                        <i class="anticon anticon-file"></i>
-                                    </span>
-                                    <span class="title">Pages</span>
-                                    <span class="arrow">
-                                        <i class="arrow-icon"></i>
-                                    </span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="">Profile</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="dropdown-toggle" href="javascript:void(0);">
-                                    <span class="icon-holder">
-                                        <i class="anticon anticon-lock"></i>
-                                    </span>
-                                    <span class="title">Authentication</span>
-                                    <span class="arrow">
-                                        <i class="arrow-icon"></i>
-                                    </span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="">Login 1</a>
-                                    </li>
-                                    <li>
-                                        <a href="">Login 2</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                <jsp:include page="${param.sideNav}" />
                 <!-- Side Nav END -->
 
                 <!-- Page Container START -->

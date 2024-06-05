@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.User;
@@ -127,7 +128,7 @@ public class UserDAO extends DBContext {
             ps = connection.prepareStatement(sql);
             ps.setString(1, username);
             rs = ps.executeQuery();
-            if (rs.next()) {
+            if (rs.next()) {              
                 return new User(
                         rs.getInt("UserID"),
                         rs.getString("Username"),
@@ -273,4 +274,48 @@ public class UserDAO extends DBContext {
 //            closePreparedStatement(ps);
 //        }
 //    }
+    public String getRankByRankID(int rankID) {
+        try {
+            String sql = "select * from [rank] where RankID = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, rankID);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            String rank = rs.getString("name");
+            return rank;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public String getRoleByRoleID(int roleID){
+        try {
+            String sql = "select * from [Role] where RoleID = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, roleID);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            String role = rs.getString("RoleName");
+            return role;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public String getColorByRank(String rank){
+        try {
+            String sql = "select * from [Rank] where name = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, rank);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            String color = rs.getString("Color");
+            return color;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }

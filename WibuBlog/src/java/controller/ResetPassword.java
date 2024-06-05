@@ -20,7 +20,7 @@ import validation.Validator;
  *
  * @author mindc
  */
-@WebServlet(name = "ResetPassword", urlPatterns = {"/ResetPassword"})
+@WebServlet(name = "ResetPassword", urlPatterns = {"/resetPassword"})
 public class ResetPassword extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -44,6 +44,7 @@ public class ResetPassword extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        request.getRequestDispatcher("ResetPassword.jsp").forward(request, response);
     }
 
     @Override
@@ -54,33 +55,33 @@ public class ResetPassword extends HttpServlet {
         String email = request.getParameter("email");
         String newPassword = request.getParameter("newPassword");
         String newConfirmedPassword = request.getParameter("newConfirmedPassword");
-        
+
         // If password is invalid, set error message and forward to ResetPassword.jsp
-        if (!Validator.passwordRegex(newPassword) || !Validator.passwordRegex(newConfirmedPassword)) {     
+        if (!Validator.passwordRegex(newPassword) || !Validator.passwordRegex(newConfirmedPassword)) {
             String errorMessage = "Invalid password! Password must contain 8-50 characters, one uppercase, one lowercase, and one special character.";
             request.setAttribute("errorMessage", errorMessage);
             request.getRequestDispatcher("ResetPassword.jsp").forward(request, response);
-        } 
+        }
 
         // Initialize UserDAO to interact with the database
         UserDAO userDAO = new UserDAO();
         User user = userDAO.getUserByEmail(email);
 
-          // Check if the new password matches the confirmed password
-        if (newPassword.equals(newConfirmedPassword)) {          
-          // Hash the new password and update it in the database
-                String hashedNewPassword = Hash.getHash(newPassword);
-                userDAO.changePassword(hashedNewPassword, email);               
-                // Forward to the index page after successful password change
-                request.setAttribute("message", "Password changed successfully, please login again!");
-                request.getRequestDispatcher("Login.jsp").forward(request, response);
-           
-        }   else {
-                // Set error message for password mismatch
-                String errorMessage = "Confirmed password incorrect, please try again!";
-                request.setAttribute("errorMessage", errorMessage);
-                request.getRequestDispatcher("ChangePass.jsp").forward(request, response);
-            }
+        // Check if the new password matches the confirmed password
+        if (newPassword.equals(newConfirmedPassword)) {
+            // Hash the new password and update it in the database
+            String hashedNewPassword = Hash.getHash(newPassword);
+            userDAO.changePassword(hashedNewPassword, user.getUserId());
+            // Forward to the index page after successful password change
+            request.setAttribute("message", "Password changed successfully, please login again!");
+            request.getRequestDispatcher("Login.jsp").forward(request, response);
+
+        } else {
+            // Set error message for password mismatch
+            String errorMessage = "Confirmed password incorrect, please try again!";
+            request.setAttribute("errorMessage", errorMessage);
+            request.getRequestDispatcher("ChangePass.jsp").forward(request, response);
+        }
     }
 
     @Override

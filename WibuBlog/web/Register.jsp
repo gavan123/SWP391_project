@@ -8,7 +8,7 @@
         <title>Register</title>
 
         <!-- Favicon -->
-        <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+        <link rel="shortcut icon" href="">
 
         <!-- page css -->
 
@@ -54,13 +54,13 @@
                                                 <div class="d-flex align-items-center justify-content-between p-t-15">
                                                     <div class="checkbox">
                                                         <input type="checkbox" class="form-check-input" id="agreed" name="agreed" required>
-                                                        <label for="agreed"><span>I have read the <a href="terms.jsp">agreement</a></span></label>
+                                                        <label for="agreed"><span>I have read the <a href="">agreement</a></span></label>
                                                     </div>
                                                     <button class="btn btn-primary" type="submit"><i class="fas fa-user-plus"></i> Sign Up</button>
                                                 </div>
                                             </div>
                                         </form>
-                                        <a href="Login.jsp" id="cancel_register"><i class="fas fa-angle-left"></i> Back</a>
+                                        <a href="login" id="cancel_register"><i class="fas fa-angle-left"></i> Back</a>
                                     </div>
                                 </div>
                             </div>
@@ -69,31 +69,6 @@
                 </div>
             </div>
         </div>
-
-        <!--        <div class="container">
-        <c:if test="${not empty errorMessage}">
-            <p style="color:red">${errorMessage}</p>
-        </c:if>
-        <c:if test="${not empty successMessage}">
-            <p style="color:greenyellow">${successMessage}</p>
-        </c:if>
-        <form action="register" method="post" class="form-signup">
-            <h1 class="h3 mb-3 font-weight-normal" style="text-align: center">Register</h1>
-            <input name="user" type="text" id="username" class="form-control" placeholder="Username" required="" autofocus=""><br>
-            <input name="pass" type="password" id="userpass" class="form-control" placeholder="Password" required autofocus=""><br>
-            <input name="email" type="email" id="email" class="form-control" placeholder="Email" required="" autofocus=""><br>
-            <input name="fullName" type="text" id="fullName" class="form-control" placeholder="Full Name" required="" autofocus=""><br>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="agreed" name="agreed" required>
-                <label class="form-check-label" for="agreed">
-                    I agree to the <a href="terms.jsp" target="_blank">terms and conditions</a>
-                </label>
-            </div><br>
-            <button class="btn btn-primary btn-block" type="submit"><i class="fas fa-user-plus"></i> Register</button>
-            <a href="#" id="cancel_register"><i class="fas fa-angle-left"></i> Back</a>
-        </form>
-    </div>-->
-
 
         <!-- Core Vendors JS -->
         <script src="assets/js/vendors.min.js"></script>

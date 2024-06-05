@@ -4,7 +4,7 @@
  */
 package controller;
 
-import com.ContentDelivery;
+import utility.ContentDelivery;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -29,6 +29,12 @@ public class Register extends HttpServlet {
     private String verificationCode = "";
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("Register.jsp").forward(request, response);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Retrieve parameters from the request
@@ -36,7 +42,7 @@ public class Register extends HttpServlet {
         String password = request.getParameter("password");
         String email = request.getParameter("email");
         String fullName = request.getParameter("fullname");
-        
+
         // Create an instance of UserDAO for database operations
         UserDAO ud = new UserDAO();
 
@@ -45,39 +51,39 @@ public class Register extends HttpServlet {
             // If email exists, set error message and forward to Register.jsp
             String errorMessage = "This email existed!";
             request.setAttribute("errorMessage", errorMessage);
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("Register.jsp").forward(request, response);
         } // Check if the username already exists in the database
         else if (ud.getUserByUsername(username) != null) {
             // If username exists, set error message and forward to Register.jsp
             String errorMessage = "This username existed!";
             request.setAttribute("errorMessage", errorMessage);
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("Register.jsp").forward(request, response);
         } // Validate username using regex
         else if (!Validator.usernameRegex(username)) {
             // If username is invalid, set error message and forward to Register.jsp
             String errorMessage = "Invalid username! Please enter at least 4-20 characters, alphabetic numbers and characters.";
             request.setAttribute("errorMessage", errorMessage);
-            request.getRequestDispatcher("register.jsp").forward(request, response);
+            request.getRequestDispatcher("Register.jsp").forward(request, response);
         } // Validate password using regex
         else if (!Validator.passwordRegex(password)) {
             // If password is invalid, set error message and forward to Register.jsp
             String errorMessage = "Invalid password! Password must contain 8-50 characters, one uppercase, one lowercase, and one special character.";
             request.setAttribute("errorMessage", errorMessage);
-            request.getRequestDispatcher("register.jsp").forward(request, response);
-        } 
-        else {
+            request.getRequestDispatcher("Register.jsp").forward(request, response);
+        } else {
             HttpSession session = request.getSession();
             // Generate a verification code
             String verificationCode = KeyGenerator.generateVerificationCode();
             // Send verification code to the user's email
-            ContentDelivery.sendVerificationCode("test", email, verificationCode);        
+            ContentDelivery.sendVerificationCode("test", email, verificationCode);
             // Create a new User object
             User user = new User(0, username, Hash.getHash(password), 3, 0, "active", email, fullName, 1);
             // Set the new user as a request attribute
             session.setAttribute("newUser", user);
             // Get the current session and set user attributes       
             session.setAttribute("temporary", true);
-            request.setAttribute("template", verificationCode);
+            session.setAttribute("template", verificationCode);
+            session.setMaxInactiveInterval(3 * 60);
             request.setAttribute("email", email);
             // Forward the request to authenticateRegister.jsp
             request.getRequestDispatcher("VerificationRegister.jsp").forward(request, response);

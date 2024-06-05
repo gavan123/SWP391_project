@@ -13,14 +13,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.User;
 
 /**
  *
- * @author mindc
+ * @author ADMIN
  */
-@WebServlet(name = "VerificationRegister", urlPatterns = {"/verificationRegister"})
-public class VerificationRegister extends HttpServlet {
+@WebServlet(name = "ForgotAuthenthicate", urlPatterns = {"/forgotAuthenthicate"})
+public class ForgotAuthenthicate extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,62 +38,69 @@ public class VerificationRegister extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet VerificationRegister</title>");
+            out.println("<title>Servlet ForgotAuthenthicate</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet VerificationRegister at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ForgotAuthenthicate at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.getRequestDispatcher("Authenticate.jsp").forward(request, response);
     }
 
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        // Create an instance of UserDAO for database operations
+        // Initialize DAO and session
         UserDAO userDao = new UserDAO();
+        HttpSession session = request.getSession();
 
-        // Retrieve the verification code and user input from the request
+        // Retrieve verification code from session and email from request
         String expectedVerificationCode = (String) session.getAttribute("template");
-        String userInputCode = request.getParameter("response");
+        String email = request.getParameter("email");
+        String userInputCode = request.getParameter("code");
 
-        // Check if the input verification code matches the expected verification code
         if (userInputCode != null && userInputCode.equals(expectedVerificationCode)) {
-
-            // Retrieve the new user from the session
-            User newUser = (User) session.getAttribute("newUser");
-
-            if (newUser != null) {
-                // Add the new user to the database
-                userDao.addUser(newUser);
-
-                // Remove the temporary attribute from the session
-                session.removeAttribute("temporary");
-                session.removeAttribute("template");
-                session.removeAttribute("newUser");
-                request.setAttribute("message", "Account signed up successfully, please re-login");
-                // Forward the request to home.jsp
-                request.getRequestDispatcher("Login.jsp").forward(request, response);
-            } else {
-                // If no new user found in session, redirect to an error page or show an error message
-                request.setAttribute("errorMessage", "No user found in session.");
-                request.getRequestDispatcher("VerificationRegister.jsp").forward(request, response);
-            }
+            // Verification code matches
+            session.removeAttribute("template");
+            request.setAttribute("email", email);
+            request.getRequestDispatcher("ResetPassword.jsp").forward(request, response);
         } else {
-            // If verification fails, set the verification code as a request attribute and forward back to verification page
-            session.setAttribute("template", expectedVerificationCode);
-            request.setAttribute("errorMessage", "Verification code does not match or timeout.");
-            request.getRequestDispatcher("VerificationRegister.jsp").forward(request, response);
+            // Verification code does not match
+            request.setAttribute("email", email);
+            request.setAttribute("errorMessage", "Verification code does not match or timeout");
+            request.getRequestDispatcher("Authenticate.jsp").forward(request, response);
         }
+
     }
 
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
     @Override
     public String getServletInfo() {
         return "Short description";

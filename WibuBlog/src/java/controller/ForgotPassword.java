@@ -14,10 +14,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import utility.KeyGenerator;
 import dal.UserDAO;
-import model.User;
-import com.ContentDelivery;
+import utility.ContentDelivery;
+import jakarta.servlet.http.HttpSession;
 
-@WebServlet(name = "ForgotPassword", urlPatterns = {"/ForgotPassword"})
+@WebServlet(name = "ForgotPassword", urlPatterns = {"/forgotPassword"})
 public class ForgotPassword extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -35,10 +35,16 @@ public class ForgotPassword extends HttpServlet {
             out.println("</body>");
             out.println("</html>");
         }
-    }
+    }  
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("ForgotPassword.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         // Retrieve the email parameter from the request
@@ -51,12 +57,13 @@ public class ForgotPassword extends HttpServlet {
             String verificationCode = KeyGenerator.generateVerificationCode();
 
             // Send the verification code to the user's email
-            ContentDelivery.sendVerificationCode(email, verificationCode);
+            ContentDelivery.sendVerificationCode("Wibu", email, verificationCode);
 
             // Set email and verification code as request attributes
             request.setAttribute("email", email);
-            request.setAttribute("template", verificationCode);
-
+            HttpSession session = request.getSession();
+            session.setAttribute("template", verificationCode);
+            session.setMaxInactiveInterval(60);
             // Forward the request to Authenticate.jsp
             request.getRequestDispatcher("Authenticate.jsp").forward(request, response);
         } else {
@@ -68,31 +75,6 @@ public class ForgotPassword extends HttpServlet {
             // Forward the request to ForgotPassword.jsp
             request.getRequestDispatcher("ForgotPassword.jsp").forward(request, response);
         }
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        // Retrieve parameters from the request
-        String email = request.getParameter("email");
-        String verificationCode = request.getParameter("template");
-        String input = request.getParameter("response");
-
-        // Check if the input verification code matches the expected verification code
-        if (input.equals(verificationCode)) {
-            // If verification is successful, forward to ResetPassword.jsp
-            request.setAttribute("email", email);
-            request.getRequestDispatcher("ResetPassword.jsp").forward(request, response);
-        } else {
-            // If verification fails, set an error message and forward to Authenticate.jsp
-            String errorMessage = "Incorrect verification code.";
-            request.setAttribute("errorMessage", errorMessage);
-            request.setAttribute("email", email);
-            request.setAttribute("template", verificationCode);
-            request.getRequestDispatcher("Authenticate.jsp").forward(request, response);
-        }
-
     }
 
     @Override

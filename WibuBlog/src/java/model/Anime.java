@@ -5,6 +5,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -18,13 +19,13 @@ public class Anime {
     private String genre;
     private int episodes;
     private String status;
-    private LocalDate releaseDate;
+    private LocalDateTime releaseDate;
     private String studio;
 
     public Anime() {
     }
 
-    public Anime(int animeId, String title, String synopsis, String genre, int episodes, String status, LocalDate releaseDate, String studio) {
+    public Anime(int animeId, String title, String synopsis, String genre, int episodes, String status, LocalDateTime releaseDate, String studio) {
         this.animeId = animeId;
         this.title = title;
         this.synopsis = synopsis;
@@ -34,6 +35,7 @@ public class Anime {
         this.releaseDate = releaseDate;
         this.studio = studio;
     }
+
 
     public int getAnimeId() {
         return animeId;
@@ -83,13 +85,15 @@ public class Anime {
         this.status = status;
     }
 
-    public LocalDate getReleaseDate() {
+    public LocalDateTime getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(LocalDate releaseDate) {
+    public void setReleaseDate(LocalDateTime releaseDate) {
         this.releaseDate = releaseDate;
     }
+
+   
 
     public String getStudio() {
         return studio;

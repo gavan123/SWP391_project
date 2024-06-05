@@ -10,7 +10,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Login</title>
         <!-- Favicon -->
-        <link rel="shortcut icon" href="assets/images/logo/favicon.png">
+        <link rel="shortcut icon" href="">
         <!-- page css -->
         <!-- Core css -->
         <link href="assets/css/app.min.css" rel="stylesheet">
@@ -51,7 +51,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label class="font-weight-semibold" for="password">Password:</label>
-                                                <a class="float-right font-size-13 text-muted" href="ForgotPassword.jsp">Forget Password?</a>
+                                                <a class="float-right font-size-13 text-muted" href="forgotPassword">Forget Password?</a>
                                                 <div class="input-affix m-b-10">
                                                     <i class="prefix-icon anticon anticon-lock"></i>
                                                     <input type="password" name="password" class="form-control" id="password" placeholder="Password" required="">
@@ -61,7 +61,7 @@
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <span class="font-size-13 text-muted">
                                                         Don't have an account? 
-                                                        <a class="small" href="register.jsp"> Register</a>
+                                                        <a class="small" href="register"> Register</a>
                                                     </span>
                                                     <button class="btn btn-primary" type="submit">Sign In</button>
                                                 </div>

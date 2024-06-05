@@ -18,15 +18,15 @@ public class DBContext {
     public DBContext() {
         try {
             String user = "sa";
-            String pass = "123";
+            String pass = "password";
             String url = "jdbc:sqlserver://localhost\\SQLEXPRESS:1433;databaseName=SWP391_SU24";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url, user, pass);
 
-            // Tạo một ScheduledExecutorService với pool thread duy nhất
-            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-            // Lập lịch cho nhiệm vụ xóa tài khoản chạy mỗi ngày
-            scheduler.scheduleAtFixedRate(new UserDAO(connection), 0, 1, TimeUnit.DAYS);
+//            // Tạo một ScheduledExecutorService với pool thread duy nhất
+//            ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+//            // Lập lịch cho nhiệm vụ xóa tài khoản chạy mỗi ngày
+//            scheduler.scheduleAtFixedRate(new UserDAO(connection), 0, 1, TimeUnit.DAYS);
 
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(DBContext.class.getName()).log(Level.SEVERE, null, ex);

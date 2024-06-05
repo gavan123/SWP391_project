@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.User;
 
-public class UserDAO extends DBContext implements Runnable {
+public class UserDAO extends DBContext {
 
     public UserDAO() {
     }
@@ -246,31 +246,31 @@ public class UserDAO extends DBContext implements Runnable {
         }
     }
 
-    @Override
-    public void run() {
-        PreparedStatement ps = null;
-        try {
-            String sql = "UPDATE [user] SET "
-                    + "Username = null, "
-                    + "PasswordHash = null, "
-                    + "RoleId = null, "
-                    + "Point = null, "
-                    + "Status = null, "
-                    + "Email = null, "
-                    + "Fullname = null, "
-                    + "RankId = null, "
-                    + "ProfilePhoto = null, "
-                    + "PhoneNumber = null "
-                    + "WHERE Status = 'deactive' AND deactivation_date <= DATEADD(day, -7, CURRENT_TIMESTAMP)";
-            ps = connection.prepareStatement(sql);
-            int rowsUpdated = ps.executeUpdate();
-            if (rowsUpdated > 0) {
-                Logger.getLogger(UserDAO.class.getName()).log(Level.INFO, "Updated {0} accounts", rowsUpdated);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            closePreparedStatement(ps);
-        }
-    }
+//    @Override
+//    public void run() {
+//        PreparedStatement ps = null;
+//        try {
+//            String sql = "UPDATE [user] SET "
+//                    + "Username = null, "
+//                    + "PasswordHash = null, "
+//                    + "RoleId = null, "
+//                    + "Point = null, "
+//                    + "Status = null, "
+//                    + "Email = null, "
+//                    + "Fullname = null, "
+//                    + "RankId = null, "
+//                    + "ProfilePhoto = null, "
+//                    + "PhoneNumber = null "
+//                    + "WHERE Status = 'deactive' AND deactivation_date <= DATEADD(day, -7, CURRENT_TIMESTAMP)";
+//            ps = connection.prepareStatement(sql);
+//            int rowsUpdated = ps.executeUpdate();
+//            if (rowsUpdated > 0) {
+//                Logger.getLogger(UserDAO.class.getName()).log(Level.INFO, "Updated {0} accounts", rowsUpdated);
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+//        } finally {
+//            closePreparedStatement(ps);
+//        }
+//    }
 }

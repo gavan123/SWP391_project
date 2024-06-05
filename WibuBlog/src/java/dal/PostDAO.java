@@ -51,6 +51,40 @@ public class PostDAO extends DBContext {
         }
         return postList;
     }
+    
+     // Lấy một số lượng giới hạn các bài đăng
+    public List<Post> getLimitedPosts(int limit) {
+        List<Post> postList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT TOP ? * FROM Post ORDER BY PostTime DESC";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, limit);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Post post = new Post(
+                        rs.getInt("PostID"),
+                        rs.getInt("UserID"),
+                        rs.getInt("CategoryID"),
+                        rs.getString("Content"),
+                        rs.getString("Source"),
+                        rs.getString("Image"),
+                        rs.getTimestamp("PostTime").toLocalDateTime(),
+                        rs.getString("Status"),
+                        rs.getInt("Vote"),
+                        rs.getInt("View")
+                );
+                postList.add(post);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        return postList;
+    }
 
     // Lấy bài đăng dựa trên PostID
     public Post getPostById(int postId) {

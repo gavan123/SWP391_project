@@ -11,31 +11,30 @@ import java.time.LocalDateTime;
  * @author admin
  */
 public class Comment {
+
     private int commentId;
     private int postId;
     private int userId;
     private String image;
     private String content;
     private String status;
-    private int upvote;
-    private int downvote;
+    private int vote;
     private int parentId;
-    private LocalDateTime postTime;
+    private LocalDateTime createAt;
 
     public Comment() {
     }
 
-    public Comment(int commentId, int postId, int userId, String image, String content, String status, int upvote, int downvote, int parentId, LocalDateTime postTime) {
+    public Comment(int commentId, int postId, int userId, String image, String content, String status, int vote, int parentId, LocalDateTime createAt) {
         this.commentId = commentId;
         this.postId = postId;
         this.userId = userId;
         this.image = image;
         this.content = content;
         this.status = status;
-        this.upvote = upvote;
-        this.downvote = downvote;
+        this.vote = vote;
         this.parentId = parentId;
-        this.postTime = postTime;
+        this.createAt = createAt;
     }
 
     public int getCommentId() {
@@ -86,22 +85,6 @@ public class Comment {
         this.status = status;
     }
 
-    public int getUpvote() {
-        return upvote;
-    }
-
-    public void addUpvote(int upvote) {
-        this.upvote += upvote;
-    }
-
-    public int getDownvote() {
-        return downvote;
-    }
-
-    public void addDownvote(int downvote) {
-        this.downvote += downvote;
-    }
-
     public int getParentId() {
         return parentId;
     }
@@ -110,13 +93,24 @@ public class Comment {
         this.parentId = parentId;
     }
 
-    public LocalDateTime getPostTime() {
-        return postTime;
+    public int getVote() {
+        return vote;
     }
 
-    public void setPostTime(LocalDateTime postTime) {
-        this.postTime = postTime;
+    public void setVote(int vote) {
+        this.vote = vote;
     }
-    
-    
+
+    public void addVote(int vote) {
+        this.vote += vote;
+    }
+
+    public LocalDateTime getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(LocalDateTime createAt) {
+        this.createAt = createAt;
+    }
+
 }

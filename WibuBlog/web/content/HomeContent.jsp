@@ -261,7 +261,7 @@
 
             <!-- Add Pagination -->
             <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
-              
+
             </div>
             <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
 
@@ -269,20 +269,21 @@
 
         </div>
     </div>
-    <script>
-        function confirmDelete() {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('deleteAccountForm').submit();
-                }
-            })
-        }
-    </script>
+</div>
+<script>
+    function confirmDelete() {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('deleteAccountForm').submit();
+            }
+        })
+    }
+</script>

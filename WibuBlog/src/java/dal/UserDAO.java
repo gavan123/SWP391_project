@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.User;
+import utility.DateConverter;
 
 public class UserDAO extends DBContext {
 
@@ -39,8 +40,8 @@ public class UserDAO extends DBContext {
                         rs.getInt("RankID"),
                         rs.getString("ProfilePhoto"),
                         rs.getString("PhoneNumber"),
-                        rs.getTimestamp("DateOfBirth").toLocalDateTime(),
-                        rs.getTimestamp("CreationDate").toLocalDateTime());
+                        rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
+                        rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null);
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -72,8 +73,8 @@ public class UserDAO extends DBContext {
                         rs.getInt("RankID"),
                         rs.getString("ProfilePhoto"),
                         rs.getString("PhoneNumber"),
-                        rs.getTimestamp("DateOfBirth").toLocalDateTime(),
-                        rs.getTimestamp("CreationDate").toLocalDateTime());
+                        rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
+                        rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null);
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -140,8 +141,8 @@ public class UserDAO extends DBContext {
                         rs.getInt("RankID"),
                         rs.getString("ProfilePhoto"),
                         rs.getString("PhoneNumber"),
-                        rs.getTimestamp("DateOfBirth").toLocalDateTime(),
-                        rs.getTimestamp("CreationDate").toLocalDateTime());
+                        rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
+                        rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null);
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);

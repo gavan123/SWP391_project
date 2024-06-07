@@ -9,7 +9,6 @@
                         <i class="anticon opacity-04 font-size-16 anticon-logout"></i>
                         <span class="m-l-10">Login</span>
                     </div>
-                    <i class="anticon font-size-10 anticon-right"></i>
                 </div>
             </button>
         </form>

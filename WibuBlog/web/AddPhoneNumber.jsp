@@ -1,15 +1,22 @@
+<%-- 
+    Document   : resetPass
+    Created on : May 23, 2024, 8:52:09 PM
+    Author     : ADMIN
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Wibi Burotsugu - Verify Email</title>
-
+        <title>Add Phone Number</title>
         <!-- Favicon -->
         <link rel="shortcut icon" href="">
-
-        <!-- Core CSS -->
+        <!-- page css -->
+        <!-- Core css -->
         <link href="assets/css/app.min.css" rel="stylesheet">
     </head>
 
@@ -26,15 +33,21 @@
                                             <p style="color:red">${errorMessage}</p>
                                         </c:if>
                                         <div class="d-flex align-items-center justify-content-end m-b-30">
-                                            <h2 class="m-b-0">Verify Email</h2>
+                                            <h2 class="m-b-0">Add Phone Number</h2>
                                         </div>
-                                        <form action="verificationRegister" method="post">
+                                        <form action="addPhoneNumber" method="post">                                          
                                             <div class="form-group">
-                                                <label class="font-weight-semibold" for="responseField">Enter verification code:</label>
-                                                <input type="text" class="form-control" id="responseField" name="response" required oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="6">
+                                                <label class="font-weight-semibold" for="confirmPassword">Phone number</label>
+                                                <div class="input-affix">
+                                                    <i class="prefix-icon anticon anticon-info"></i>
+                                                    <input type="number" name="phoneNumber" class="form-control" id="confirmPassword" placeholder="Phone number" required oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="11">
+                                                </div>
                                             </div>
-                                            <p style="color : red">${requestScope.error}</p>
-                                            <button class="btn btn-primary" type="submit">Submit</button>
+                                            <div class="form-group">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <button class="btn btn-primary">Add phone number</button>
+                                                </div>
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
@@ -48,8 +61,9 @@
         <!-- Core Vendors JS -->
         <script src="assets/js/vendors.min.js"></script>
 
+        <!-- page js -->
+
         <!-- Core JS -->
         <script src="assets/js/app.min.js"></script>
     </body>
-
 </html>

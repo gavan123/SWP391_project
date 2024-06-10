@@ -38,7 +38,7 @@ public class UserDAO extends DBContext {
                         rs.getString("Email"),
                         rs.getString("Fullname"),
                         rs.getInt("RankID"),
-                        rs.getString("ProfilePhoto"),
+                        rs.getInt("ProfilePhoto"),
                         rs.getString("PhoneNumber"),
                         rs.getTimestamp("DateOfBirth").toLocalDateTime(),
                         rs.getTimestamp("CreationDate").toLocalDateTime());
@@ -71,7 +71,7 @@ public class UserDAO extends DBContext {
                         rs.getString("Email"),
                         rs.getString("Fullname"),
                         rs.getInt("RankID"),
-                        rs.getString("ProfilePhoto"),
+                        rs.getInt("ProfilePhoto"),
                         rs.getString("PhoneNumber"),
                         rs.getTimestamp("DateOfBirth").toLocalDateTime(),
                         rs.getTimestamp("CreationDate").toLocalDateTime());
@@ -139,7 +139,7 @@ public class UserDAO extends DBContext {
                         rs.getString("Email"),
                         rs.getString("Fullname"),
                         rs.getInt("RankID"),
-                        rs.getString("ProfilePhoto"),
+                        rs.getInt("ProfilePhoto"),
                         rs.getString("PhoneNumber"),
                         rs.getTimestamp("DateOfBirth").toLocalDateTime(),
                         rs.getTimestamp("CreationDate").toLocalDateTime());
@@ -230,21 +230,18 @@ public class UserDAO extends DBContext {
         }
     }
 
-    public boolean updateProfilePhoto(int userId, String profilePhoto) {
+    public void updateProfilePhoto(int userId, int profilePhotoID) {
         PreparedStatement ps = null;
         try {
-            String sql = "UPDATE [user] SET ProfilePictureURL = ? WHERE UserID = ?";
+            String sql = "UPDATE [user] SET ProfilePhoto = ? WHERE UserID = ?";
             ps = connection.prepareStatement(sql);
-            ps.setString(1, profilePhoto);
+            ps.setInt(1, profilePhotoID);
             ps.setInt(2, userId);
-            int rowsUpdated = ps.executeUpdate();
-            return rowsUpdated > 0;
+            ps.execute();
+            ps.close();
         } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        } finally {
-            closePreparedStatement(ps);
-        }
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);          
+        } 
     }
 
 //    @Override
@@ -317,5 +314,23 @@ public class UserDAO extends DBContext {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    public void setPhoneNumber(String phoneNumber, int userID){
+        try {
+            String sql = "update [user] set PhoneNumber = ? where userid = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, phoneNumber);
+            ps.setInt(2,userID);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+     public String getProfilePic(int userID){
+        String sql = "select * from media where userId = ?";
+        ps.setInt(1, userID);
     }
 }

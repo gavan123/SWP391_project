@@ -3,12 +3,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="model.User" %>
 <%@ page import="dal.UserDAO" %>
+<%@ page import="dal.MediaDAO" %>
 <link rel="stylesheet" href="assets/css/testcss.css">
 <% User user = (User)session.getAttribute("user");
     UserDAO userDAO = new UserDAO();
     String rank = userDAO.getRankByRankID(user.getRankId());
     String rankColor = userDAO.getColorByRank(rank);
     String role = userDAO.getRoleByRoleID(user.getRoleId()); 
+    MediaDAO mediaDAO = new MediaDAO();
     
 %>
 <div class="container">
@@ -21,13 +23,15 @@
                             
                           <div class="test avatar avatar-image" style="width: 150px; height: 150px">                            
                                    <c:choose>
-                                        <c:when test="${user.profilePhoto == null}">
-                                            <input type="file" class="upload-input">
+                                        <c:when test="${user.profilePhoto == 0}">
+                                            <form action="UploadPFP" method="post" enctype="multipart/form-data"  >
+                                            <input type="file" class="upload-input" onchange="this.form.submit()" name="pfp" id="someId">
                                             <img src="assets/images/avatars/thumb-3.jpg" alt="">
                                             <div class="upload-text">Upload an image</div>
+                                            </form>
                                         </c:when>                                     
                                         <c:otherwise>
-                                            <p class="col font-weight-semibold"> <a href="addPhoneNumber">Add your phone number</a> </p>
+                                            <p class="col font-weight-semibold"><img src=""></p>
                                         </c:otherwise>
                                       </c:choose>
                                 
@@ -364,3 +368,25 @@
         </div>
     </div>
 </div>
+                                <script>
+                                    var file = document.getElementById('someId');
+                                    file.onchange = function(e) {
+                                      var ext = this.value.match(/\.([^\.]+)$/)[1];                                 
+                                      switch (ext) {
+                                        case 'jpg':
+                                        this.form.submit();
+                                        break;
+                                        case 'bmp':
+                                        this.form.submit();
+                                        case 'png':
+                                        this.form.submit();
+                                        break;
+                                        case 'tif':
+                                          this.form.submit();
+                                          break;
+                                        default:
+                                          alert('Not allowed');
+                                          this.value = '';
+                                      }
+                                    };
+                                </script>

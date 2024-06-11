@@ -83,11 +83,13 @@ public class UploadPFP extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        File source = new File("C:\\Users\\mindc\\OneDrive\\Documents\\GitHub\\SWP391_project\\WibuBlog" + imageFileName);
-        File target = new File("C:\\Users\\mindc\\OneDrive\\Documents\\GitHub\\SWP391_project\\WibuBlog" + encodedMediaName);
+        
+        
+        //encode file name in case of duplicate file name but different content
+        File source = new File("C:\\Users\\mindc\\OneDrive\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + imageFileName);
+        File target = new File("C:\\Users\\mindc\\OneDrive\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + encodedMediaName);
          if (source.renameTo(target)) { 
-  
+             
             // display that the file is renamed 
             // to the abstract path name 
             out.println("File is renamed"); 
@@ -102,18 +104,18 @@ public class UploadPFP extends HttpServlet {
         Media media = new Media(0,
                 user.getUserId(),
                 mediaDAO.encodeMediaName(user.getUserId()),
-                uploadPath,
+                "C:\\Users\\mindc\\OneDrive\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + encodedMediaName,
                 mediaDAO.getExtension(imageFileName),
                 LocalDateTime.now());
 
         //insert into database
         mediaDAO.insertMedia(media);
         UserDAO userDAO = new UserDAO();
-        userDAO.updateProfilePhoto(user.getUserId(), 1);
+        userDAO.updateProfilePhoto(user.getUserId(), mediaDAO.getMediaJustInserted(user.getUserId()));
         user.setProfilePhoto(mediaDAO.getMediaJustInserted(user.getUserId()));
 
         //go back to profile
-        // response.sendRedirect("Profile.jsp");
+         response.sendRedirect("Profile.jsp");
     }
 
     @Override

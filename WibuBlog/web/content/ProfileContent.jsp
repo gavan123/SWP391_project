@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="model.User" %>
+<%@ page import="model.Media" %>
 <%@ page import="dal.UserDAO" %>
 <%@ page import="dal.MediaDAO" %>
 <link rel="stylesheet" href="assets/css/testcss.css">
@@ -11,8 +12,11 @@
     String rankColor = userDAO.getColorByRank(rank);
     String role = userDAO.getRoleByRoleID(user.getRoleId()); 
     MediaDAO mediaDAO = new MediaDAO();
+    Media media = mediaDAO.getMedia(user.getProfilePhoto());
     
 %>
+
+<img src="<%=media.getPath()%>" width="100%">
 <div class="container">
     <div class="card">
         <div class="card-body">
@@ -31,7 +35,7 @@
                                             </form>
                                         </c:when>                                     
                                         <c:otherwise>
-                                            <p class="col font-weight-semibold"><img src=""></p>
+                                            <img src="<%=media.getPath()%>" width="600px">
                                         </c:otherwise>
                                       </c:choose>
                                 

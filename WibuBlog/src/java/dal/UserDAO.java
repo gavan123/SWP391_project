@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Media;
 import model.User;
 
 public class UserDAO extends DBContext {
@@ -329,8 +330,5 @@ public class UserDAO extends DBContext {
         }
     }
     
-     public String getProfilePic(int userID){
-        String sql = "select * from media where userId = ?";
-        ps.setInt(1, userID);
-    }
+      
 }

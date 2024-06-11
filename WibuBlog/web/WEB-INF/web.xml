@@ -8,4 +8,5 @@
         <servlet-name>blank</servlet-name>
         <url-pattern>/blank</url-pattern>
     </servlet-mapping>
+    
 </web-app>

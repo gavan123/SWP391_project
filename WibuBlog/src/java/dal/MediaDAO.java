@@ -5,12 +5,14 @@
 package dal;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Media;
@@ -68,12 +70,32 @@ public class MediaDAO extends DBContext {
     }
 
     public String encodeMediaName(int userID) {
-        return userID + "_" + LocalDate.now().toString() + "_" + LocalTime.now();
+        LocalDateTime datetime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_hhmmss");
+        String formattedDateTime = datetime.format(formatter);
+        return userID + "_" + formattedDateTime;
     }
-    
-    public String searchEncodedMedia(String mediaID){
-        String sql = "select * from media where userID = ? ";
+
+    public Media getMedia(int mediaID) {
+        try {
+            String sql = "select * from media where mediaid = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, mediaID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return new Media(rs.getInt("MediaID"),
+                        rs.getInt("UserID"),
+                        rs.getString("FileName"),
+                        rs.getString("Path"),
+                        rs.getString("Type"),
+                        LocalDateTime.parse(rs.getString("Uploaded")));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MediaDAO.class.getName()).log(Level.SEVERE, null, ex);
         
+
+        }
         return null;
     }
+
 }

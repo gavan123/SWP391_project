@@ -172,63 +172,6 @@
                         <h2 class="menu-text-sm text-center mt-2 text-truncate-2">Tiên Tử, Xin Nghe Ta Giải Thích: Dân mạng đánh giá thế nào?</h2>
                     </a>
                 </div>
-
-
-                <div class="swiper-slide g_thumb" role="group" aria-label="9 / 12" style="width: 135.833px; margin-right: 15px;">
-                    <span class="badge badge-info posts-badge">3336 <i class="mdi mdi-eye"></i></span>
-
-                    <span class="badge badge-danger posts-badge-2 text-truncate">Nhiệt huyết</span>
-
-                    <a href="//vidian.vn/chi-tiet/de-ba-bo-de-lao-to-lao-thu-yeu" id="new_post8">
-
-                        <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="//vidian.vn/img-thumbnail/img-thumbnail-1717241665798.jpg" onerror="this.src='https:////vidian.vn/img-thumbnail/default-book.png'" alt="Đế Bá: Bồ Đề Lão Tổ | Lão Thụ Yêu">
-
-                        <h2 class="menu-text-sm text-center mt-2 text-truncate-2">Đế Bá: Bồ Đề Lão Tổ | Lão Thụ Yêu</h2>
-                    </a>
-                </div>
-
-
-                <div class="swiper-slide g_thumb" role="group" aria-label="10 / 12" style="width: 135.833px; margin-right: 15px;">
-                    <span class="badge badge-info posts-badge">3532 <i class="mdi mdi-eye"></i></span>
-
-                    <span class="badge badge-danger posts-badge-2 text-truncate">Nhiệt huyết</span>
-
-                    <a href="//vidian.vn/chi-tiet/tien-cong-khai-quat-cua-co-chan-nhan-truoc-khi-len-ke-dat-duoc-500-fan-minh-chu-cat-ngu-quyen-tu-luyen-bat-dau-tu-don-gian-hoa-cong-phap-doi-ten" id="new_post9">
-
-                        <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="//vidian.vn/img-thumbnail/img-thumbnail-1717044673511.webp" onerror="this.src='https:////vidian.vn/img-thumbnail/default-book.png'" alt="Tiên Công Khai Quật của Cổ Chân Nhân trước khi lên kệ đạt được 500 fan Minh chủ, Cật Ngư quyển Tu Luyện Bắt Đầu Từ Đơn Giản Hóa Công Pháp đổi tên">
-
-                        <h2 class="menu-text-sm text-center mt-2 text-truncate-2">Tiên Công Khai Quật của Cổ Chân Nhân trước khi lên kệ đạt được 500 fan Minh chủ, Cật Ngư quyển Tu Luyện Bắt Đầu Từ Đơn Giản Hóa Công Pháp đổi tên</h2>
-                    </a>
-                </div>
-
-
-                <div class="swiper-slide g_thumb" role="group" aria-label="11 / 12" style="width: 135.833px; margin-right: 15px;">
-                    <span class="badge badge-info posts-badge">2251 <i class="mdi mdi-eye"></i></span>
-
-                    <span class="badge badge-danger posts-badge-2 text-truncate">Nhiệt huyết</span>
-
-                    <a href="//vidian.vn/chi-tiet/de-ba-trieu-dai-chuy" id="new_post10">
-
-                        <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="//vidian.vn/img-thumbnail/img-thumbnail-1717056744572.jpg" onerror="this.src='https:////vidian.vn/img-thumbnail/default-book.png'" alt="Đế Bá: Triệu Đại Chùy">
-
-                        <h2 class="menu-text-sm text-center mt-2 text-truncate-2">Đế Bá: Triệu Đại Chùy</h2>
-                    </a>
-                </div>
-
-
-                <div class="swiper-slide g_thumb" role="group" aria-label="12 / 12" style="width: 135.833px; margin-right: 15px;">
-                    <span class="badge badge-info posts-badge">3728 <i class="mdi mdi-eye"></i></span>
-
-                    <span class="badge badge-danger posts-badge-2 text-truncate">Nhiệt huyết</span>
-
-                    <a href="//vidian.vn/chi-tiet/de-cu-vai-quyen-tieu-thuyet-ky-huyen-ma-phap-do-thi-di-nang-khoa-huyen-tuong-lai-da-hoan-thanh" id="new_post11">
-
-                        <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="//vidian.vn/img-thumbnail/img-thumbnail-1716886092053.jpg" onerror="this.src='https:////vidian.vn/img-thumbnail/default-book.png'" alt="Đề cử vài quyển tiểu thuyết kỳ huyễn ma pháp, đô thị dị năng, khoa huyễn tương lai đã hoàn thành">
-
-                        <h2 class="menu-text-sm text-center mt-2 text-truncate-2">Đề cử vài quyển tiểu thuyết kỳ huyễn ma pháp, đô thị dị năng, khoa huyễn tương lai đã hoàn thành</h2>
-                    </a>
-                </div>
-
             </div>
 
             <!-- Add Pagination -->

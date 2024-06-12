@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
+<jsp:useBean id="p" scope="request" class="dal.PostDAO" />
 
 <c:choose>
     <c:when test="${empty user}">
@@ -30,57 +30,29 @@
         </form>
     </c:otherwise>
 </c:choose>
+
 <div class="card mb-2 rounded-5 border-0">
     <div class="card-header">
         <h3 class="card-header-h3 fs-16">
             Q &amp; A
             <span class="float-right text-uppercase">
-                <a href="//vidian.vn/qas/qa/1">Xem thêm</a>
+                <a href="question">Xem thêm</a>
             </span>
         </h3>
     </div>
     <div class="card-body">
         <ul class="list-group list-group-flush">
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div class="col-10 text-truncate font-weight-bold">
-                    <a href="//vidian.vn/qa/xin-cac-dao-huu-cho-minh-xin-vai-bo-he-thong-ba-vl">xin các đạo hữu cho mình xin vài bộ hệ thống bá vl</a>
-                </div>
-                <span class="badge badge-primary badge-pill">
-                    <i class="far fa-comment-dots"></i> 2
-                </span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div class="col-10 text-truncate font-weight-bold">
-                    <a href="//vidian.vn/qa/co-than-co-tu-vi-nhu-the-nao-co-cap-bac-hay-dia-vi-gi-khong-">Cổ Thần có tu vi như thế nào . Có cấp bậc hay địa vị gì không </a>
-                </div>
-                <span class="badge badge-primary badge-pill">
-                    <i class="far fa-comment-dots"></i> 6
-                </span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div class="col-10 text-truncate font-weight-bold">
-                    <a href="//vidian.vn/qa/nho-cac-dao-huu-gioi-thieu-cho-mot-bo-ngu-thu-hay-nhe-nhang-minh-da-doc-khong-khoa-hoc-ngu-thu">Nhờ các đạo hữu giới thiệu cho một bộ ngự thú hay , nhẹ nhàng. Mình đã đọc Không Khoa Học Ngự Thú</a>
-                </div>
-                <span class="badge badge-primary badge-pill">
-                    <i class="far fa-comment-dots"></i> 6
-                </span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div class="col-10 text-truncate font-weight-bold">
-                    <a href="//vidian.vn/qa/kiem-lai-van-tam-thu-gian-ho-tran-binh-an-tai-ha-khong-hieu-ro-duoc-doan-nay-mng-co-ai-biet-thi-giai-dap-giup-tui-vs">Kiếm Lai. Vấn tâm Thư Giản Hồ Trần Bình An. Tại hạ không hiểu rõ được đoạn này... Mng có ai biết thì giải đáp giúp tui vs...</a>
-                </div>
-                <span class="badge badge-primary badge-pill">
-                    <i class="far fa-comment-dots"></i> 11
-                </span>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div class="col-10 text-truncate font-weight-bold">
-                    <a href="//vidian.vn/qa/tai-ha-muon-hoi-phan-cap-bac-yeu-thudi-thu-ten-cap-bac-khong-phai-la-123abd-">Tại hạ muốn hỏi phân cấp bậc yêu thú(dị thú) (tên cấp bậc không phải là 123,abd) </a>
-                </div>
-                <span class="badge badge-primary badge-pill">
-                    <i class="far fa-comment-dots"></i> 5
-                </span>
-            </li>
+            <c:forEach var="post" items="${p.getLimitedPostsByCategory(5,10)}">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="col-10 text-truncate font-weight-bold">
+                        <a href="${post.source}">${post.content}</a>
+                    </div>
+                    <span class="badge badge-primary badge-pill">
+                        <i class="far fa-comment-dots fa-lg"></i>
+                        <span style="font-size: larger;">${post.view}</span> 
+                    </span>
+                </li>
+            </c:forEach>
         </ul>
     </div>
 </div>

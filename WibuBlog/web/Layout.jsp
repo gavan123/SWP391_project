@@ -14,6 +14,19 @@
         <link rel="shortcut icon" href="">
         <link href="assets/css/app.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+        <style>
+            .logo {
+                width: 100%; /* Hoặc đặt kích thước cố định nếu cần */
+                max-width: 300px; /* Kích thước tối đa của div logo, bạn có thể điều chỉnh giá trị này */
+                margin: 0 auto; /* Để căn giữa div logo nếu cần */
+            }
+
+            .logo img {
+                width: 100%;
+                height: 70px;
+                display: block;
+            }
+        </style>
     </head>
     <body>
         <div class="app">
@@ -22,14 +35,14 @@
                 <div class="header">
                     <div class="logo logo-dark">
                         <a href="home">
-                            <img src="assets/images/logo/logo.png" alt="Logo">
-                            <img class="logo-fold" src="assets/images/logo/logo-fold.png" alt="Logo">
+                            <img src="images/logo/logo.png" alt="Logo" class="logo-image">
+                            <img class="logo-fold" src="images/logo/logo.png" alt="Logo" class="logo-image">
                         </a>
                     </div>
                     <div class="logo logo-white">
                         <a href="home">
-                            <img src="assets/images/logo/logo-white.png" alt="Logo">
-                            <img class="logo-fold" src="assets/images/logo/logo-fold-white.png" alt="Logo">
+                            <img src="images/logo/logo.png" alt="Logo" class="logo-image">
+                            <img class="logo-fold" src="images/logo/logo.png" alt="Logo" class="logo-image">
                         </a>
                     </div>
                     <div class="nav-wrap">

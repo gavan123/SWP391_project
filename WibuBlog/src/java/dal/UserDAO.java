@@ -26,7 +26,7 @@ public class UserDAO extends DBContext {
             ps = connection.prepareStatement(sql);
             ps.setString(1, email);
             rs = ps.executeQuery();
-            if (rs.next()) {
+            if (rs.next()) {    
                 return new User(
                         rs.getInt("UserID"),
                         rs.getString("Username"),

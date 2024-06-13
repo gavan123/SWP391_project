@@ -88,19 +88,12 @@ public class UploadPFP extends HttpServlet {
         //encode file name in case of duplicate file name but different content
         File source = new File("C:\\Users\\admin\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + imageFileName);
         File target = new File("C:\\Users\\admin\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + encodedMediaName);
-         if (source.renameTo(target)) { 
-             
-            // display that the file is renamed 
-            // to the abstract path name 
+         if (source.renameTo(target)) {                   
             out.println("File is renamed"); 
         } 
         else { 
-            // display that the file cannot be renamed 
-            // to the abstract path name 
             out.println("File cannot be renamed"); 
         } 
-        
-
         Media media = new Media(0,
                 user.getUserId(),
                 mediaDAO.encodeMediaName(user.getUserId()),

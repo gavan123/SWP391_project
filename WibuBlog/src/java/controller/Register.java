@@ -76,7 +76,7 @@ public class Register extends HttpServlet {
             // Generate a verification code
             String verificationCode = KeyGenerator.generateVerificationCode();
             // Send verification code to the user's email
-            ContentDelivery.sendVerificationCode("verification code", email, verificationCode);
+            ContentDelivery.sendVerificationCode("Verification code", email, verificationCode);
             // Create a new User object
             User user = new User(0, username, Hash.getHash(password), 3, 0, "active", email, fullName, 1);
             User user2 = new User(0, username, Hash.getHash(password), 3, 0, "active", email, fullName, 1, 0, null, null, null);
@@ -88,6 +88,7 @@ public class Register extends HttpServlet {
             session.setMaxInactiveInterval(3 * 60);
             request.setAttribute("email", email);
             // Forward the request to authenticateRegister.jsp
+            request.setAttribute("message", "An OTP has been sent to " + email + " please login to your account to verify");
             request.getRequestDispatcher("VerificationRegister.jsp").forward(request, response);
         }
     }

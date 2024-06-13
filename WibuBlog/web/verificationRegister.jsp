@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -24,6 +24,9 @@
                                     <div class="card-body">
                                         <c:if test="${not empty errorMessage}">
                                             <p style="color:red">${errorMessage}</p>
+                                        </c:if>
+                                            <c:if test="${message != null}">
+                                                <p style="color: blue">${message}</p>
                                         </c:if>
                                         <div class="d-flex align-items-center justify-content-end m-b-30">
                                             <h2 class="m-b-0">Verify Email</h2>

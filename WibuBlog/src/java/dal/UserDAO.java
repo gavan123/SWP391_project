@@ -29,6 +29,7 @@ public class UserDAO extends DBContext {
             ps.setString(1, email);
             rs = ps.executeQuery();
             if (rs.next()) {
+                if(rs.getTimestamp("DateOfBirth") != null){
                 return new User(
                         rs.getInt("UserID"),
                         rs.getString("Username"),
@@ -43,6 +44,22 @@ public class UserDAO extends DBContext {
                         rs.getString("PhoneNumber"),
                         rs.getTimestamp("DateOfBirth").toLocalDateTime(),
                         rs.getTimestamp("CreationDate").toLocalDateTime());
+                }
+                else{
+                    return new User(
+                        rs.getInt("UserID"),
+                        rs.getString("Username"),
+                        rs.getString("Password"),
+                        rs.getInt("RoleID"),
+                        rs.getInt("Point"),
+                        rs.getString("Status"),
+                        rs.getString("Email"),
+                        rs.getString("Fullname"),
+                        rs.getInt("RankID"),
+                        rs.getInt("ProfilePhoto"),
+                        rs.getString("PhoneNumber"),
+                        rs.getTimestamp("CreationDate").toLocalDateTime());
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);

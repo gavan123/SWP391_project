@@ -85,6 +85,124 @@
         </div>
     </div>
 </div>
+
+
+
+<div class="card mb-2 rounded-3 border-0">
+    <div class="card-header" id="top"><h3 class="card-header-h3 fs-16">Anime Reviews
+            <span class="float-right text-uppercase">
+                <a href="postList">Xem thêm</a>
+            </span></h3></div>
+    <div class="card-body">
+        <!-- Swiper slider -->
+        <div class="swiper-container swiper-container-initialized swiper-container-horizontal" style="min-height:220px">
+            <div class="swiper-wrapper" id="swiper-wrapper" aria-live="polite" style="transform: translate3d(-603.333px, 0px, 0px); transition-duration: 0ms;">
+                <c:forEach var="post" items="${p.getLimitedPostsByCategory(10, 1)}">
+                    <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
+                        <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
+                        <span class="badge badge-danger posts-badge-2 text-truncate">${post.status}</span>
+                        <a href="${post.source}" id="new_post0">
+                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
+                            <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
+                        </a>
+                    </div>
+                </c:forEach>
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
+            </div>
+            <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+            <!-- End Swiper slider -->
+        </div>
+    </div>
+</div>
+
+<div class="card mb-2 rounded-3 border-0">
+    <div class="card-header" id="top"><h3 class="card-header-h3 fs-16">Character Analysis
+            <span class="float-right text-uppercase">
+                <a href="postList">Xem thêm</a>
+            </span></h3></div>
+    <div class="card-body">
+        <!-- Swiper slider -->
+        <div class="swiper-container swiper-container-initialized swiper-container-horizontal" style="min-height:220px">
+            <div class="swiper-wrapper" id="swiper-wrapper" aria-live="polite" style="transform: translate3d(-603.333px, 0px, 0px); transition-duration: 0ms;">
+                <c:forEach var="post" items="${p.getLimitedPostsByCategory(10, 2)}">
+                    <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
+                        <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
+                        <span class="badge badge-danger posts-badge-2 text-truncate">${post.status}</span>
+                        <a href="${post.source}" id="new_post0">
+                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
+                            <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
+                        </a>
+                    </div>
+                </c:forEach>
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
+            </div>
+            <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+            <!-- End Swiper slider -->
+        </div>
+    </div>
+</div>
+
+<div class="card mb-2 rounded-3 border-0">
+    <div class="card-header" id="top"><h3 class="card-header-h3 fs-16">Plot Analysis 
+            <span class="float-right text-uppercase">
+                <a href="postList">Xem thêm</a>
+            </span></h3></div>
+    <div class="card-body">
+        <!-- Swiper slider -->
+        <div class="swiper-container swiper-container-initialized swiper-container-horizontal" style="min-height:220px">
+            <div class="swiper-wrapper" id="swiper-wrapper" aria-live="polite" style="transform: translate3d(-603.333px, 0px, 0px); transition-duration: 0ms;">
+                <c:forEach var="post" items="${p.getLimitedPostsByCategory(10, 3)}">
+                    <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
+                        <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
+                        <span class="badge badge-danger posts-badge-2 text-truncate">${post.status}</span>
+                        <a href="${post.source}" id="new_post0">
+                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
+                            <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
+                        </a>
+                    </div>
+                </c:forEach>
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
+            </div>
+            <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+            <!-- End Swiper slider -->
+        </div>
+    </div>
+</div>
+
+<div class="card mb-2 rounded-3 border-0">
+    <div class="card-header" id="top"><h3 class="card-header-h3 fs-16">Interviews
+            <span class="float-right text-uppercase">
+                <a href="postList">Xem thêm</a>
+            </span></h3></div>
+    <div class="card-body">
+        <!-- Swiper slider -->
+        <div class="swiper-container swiper-container-initialized swiper-container-horizontal" style="min-height:220px">
+            <div class="swiper-wrapper" id="swiper-wrapper" aria-live="polite" style="transform: translate3d(-603.333px, 0px, 0px); transition-duration: 0ms;">
+                <c:forEach var="post" items="${p.getLimitedPostsByCategory(10, 8)}">
+                    <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
+                        <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
+                        <span class="badge badge-danger posts-badge-2 text-truncate">${post.status}</span>
+                        <a href="${post.source}" id="new_post0">
+                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
+                            <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
+                        </a>
+                    </div>
+                </c:forEach>
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
+            </div>
+            <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
+            <!-- End Swiper slider -->
+        </div>
+    </div>
+</div>
 <script>
     function confirmDelete() {
         Swal.fire({

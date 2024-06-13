@@ -48,15 +48,7 @@ public class AddPhoneNumber extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+   
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -69,12 +61,19 @@ public class AddPhoneNumber extends HttpServlet {
             throws ServletException, IOException {
         String phoneNumber = request.getParameter("phoneNumber");
         UserDAO userDAO = new UserDAO();
+        if(userDAO.checkPhoneNumber(phoneNumber) == true){
+            request.setAttribute("errorMessage", "This number has already existed");
+            request.getRequestDispatcher("AddPhoneNumber.jsp").forward(request, response);
+        }
+        else{
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
         user.setPhoneNumber(phoneNumber);
         userDAO.setPhoneNumber(phoneNumber, user.getUserId());
         request.setAttribute("updateNumberMessage", "Update successfully");
         request.getRequestDispatcher("Profile.jsp").forward(request, response);
+        }
+       
     }
 
     @Override

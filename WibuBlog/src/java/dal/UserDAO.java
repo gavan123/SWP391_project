@@ -142,9 +142,9 @@ public class UserDAO extends DBContext {
                         rs.getInt("RankID"),
                         rs.getInt("ProfilePhoto"),
                         rs.getString("PhoneNumber"),
-                        rs.getTimestamp("DateOfBirth").toLocalDateTime(),
                         rs.getTimestamp("CreationDate").toLocalDateTime());
             }
+            
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -330,5 +330,18 @@ public class UserDAO extends DBContext {
         }
     }
     
-      
+      public boolean checkPhoneNumber(String phoneNumber){
+        try {
+            String sql = "select * from user where PhoneNumber = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, phoneNumber);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+      }
 }

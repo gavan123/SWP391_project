@@ -6,17 +6,14 @@
 <%@ page import="dal.UserDAO" %>
 <%@ page import="dal.MediaDAO" %>
 <link rel="stylesheet" href="assets/css/testcss.css">
-<% User user = (User)session.getAttribute("user");
-    UserDAO userDAO = new UserDAO();
-    String rank = userDAO.getRankByRankID(user.getRankId());
-    String rankColor = userDAO.getColorByRank(rank);
-    String role = userDAO.getRoleByRoleID(user.getRoleId()); 
-    MediaDAO mediaDAO = new MediaDAO();
-    Media media = mediaDAO.getMedia(user.getProfilePhoto());
-    
-%>
-
-<img src="<%=media.getPath()%>" width="100%">
+ <% User user = (User)session.getAttribute("user");
+                                UserDAO userDAO = new UserDAO();
+                                String rank = userDAO.getRankByRankID(user.getRankId());
+                                String rankColor = userDAO.getColorByRank(rank);
+                                String role = userDAO.getRoleByRoleID(user.getRoleId()); 
+                                MediaDAO mediaDAO = new MediaDAO();
+                                Media media = mediaDAO.getMedia(user.getProfilePhoto());
+                            %>
 <div class="container">
     <div class="card">
         <div class="card-body">
@@ -24,23 +21,27 @@
                 <div class="col-md-7">
                     <div class="d-md-flex align-items-center">
                         <div class="text-center text-sm-left ">
-                            
-                          <div class="test avatar avatar-image" style="width: 150px; height: 150px">                            
+                           
+                          <div class="test avatar avatar-image" style="width: 150px; height: 100px;border: 2px solid grey;">                            
                                    <c:choose>
                                         <c:when test="${user.profilePhoto == 0}">
                                             <form action="UploadPFP" method="post" enctype="multipart/form-data"  >
-                                            <input type="file" class="upload-input" onchange="this.form.submit()" name="pfp" id="someId">
-                                            <img src="assets/images/avatars/thumb-3.jpg" alt="">
+                                            <input type="file" class="upload-input" onchange="this.form.submit()" name="pfp" id="someId">                                       
                                             <div class="upload-text">Upload an image</div>
                                             </form>
                                         </c:when>                                     
                                         <c:otherwise>
-                                            <img src="<%=media.getPath()%>" width="600px">
+                                            
+                                            <form action="UploadPFP" method="post" enctype="multipart/form-data"  >
+                                            <input type="file" class="upload-input" onchange="this.form.submit()" name="pfp" id="someId">         
+                                              <img src="<%=media.getPath()%>" style="width: 150px; height: 100px">
+                                            <div class="upload-text">Upload an image</div>
+                                            </form>               
                                         </c:otherwise>
                                       </c:choose>
                                 
                             </div>
-                        </div>
+                        </div>                                        
                         <div class="text-center text-sm-left m-v-15 p-l-30">
                             <h2 class="m-b-5">${user.username}</h2>
                             <i class="text-opacity font-size-15" style="color:<%=rankColor%>" ><b><%=rank%></b></i>
@@ -67,12 +68,16 @@
                                     </p>                                 
                                      <c:choose>
                                         <c:when test="${user.phoneNumber != null}">
-                                           <p class="col font-weight-semibold"> ${user.phoneNumber} </p>
+                                            <p class="col font-weight-semibold"> ${user.phoneNumber} </p>
+                                            <c:if test="${updateNumberMessage != null}">
+                                                <p style="color: green">${updateNumberMessage}</p>
+                                            </c:if>                                                                                     
                                         </c:when>                                     
                                         <c:otherwise>
                                             <p class="col font-weight-semibold"> <a href="addPhoneNumber">Add your phone number</a> </p>
                                         </c:otherwise>
                                       </c:choose>
+                                         
                                 </li>
                                 
                             </ul>
@@ -379,6 +384,13 @@
                                       switch (ext) {
                                         case 'jpg':
                                         this.form.submit();
+                                       
+                                        break;
+                                        case 'jpeg':
+                                        this.form.submit();
+                                        break;
+                                        case 'webp':
+                                        this.form.submit();
                                         break;
                                         case 'bmp':
                                         this.form.submit();
@@ -394,3 +406,5 @@
                                       }
                                     };
                                 </script>
+                                
+                               

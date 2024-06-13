@@ -69,7 +69,7 @@ public class VerificationRegister extends HttpServlet {
         if (userInputCode != null && userInputCode.equals(expectedVerificationCode)) {
 
             // Retrieve the new user from the session
-            User newUser = (User) session.getAttribute("newUser");
+            User newUser = (User)session.getAttribute("newUser");
 
             if (newUser != null) {
                 // Add the new user to the database

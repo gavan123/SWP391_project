@@ -45,6 +45,20 @@ public class User {
         this.creationDate = creationDate;
     }
 
+        public User(int userId, String username, String passwordHash, int roleId, int point, String status, String email, String fullName, int rankId, int profilePhoto, String phoneNumber, LocalDateTime creationDate) {
+        this.userId = userId;
+        this.username = username;
+        this.passwordHash = passwordHash;
+        this.roleId = roleId;
+        this.point = point;
+        this.status = status;
+        this.email = email;
+        this.fullName = fullName;
+        this.rankId = rankId;
+        this.profilePhoto = profilePhoto;
+        this.phoneNumber = phoneNumber;
+        this.creationDate = creationDate;
+    }
 
     public User(int userId, String username, String fullName, int profilePhoto, String phoneNumber, LocalDateTime dateOfBirth) {
         this.userId = userId;
@@ -77,7 +91,7 @@ public class User {
         this.fullName = fullName;
         this.rankId = rankId;
     }
-
+    
     public int getUserId() {
         return userId;
     }

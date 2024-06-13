@@ -69,7 +69,7 @@ public class UploadPFP extends HttpServlet {
         String encodedMediaName = mediaDAO.encodeMediaName(user.getUserId()) + "." + mediaDAO.getExtension(imageFileName);
 
         //set an upload path to store media
-        String uploadPath = "C:/Users/mindc/OneDrive/Documents/GitHub/SWP391_project/WibuBlog/web/PFP/" + imageFileName;
+        String uploadPath = "C:/Users/admin/Documents/GitHub/SWP391_project/WibuBlog/web/PFP/" + imageFileName;
         try {
             FileOutputStream fos = new FileOutputStream(uploadPath);
             InputStream is = file.getInputStream();
@@ -86,8 +86,8 @@ public class UploadPFP extends HttpServlet {
         
         
         //encode file name in case of duplicate file name but different content
-        File source = new File("C:\\Users\\mindc\\OneDrive\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + imageFileName);
-        File target = new File("C:\\Users\\mindc\\OneDrive\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + encodedMediaName);
+        File source = new File("C:\\Users\\admin\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + imageFileName);
+        File target = new File("C:\\Users\\admin\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + encodedMediaName);
          if (source.renameTo(target)) { 
              
             // display that the file is renamed 
@@ -104,7 +104,7 @@ public class UploadPFP extends HttpServlet {
         Media media = new Media(0,
                 user.getUserId(),
                 mediaDAO.encodeMediaName(user.getUserId()),
-                "C:\\Users\\mindc\\OneDrive\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + encodedMediaName,
+                "http://localhost:9999/WibuBlog/PFP/" + encodedMediaName,
                 mediaDAO.getExtension(imageFileName),
                 LocalDateTime.now());
 
@@ -113,7 +113,6 @@ public class UploadPFP extends HttpServlet {
         UserDAO userDAO = new UserDAO();
         userDAO.updateProfilePhoto(user.getUserId(), mediaDAO.getMediaJustInserted(user.getUserId()));
         user.setProfilePhoto(mediaDAO.getMediaJustInserted(user.getUserId()));
-
         //go back to profile
          response.sendRedirect("Profile.jsp");
     }

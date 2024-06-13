@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <jsp:useBean id="p" scope="request" class="dal.PostDAO" />
 
-<c:choose>
+<%--<c:choose>
     <c:when test="${empty user}">
         <form action="login" method="get" class="form-button m-2">
             <button type="submit" class="btn btn-primary">Login</button>
@@ -29,7 +29,7 @@
             <button type="submit" class="btn btn-primary">Logout</button>
         </form>
     </c:otherwise>
-</c:choose>
+</c:choose>--%>
 
 <div class="card mb-2 rounded-5 border-0">
     <div class="card-header">

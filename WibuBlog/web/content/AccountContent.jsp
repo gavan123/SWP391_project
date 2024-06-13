@@ -61,6 +61,10 @@
                         </div>
                     </div>
                 </div>
+                
+                <form id="profileForm" action="profile" method="get" class="d-none">
+                    <input type="hidden" name="userId" value="<c:out value='${user.userId}' />">
+                </form>
                 <a href="#" class="dropdown-item d-block p-h-15 p-v-10" onclick="document.getElementById('profileForm').submit();">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
@@ -70,18 +74,17 @@
                         <i class="anticon font-size-10 anticon-right"></i>
                     </div>
                 </a>
-                <form id="profileForm" action="profile" method="post" class="d-none">
-                    <input type="hidden" name="userId" value="<c:out value='${user.userId}' />">
-                </form>
-                <a href="logout" class="dropdown-item d-block p-h-15 p-v-10">
+                
+                <a href="changePassword" class="dropdown-item d-block p-h-15 p-v-10">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <i class="anticon opacity-04 font-size-16 anticon-logout"></i>
-                            <span class="m-l-10">Logout</span>
+                            <span class="m-l-10">Change Password</span>
                         </div>
                         <i class="anticon font-size-10 anticon-right"></i>
                     </div>
                 </a>
+                
                 <a href="javascript:void(0);" class="dropdown-item d-block p-h-15 p-v-10">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
@@ -91,6 +94,7 @@
                         <i class="anticon font-size-10 anticon-right"></i>
                     </div>
                 </a>
+                
                 <a href="javascript:void(0);" class="dropdown-item d-block p-h-15 p-v-10">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
@@ -100,11 +104,22 @@
                         <i class="anticon font-size-10 anticon-right"></i>
                     </div>
                 </a>
+                
                 <a href="javascript:void(0);" class="dropdown-item d-block p-h-15 p-v-10">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <i class="anticon opacity-04 font-size-16 anticon-project"></i>
                             <span class="m-l-10">Projects</span>
+                        </div>
+                        <i class="anticon font-size-10 anticon-right"></i>
+                    </div>
+                </a>
+                
+                <a href="logout" class="dropdown-item d-block p-h-15 p-v-10">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <i class="anticon opacity-04 font-size-16 anticon-logout"></i>
+                            <span class="m-l-10">Logout</span>
                         </div>
                         <i class="anticon font-size-10 anticon-right"></i>
                     </div>

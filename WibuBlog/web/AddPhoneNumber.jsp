@@ -12,7 +12,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Change Password</title>
+        <title>Add Phone Number</title>
         <!-- Favicon -->
         <link rel="shortcut icon" href="">
         <!-- page css -->
@@ -33,33 +33,19 @@
                                             <p style="color:red">${errorMessage}</p>
                                         </c:if>
                                         <div class="d-flex align-items-center justify-content-end m-b-30">
-                                            <h2 class="m-b-0">Change Password</h2>
+                                            <h2 class="m-b-0">Add Phone Number</h2>
                                         </div>
-                                        <form action="changePassword" method="post">
+                                        <form action="addPhoneNumber" method="post">                                          
                                             <div class="form-group">
-                                                <label class="font-weight-semibold" for="oldPassword">Old Password:</label>
+                                                <label class="font-weight-semibold" for="confirmPassword">Phone number</label>
                                                 <div class="input-affix">
-                                                    <i class="prefix-icon anticon anticon-lock"></i>
-                                                    <input type="password" name="oldPassword" class="form-control" id="oldPassword" placeholder="Old Password" required>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="font-weight-semibold" for="newPassword">New Password:</label>
-                                                <div class="input-affix">
-                                                    <i class="prefix-icon anticon anticon-lock"></i>
-                                                    <input type="password" name="newPassword" class="form-control" id="newPassword" placeholder="New Password" required>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="font-weight-semibold" for="confirmPassword">Confirm New Password:</label>
-                                                <div class="input-affix">
-                                                    <i class="prefix-icon anticon anticon-lock"></i>
-                                                    <input type="password" name="newConfirmedPassword" class="form-control" id="confirmPassword" placeholder="Confirm New Password" required>
+                                                    <i class="prefix-icon anticon anticon-info"></i>
+                                                    <input type="number" name="phoneNumber" class="form-control" id="confirmPassword" placeholder="Phone number" required oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="11">
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="d-flex align-items-center justify-content-between">
-                                                    <button class="btn btn-primary">Change Password</button>
+                                                    <button class="btn btn-primary">Add phone number</button>
                                                 </div>
                                             </div>
                                         </form>

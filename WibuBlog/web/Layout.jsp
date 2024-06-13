@@ -36,7 +36,7 @@
                     <div class="logo logo-dark">
                         <a href="home">
                             <img src="images/logo/logo.png" alt="Logo" class="logo-image">
-                            <img class="logo-fold" src="images/logo/logo.png" alt="Logo" class="logo-image">
+                            <img class="logo-fold" src="images/logo/logo.png" alt="Logo" class="logo-image">                        
                         </a>
                     </div>
                     <div class="logo logo-white">

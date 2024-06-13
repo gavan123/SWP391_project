@@ -58,130 +58,30 @@
 </div>
 
 <div class="card mb-2 rounded-3 border-0">
-    <div class="card-header" id="top"><h3 class="card-header-h3 fs-16">BÀI MỚI<span class="float-right text-uppercase"><a href="//vidian.vn/n/bai-moi/1">Xem thêm</a></span></h3></div>
+    <div class="card-header" id="top"><h3 class="card-header-h3 fs-16">New Post
+            <span class="float-right text-uppercase">
+                <a href="postList">Xem thêm</a>
+            </span></h3></div>
     <div class="card-body">
-
         <!-- Swiper slider -->
-
         <div class="swiper-container swiper-container-initialized swiper-container-horizontal" style="min-height:220px">
-            <div class="swiper-wrapper" id="swiper-wrapper-c19fcdab835924ac" aria-live="polite" style="transform: translate3d(-603.333px, 0px, 0px); transition-duration: 0ms;">
-
-
-
-                <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px; margin-right: 15px;">
-                    <span class="badge badge-info posts-badge">35 <i class="mdi mdi-eye"></i></span>
-
-                    <span class="badge badge-danger posts-badge-2 text-truncate">Nhiệt huyết</span>
-
-                    <a href="//vidian.vn/chi-tiet/review-tieu-thuyet-truong-sinh-tu-bang-mon-tu-si-bat-dau-con-duong-tu-tien-bien-kho-roi" id="new_post0">
-
-                        <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="//vidian.vn/img-thumbnail/img-thumbnail-1717517353711.jpg" onerror="this.src='https:////vidian.vn/img-thumbnail/default-book.png'" alt="Review tiểu thuyết Trường Sinh, Từ Bàng Môn Tu Sĩ Bắt Đầu: con đường tu tiên biến khó rồi!">
-
-                        <span class="menu-text-sm text-center mt-2 text-truncate-2">Review tiểu thuyết Trường Sinh, Từ Bàng Môn Tu Sĩ Bắt Đầu: con đường tu tiên biến khó rồi!</span>
-                    </a>
-                </div>
-
-
-                <div class="swiper-slide g_thumb" role="group" aria-label="2 / 12" style="width: 135.833px; margin-right: 15px;">
-                    <span class="badge badge-info posts-badge">42 <i class="mdi mdi-eye"></i></span>
-
-                    <a href="//vidian.vn/chi-tiet/bo-phim-ngan-thieu-nien-ca-hanh-mua-thu-nhat-lap-ho-so-dao-dien-dong-huy-ba-mua-co-the-quay-xong-tat-ca-noi-dung-cot-truyen-khong" id="new_post1">
-
-                        <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="//vidian.vn/img-thumbnail/img-thumbnail-1717515593644.jpg" onerror="this.src='https:////vidian.vn/img-thumbnail/default-book.png'" alt="Bộ phim ngắn Thiếu Niên Ca Hành mùa thứ nhất lập hồ sơ, đạo diễn Đồng Huy, ba mùa có thể quay xong tất cả nội dung cốt truyện không?">
-
-                        <span class="menu-text-sm text-center mt-2 text-truncate-2">Bộ phim ngắn Thiếu Niên Ca Hành mùa thứ nhất lập hồ sơ, đạo diễn Đồng Huy, ba mùa có thể quay xong tất cả nội dung cốt truyện không?</span>
-                    </a>
-                </div>
-
-
-                <div class="swiper-slide g_thumb" role="group" aria-label="3 / 12" style="width: 135.833px; margin-right: 15px;">
-                    <span class="badge badge-info posts-badge">26 <i class="mdi mdi-eye"></i></span>
-
-                    <a href="//vidian.vn/chi-tiet/sach-moi-tien-cong-khai-vat-cua-co-chan-nhan-dat-truoc-nam-van-sau-xep-hang-dat-truoc-thu-bay-toan-tram-qidian" id="new_post2">
-
-                        <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="//vidian.vn/img-thumbnail/img-thumbnail-1717513857367.webp" onerror="this.src='https:////vidian.vn/img-thumbnail/default-book.png'" alt="Sách mới Tiên Công Khai Vật của Cổ Chân Nhân đặt trước năm vạn sáu, xếp hạng đặt trước thứ bảy toàn trạm Qidian">
-
-                        <span class="menu-text-sm text-center mt-2 text-truncate-2">Sách mới Tiên Công Khai Vật của Cổ Chân Nhân đặt trước năm vạn sáu, xếp hạng đặt trước thứ bảy toàn trạm Qidian</span>
-                    </a>
-                </div>
-
-
-                <div class="swiper-slide g_thumb swiper-slide-prev" role="group" aria-label="4 / 12" style="width: 135.833px; margin-right: 15px;">
-                    <span class="badge badge-info posts-badge">1201 <i class="mdi mdi-eye"></i></span>
-
-                    <a href="//vidian.vn/chi-tiet/tien-nghich-no-luc-cua-vuong-lam-vi-tan-cap-nguyen-anh-cung-ly-mo-uyen-la-that-tam-hay-la-loi-dung" id="new_post3">
-
-                        <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="//vidian.vn/img-thumbnail/img-thumbnail-1717432669404.jpg" onerror="this.src='https:////vidian.vn/img-thumbnail/default-book.png'" alt="Tiên Nghịch: Nỗ lực của Vương Lâm vì tấn cấp Nguyên Anh, cùng Lý Mộ Uyển là thật tâm hay là lợi dụng?">
-
-                        <span class="menu-text-sm text-center mt-2 text-truncate-2">Tiên Nghịch: Nỗ lực của Vương Lâm vì tấn cấp Nguyên Anh, cùng Lý Mộ Uyển là thật tâm hay là lợi dụng?</span>
-                    </a>
-                </div>
-
-
-                <div class="swiper-slide g_thumb swiper-slide-active" role="group" aria-label="5 / 12" style="width: 135.833px; margin-right: 15px;">
-                    <span class="badge badge-info posts-badge">584 <i class="mdi mdi-eye"></i></span>
-
-                    <span class="badge badge-danger posts-badge-2 text-truncate">Nhiệt huyết</span>
-
-                    <a href="//vidian.vn/chi-tiet/dau-pha-thuong-khung-tieu-viem-ngam-minh-trong-huyet-dam-manh-co-nao-thu-tu-luu-ly-hoa-lien-don-cung-ran-cuong-hoa-doc" id="new_post4">
-
-                        <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="//vidian.vn/img-thumbnail/img-thumbnail-1717431018713.jpg" onerror="this.src='https:////vidian.vn/img-thumbnail/default-book.png'" alt="Đấu Phá Thương Khung: Tiêu Viêm ngâm mình trong huyết đàm mạnh cỡ nào? Thủ Tú Lưu Ly Hỏa Liên Độn cứng rắn, cương hỏa độc!">
-
-                        <span class="menu-text-sm text-center mt-2 text-truncate-2">Đấu Phá Thương Khung: Tiêu Viêm ngâm mình trong huyết đàm mạnh cỡ nào? Thủ Tú Lưu Ly Hỏa Liên Độn cứng rắn, cương hỏa độc!</span>
-                    </a>
-                </div>
-
-
-                <div class="swiper-slide g_thumb swiper-slide-next" role="group" aria-label="6 / 12" style="width: 135.833px; margin-right: 15px;">
-                    <span class="badge badge-info posts-badge">351 <i class="mdi mdi-eye"></i></span>
-
-                    <span class="badge badge-danger posts-badge-2 text-truncate">Nhiệt huyết</span>
-
-                    <a href="//vidian.vn/chi-tiet/qidian-lai-tang-them-ba-quyen-sach-moi-dat-duoc-van-mua-thoi-dai-hoang-kim-cua-thuy-giac-hoi-bien-bach-dat-hang-dau-tien-gan-hai-muoi-tam-nghin" id="new_post5">
-
-                        <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="//vidian.vn/img-thumbnail/img-thumbnail-1717428463003.webp" onerror="this.src='https:////vidian.vn/img-thumbnail/default-book.png'" alt="Qidian lại tăng thêm ba quyển sách mới đạt được vạn mua, Thời Đại Hoàng Kim của Thuỵ Giác Hội Biến Bạch đặt hàng đầu tiên gần hai mươi tám nghìn">
-
-                        <h2 class="menu-text-sm text-center mt-2 text-truncate-2">Qidian lại tăng thêm ba quyển sách mới đạt được vạn mua, Thời Đại Hoàng Kim của Thuỵ Giác Hội Biến Bạch đặt hàng đầu tiên gần hai mươi tám nghìn</h2>
-                    </a>
-                </div>
-
-
-                <div class="swiper-slide g_thumb" role="group" aria-label="7 / 12" style="width: 135.833px; margin-right: 15px;">
-                    <span class="badge badge-info posts-badge">227 <i class="mdi mdi-eye"></i></span>
-
-                    <span class="badge badge-danger posts-badge-2 text-truncate">Nhiệt huyết</span>
-
-                    <a href="//vidian.vn/chi-tiet/review-tieu-thuyet-chao-buoi-sang-nguoi-lam-cong-tam-quoc" id="new_post6">
-
-                        <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="//vidian.vn/img-thumbnail/img-thumbnail-1717421278323.jpg" onerror="this.src='https:////vidian.vn/img-thumbnail/default-book.png'" alt="Review tiểu thuyết Chào Buổi Sáng, Người Làm Công Tam Quốc!">
-
-                        <h2 class="menu-text-sm text-center mt-2 text-truncate-2">Review tiểu thuyết Chào Buổi Sáng, Người Làm Công Tam Quốc!</h2>
-                    </a>
-                </div>
-
-
-                <div class="swiper-slide g_thumb" role="group" aria-label="8 / 12" style="width: 135.833px; margin-right: 15px;">
-                    <span class="badge badge-info posts-badge">199 <i class="mdi mdi-eye"></i></span>
-
-                    <span class="badge badge-danger posts-badge-2 text-truncate">Sảng văn</span>
-
-                    <a href="//vidian.vn/chi-tiet/tien-tu-xin-nghe-ta-giai-thich-dan-mang-danh-gia-the-nao" id="new_post7">
-
-                        <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="//vidian.vn/img-thumbnail/img-thumbnail-1717482901014.jpg" onerror="this.src='https:////vidian.vn/img-thumbnail/default-book.png'" alt="Tiên Tử, Xin Nghe Ta Giải Thích: Dân mạng đánh giá thế nào?">
-
-                        <h2 class="menu-text-sm text-center mt-2 text-truncate-2">Tiên Tử, Xin Nghe Ta Giải Thích: Dân mạng đánh giá thế nào?</h2>
-                    </a>
-                </div>
+            <div class="swiper-wrapper" id="swiper-wrapper" aria-live="polite" style="transform: translate3d(-603.333px, 0px, 0px); transition-duration: 0ms;">
+                <c:forEach var="post" items="${p.getLimitedPosts(10)}">
+                    <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
+                        <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
+                        <span class="badge badge-danger posts-badge-2 text-truncate">${post.status}</span>
+                        <a href="${post.source}" id="new_post0">
+                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.content}">
+                            <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.content}</span>
+                        </a>
+                    </div>
+                </c:forEach>
             </div>
-
             <!-- Add Pagination -->
             <div class="swiper-pagination swiper-pagination-clickable swiper-pagination-bullets">
-
             </div>
             <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
-
             <!-- End Swiper slider -->
-
         </div>
     </div>
 </div>

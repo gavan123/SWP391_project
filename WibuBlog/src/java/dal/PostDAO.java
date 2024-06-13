@@ -58,9 +58,9 @@ public class PostDAO extends DBContext {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT TOP ? * FROM Post ORDER BY PostTime DESC";
+            // Xây dựng câu truy vấn động
+            String sql = "SELECT TOP " + limit + " * FROM Post ORDER BY PostTime DESC";
             ps = connection.prepareStatement(sql);
-            ps.setInt(1, limit);
             rs = ps.executeQuery();
             while (rs.next()) {
                 Post post = new Post(
@@ -233,7 +233,7 @@ public class PostDAO extends DBContext {
         PostDAO postDAO = new PostDAO();
 
         // Gọi phương thức getAllPosts để lấy tất cả bài đăng
-        List<Post> posts = postDAO.getLimitedPostsByCategory(5, 10);
+        List<Post> posts = postDAO.getLimitedPosts(10);
 
         // Hiển thị thông tin của từng bài đăng
         for (Post post : posts) {

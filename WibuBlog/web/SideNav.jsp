@@ -1,32 +1,59 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="c" scope="request" class="dal.CategoryDAO" />
 
 <div class="side-nav">
     <div class="side-nav-inner">
         <ul class="side-nav-menu scrollable">
             <li class="nav-item dropdown">
-                <a class="dropdown-toggle" href="javascript:void(0);">
+                <a class="dropdown-toggle" href="">
                     <span class="icon-holder">
                         <i class="anticon anticon-dashboard"></i>
                     </span>
                     <span class="title">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="dropdown-toggle" href="javascript:void(0);">
+                    <span class="icon-holder">
+                        <i class="anticon anticon-appstore"></i>
+                    </span>
+                    <span class="title">Catalog</span>
                     <span class="arrow">
                         <i class="arrow-icon"></i>
                     </span>
                 </a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="">Default</a>
+                        <a href="">Anime Reviews</a>
                     </li>
                     <li>
-                        <a href="">CRM</a>
+                        <a href="">Character Analysis</a>
                     </li>
                     <li>
-                        <a href="">E-commerce</a>
+                        <a href="">Plot Analysis</a>
                     </li>
                     <li>
-                        <a href="">Projects</a>
+                        <a href="">Anime Comparisons</a>
+                    </li>
+                    <li>
+                        <a href="">Genre Analysis</a>
+                    </li>
+                    <li>
+                        <a href="">History and Evolution</a>
+                    </li>
+                    <li>
+                        <a href="">Top Lists</a>
+                    </li>
+                    <li>
+                        <a href="">Interviews</a>
+                    </li>
+                    <li>
+                        <a href="">Art Analysis</a>
+                    </li>
+                    <li>
+                        <a href="question">Question</a>
+                    </li>
+                    <li>
+                        <a href="">Community Articles</a>
                     </li>
                 </ul>
             </li>

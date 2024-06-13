@@ -19,7 +19,7 @@
                 font-weight: bold;
             }
             .swiper-slide {
-                width: auto;
+                width: 200px;
                 margin-right: 15px;
             }
             .posts-badge {

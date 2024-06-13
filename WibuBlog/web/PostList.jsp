@@ -1,19 +1,21 @@
 <%-- 
-    Document   : QuestionList
-    Created on : Jun 12, 2024, 9:27:16 PM
+    Document   : PostList
+    Created on : Jun 13, 2024, 4:17:19 PM
     Author     : ADMIN
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Question list Page</title>
+        <title>Post list Page</title>
         <style>
-            .card {
-                border-radius: 15px; 
+            .posts-img {
+                width: 200px; 
+                height: auto; 
+                object-fit: cover; 
+                border-radius: 5px; 
             }
         </style>
     </head>
@@ -21,7 +23,7 @@
         <jsp:include page="Layout.jsp">
             <jsp:param name="sideNav" value="SideNav.jsp" />
             <jsp:param name="accountHeader" value="/content/AccountContent.jsp" />
-            <jsp:param name="content" value="/content/QuestionContent.jsp" />
+            <jsp:param name="content" value="/content/PostListContent.jsp" />
         </jsp:include>
     </body>
 </html>

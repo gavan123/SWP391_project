@@ -34,6 +34,7 @@ public class PostDAO extends DBContext {
                         rs.getInt("PostID"),
                         rs.getInt("UserID"),
                         rs.getInt("CategoryID"),
+                        rs.getString("Title"),
                         rs.getString("Content"),
                         rs.getString("Source"),
                         rs.getString("Image"),
@@ -67,6 +68,7 @@ public class PostDAO extends DBContext {
                         rs.getInt("PostID"),
                         rs.getInt("UserID"),
                         rs.getInt("CategoryID"),
+                        rs.getString("Title"),
                         rs.getString("Content"),
                         rs.getString("Source"),
                         rs.getString("Image"),
@@ -104,6 +106,7 @@ public class PostDAO extends DBContext {
                         rs.getInt("PostID"),
                         rs.getInt("UserID"),
                         rs.getInt("CategoryID"),
+                        rs.getString("Title"),
                         rs.getString("Content"),
                         rs.getString("Source"),
                         rs.getString("Image"),
@@ -142,6 +145,7 @@ public class PostDAO extends DBContext {
                         rs.getInt("PostID"),
                         rs.getInt("UserID"),
                         rs.getInt("CategoryID"),
+                        rs.getString("Title"),
                         rs.getString("Content"),
                         rs.getString("Source"),
                         rs.getString("Image"),
@@ -176,6 +180,7 @@ public class PostDAO extends DBContext {
                         rs.getInt("PostID"),
                         rs.getInt("UserID"),
                         rs.getInt("CategoryID"),
+                        rs.getString("Title"),
                         rs.getString("Content"),
                         rs.getString("Source"),
                         rs.getString("Image"),
@@ -209,6 +214,7 @@ public class PostDAO extends DBContext {
                         rs.getInt("PostID"),
                         rs.getInt("UserID"),
                         rs.getInt("CategoryID"),
+                        rs.getString("Title"),
                         rs.getString("Content"),
                         rs.getString("Source"),
                         rs.getString("Image"),
@@ -240,7 +246,7 @@ public class PostDAO extends DBContext {
             System.out.println("Post ID: " + post.getPostId());
             System.out.println("User ID: " + post.getUserId());
             System.out.println("Category ID: " + post.getCategoryId());
-            System.out.println("Content: " + post.getContent());
+            System.out.println("Title: " + post.getTitle());
             System.out.println("Source: " + post.getSource());
             System.out.println("Image: " + post.getImage());
             System.out.println("Post Time: " + post.getPostTime());

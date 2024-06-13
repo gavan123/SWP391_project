@@ -45,7 +45,7 @@
             <c:forEach var="post" items="${p.getLimitedPostsByCategory(5,10)}">
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="col-10 text-truncate font-weight-bold">
-                        <a href="${post.source}">${post.content}</a>
+                        <a href="${post.source}">${post.title}</a>
                     </div>
                     <span class="badge badge-primary badge-pill">
                         <i class="far fa-comment-dots fa-lg"></i>
@@ -71,8 +71,8 @@
                         <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
                         <span class="badge badge-danger posts-badge-2 text-truncate">${post.status}</span>
                         <a href="${post.source}" id="new_post0">
-                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.content}">
-                            <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.content}</span>
+                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
+                            <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
                         </a>
                     </div>
                 </c:forEach>

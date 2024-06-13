@@ -18,7 +18,7 @@
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center" style="background:none;border:none">
                             <div class="col-10 text-truncate font-weight-bold">
-                                <a href="${post.source}">${post.content}</a>
+                                <a href="${post.source}">${post.title}</a>
                             </div>
                             <!-- Display the comment count -->
                             <span class="badge badge-primary badge-pill">

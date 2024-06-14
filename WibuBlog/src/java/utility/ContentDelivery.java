@@ -19,12 +19,12 @@ public class ContentDelivery {
     }
 
     public static void sendVerificationCode(String to, String code) {
-        Email.sendMail("wibi", to, "Verification code", code);
+        Email.sendMail("Verification code", to, "Verification code", code);
 
     }
 
     public static void sendNewPassword(String to, String code) {
-        Email.sendMail("wibi", to, "New password", code);
+        Email.sendMail("Verification code", to, "New password", code);
 
     }
 }

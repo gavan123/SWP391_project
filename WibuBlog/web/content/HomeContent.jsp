@@ -91,7 +91,7 @@
 <div class="card mb-2 rounded-3 border-0">
     <div class="card-header" id="top"><h3 class="card-header-h3 fs-16">Anime Reviews
             <span class="float-right text-uppercase">
-                <a href="postList">Xem thêm</a>
+                <a href="postListByCategory?categoryId=1">Xem thêm</a>
             </span></h3></div>
     <div class="card-body">
         <!-- Swiper slider -->
@@ -120,7 +120,7 @@
 <div class="card mb-2 rounded-3 border-0">
     <div class="card-header" id="top"><h3 class="card-header-h3 fs-16">Character Analysis
             <span class="float-right text-uppercase">
-                <a href="postList">Xem thêm</a>
+                <a href="postListByCategory?categoryId=2">Xem thêm</a>
             </span></h3></div>
     <div class="card-body">
         <!-- Swiper slider -->
@@ -149,7 +149,7 @@
 <div class="card mb-2 rounded-3 border-0">
     <div class="card-header" id="top"><h3 class="card-header-h3 fs-16">Plot Analysis 
             <span class="float-right text-uppercase">
-                <a href="postList">Xem thêm</a>
+                <a href="postListByCategory?categoryId=3">Xem thêm</a>
             </span></h3></div>
     <div class="card-body">
         <!-- Swiper slider -->
@@ -178,7 +178,7 @@
 <div class="card mb-2 rounded-3 border-0">
     <div class="card-header" id="top"><h3 class="card-header-h3 fs-16">Interviews
             <span class="float-right text-uppercase">
-                <a href="postList">Xem thêm</a>
+                <a href="postListByCategory?categoryId=8">Xem thêm</a>
             </span></h3></div>
     <div class="card-body">
         <!-- Swiper slider -->

@@ -43,8 +43,9 @@
         </div>
     </div>
 </div>
-<img src="${pageContext.request.contextPath}/images/game/${image}" alt="Uploaded Image">
-<img src="${pageContext.request.contextPath}/images/game/sample_image.png" alt="Uploaded Image">
+<c:forEach var="fileName" items="${image}">
+    <img src="${pageContext.request.contextPath}/images/game/${fileName}" alt="Uploaded Image">
+</c:forEach>
 
 <div class="card mb-2 rounded-5 border-0">
     <div class="card-header">

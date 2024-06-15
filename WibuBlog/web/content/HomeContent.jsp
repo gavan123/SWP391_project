@@ -30,6 +30,21 @@
         </form>
     </c:otherwise>
 </c:choose>--%>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form name="imageUpload" action="imageUpload" method="POST" enctype="multipart/form-data" class="border p-4">
+                <div class="form-group">
+                    <label for="image">Choose Images:</label>
+                    <input type="file" class="form-control-file" name="image" id="image" accept="image/png,image/jpeg,image/jpg,image/bmp,image/gif" multiple>
+                </div>
+                <button type="submit" class="btn btn-primary">Upload Images</button>
+            </form>
+        </div>
+    </div>
+</div>
+<img src="${pageContext.request.contextPath}/images/game/${image}" alt="Uploaded Image">
+<img src="${pageContext.request.contextPath}/images/game/sample_image.png" alt="Uploaded Image">
 
 <div class="card mb-2 rounded-5 border-0">
     <div class="card-header">

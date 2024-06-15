@@ -24,14 +24,14 @@ public class ImageHandler {
     }
 
     // Function to save multiple BufferedImages to a directory with individual formats
-    public static void saveImages(BufferedImage[] images, String[] directories, String[] fileNames, String[] formats) {
-        if (images.length != fileNames.length || images.length != formats.length || images.length != directories.length) {
-            System.err.println("The number of images, directories, file names, and formats must match.");
+    public static void saveImages(BufferedImage[] images, String directory, String[] fileNames, String[] formats) {
+        if (images.length != fileNames.length || images.length != formats.length) {
+            System.err.println("The number of images, file names, and formats must match.");
             return;
         }
 
         for (int i = 0; i < images.length; i++) {
-            saveImage(images[i], directories[i], fileNames[i], formats[i]);
+            saveImage(images[i], directory, fileNames[i], formats[i]);
         }
     }
 
@@ -74,24 +74,24 @@ public class ImageHandler {
 
     public static void main(String[] args) {
         // Example BufferedImage (you can replace this with your own image loading logic)
-        BufferedImage image = createSampleImage();
+        BufferedImage image1 = createSampleImage(200, 200);
+        BufferedImage image2 = createSampleImage(300, 300);
 
-        // Directory and file name where the image will be saved
+        // Directory where the images will be saved
         String directory = "game";
-        String fileName = "sample_image.png";
 
-        // Format of the image (e.g., "PNG", "JPEG")
-        String format = "png";
+        // File names and formats for the images
+        String[] fileNames = {"sample_image1.png", "sample_image2.png"};
+        String[] formats = {"png", "png"};
 
-        // Save the image using ImageHandler
-        ImageHandler.saveImage(image, directory, fileName, format);
+        // Save the images using ImageHandler
+        ImageHandler.saveImages(new BufferedImage[]{image1, image2}, directory, fileNames, formats);
     }
 
-    // Helper method to create a sample BufferedImage
-    private static BufferedImage createSampleImage() {
-        BufferedImage image = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
+    private static BufferedImage createSampleImage(int width, int height) {
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         // Fill the image with some content (optional)
-        image.createGraphics().drawRect(50, 50, 100, 100);
+        image.createGraphics().drawRect(width / 4, height / 4, width / 2, height / 2);
         return image;
     }
 }

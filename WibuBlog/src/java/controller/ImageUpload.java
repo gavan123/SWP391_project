@@ -16,9 +16,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
-import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import javax.imageio.ImageIO;
 
 /**
@@ -90,34 +93,43 @@ public class ImageUpload extends HttpServlet {
         // Cắt bỏ phần "build" nếu có trong đường dẫn
         baseImagePath = ImageHandler.removeBuildFromPath(baseImagePath);
 
-        // Retrieve the image Part from the request
-        Part filePart = request.getPart("image");
+        // Tạo thư mục "game" nếu chưa tồn tại
+        Path gameDirectory = baseImagePath.resolve("game");
+        Files.createDirectories(gameDirectory);
 
-        // Extract filename from content-disposition header of part
-        String fileName = filePart.getSubmittedFileName();
+        // Lưu danh sách các file ảnh và tên file
+        List<String> fileNames = new ArrayList<>();
+        
+        // Lấy các file ảnh từ request và lưu vào thư mục "game"
+        for (Part part : request.getParts()) {
+            String submittedFileName = part.getSubmittedFileName();
+            if (submittedFileName != null && ImageHandler.isImageFile(submittedFileName)) {
+                String fileName = Paths.get(submittedFileName).getFileName().toString();
+                fileNames.add(fileName);
 
-        // Determine format based on filename extension
-        String format = ImageHandler.getExtension(fileName);
-
-        try (InputStream input = filePart.getInputStream()) {
-            // Read input stream into BufferedImage
-            BufferedImage image = ImageIO.read(input);
-
-            // Save the image using ImageHandler
-            String directory = "game"; // Đổi tên thư mục nếu cần
-            ImageHandler.saveImage(image, baseImagePath.resolve(directory).toString(), fileName, format);
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-
+                try (InputStream input = part.getInputStream()) {
+                    BufferedImage image = ImageIO.read(input);
+                    ImageHandler.saveImage(image, gameDirectory.toString(), fileName, ImageHandler.getExtension(fileName));
+                } catch (IOException e) {
+                    response.getWriter().println("Error reading or saving image: " + e.getMessage());
+                    return;
+                }
             }
-            response.getWriter().println(" uploading image: " + baseImagePath.resolve(directory).toString());
-//            request.setAttribute("image", fileName);
-//            request.getRequestDispatcher("Home.jsp").forward(request, response);
-        } catch (IOException e) {
-            // Handle exception (e.g., log error, respond with error message)
-            response.getWriter().println("Error uploading image: " + e.getMessage());
         }
+
+        // Tạm dừng 2 giây để đảm bảo hình ảnh được lưu trước khi forward
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            // Handle interrupted exception if needed
+        }
+
+        // Gửi phản hồi về client
+        response.getWriter().println("Upload thành công các ảnh vào thư mục: " + gameDirectory.toString());
+
+        // Sau khi xử lý xong, chuyển hướng về trang Home.jsp hoặc trang khác
+        request.setAttribute("image", fileNames.isEmpty() ? null : fileNames.get(0));
+        request.getRequestDispatcher("Home.jsp").forward(request, response);
     }
 
     /**

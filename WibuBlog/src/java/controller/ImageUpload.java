@@ -78,8 +78,6 @@ public class ImageUpload extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final Path BASE_IMAGE_PATH = FileSystems.getDefault().getPath("web", "images").toAbsolutePath();
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -88,6 +86,9 @@ public class ImageUpload extends HttpServlet {
 
         // Xây dựng đường dẫn tuyệt đối đến thư mục images
         Path baseImagePath = Paths.get(realPath, "images");
+
+        // Cắt bỏ phần "build" nếu có trong đường dẫn
+        baseImagePath = ImageHandler.removeBuildFromPath(baseImagePath);
 
         // Retrieve the image Part from the request
         Part filePart = request.getPart("image");
@@ -105,33 +106,18 @@ public class ImageUpload extends HttpServlet {
             // Save the image using ImageHandler
             String directory = "game"; // Đổi tên thư mục nếu cần
             ImageHandler.saveImage(image, baseImagePath.resolve(directory).toString(), fileName, format);
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
 
-            // Construct the full path where the image is saved
-            Path savedImagePath = baseImagePath.resolve(directory).resolve(fileName);
-
-            // Optionally, respond with the path savedImagePath
-//            String responseMessage = "Image uploaded and saved successfully. Path: " + savedImagePath.toString();
-//            response.getWriter().println(responseMessage);
-            
-            request.setAttribute("image", fileName);
-            request.getRequestDispatcher("Home.jsp").forward(request, response);
+            }
+            response.getWriter().println(" uploading image: " + baseImagePath.resolve(directory).toString());
+//            request.setAttribute("image", fileName);
+//            request.getRequestDispatcher("Home.jsp").forward(request, response);
         } catch (IOException e) {
             // Handle exception (e.g., log error, respond with error message)
             response.getWriter().println("Error uploading image: " + e.getMessage());
         }
-    }
-
-// Helper method to extract filename from content-disposition header
-    private String getSubmittedFileName(Part part) {
-        String contentDispositionHeader = part.getHeader("content-disposition");
-        for (String cd : contentDispositionHeader.split(";")) {
-            if (cd.trim().startsWith("filename")) {
-                String fileName = cd.substring(cd.indexOf('=') + 1).trim().replace("\"", "");
-                return fileName.substring(fileName.lastIndexOf('/') + 1)
-                        .substring(fileName.lastIndexOf('\\') + 1); // MSIE fix.
-            }
-        }
-        return null;
     }
 
     /**

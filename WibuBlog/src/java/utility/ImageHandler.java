@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 
@@ -53,6 +54,12 @@ public class ImageHandler {
         } catch (IOException e) {
             System.err.println("Error saving image: " + e.getMessage());
         }
+    }
+
+    public static Path removeBuildFromPath(Path path) {
+        String pathString = path.toString();
+        pathString = pathString.replace("\\build\\", "\\");
+        return Paths.get(pathString);
     }
 
     public static String getExtension(String FileName) {

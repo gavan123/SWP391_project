@@ -92,7 +92,10 @@
             <div class="card">
                 <div class="card-body">
                     <h5>Bio</h5>
-                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here'.</p>
+                     
+                     <label for="bio"></label>
+                    <textarea id="bio" name="bio" rows="5" cols="90" placeholder="Hãy thể hiện cá tính của bạn!!"></textarea>
+                  
                     <h5>Experices</h5>
                     <div class="m-t-20">
                         <div class="media m-b-30">

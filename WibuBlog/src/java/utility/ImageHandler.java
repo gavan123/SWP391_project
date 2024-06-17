@@ -1,8 +1,11 @@
+package utility;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 
@@ -12,7 +15,7 @@ public class ImageHandler {
     private static final Pattern IMAGE_FILE_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(png|jpg|jpeg|bmp|gif))$)");
 
     // Base directory path for images
-    private static final Path BASE_IMAGE_PATH = FileSystems.getDefault().getPath("web", "images");
+    private static final Path BASE_IMAGE_PATH = FileSystems.getDefault().getPath("web", "images").toAbsolutePath();
 
     // Function to save a BufferedImage to a file
     public static void saveImage(BufferedImage image, String directory, String fileName, String format) {
@@ -20,21 +23,15 @@ public class ImageHandler {
         saveImage(image, imagePath.toString(), format);
     }
 
-    // Function to load a BufferedImage from a file
-    public static BufferedImage loadImage(String directory, String fileName) {
-        Path imagePath = BASE_IMAGE_PATH.resolve(directory).resolve(fileName);
-        return loadImage(imagePath.toString());
-    }
-
     // Function to save multiple BufferedImages to a directory with individual formats
-    public static void saveImages(BufferedImage[] images, String[] directories, String[] fileNames, String[] formats) {
-        if (images.length != fileNames.length || images.length != formats.length || images.length != directories.length) {
-            System.err.println("The number of images, directories, file names, and formats must match.");
+    public static void saveImages(BufferedImage[] images, String directory, String[] fileNames, String[] formats) {
+        if (images.length != fileNames.length || images.length != formats.length) {
+            System.err.println("The number of images, file names, and formats must match.");
             return;
         }
 
         for (int i = 0; i < images.length; i++) {
-            saveImage(images[i], directories[i], fileNames[i], formats[i]);
+            saveImage(images[i], directory, fileNames[i], formats[i]);
         }
     }
 
@@ -44,7 +41,7 @@ public class ImageHandler {
     }
 
     // Function to save a BufferedImage to a file
-    private static void saveImage(BufferedImage image, String filePath, String format) {
+    public static void saveImage(BufferedImage image, String filePath, String format) {
         if (!isImageFile(filePath)) {
             System.err.println("The file path " + filePath + " is not a valid image file.");
             return;
@@ -59,38 +56,42 @@ public class ImageHandler {
         }
     }
 
-    // Function to load a BufferedImage from a file
-    private static BufferedImage loadImage(String filePath) {
-        if (!isImageFile(filePath)) {
-            System.err.println("The file " + filePath + " is not a valid image file.");
-            return null;
-        }
+    public static Path removeBuildFromPath(Path path) {
+        String pathString = path.toString();
+        pathString = pathString.replace("\\build\\", "\\");
+        return Paths.get(pathString);
+    }
 
-        File inputFile = new File(filePath);
-        try {
-            BufferedImage image = ImageIO.read(inputFile);
-            System.out.println("Image loaded successfully from " + filePath);
-            return image;
-        } catch (IOException e) {
-            System.err.println("Error loading image: " + e.getMessage());
-            return null;
+    public static String getExtension(String FileName) {
+        String extension = "";
+        int i = FileName.lastIndexOf('.');
+        if (i > 0) {
+            extension = FileName.substring(i + 1);
+            return extension;
         }
+        return null;
     }
 
     public static void main(String[] args) {
-        // Example usage
+        // Example BufferedImage (you can replace this with your own image loading logic)
+        BufferedImage image1 = createSampleImage(200, 200);
+        BufferedImage image2 = createSampleImage(300, 300);
 
-        // Load images from files
-        BufferedImage image1 = loadImage("game", "image1.png");  // Replace with your image paths
-        BufferedImage image2 = loadImage("game", "image2.jpg");  // Replace with your image paths
+        // Directory where the images will be saved
+        String directory = "game";
 
-        if (image1 != null && image2 != null) {
-            // Save the images to their respective directories
-            BufferedImage[] images = {image1, image2};
-            String[] directories = {"game", "game"};
-            String[] fileNames = {"saved_image1.png", "saved_image2.jpg"};
-            String[] formats = {"png", "jpg"};
-            saveImages(images, directories, fileNames, formats);
-        }
+        // File names and formats for the images
+        String[] fileNames = {"sample_image1.png", "sample_image2.png"};
+        String[] formats = {"png", "png"};
+
+        // Save the images using ImageHandler
+        ImageHandler.saveImages(new BufferedImage[]{image1, image2}, directory, fileNames, formats);
+    }
+
+    private static BufferedImage createSampleImage(int width, int height) {
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        // Fill the image with some content (optional)
+        image.createGraphics().drawRect(width / 4, height / 4, width / 2, height / 2);
+        return image;
     }
 }

@@ -5,10 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Media;
 import model.User;
 
 public class UserDAO extends DBContext {
@@ -28,8 +26,7 @@ public class UserDAO extends DBContext {
             ps = connection.prepareStatement(sql);
             ps.setString(1, email);
             rs = ps.executeQuery();
-            if (rs.next()) {
-                if(rs.getTimestamp("DateOfBirth") != null){
+            if (rs.next()) {    
                 return new User(
                         rs.getInt("UserID"),
                         rs.getString("Username"),
@@ -42,25 +39,9 @@ public class UserDAO extends DBContext {
                         rs.getInt("RankID"),
                         rs.getInt("ProfilePhoto"),
                         rs.getString("PhoneNumber"),
-                        rs.getTimestamp("DateOfBirth").toLocalDateTime(),
-                        rs.getTimestamp("CreationDate").toLocalDateTime());
-                }
-                else{
-                    return new User(
-                        rs.getInt("UserID"),
-                        rs.getString("Username"),
-                        rs.getString("Password"),
-                        rs.getInt("RoleID"),
-                        rs.getInt("Point"),
-                        rs.getString("Status"),
-                        rs.getString("Email"),
-                        rs.getString("Fullname"),
-                        rs.getInt("RankID"),
-                        rs.getInt("ProfilePhoto"),
-                        rs.getString("PhoneNumber"),
-                        rs.getTimestamp("CreationDate").toLocalDateTime());
-                }
-            }
+                        rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
+                        rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null);
+                }                      
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -91,8 +72,8 @@ public class UserDAO extends DBContext {
                         rs.getInt("RankID"),
                         rs.getInt("ProfilePhoto"),
                         rs.getString("PhoneNumber"),
-                        rs.getTimestamp("DateOfBirth").toLocalDateTime(),
-                        rs.getTimestamp("CreationDate").toLocalDateTime());
+                        rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
+                        rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null);
             }
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -159,9 +140,10 @@ public class UserDAO extends DBContext {
                         rs.getInt("RankID"),
                         rs.getInt("ProfilePhoto"),
                         rs.getString("PhoneNumber"),
-                        rs.getTimestamp("CreationDate").toLocalDateTime());
-            }
-            
+                        rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
+                        rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null);
+
+            }        
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {

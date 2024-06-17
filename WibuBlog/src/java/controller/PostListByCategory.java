@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.CategoryDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,13 +12,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Category;
 
 /**
  *
  * @author ADMIN
  */
-@WebServlet(name = "Home", urlPatterns = {"/home"})
-public class Home extends HttpServlet {
+@WebServlet(name = "PostListByCategory", urlPatterns = {"/postListByCategory"})
+public class PostListByCategory extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,10 +38,10 @@ public class Home extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Home</title>");
+            out.println("<title>Servlet PostListByCategory</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Home at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet PostListByCategory at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -57,7 +59,18 @@ public class Home extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("Home.jsp").forward(request, response);
+        String categoryIdParam = request.getParameter("categoryId");
+        int categoryId = 0;
+
+        try {
+            categoryId = Integer.parseInt(categoryIdParam);
+        } catch (NumberFormatException e) {
+        }
+
+        CategoryDAO dao = new CategoryDAO();
+        Category category = dao.getCategoryById(categoryId);
+        request.setAttribute("category", category);
+        request.getRequestDispatcher("PostListCate.jsp").forward(request, response);
     }
 
     /**

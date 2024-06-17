@@ -1,30 +1,40 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<jsp:useBean id="c" scope="request" class="dal.CategoryDAO" />
 <div class="side-nav">
     <div class="side-nav-inner">
         <ul class="side-nav-menu scrollable">
             <li class="nav-item dropdown">
-                <a class="dropdown-toggle" href="javascript:void(0);">
+                <a class="dropdown-toggle" href="">
                     <span class="icon-holder">
                         <i class="anticon anticon-dashboard"></i>
                     </span>
                     <span class="title">Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="dropdown-toggle" href="javascript:void(0);">
+                    <span class="icon-holder">
+                        <i class="anticon anticon-appstore"></i>
+                    </span>
+                    <span class="title">Catalog</span>
                     <span class="arrow">
                         <i class="arrow-icon"></i>
                     </span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li>
-                        <a href="">Default</a>
-                    </li>
-                    <li>
-                        <a href="">CRM</a>
-                    </li>
-                    <li>
-                        <a href="">E-commerce</a>
-                    </li>
-                    <li>
-                        <a href="">Projects</a>
-                    </li>
+                    <c:forEach var="category" items="${c.allCategories}">
+                        <li>
+                            <c:choose>
+                                <c:when test="${category.categoryId == 10}">
+                                    <a href="question">${category.name}</a>
+                                </c:when>
+                                <c:otherwise>
+                                    <a href="postListByCategory?categoryId=${category.categoryId}">${category.name}</a>
+                                </c:otherwise>
+                            </c:choose>
+                        </li>
+                    </c:forEach>
                 </ul>
             </li>
             <li class="nav-item dropdown">

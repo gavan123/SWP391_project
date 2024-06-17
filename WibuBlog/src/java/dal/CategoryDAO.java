@@ -108,4 +108,12 @@ public class CategoryDAO extends DBContext {
         }
     }
 
+    public static void main(String[] args) {
+        CategoryDAO cateDAO = new CategoryDAO();
+        List<Category> cate = cateDAO.getAllCategories();
+
+        for (Category category : cate) {
+            System.out.println(category.getCategoryId() + ":" + category.getName());
+        }
+    }
 }

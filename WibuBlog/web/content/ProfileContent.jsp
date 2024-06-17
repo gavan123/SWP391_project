@@ -92,10 +92,13 @@
             <div class="card">
                 <div class="card-body">
                     <h5>Bio</h5>
-                     
+                    
+                    <form action="UpdateBio" method="post">
                      <label for="bio"></label>
                     <textarea id="bio" name="bio" rows="5" cols="90" placeholder="Hãy thể hiện cá tính của bạn!!"></textarea>
-                  
+                    <input type="submit" value="Lưu"> 
+                  </form>
+                    
                     <h5>Experices</h5>
                     <div class="m-t-20">
                         <div class="media m-b-30">

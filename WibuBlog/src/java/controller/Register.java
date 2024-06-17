@@ -75,7 +75,7 @@ public class Register extends HttpServlet {
             // Generate a verification code
             String verificationCode = KeyGenerator.generateVerificationCode();
             // Send verification code to the user's email
-            ContentDelivery.sendVerificationCode("test", email, verificationCode);
+            ContentDelivery.sendRegistrationVerification(email, username, verificationCode);
             // Create a new User object
             User user = new User(0, username, Hash.getHash(password), 3, 0, "active", email, fullName, 1);
             // Set the new user as a request attribute

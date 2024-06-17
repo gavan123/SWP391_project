@@ -16,6 +16,7 @@ import utility.KeyGenerator;
 import dal.UserDAO;
 import utility.ContentDelivery;
 import jakarta.servlet.http.HttpSession;
+import model.User;
 
 @WebServlet(name = "ForgotPassword", urlPatterns = {"/forgotPassword"})
 public class ForgotPassword extends HttpServlet {
@@ -55,9 +56,10 @@ public class ForgotPassword extends HttpServlet {
         if (userDao.emailExists(email)) {
             // Generate a verification code
             String verificationCode = KeyGenerator.generateVerificationCode();
+            User user = userDao.getUserByEmail(email);
 
             // Send the verification code to the user's email
-            ContentDelivery.sendVerificationCode("Wibu", email, verificationCode);
+            ContentDelivery.sendPasswordResetVerification(email, user.getUsername(), verificationCode);
 
             // Set email and verification code as request attributes
             request.setAttribute("email", email);

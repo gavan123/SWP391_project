@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import dal.UserDAO;
 import jakarta.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 import model.User;
 import security.Hash;
 
@@ -78,6 +79,7 @@ public class Register extends HttpServlet {
             ContentDelivery.sendRegistrationVerification(email, username, verificationCode);
             // Create a new User object
             User user = new User(0, username, Hash.getHash(password), 3, 0, "active", email, fullName, 1);
+            User user2 = new User(0, username, Hash.getHash(password), 3, 0, "active", email, fullName, 1, 0, null, null, null);
             // Set the new user as a request attribute
             session.setAttribute("newUser", user);
             // Get the current session and set user attributes       
@@ -86,6 +88,7 @@ public class Register extends HttpServlet {
             session.setMaxInactiveInterval(3 * 60);
             request.setAttribute("email", email);
             // Forward the request to authenticateRegister.jsp
+            request.setAttribute("message", "An OTP has been sent to " + email + " please login to your account to verify");
             request.getRequestDispatcher("VerificationRegister.jsp").forward(request, response);
         }
     }

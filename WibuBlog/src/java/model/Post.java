@@ -15,6 +15,7 @@ public class Post {
     private int postId;
     private int userId;
     private int categoryId;
+    private String title;
     private String content;
     private String source;
     private String image;
@@ -22,14 +23,16 @@ public class Post {
     private String status;
     private int vote;
     private int view;
+    private int commentCount;
 
     public Post() {
     }
 
-    public Post(int postId, int userId, int categoryId, String content, String source, String image, String status, int vote, int view) {
+    public Post(int postId, int userId, int categoryId, String title, String content, String source, String image, String status, int vote, int view) {
         this.postId = postId;
         this.userId = userId;
         this.categoryId = categoryId;
+        this.title = title;
         this.content = content;
         this.source = source;
         this.image = image;
@@ -38,10 +41,26 @@ public class Post {
         this.view = view;
     }
 
-    public Post(int postId, int userId, int categoryId, String content, String source, String image, LocalDateTime postTime, String status, int vote, int view) {
+    public Post(int postId, int userId, int categoryId, String title, String content, String source, String image, LocalDateTime postTime, String status, int vote, int view, int commentCount) {
         this.postId = postId;
         this.userId = userId;
         this.categoryId = categoryId;
+        this.title = title;
+        this.content = content;
+        this.source = source;
+        this.image = image;
+        this.postTime = postTime;
+        this.status = status;
+        this.vote = vote;
+        this.view = view;
+        this.commentCount = commentCount;
+    }
+
+    public Post(int postId, int userId, int categoryId, String title, String content, String source, String image, LocalDateTime postTime, String status, int vote, int view) {
+        this.postId = postId;
+        this.userId = userId;
+        this.categoryId = categoryId;
+        this.title = title;
         this.content = content;
         this.source = source;
         this.image = image;
@@ -129,6 +148,22 @@ public class Post {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
 }

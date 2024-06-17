@@ -66,6 +66,7 @@ public class ForgotPassword extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("template", verificationCode);
             session.setMaxInactiveInterval(60);
+            request.setAttribute("message", "An OTP has been sent to " + email + " please login to your account to verify");
             // Forward the request to Authenticate.jsp
             request.getRequestDispatcher("Authenticate.jsp").forward(request, response);
         } else {

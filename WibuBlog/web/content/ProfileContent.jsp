@@ -1,6 +1,19 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="model.User" %>
+<%@ page import="model.Media" %>
+<%@ page import="dal.UserDAO" %>
+<%@ page import="dal.MediaDAO" %>
+<link rel="stylesheet" href="assets/css/testcss.css">
+<% User user = (User)session.getAttribute("user");
+                               UserDAO userDAO = new UserDAO();
+                               String rank = userDAO.getRankByRankID(user.getRankId());
+                               String rankColor = userDAO.getColorByRank(rank);
+                               String role = userDAO.getRoleByRoleID(user.getRoleId()); 
+                               MediaDAO mediaDAO = new MediaDAO();
+                               Media media = mediaDAO.getMedia(user.getProfilePhoto());
+%>
 <div class="container">
     <div class="card">
         <div class="card-body">
@@ -8,14 +21,31 @@
                 <div class="col-md-7">
                     <div class="d-md-flex align-items-center">
                         <div class="text-center text-sm-left ">
-                            <div class="avatar avatar-image" style="width: 150px; height:150px">
-                                <img src="assets/images/avatars/thumb-3.jpg" alt="">
+
+                            <div class="test avatar avatar-image" style="width: 150px; height: 100px;border: 2px solid grey;">                            
+                                <c:choose>
+                                    <c:when test="${user.profilePhoto == 0}">
+                                        <form action="UploadPFP" method="post" enctype="multipart/form-data"  >
+                                            <input type="file" class="upload-input" onchange="this.form.submit()" name="pfp" id="someId">                                       
+                                            <div class="upload-text">Upload an image</div>
+                                        </form>
+                                    </c:when>                                     
+                                    <c:otherwise>
+
+                                        <form action="UploadPFP" method="post" enctype="multipart/form-data"  >
+                                            <input type="file" class="upload-input" onchange="this.form.submit()" name="pfp" id="someId">         
+                                            <img src="<%=media.getPath()%>" style="width: 150px; height: 100px">
+                                            <div class="upload-text">Upload an image</div>
+                                        </form>               
+                                    </c:otherwise>
+                                </c:choose>
+
                             </div>
-                        </div>
+                        </div>                                        
                         <div class="text-center text-sm-left m-v-15 p-l-30">
-                            <h2 class="m-b-5">Marshall Nichols</h2>
-                            <p class="text-opacity font-size-13">@Marshallnich</p>
-                            <p class="text-dark m-b-20">Frontend Developer, UI/UX Designer</p>
+                            <h2 class="m-b-5">${user.username}</h2>
+                            <i class="text-opacity font-size-15" style="color:<%=rankColor%>" ><b><%=rank%></b></i>
+                            <p class="text-dark m-b-20"><%=role%></p>
                         </div>
                     </div>
                 </div>
@@ -29,22 +59,27 @@
                                         <i class="m-r-10 text-primary anticon anticon-mail"></i>
                                         <span>Email: </span> 
                                     </p>
-                                    <p class="col font-weight-semibold"> Marshall123@gmail.com</p>
+                                    <p class="col font-weight-semibold">${user.email}</p>
                                 </li>
                                 <li class="row">
                                     <p class="col-sm-4 col-4 font-weight-semibold text-dark m-b-5">
                                         <i class="m-r-10 text-primary anticon anticon-phone"></i>
-                                        <span>Phone: </span> 
-                                    </p>
-                                    <p class="col font-weight-semibold"> +12-123-1234</p>
+                                        <span>Phone:</span> 
+                                    </p>                                 
+                                    <c:choose>
+                                        <c:when test="${user.phoneNumber != null}">
+                                            <p class="col font-weight-semibold"> ${user.phoneNumber} </p>
+                                            <c:if test="${updateNumberMessage != null}">
+                                                <p style="color: green">${updateNumberMessage}</p>
+                                            </c:if>                                                                                     
+                                        </c:when>                                     
+                                        <c:otherwise>
+                                            <p class="col font-weight-semibold"> <a href="addPhoneNumber">Add your phone number</a> </p>
+                                        </c:otherwise>
+                                    </c:choose>
+
                                 </li>
-                                <li class="row">
-                                    <p class="col-sm-4 col-5 font-weight-semibold text-dark m-b-5">
-                                        <i class="m-r-10 text-primary anticon anticon-compass"></i>
-                                        <span>Location: </span> 
-                                    </p>
-                                    <p class="col font-weight-semibold"> Los Angeles, CA</p>
-                                </li>
+
                             </ul>
                         </div>
                     </div>
@@ -342,3 +377,34 @@
         </div>
     </div>
 </div>
+<script>
+    var file = document.getElementById('someId');
+    file.onchange = function (e) {
+        var ext = this.value.match(/\.([^\.]+)$/)[1];
+        switch (ext) {
+            case 'jpg':
+                this.form.submit();
+
+                break;
+            case 'jpeg':
+                this.form.submit();
+                break;
+            case 'webp':
+                this.form.submit();
+                break;
+            case 'bmp':
+                this.form.submit();
+            case 'png':
+                this.form.submit();
+                break;
+            case 'tif':
+                this.form.submit();
+                break;
+            default:
+                alert('Not allowed');
+                this.value = '';
+        }
+    };
+</script>
+
+

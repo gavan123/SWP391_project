@@ -303,5 +303,21 @@ public class PostDAO extends DBContext {
             System.out.println();
         }
     }
+    
+    public boolean updateVote(int postId, String action) {
+        PreparedStatement ps = null;
+        try {
+            String sql = "UPDATE Post SET Vote = Vote " + ("upvote".equals(action) ? "+ 1" : "- 1") + " WHERE PostID = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, postId);
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } finally {
+            closePreparedStatement(ps);
+        }
+    }
 
 }

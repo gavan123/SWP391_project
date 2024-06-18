@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.User;
 import security.Hash;
+import utility.ContentDelivery;
 import validation.Validator;
 
 /**
@@ -72,6 +73,7 @@ public class ResetPassword extends HttpServlet {
             // Hash the new password and update it in the database
             String hashedNewPassword = Hash.getHash(newPassword);
             userDAO.changePassword(hashedNewPassword, user.getUserId());
+            ContentDelivery.sendSecurityAlert(email, user.getUsername());
             // Forward to the index page after successful password change
             request.setAttribute("message", "Password changed successfully, please login again!");
             request.getRequestDispatcher("Login.jsp").forward(request, response);

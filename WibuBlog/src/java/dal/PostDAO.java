@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Anime;
 import model.Post;
+import model.PostDetail;
 
 /**
  *
@@ -234,6 +235,51 @@ public class PostDAO extends DBContext {
         return postList;
     }
 
+    
+     public PostDetail getPostDetailById(int postID) {
+    PostDetail postDetail = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    try {
+        String sql = "SELECT p.PostID, u.Username, c.[Name] AS CategoryName, g.[Name] AS GenreName, "
+                   + "p.Title, p.Content, p.Source, p.[Image], p.PostTime, p.[Status], p.Vote, p.[View], "
+                   + "r.[Name] AS [Rank], r.Color "
+                   + "FROM Post AS p "
+                   + "JOIN [User] AS u ON p.UserID = u.UserID "
+                   + "JOIN [Category] AS c ON p.CategoryID = c.CategoryID "
+                   + "JOIN [PostGenre] AS pg ON p.PostID = pg.PostID "
+                   + "JOIN [Genre] AS g ON g.GenreID = pg.GenreID "
+                   + "JOIN [Rank] AS r ON u.RankID = r.RankID "
+                   + "WHERE p.PostID = ?";
+        ps = connection.prepareStatement(sql);
+        ps.setInt(1, postID);
+        rs = ps.executeQuery();
+        if (rs.next()) {
+            postDetail = new PostDetail(
+                    rs.getInt("PostID"),
+                    rs.getString("Username"),
+                    rs.getString("CategoryName"),
+                    rs.getString("GenreName"),
+                    rs.getString("Title"),
+                    rs.getString("Content"),
+                    rs.getString("Source"),
+                    rs.getString("Image"),
+                    rs.getTimestamp("PostTime").toLocalDateTime(),
+                    rs.getString("Status"),
+                    rs.getInt("Vote"),
+                    rs.getInt("View"),
+                    rs.getString("Rank"),
+                    rs.getString("Color")
+            );
+        }
+    } catch (SQLException ex) {
+        Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+    } finally {
+        closeResultSet(rs);
+        closePreparedStatement(ps);
+    }
+    return postDetail;
+}
     public static void main(String[] args) {
         // Tạo một đối tượng PostDAO
         PostDAO postDAO = new PostDAO();

@@ -128,8 +128,8 @@ public class ImageUpload extends HttpServlet {
         response.getWriter().println("Upload thành công các ảnh vào thư mục: " + gameDirectory.toString());
 
         // Sau khi xử lý xong, chuyển hướng về trang Home.jsp hoặc trang khác
-        request.setAttribute("image", fileNames.isEmpty() ? null : fileNames);
-        request.getRequestDispatcher("Home.jsp").forward(request, response);
+        //request.setAttribute("image", fileNames.isEmpty() ? null : fileNames);
+        //request.getRequestDispatcher("Home.jsp").forward(request, response);
     }
 
     /**

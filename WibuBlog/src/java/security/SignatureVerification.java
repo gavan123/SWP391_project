@@ -14,18 +14,21 @@ public class SignatureVerification {
     private final List<Object> png = new ArrayList();
     private final List<Object> jpg = new ArrayList();
     private final List<Object> bmp = new ArrayList();
+    private final List<Object> webp = new ArrayList();
     private final List<Object> mp4 = new ArrayList();
     private final List<Object> txt = new ArrayList();
 
     private final String[] pngFNE = {".png"};
-    private final String[] jpgFNE = {".jpg", ".jpeg"};
+    private final String[] jpgFNE = {".jpg", ".jpeg", ".jfif"};
     private final String[] bmpFNE = {".bmp"};
+    private final String[] webpFNE = {".webp"};
     private final String[] mp4FNE = {".mp4"};
     private final String[] txtFNE = {".txt"};
 
     private final String pngSignature = "0x89 0x50 0x4E 0x47 0x0D 0x0A 0x1A 0x0A";
     private final String jpgSignature = "0xFF 0xD8 0xFF";
     private final String bmpSignature = "0x42 0x4D";
+    private final String webpSignature = "";
     private final String mp4Signature = "0x66 0x74 0x79 0x70";
     private final String txtSignature = "0xEF 0xBB 0xBF";
 
@@ -38,6 +41,9 @@ public class SignatureVerification {
 
         bmp.add(bmpFNE);
         bmp.add(bmpSignature);
+        
+        webp.add(webpFNE);
+        webp.add(webpSignature);
 
         mp4.add(mp4FNE);
         mp4.add(mp4Signature);
@@ -48,14 +54,15 @@ public class SignatureVerification {
         knownFileTypes.put("png", png);
         knownFileTypes.put("jpg", jpg);
         knownFileTypes.put("bmp", bmp);
+        knownFileTypes.put("webp", webp);
         knownFileTypes.put("mp4", mp4);
         knownFileTypes.put("txt", txt);
     }
 
-    private boolean verifyFileNameExtension(File file, String[] fne) {
+    private boolean verifyFileNameExtension(File file, String[] fneList) {
         String fileName = file.getName().toLowerCase();
-        for (String extension : fne) {
-            if (fileName.endsWith(extension)) {
+        for (String fne : fneList) {
+            if (fileName.endsWith(fne)) {
                 return true;
             }
         }

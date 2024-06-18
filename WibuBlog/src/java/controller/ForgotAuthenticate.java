@@ -18,8 +18,8 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author ADMIN
  */
-@WebServlet(name = "ForgotAuthenthicate", urlPatterns = {"/forgotAuthenthicate"})
-public class ForgotAuthenthicate extends HttpServlet {
+@WebServlet(name = "ForgotAuthenticate", urlPatterns = {"/forgotAuthenticate"})
+public class ForgotAuthenticate extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

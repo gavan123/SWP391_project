@@ -36,7 +36,7 @@
                                         <div class="d-flex align-items-center justify-content-end m-b-30">
                                             <h2 class="m-b-0">Authenticate</h2>
                                         </div>
-                                        <form action="forgotAuthenthicate" method="post">
+                                        <form action="forgotAuthenticate" method="post">
                                             <div class="form-group">
                                                 <label class="font-weight-semibold" for="code">Enter verification code</label>
                                                 <div class="input-affix">

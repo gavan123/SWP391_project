@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.User;
 import security.Hash;
+import utility.ContentDelivery;
 import validation.Validator;
 
 /**
@@ -55,7 +56,7 @@ public class ChangePassword extends HttpServlet {
 
         // Check if the user is logged in by checking the session
         if (session.getAttribute("user") == null) {
-            String errorMessage = "session expire!";
+            String errorMessage = "Session expired!";
             request.setAttribute("errorMessage", errorMessage);
             request.getRequestDispatcher("Login.jsp").forward(request, response);
             return;
@@ -99,6 +100,7 @@ public class ChangePassword extends HttpServlet {
         String hashedNewPassword = Hash.getHash(newPassword);
         UserDAO userDAO = new UserDAO();
         userDAO.changePassword(hashedNewPassword, userSession.getUserId());
+        ContentDelivery.sendSecurityAlert(userSession.getEmail(), userSession.getUsername());
 
         request.setAttribute("message", "Password changed successfully, please login again!");
         request.getRequestDispatcher("Login.jsp").forward(request, response);

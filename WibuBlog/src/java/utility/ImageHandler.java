@@ -58,15 +58,15 @@ public class ImageHandler {
 
     public static Path removeBuildFromPath(Path path) {
         String pathString = path.toString();
-        pathString = pathString.replace("\\build\\", "\\");
+        pathString = pathString.replace(File.separator + "build" + File.separator, File.separator);
         return Paths.get(pathString);
     }
 
-    public static String getExtension(String FileName) {
+    public static String getExtension(String fileName) {
         String extension = "";
-        int i = FileName.lastIndexOf('.');
+        int i = fileName.lastIndexOf('.');
         if (i > 0) {
-            extension = FileName.substring(i + 1);
+            extension = fileName.substring(i + 1);
             return extension;
         }
         return null;
@@ -78,7 +78,7 @@ public class ImageHandler {
         BufferedImage image2 = createSampleImage(300, 300);
 
         // Directory where the images will be saved
-        String directory = "game";
+        String directory = "game"; // Note: Directory with spaces
 
         // File names and formats for the images
         String[] fileNames = {"sample_image1.png", "sample_image2.png"};

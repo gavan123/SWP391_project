@@ -108,6 +108,7 @@ public class PostDetail extends HttpServlet {
 
     }
 // Phương thức kiểm tra xem bài viết đã được xem chưa
+
     private boolean isPostViewed(HttpServletRequest request, int postId) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
@@ -123,7 +124,7 @@ public class PostDetail extends HttpServlet {
 // Phương thức để thiết lập cookie cho bài viết đã được xem
     private void setPostViewedCookie(HttpServletResponse response, int postId) {
         Cookie viewedCookie = new Cookie("viewedPost_" + postId, "true");
-        viewedCookie.setMaxAge(60 * 60); // Số giây trong 1 ngày
+        viewedCookie.setMaxAge(24 * 60 * 60); // Số giây trong 1 ngày
         viewedCookie.setPath("/"); // Ensure the cookie is valid for the entire application
         response.addCookie(viewedCookie);
     }

@@ -26,6 +26,9 @@
                 height: 70px;
                 display: block;
             }
+            .app{
+                background-color: #fee2dc;
+            }
         </style>
     </head>
     <body>

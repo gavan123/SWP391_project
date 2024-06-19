@@ -118,6 +118,22 @@ public class UserDAO extends DBContext {
             closePreparedStatement(ps);
         }
     }
+    
+       public void changeEmail(String email, int userID) {
+        PreparedStatement ps = null;
+        try {
+            String sql = "update [user] set email = ? where UserID = ? ";
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, email);
+            ps.setInt(2, userID);
+            ps.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closePreparedStatement(ps);
+        }
+    }
+
 
     public User getUserByUsername(String username) {
         PreparedStatement ps = null;

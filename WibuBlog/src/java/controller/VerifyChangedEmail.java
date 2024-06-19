@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -49,12 +50,17 @@ public class VerifyChangedEmail extends HttpServlet {
         User user = (User)session.getAttribute("user");
         String template = (String) session.getAttribute("template");
         String input = request.getParameter("response");
+        String newEmail = (String) session.getAttribute("newEmail");
         if (!input.equals(template)){
             request.setAttribute("errorMessage", "Wrong verificationcode");
             request.getRequestDispatcher("VerifyChangedEmail.jsp").forward(request, response);
         }
         else{
             session.removeAttribute("template");
+            user.setEmail(newEmail);
+            UserDAO userDAO = new UserDAO();
+            userDAO.changeEmail(newEmail, user.getUserId());
+            response.sendRedirect("AccountSetting.jsp");
         }
         
         

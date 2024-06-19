@@ -62,7 +62,7 @@
                                                     <div class="close-btn" onclick="togglePopup2()">&times;</div>
                                                     <h1>Change email</h1>
                                                     <p>Email: ${user.email}</p>
-                                                    <form action="ModifyEmail" method="post">
+                                                    <form action="ChangeEmail" method="post">
                                                         <input type="text" name="newEmail" id="newEmail" placeholder="new email" oninput="checkEmail()"> 
                                                         <br>
                                                         <span id="result2" name="result" style="color: red"></span>

@@ -30,8 +30,8 @@
                                         <c:if test="${not empty errorMessage}">
                                             <p style="color:red">${errorMessage}</p>
                                         </c:if>
-                                             <c:if test="${message != null}">
-                                                <p style="color: blue">${message}</p>
+                                        <c:if test="${message != null}">
+                                            <p style="color: blue">${message}</p>
                                         </c:if>
                                         <div class="d-flex align-items-center justify-content-end m-b-30">
                                             <h2 class="m-b-0">Authenticate</h2>

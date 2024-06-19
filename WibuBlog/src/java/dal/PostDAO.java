@@ -235,7 +235,6 @@ public class PostDAO extends DBContext {
         return postList;
     }
 
-    
     public PostDetail getPostDetailById(int postID) {
         PostDetail postDetail = null;
         PreparedStatement ps = null;
@@ -280,30 +279,7 @@ public class PostDAO extends DBContext {
         }
         return postDetail;
     }
-    
-    public static void main(String[] args) {
-        // Tạo một đối tượng PostDAO
-        PostDAO postDAO = new PostDAO();
 
-        // Gọi phương thức getAllPosts để lấy tất cả bài đăng
-        List<Post> posts = postDAO.getLimitedPosts(10);
-
-        // Hiển thị thông tin của từng bài đăng
-        for (Post post : posts) {
-            System.out.println("Post ID: " + post.getPostId());
-            System.out.println("User ID: " + post.getUserId());
-            System.out.println("Category ID: " + post.getCategoryId());
-            System.out.println("Title: " + post.getTitle());
-            System.out.println("Source: " + post.getSource());
-            System.out.println("Image: " + post.getImage());
-            System.out.println("Post Time: " + post.getPostTime());
-            System.out.println("Status: " + post.getStatus());
-            System.out.println("Vote: " + post.getVote());
-            System.out.println("View: " + post.getView());
-            System.out.println();
-        }
-    }
-    
     public boolean updateVote(int postId, String action) {
         PreparedStatement ps = null;
         try {
@@ -317,6 +293,34 @@ public class PostDAO extends DBContext {
             return false;
         } finally {
             closePreparedStatement(ps);
+        }
+    }
+
+    public static void main(String[] args) {
+        PostDAO postDAO = new PostDAO();
+
+        // Retrieve post detail by ID
+        int postID = 1; // Example post ID
+        PostDetail postDetail = postDAO.getPostDetailById(postID);
+
+        // Print post details
+        if (postDetail != null) {
+            System.out.println("Post ID: " + postDetail.getPostID());
+            System.out.println("Username: " + postDetail.getUsername());
+            System.out.println("Category Name: " + postDetail.getCategoryName());
+            System.out.println("Genre Name: " + postDetail.getGenreName());
+            System.out.println("Title: " + postDetail.getTitle());
+            System.out.println("Content: " + postDetail.getContent());
+            System.out.println("Source: " + postDetail.getSource());
+            System.out.println("Image: " + postDetail.getImage());
+            System.out.println("Post Time: " + postDetail.getPostTime());
+            System.out.println("Status: " + postDetail.getStatus());
+            System.out.println("Vote: " + postDetail.getVote());
+            System.out.println("View: " + postDetail.getView());
+            System.out.println("Rank: " + postDetail.getRank());
+            System.out.println("Color: " + postDetail.getColor());
+        } else {
+            System.out.println("Post not found with ID: " + postID);
         }
     }
 

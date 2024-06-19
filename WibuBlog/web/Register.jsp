@@ -55,8 +55,8 @@
                                                     <div class="checkbox">
                                                         <input type="checkbox" class="form-check-input" id="agreed" name="agreed" required>
                                                         <label for="agreed"><span>I have read the <a href="">agreement</a></span></label>
-                                                    </div>
-                                                    <button class="btn btn-primary" type="submit"><i class="fas fa-user-plus"></i> Sign Up</button>
+                                                    </div>                                                   
+                                                    <button class="btn btn-primary" type="submit"><i class="fas fa-user-plus"></i>Sign Up</button>
                                                 </div>
                                             </div>
                                         </form>

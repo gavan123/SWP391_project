@@ -63,6 +63,7 @@
                                                 </div>
                                             </div>
                                         </form>
+                                            <a class="small" href="AccountSetting.jsp">Return</a>
                                     </div>
                                 </div>
                             </div>

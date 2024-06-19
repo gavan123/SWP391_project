@@ -29,6 +29,10 @@
             .app{
                 background-color: #fee2dc;
             }
+            ::selection {
+                color: black;
+                background: #fee2dc;
+            }
         </style>
     </head>
     <body>

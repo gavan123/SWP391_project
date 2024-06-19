@@ -5,17 +5,23 @@
 package controller;
 
 import dal.PostDAO;
+import jakarta.servlet.ServletException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
- * @author minht
+ * @author ADMIN
  */
+@WebServlet(name = "PostDetail", urlPatterns = {"/postDetail"})
 public class PostDetail extends HttpServlet {
 
     /**
@@ -54,7 +60,7 @@ public class PostDetail extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-     protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String postIdStr = request.getParameter("postId");
         if (postIdStr != null && !postIdStr.isEmpty()) {
@@ -63,22 +69,54 @@ public class PostDetail extends HttpServlet {
                 PostDAO postDAO = new PostDAO();
                 model.PostDetail post = postDAO.getPostDetailById(postId);
 
-                // Đặt thông tin chi tiết bài viết vào request và chuyển tiếp đến JSP
                 if (post != null) {
+                    // Kiểm tra xem bài viết đã được xem chưa
+                    if (!isPostViewed(request, postId)) {
+                        // Cập nhật số lượt xem và tạo cookie
+                        postDAO.updateView(postId);
+                        setPostViewedCookie(response, postId);
+                    }
+
+                    // Định dạng lại thời gian thành yyyy-MM-dd
+                    String formattedDate = formatDate(post.getPostTime());
+                    
                     request.setAttribute("post", post);
+                    request.setAttribute("postTime", formattedDate);
                     request.getRequestDispatcher("PostDetail.jsp").forward(request, response);
-                } else {
-                    response.sendRedirect("error.jsp");
+                    return; // Thoát khỏi phương thức sau khi forward
                 }
-            } catch (NumberFormatException e) {
-                response.sendRedirect("error.jsp");
-            } catch (Exception e) {
-                throw new ServletException(e);
+            } catch (NumberFormatException ex) {
+                ex.printStackTrace();
             }
-        } else {
-            // Nếu không có postId, chuyển hướng tới trang lỗi
-            response.sendRedirect("error.jsp");
         }
+
+        response.sendRedirect("Error.jsp"); // Xử lý khi không thành công
+
+    }
+// Phương thức kiểm tra xem bài viết đã được xem chưa
+
+    private boolean isPostViewed(HttpServletRequest request, int postId) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("viewedPost_" + postId)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+// Phương thức để thiết lập cookie cho bài viết đã được xem
+    private void setPostViewedCookie(HttpServletResponse response, int postId) {
+        Cookie viewedCookie = new Cookie("viewedPost_" + postId, "true");
+        viewedCookie.setMaxAge(24 * 60 * 60); // Số giây trong 1 ngày
+        response.addCookie(viewedCookie);
+    }
+
+// Phương thức để định dạng ngày thành chuỗi yyyy-MM-dd
+    private String formatDate(LocalDateTime dateTime) {
+        return dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     /**

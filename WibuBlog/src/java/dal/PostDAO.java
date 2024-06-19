@@ -27,7 +27,7 @@ public class PostDAO extends DBContext {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM Post ORDER BY PostTime DESC";
+            String sql = "SELECT * FROM Post WHERE CategoryId != 10 ORDER BY PostTime DESC";
             ps = connection.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -61,7 +61,7 @@ public class PostDAO extends DBContext {
         ResultSet rs = null;
         try {
             // Xây dựng câu truy vấn động
-            String sql = "SELECT TOP " + limit + " * FROM Post ORDER BY PostTime DESC";
+            String sql = "SELECT TOP " + limit + " * FROM Post WHERE CategoryId != 10 ORDER BY PostTime DESC";
             ps = connection.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -296,32 +296,30 @@ public class PostDAO extends DBContext {
         }
     }
 
+    public boolean updateView(int postId) {
+        PreparedStatement ps = null;
+        try {
+            String sql = "UPDATE Post SET [View] = [View] + 1 WHERE PostID = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, postId);
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } finally {
+            closePreparedStatement(ps);
+        }
+    }
+
     public static void main(String[] args) {
         PostDAO postDAO = new PostDAO();
 
         // Retrieve post detail by ID
         int postID = 1; // Example post ID
         PostDetail postDetail = postDAO.getPostDetailById(postID);
-
-        // Print post details
-        if (postDetail != null) {
-            System.out.println("Post ID: " + postDetail.getPostID());
-            System.out.println("Username: " + postDetail.getUsername());
-            System.out.println("Category Name: " + postDetail.getCategoryName());
-            System.out.println("Genre Name: " + postDetail.getGenreName());
-            System.out.println("Title: " + postDetail.getTitle());
-            System.out.println("Content: " + postDetail.getContent());
-            System.out.println("Source: " + postDetail.getSource());
-            System.out.println("Image: " + postDetail.getImage());
-            System.out.println("Post Time: " + postDetail.getPostTime());
-            System.out.println("Status: " + postDetail.getStatus());
-            System.out.println("Vote: " + postDetail.getVote());
-            System.out.println("View: " + postDetail.getView());
-            System.out.println("Rank: " + postDetail.getRank());
-            System.out.println("Color: " + postDetail.getColor());
-        } else {
-            System.out.println("Post not found with ID: " + postID);
-        }
+        postDAO.updateView(54);
+        
     }
 
 }

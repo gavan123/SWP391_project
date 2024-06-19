@@ -27,8 +27,6 @@ import validation.Validator;
 @WebServlet(name = "RegisterController", urlPatterns = {"/register"})
 public class Register extends HttpServlet {
 
-    private String verificationCode = "";
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -76,7 +74,7 @@ public class Register extends HttpServlet {
             // Generate a verification code
             String verificationCode = KeyGenerator.generateVerificationCode();
             // Send verification code to the user's email
-            ContentDelivery.sendRegistrationVerification(email, username, verificationCode);
+            ContentDelivery.sendEmailVerification(email, username, verificationCode);
             // Create a new User object
             User user = new User(0, username, Hash.getHash(password), 3, 0, "active", email, fullName, 1);
             User user2 = new User(0, username, Hash.getHash(password), 3, 0, "active", email, fullName, 1, 0, null, null, null);

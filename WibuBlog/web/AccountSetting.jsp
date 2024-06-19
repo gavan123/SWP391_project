@@ -1,7 +1,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link rel="stylesheet" href="assets/css/testcss2.css">
+<link rel="stylesheet" href="assets/css/accountsetting.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -51,16 +53,33 @@
                                             </div>
                                            
                                             <div class="form-group">
-                                                <p class="font-weight-semibold">Email: ${user.email} <span><a href="" style="float: right">change</a></span> </p></p>
+                                                <p class="font-weight-semibold">Email: ${user.email} <span><a href="#" style="float: right" onclick="togglePopup2()">Change</a></span> </p></p>
+                                            </div>
+                                            
+                                             <div class="popup2" id="popup-2">
+                                                <div class="overlay" onclick="togglePopup2()"></div>
+                                                <div class="content">
+                                                    <div class="close-btn" onclick="togglePopup2()">&times;</div>
+                                                    <h1>Change email</h1>
+                                                    <p>Email: ${user.email}</p>
+                                                    <form action="ModifyEmail" method="post">
+                                                        <input type="text" name="newEmail" id="newEmail" placeholder="new email" oninput="checkEmail()"> 
+                                                        <br>
+                                                        <span id="result2" name="result" style="color: red"></span>
+                                                        <hr>
+                                                        <input type="submit" value="Done">
+                                                    </form>
+                                                </div>
+                                            </div>
+                                                    
+                                            <div class="form-group">
+                                                <p class="font-weight-semibold">Full name: ${user.fullName} <span><a href="" style="float: right">Change</a></span> </p></p>
                                             </div>
                                             <div class="form-group">
-                                                <p class="font-weight-semibold">Full name: ${user.fullName} <span><a href="" style="float: right">change</a></span> </p></p>
-                                            </div>
-                                            <div class="form-group">
-                                                <p class="font-weight-semibold" p>Password: ********  <span><a href="changePassword" style="float: right">change</a></span> </p></p>
+                                                <p class="font-weight-semibold" p>Password: ********  <span><a href="changePassword" style="float: right">Change</a></span> </p></p>
                                             </div>
                                               <div class="form-group">
-                                                <p class="font-weight-semibold" p>Phone Number: ${user.phoneNumber}  <span><a href="" style="float: right">change</a></span> </p></p>
+                                                <p class="font-weight-semibold" p>Phone Number: ${user.phoneNumber}  <span><a href="" style="float: right">Change</a></span> </p></p>
                                             </div>
                                             <hr >
                                             <div class="form-group">
@@ -83,12 +102,19 @@
         <!-- Core JS -->
         <script src="assets/js/app.min.js"></script>
         
+        
          <script>
              function togglePopup() {
                 document.getElementById("popup-1").classList.toggle("active");
             }
+              function togglePopup2() {
+                document.getElementById("popup-2").classList.toggle("active");
+            }
         </script>
              
+        
+       
+            
              <script>
              function checkUsername(){
                  jQuery.ajax({
@@ -97,6 +123,18 @@
                  type:"POST",
                  success:function(data){
                      $("#result").html(data);
+                   },
+                 error:function(){}
+              });
+             }
+             
+              function checkEmail(){
+                 jQuery.ajax({
+                 url:"CheckEmail",
+                 data:'newEmail='+$("#newEmail").val(),
+                 type:"POST",
+                 success:function(data){
+                     $("#result2").html(data);
                    },
                  error:function(){}
               });

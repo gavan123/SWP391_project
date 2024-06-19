@@ -14,24 +14,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.User;
+import utility.ContentDelivery;
+import utility.KeyGenerator;
 import validation.Validator;
 
 /**
  *
  * @author admin
  */
-@WebServlet(name = "ChangeUsername", urlPatterns = {"/ChangeUsername"})
-public class ChangeUsername extends HttpServlet {
+@WebServlet(name = "ChangeEmail", urlPatterns = {"/ChangeEmail"})
+public class ChangeEmail extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+ 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -40,80 +34,63 @@ public class ChangeUsername extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ChangeUsername</title>");
+            out.println("<title>Servlet ChangeEmail</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ChangeUsername at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ChangeEmail at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+   
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+   
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        String newUsername = request.getParameter("newUsername");
         HttpSession session = request.getSession();
+        User user = (User)session.getAttribute("user");
+        String oldEmail = user.getEmail();
+        String newEmail = request.getParameter("newEmail");
         UserDAO userDAO = new UserDAO();
-        User user = (User) (session.getAttribute("user"));
-        if (newUsername.equals("")){
+        
+        if (newEmail.equals("")){
             PrintWriter out = response.getWriter();
             out.println("<script type=\"text/javascript\">");
-            out.println("alert('Username Must Not Be Empty');");
+            out.println("alert('Email Must Not Be Empty');");
             out.println("location='AccountSetting.jsp';");
             out.println("</script>");
         }
-        else if (userDAO.getUserByUsername(newUsername) != null) {
+        else if (userDAO.getUserByEmail(newEmail) != null) {
             PrintWriter out = response.getWriter();
             out.println("<script type=\"text/javascript\">");
-            out.println("alert('Username Already Existed');");
+            out.println("alert('Email Already Existed');");
             out.println("location='AccountSetting.jsp';");
             out.println("</script>");
         } 
-        else if (Validator.usernameRegex(newUsername) == false){
+        else if (Validator.emailRegex(newEmail) == false){
             PrintWriter out = response.getWriter();
             out.println("<script type=\"text/javascript\">");
-            out.println("alert('Invalid Username');");
+            out.println("alert('Invalid Email');");
             out.println("location='AccountSetting.jsp';");
             out.println("</script>");
         }
         else {
-            userDAO.changeUsername(newUsername, user.getUserId());
-            user.setUsername(newUsername);
-            response.sendRedirect("AccountSetting.jsp");
+            String verificationCode = KeyGenerator.generateVerificationCode();
+            ContentDelivery.sendVerificationCode("Verification Code", oldEmail, verificationCode);
+            request.setAttribute("template", verificationCode);
+            request.setAttribute("message", "An OTP have been sent to " + oldEmail + " please login to verify to change your email.");
+            request.getRequestDispatcher("VerifyChangedEmail.jsp").forward(request, response);
         }
-
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+   
     @Override
     public String getServletInfo() {
         return "Short description";

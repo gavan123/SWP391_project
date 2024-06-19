@@ -9,30 +9,30 @@ import java.util.HashMap;
 
 public class SignatureVerification {
 
-    private final HashMap<String, List<Object>> knownFileTypes = new HashMap();
+    private static final HashMap<String, List<Object>> knownFileTypes = new HashMap();
 
-    private final List<Object> png = new ArrayList();
-    private final List<Object> jpg = new ArrayList();
-    private final List<Object> bmp = new ArrayList();
-    private final List<Object> webp = new ArrayList();
-    private final List<Object> mp4 = new ArrayList();
-    private final List<Object> txt = new ArrayList();
+    private static final List<Object> png = new ArrayList();
+    private static final List<Object> jpg = new ArrayList();
+    private static final List<Object> bmp = new ArrayList();
+    private static final List<Object> webp = new ArrayList();
+    private static final List<Object> mp4 = new ArrayList();
+    private static final List<Object> txt = new ArrayList();
 
-    private final String[] pngFNE = {".png"};
-    private final String[] jpgFNE = {".jpg", ".jpeg", ".jfif"};
-    private final String[] bmpFNE = {".bmp"};
-    private final String[] webpFNE = {".webp"};
-    private final String[] mp4FNE = {".mp4"};
-    private final String[] txtFNE = {".txt"};
+    private static final String[] pngFNE = {".png"};
+    private static final String[] jpgFNE = {".jpg", ".jpeg", ".jfif"};
+    private static final String[] bmpFNE = {".bmp"};
+    private static final String[] webpFNE = {".webp"};
+    private static final String[] mp4FNE = {".mp4"};
+    private static final String[] txtFNE = {".txt"};
 
-    private final String pngSignature = "0x89 0x50 0x4E 0x47 0x0D 0x0A 0x1A 0x0A";
-    private final String jpgSignature = "0xFF 0xD8 0xFF";
-    private final String bmpSignature = "0x42 0x4D";
-    private final String webpSignature = "";
-    private final String mp4Signature = "0x66 0x74 0x79 0x70";
-    private final String txtSignature = "0xEF 0xBB 0xBF";
+    private static final String pngSignature = "0x89 0x50 0x4E 0x47 0x0D 0x0A 0x1A 0x0A";
+    private static final String jpgSignature = "0xFF 0xD8 0xFF";
+    private static final String bmpSignature = "0x42 0x4D";
+    private static final String webpSignature = "";
+    private static final String mp4Signature = "0x66 0x74 0x79 0x70";
+    private static final String txtSignature = "0xEF 0xBB 0xBF";
 
-    public SignatureVerification() {
+    static {
         png.add(pngFNE);
         png.add(pngSignature);
 
@@ -59,7 +59,7 @@ public class SignatureVerification {
         knownFileTypes.put("txt", txt);
     }
 
-    private boolean verifyFileNameExtension(File file, String[] fneList) {
+    private static boolean verifyFileNameExtension(File file, String[] fneList) {
         String fileName = file.getName().toLowerCase();
         for (String fne : fneList) {
             if (fileName.endsWith(fne)) {
@@ -69,7 +69,7 @@ public class SignatureVerification {
         return false;
     }
 
-    private boolean verifySignature(File file, String[] fne, byte[] magic) throws IOException {
+    private static boolean verifySignature(File file, String[] fne, byte[] magic) throws IOException {
         if (!verifyFileNameExtension(file, fne)) {
             return false;
         }
@@ -104,7 +104,7 @@ public class SignatureVerification {
         }
     }
 
-    public boolean verifyFile(File file, String fileType) throws IOException {
+    public static boolean verifyFile(File file, String fileType) throws IOException {
         List data = knownFileTypes.get(fileType);
 
         String[] fne = (String[]) data.get(0);

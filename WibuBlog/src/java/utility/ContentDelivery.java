@@ -15,7 +15,7 @@ import utility.Email;
 public class ContentDelivery {
     private static String from = "Wibu Blog";
     
-    public static void sendRegistrationVerification(String to, String username, String code) {
+    public static void sendEmailVerification(String to, String username, String code) {
         String subject = "Confirm registration for account " + username;
 
         String content = "Hi " + username + ",\n\n";

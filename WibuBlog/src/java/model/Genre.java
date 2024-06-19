@@ -9,11 +9,16 @@ package model;
  * @author admin
  */
 public class Genre {
+
     private int genreId;
     private String name;
     private String description;
 
     public Genre() {
+    }
+
+    public Genre(String name) {
+        this.name = name;
     }
 
     public Genre(int genreId, String name, String description) {
@@ -45,6 +50,5 @@ public class Genre {
     public void setDescription(String description) {
         this.description = description;
     }
-    
-    
+
 }

@@ -141,7 +141,8 @@ public class UserDAO extends DBContext {
                         rs.getInt("ProfilePhoto"),
                         rs.getString("PhoneNumber"),
                         rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
-                        rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null);
+                        rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null,
+                        rs.getString("Bio") != null ? rs.getString("Bio") : null);
 
             }        
         } catch (SQLException ex) {
@@ -342,5 +343,32 @@ public class UserDAO extends DBContext {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+      }
+      
+      public void updateBio(String content, int userID){
+        try {
+            String sql = "update [user] set bio = ? where userID = ? ";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1,content);
+            ps.setInt(2, userID);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      }
+      
+      public void changeUsername(String newUsername, int userID){ 
+        try {
+            String sql = "update [user] set username = ? where userID = ? ";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, newUsername);
+            ps.setInt(2, userID);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+          
       }
 }

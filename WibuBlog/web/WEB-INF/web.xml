@@ -32,7 +32,6 @@
         <filter-name>LoginFilter</filter-name>
         <url-pattern>/Profile.jsp</url-pattern>
         <url-pattern>/AddPhoneNumber.jsp</url-pattern>
-        <url-pattern>/changePass.jsp</url-pattern>
     </filter-mapping>
     <servlet>
         <servlet-name>blank</servlet-name>

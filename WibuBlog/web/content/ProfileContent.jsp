@@ -6,6 +6,7 @@
 <%@ page import="dal.UserDAO" %>
 <%@ page import="dal.MediaDAO" %>
 <link rel="stylesheet" href="assets/css/testcss.css">
+<link rel="stylesheet" href="assets/css/testcss2.css">
 <% User user = (User)session.getAttribute("user");
                                UserDAO userDAO = new UserDAO();
                                String rank = userDAO.getRankByRankID(user.getRankId());
@@ -91,9 +92,47 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <h5>Bio</h5>
-                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here'.</p>
-                    <h5>Experices</h5>
+                    <h5>Bio</h5>     
+                    <c:choose>
+                        <c:when test="${user.bio == null}">
+                    <form action="SetBio" method="post" id="UpdateBio">
+                     <label for="bio"></label>
+                    <textarea id="bio" name="bio" rows="5" cols="90" placeholder="Hãy thể hiện cá tính của bạn!!"></textarea>             
+                  </form>
+                    <input type="submit" value="Lưu" form="UpdateBio"> 
+                    </c:when>
+                    <c:otherwise>
+                        <div class="w3-container w3-pale-blue w3-leftbar w3-border-blue">
+                            <p>${user.bio}</p>
+                            <hr style="color: aqua">
+                            
+                        </div>
+                            <div>
+                          
+                            <a href="#" onclick="togglePopup()" style="float:right">Edit</a>
+                            </div>
+    <div class="popup" id="popup-1">
+        <div class="overlay" onclick="togglePopup()"></div>
+        <div class="content">
+            <div class="close-btn" onclick="togglePopup()">&times;</div>
+            <h1>Change new bio</h1>
+            <p>Enter new bio</p>
+            <form action="UpdateBio" method="post">
+                <textarea name="newBio" rows="4" cols="50" placeholder="Your new bio 😍"></textarea>
+                <br>
+                <input type="submit" value="Done">
+            </form>
+        </div>
+    </div>
+    <script>
+        function togglePopup() {
+            document.getElementById("popup-1").classList.toggle("active");
+        }
+    </script>
+                    </c:otherwise>
+                    </c:choose>
+                    <br>
+                    <h5>Experience</h5>
                     <div class="m-t-20">
                         <div class="media m-b-30">
                             <div class="avatar avatar-image">
@@ -377,6 +416,7 @@
         </div>
     </div>
 </div>
+                                
 <script>
     var file = document.getElementById('someId');
     file.onchange = function (e) {
@@ -384,7 +424,6 @@
         switch (ext) {
             case 'jpg':
                 this.form.submit();
-
                 break;
             case 'jpeg':
                 this.form.submit();
@@ -405,6 +444,12 @@
                 this.value = '';
         }
     };
+</script>
+
+<script>
+  function togglePopup(){
+      document.getElementById("popup-1").classList.toggle("active");
+  } 
 </script>
 
 

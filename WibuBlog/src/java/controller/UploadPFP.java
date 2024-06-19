@@ -69,7 +69,7 @@ public class UploadPFP extends HttpServlet {
         String encodedMediaName = mediaDAO.encodeMediaName(user.getUserId()) + "." + mediaDAO.getExtension(imageFileName);
 
         //set an upload path to store media
-        String uploadPath = "C:/Users/admin/Documents/GitHub/SWP391_project/WibuBlog/web/PFP/" + imageFileName;
+        String uploadPath = "C:/Users/admin/Documents/GitHub/SWP391_project/WibuBlog/web/PFP/" + imageFileName; //sua duong dan 
         try {
             FileOutputStream fos = new FileOutputStream(uploadPath);
             InputStream is = file.getInputStream();
@@ -86,8 +86,8 @@ public class UploadPFP extends HttpServlet {
         
         
         //encode file name in case of duplicate file name but different content
-        File source = new File("C:\\Users\\admin\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + imageFileName);
-        File target = new File("C:\\Users\\admin\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + encodedMediaName);
+        File source = new File("C:\\Users\\admin\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + imageFileName); //sua duong dan 
+        File target = new File("C:\\Users\\admin\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + encodedMediaName); //sua duong dan 
          if (source.renameTo(target)) {                   
             out.println("File is renamed"); 
         } 

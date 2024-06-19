@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Wibi Burotsugu - Verify Email</title>
+        <title>Verify Email</title>
 
         <!-- Favicon -->
         <link rel="shortcut icon" href="">
@@ -31,7 +31,7 @@
                                         <div class="d-flex align-items-center justify-content-end m-b-30">
                                             <h2 class="m-b-0">Verify Email</h2>
                                         </div>
-                                        <form action="verificationRegister" method="post">
+                                        <form action="VerifyChangedEmail" method="post">
                                             <div class="form-group">
                                                 <label class="font-weight-semibold" for="responseField">Enter verification code:</label>
                                                 <input type="text" class="form-control" id="responseField" name="response" required oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="6">

@@ -1,5 +1,6 @@
 package utility;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +13,7 @@ import javax.imageio.ImageIO;
 public class ImageHandler {
 
     // Regex pattern for common image file extensions
-    private static final Pattern IMAGE_FILE_PATTERN = Pattern.compile("([^\\s]+(\\.(?i)(png|jpg|jpeg|bmp|gif))$)");
+    private static final Pattern IMAGE_FILE_PATTERN = Pattern.compile("([^\\s]+\\s)*[^\\s]+(\\s[^\\s]+)*\\.(?i)(png|jpg|jpeg|bmp|gif)$");
 
     // Base directory path for images
     private static final Path BASE_IMAGE_PATH = FileSystems.getDefault().getPath("web", "images").toAbsolutePath();
@@ -20,7 +21,7 @@ public class ImageHandler {
     // Function to save a BufferedImage to a file
     public static void saveImage(BufferedImage image, String directory, String fileName, String format) {
         Path imagePath = BASE_IMAGE_PATH.resolve(directory).resolve(fileName);
-        saveImage(image, imagePath.toString(), format);
+        saveImage(image, imagePath, format);
     }
 
     // Function to save multiple BufferedImages to a directory with individual formats
@@ -41,13 +42,28 @@ public class ImageHandler {
     }
 
     // Function to save a BufferedImage to a file
-    public static void saveImage(BufferedImage image, String filePath, String format) {
-        if (!isImageFile(filePath)) {
+//    public static void saveImage(BufferedImage image, String filePath, String format) {
+//        if (!isImageFile(filePath)) {
+//            System.err.println("The file path " + filePath + " is not a valid image file.");
+//            return;
+//        }
+//
+//        File outputFile = new File(filePath);
+//        try {
+//            ImageIO.write(image, format, outputFile);
+//            System.out.println("Image saved successfully to " + filePath);
+//        } catch (IOException e) {
+//            System.err.println("Error saving image: " + e.getMessage());
+//        }
+//    }
+
+    public static void saveImage(BufferedImage image, Path filePath, String format) {
+        if (!isImageFile(filePath.toString())) {
             System.err.println("The file path " + filePath + " is not a valid image file.");
             return;
         }
 
-        File outputFile = new File(filePath);
+        File outputFile = filePath.toFile();
         try {
             ImageIO.write(image, format, outputFile);
             System.out.println("Image saved successfully to " + filePath);
@@ -91,7 +107,14 @@ public class ImageHandler {
     private static BufferedImage createSampleImage(int width, int height) {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         // Fill the image with some content (optional)
-        image.createGraphics().drawRect(width / 4, height / 4, width / 2, height / 2);
+        Graphics2D g2d = image.createGraphics();
+        try {
+            // Fill the image with some content (optional)
+            g2d.drawRect(width / 4, height / 4, width / 2, height / 2);
+        } finally {
+            g2d.dispose(); // Dispose of graphics context to free resources
+        }
+
         return image;
     }
 }

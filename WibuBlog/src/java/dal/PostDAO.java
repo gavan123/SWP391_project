@@ -280,12 +280,13 @@ public class PostDAO extends DBContext {
         return postDetail;
     }
 
-    public boolean updateVote(int postId, String action) {
+    public boolean updateVote(int postId, int vote) {
         PreparedStatement ps = null;
         try {
-            String sql = "UPDATE Post SET Vote = Vote " + ("upvote".equals(action) ? "+ 1" : "- 1") + " WHERE PostID = ?";
+            String sql = "UPDATE Post SET Vote = ? WHERE PostID = ?";
             ps = connection.prepareStatement(sql);
-            ps.setInt(1, postId);
+            ps.setInt(1, vote);
+            ps.setInt(2, postId);
             int rowsUpdated = ps.executeUpdate();
             return rowsUpdated > 0;
         } catch (SQLException ex) {
@@ -319,7 +320,7 @@ public class PostDAO extends DBContext {
         int postID = 1; // Example post ID
         PostDetail postDetail = postDAO.getPostDetailById(postID);
         postDAO.updateView(54);
-        
+
     }
 
 }

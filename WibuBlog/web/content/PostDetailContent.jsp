@@ -25,6 +25,26 @@
         font-size: 18px;
         margin-left: 8px;
     }
+
+    .vote-section.upvoted {
+        background-color: lightgreen; /* Màu nền khi upvote */
+    }
+
+    .vote-section.downvoted {
+        background-color: salmon; /* Màu nền khi downvote */
+    }
+    .vote-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        border-radius: 20px; /* Độ cong của các góc */
+        border: 1px solid #ccc;
+        padding: 10px; /* Khoảng cách từ nội dung đến biên */
+        margin: 10px; /* Khoảng cách xung quanh */
+        transition: background-color 0.3s ease; /* Hiệu ứng chuyển đổi màu nền */
+    }
+
 </style>
 <div class="col-lg-12 mb-2">
     <div class="card mb-2">
@@ -49,15 +69,21 @@
             </h3>
             <div class="card-text fs-content" style="font-size: 18px;">
                 ${post.content}
+                <br>
+                <br>
+                <br>
+                <h4>Source: ${post.source != null ? post.source : 'N/A'}</h4>
             </div>
             <hr>
             <div class="row">
                 <div class="col-lg-4 mb-2 mx-auto">
                     <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
                         <li class="d-flex align-items-center mr-4 font-weight-bold">
-                            <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2" onclick="vote('up')" ></i>
-                            <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" onclick="vote('down')"></i>
-                            <span id="vote_value">${post.vote}</span>
+                            <div class="vote-section" id="vote-section">
+                                <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2" onclick="vote('up')" ></i>
+                                <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" onclick="vote('down')"></i>
+                                <span id="vote_value">${post.vote}</span>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -158,21 +184,85 @@
     // Biến để theo dõi trạng thái upvote/downvote
     let voteStatus = 'none'; // Trạng thái ban đầu
 
-    function vote(type) {
-        let voteValueElement = document.getElementById('vote_value');
-        let currentVote = parseInt(voteValueElement.innerText);
-        let increment = 0;
+// Hàm để lấy giá trị của một tham số từ URL
+    const getUrlParameter = (param) => {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    };
 
-        if (type === 'up') {
-            increment = (voteStatus === 'upvoted') ? -1 : (voteStatus === 'downvoted') ? 2 : 1;
-            voteStatus = (voteStatus === 'upvoted') ? 'none' : 'upvoted';
-        } else if (type === 'down') {
-            increment = (voteStatus === 'downvoted') ? 1 : (voteStatus === 'upvoted') ? -2 : -1;
-            voteStatus = (voteStatus === 'downvoted') ? 'none' : 'downvoted';
+    const vote = (type) => {
+        const voteValueElement = document.getElementById('vote_value');
+        const postId = getUrlParameter('postId');
+        if (!postId) {
+            console.error("postId không tồn tại trong URL");
+            return; // Thoát ra nếu postId không tồn tại
         }
 
-        voteValueElement.innerText = currentVote + increment;
-    }
+        isLoggedIn((loggedIn) => {
+            if (!loggedIn) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Bạn cần đăng nhập để bỏ phiếu.',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                return;
+            }
+            const currentVote = parseInt(voteValueElement.innerText);
+            let increment = 0;
+
+            // Hàm để xử lý thêm/loại bỏ lớp 'upvoted' và 'downvoted'
+            const toggleVoteClass = (addUpvoted, addDownvoted) => {
+                const voteSection = document.getElementById('vote-section');
+                voteSection.classList.toggle('upvoted', addUpvoted);
+                voteSection.classList.toggle('downvoted', addDownvoted);
+            };
+
+            // Xử lý upvote và downvote
+            if (type === 'up') {
+                increment = (voteStatus === 'upvoted') ? -1 : (voteStatus === 'downvoted') ? 2 : 1;
+                voteStatus = (voteStatus === 'upvoted') ? 'none' : 'upvoted';
+                toggleVoteClass(voteStatus === 'upvoted', false);
+            } else if (type === 'down') {
+                increment = (voteStatus === 'downvoted') ? 1 : (voteStatus === 'upvoted') ? -2 : -1;
+                voteStatus = (voteStatus === 'downvoted') ? 'none' : 'downvoted';
+                toggleVoteClass(false, voteStatus === 'downvoted');
+            }
+
+            let newVoteValue = currentVote + increment;
+            voteValueElement.innerText = newVoteValue;
+
+            // Gửi yêu cầu AJAX để cập nhật vote
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "updateVote", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    console.log(xhr.status === 200 ? "Vote updated successfully" : "Error updating vote");
+                }
+            };
+            xhr.send("postId=" + postId + "&vote_value=" + newVoteValue);
+        });
+    };
+
+    // Check Login
+    const isLoggedIn = (callback) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "checkLogin", true);
+        xhr.setRequestHeader("Content-Type", "text/plain"); // Sử dụng text/plain
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    const loggedIn = (xhr.responseText.trim() === 'true');
+                    callback(loggedIn);
+                } else {
+                    console.error("Lỗi khi kiểm tra đăng nhập:", xhr.status);
+                    callback(false);
+                }
+            }
+        };
+        xhr.send();
+    };
 
     function sendMsg() {
         var msg = $("#msg").val();

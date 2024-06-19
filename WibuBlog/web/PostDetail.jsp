@@ -11,10 +11,11 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Post Detail Page</title>
-      
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
     </head>
     <body>
-          <jsp:include page="Layout.jsp">
+        <jsp:include page="Layout.jsp">
             <jsp:param name="sideNav" value="SideNav.jsp" />
             <jsp:param name="accountHeader" value="/content/AccountContent.jsp" />
             <jsp:param name="content" value="/content/PostDetailContent.jsp" />

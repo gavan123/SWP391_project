@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.CommentDAO;
 import dal.PostDAO;
 import jakarta.servlet.ServletException;
 import java.io.IOException;
@@ -14,8 +15,12 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import model.Comment;
+import model.User;
 
 /**
  *
@@ -63,11 +68,18 @@ public class PostDetail extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String postIdStr = request.getParameter("postId");
+        // Get the session from the request
+        HttpSession session = request.getSession();
+        User userSession = (User) session.getAttribute("user");
+
         if (postIdStr != null && !postIdStr.isEmpty()) {
             try {
                 int postId = Integer.parseInt(postIdStr);
                 PostDAO postDAO = new PostDAO();
+                CommentDAO commentDAO = new CommentDAO();
+
                 model.PostDetail post = postDAO.getPostDetailById(postId);
+                List<Comment> comments = commentDAO.getCommentsForPost(postId);
 
                 if (post != null) {
                     // Kiểm tra xem bài viết đã được xem chưa
@@ -76,10 +88,12 @@ public class PostDetail extends HttpServlet {
                         postDAO.updateView(postId);
                         setPostViewedCookie(response, postId);
                     }
-
                     // Định dạng lại thời gian thành yyyy-MM-dd
                     String formattedDate = formatDate(post.getPostTime());
-                    
+
+                    // Set attributes for JSP rendering
+                    request.setAttribute("user", userSession);
+                    request.setAttribute("commentsList", comments); // Set commentsList attribute
                     request.setAttribute("post", post);
                     request.setAttribute("postTime", formattedDate);
                     request.getRequestDispatcher("PostDetail.jsp").forward(request, response);
@@ -94,7 +108,6 @@ public class PostDetail extends HttpServlet {
 
     }
 // Phương thức kiểm tra xem bài viết đã được xem chưa
-
     private boolean isPostViewed(HttpServletRequest request, int postId) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
@@ -110,7 +123,8 @@ public class PostDetail extends HttpServlet {
 // Phương thức để thiết lập cookie cho bài viết đã được xem
     private void setPostViewedCookie(HttpServletResponse response, int postId) {
         Cookie viewedCookie = new Cookie("viewedPost_" + postId, "true");
-        viewedCookie.setMaxAge(24 * 60 * 60); // Số giây trong 1 ngày
+        viewedCookie.setMaxAge(60 * 60); // Số giây trong 1 ngày
+        viewedCookie.setPath("/"); // Ensure the cookie is valid for the entire application
         response.addCookie(viewedCookie);
     }
 

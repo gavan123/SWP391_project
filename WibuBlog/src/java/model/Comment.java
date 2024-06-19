@@ -15,7 +15,6 @@ public class Comment {
     private int commentId;
     private int postId;
     private int userId;
-    private String image;
     private String content;
     private String status;
     private int vote;
@@ -25,11 +24,10 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(int commentId, int postId, int userId, String image, String content, String status, int vote, int parentId, LocalDateTime createAt) {
+    public Comment(int commentId, int postId, int userId,  String content, String status, int vote, int parentId, LocalDateTime createAt) {
         this.commentId = commentId;
         this.postId = postId;
         this.userId = userId;
-        this.image = image;
         this.content = content;
         this.status = status;
         this.vote = vote;
@@ -61,13 +59,6 @@ public class Comment {
         this.userId = userId;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
 
     public String getContent() {
         return content;

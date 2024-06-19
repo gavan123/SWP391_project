@@ -72,26 +72,8 @@
                 </a>
                 <form id="profileForm" action="profile" method="post" class="d-none">
                     <input type="hidden" name="userId" value="<c:out value='${user.userId}' />">
-                </form>
-                  <a href="changePassword" class="dropdown-item d-block p-h-15 p-v-10">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <i class="anticon opacity-04 font-size-16 anticon-user"></i>
-                            <span class="m-l-10">Change password</span>
-                        </div>
-                        <i class="anticon font-size-10 anticon-right"></i>
-                    </div>
-                </a>
-                <a href="javascript:void(0);" class="dropdown-item d-block p-h-15 p-v-10">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div>
-                            <i class="anticon opacity-04 font-size-16 anticon-user"></i>
-                            <span class="m-l-10">Edit Profile</span>
-                        </div>
-                        <i class="anticon font-size-10 anticon-right"></i>
-                    </div>
-                </a>
-                <a href="javascript:void(0);" class="dropdown-item d-block p-h-15 p-v-10">
+                </form>    
+                <a href="AccountSetting" class="dropdown-item d-block p-h-15 p-v-10">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
                             <i class="anticon opacity-04 font-size-16 anticon-lock"></i>

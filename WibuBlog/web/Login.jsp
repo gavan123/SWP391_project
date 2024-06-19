@@ -62,7 +62,7 @@
                                                     <span class="font-size-13 text-muted">
                                                         Don't have an account? 
                                                         <a class="small" href="Register.jsp"> Register</a><br>
-                                                        <a class="small" href="home.jsp">Return to homepage</a>
+                                                        <a class="small" href="Home.jsp">Return to homepage</a>
                                                     </span>
                                                     <button class="btn btn-primary" type="submit">Sign In</button>
                                                 </div>

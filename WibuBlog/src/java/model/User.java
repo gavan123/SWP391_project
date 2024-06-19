@@ -25,10 +25,30 @@ public class User {
     private String phoneNumber;
     private LocalDateTime dateOfBirth;
     private LocalDateTime creationDate;
+    private String bio;
+    
 
     public User() {
     }
 
+    public User(int userId, String username, String passwordHash, int roleId, int point, String status, String email, String fullName, int rankId, int profilePhoto, String phoneNumber, LocalDateTime dateOfBirth, LocalDateTime creationDate, String bio) {
+        this.userId = userId;
+        this.username = username;
+        this.passwordHash = passwordHash;
+        this.roleId = roleId;
+        this.point = point;
+        this.status = status;
+        this.email = email;
+        this.fullName = fullName;
+        this.rankId = rankId;
+        this.profilePhoto = profilePhoto;
+        this.phoneNumber = phoneNumber;
+        this.dateOfBirth = dateOfBirth;
+        this.creationDate = creationDate;
+        this.bio = bio;
+    }
+
+    
     public User(int userId, String username, String passwordHash, int roleId, int point, String status, String email, String fullName, int rankId, int profilePhoto, String phoneNumber, LocalDateTime dateOfBirth, LocalDateTime creationDate) {
         this.userId = userId;
         this.username = username;
@@ -202,6 +222,14 @@ public class User {
 
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 
     

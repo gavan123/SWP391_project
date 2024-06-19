@@ -31,7 +31,7 @@
                                         <div class="d-flex align-items-center justify-content-end m-b-30">
                                             <h2 class="m-b-0">Verify Email</h2>
                                         </div>
-                                        <form action="verificationRegister" method="post">
+                                        <form action="VerifyChangedEmail" method="post">
                                             <div class="form-group">
                                                 <label class="font-weight-semibold" for="responseField">Enter verification code:</label>
                                                 <input type="text" class="form-control" id="responseField" name="response" required oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="6">

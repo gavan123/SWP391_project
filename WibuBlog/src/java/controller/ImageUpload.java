@@ -99,17 +99,18 @@ public class ImageUpload extends HttpServlet {
 
         // Lưu danh sách các file ảnh và tên file
         List<String> fileNames = new ArrayList<>();
-        
+
         // Lấy các file ảnh từ request và lưu vào thư mục "game"
         for (Part part : request.getParts()) {
             String submittedFileName = part.getSubmittedFileName();
             if (submittedFileName != null && ImageHandler.isImageFile(submittedFileName)) {
-                String fileName = Paths.get(submittedFileName).getFileName().toString();
-                fileNames.add(fileName);
+                fileNames.add(submittedFileName);
 
+                // Đọc và lưu ảnh vào thư mục "game"
                 try (InputStream input = part.getInputStream()) {
                     BufferedImage image = ImageIO.read(input);
-                    ImageHandler.saveImage(image, gameDirectory.toString(), fileName, ImageHandler.getExtension(fileName));
+                    ImageHandler.saveImage(image, gameDirectory.toString(),
+                            submittedFileName, ImageHandler.getExtension(submittedFileName));
                 } catch (IOException e) {
                     response.getWriter().println("Error reading or saving image: " + e.getMessage());
                     return;

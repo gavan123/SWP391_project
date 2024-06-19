@@ -83,7 +83,20 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-
+    public void changePhoneNumber(String phonenumber, int userID){
+        PreparedStatement ps = null;
+        try {
+            String sql = "update [user] set phonenumber = ? where UserID = ? ";
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, phonenumber);
+            ps.setInt(2, userID);
+            ps.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closePreparedStatement(ps);
+        }
+    }
     public boolean emailExists(String email) {
         PreparedStatement ps = null;
         ResultSet rs = null;

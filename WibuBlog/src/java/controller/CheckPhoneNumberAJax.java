@@ -18,9 +18,10 @@ import validation.Validator;
  *
  * @author admin
  */
-@WebServlet(name = "CheckNewPasswordAJax", urlPatterns = {"/CheckNewConfirmedPassword"})
-public class CheckNewConfirmedPasswordAJax extends HttpServlet {
+@WebServlet(name = "CheckPhoneNumberAJax", urlPatterns = {"/CheckPhoneNumber"})
+public class CheckPhoneNumberAJax extends HttpServlet {
 
+   
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -29,10 +30,10 @@ public class CheckNewConfirmedPasswordAJax extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CheckPasswordAJax</title>");            
+            out.println("<title>Servlet CheckPhoneNumberAJax</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CheckPasswordAJax at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet CheckPhoneNumberAJax at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -45,19 +46,16 @@ public class CheckNewConfirmedPasswordAJax extends HttpServlet {
         processRequest(request, response);
     }
 
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String newConfirmedPassword = request.getParameter("newConfirmedPassword");
-        if (newConfirmedPassword.equals("")){
-            response.setContentType("text/html");
+        String newPhoneNumber = request.getParameter("newPhoneNumber");
+        UserDAO userDAO = new UserDAO();
+        if(newPhoneNumber.equals("")){
+             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
-            out.print("Password Must Not Be Empty");
-        }
-        else if(Validator.passwordRegex(newConfirmedPassword) == false){
-            response.setContentType("text/html");
-            PrintWriter out = response.getWriter();
-            out.print("Invalid Password");
+            out.print("Phone Number Must Not Be Empty");
         }
 
         else{

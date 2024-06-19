@@ -4,7 +4,7 @@
 <%@ page import="model.Category" %>
 <%@ page import="model.Genre" %>
 <%@ page import="dal.GenreDAO" %>
-<%@page import="java.util.List"%>
+<%@ page import="java.util.List"%>
         
         
 <!DOCTYPE html>
@@ -17,9 +17,8 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
         <%CategoryDAO categoryDAO = new CategoryDAO();
-        GenreDAO genreDAO = new GenreDAO(); %>
-        
-        <% List<Category> categories = categoryDAO.getCategoryNames();
+        GenreDAO genreDAO = new GenreDAO(); 
+        List<Category> categories = categoryDAO.getCategoryNames();
         List<Genre> genres = genreDAO.getAllGenres();%>
         
         
@@ -48,16 +47,16 @@
                 </div>
                 <div class="form-group">
                     <label>Categories:</label><br>
-                    <c:forEach var="category" items="${categories}">
+                    <c:forEach var="category" items="<%=categories%>">
                         <input type="checkbox" class="btn-check" id="category-${category.categoryId}" name="category" value="${category.categoryId}">
                         <label class="btn btn-outline-primary" for="category-${category.categoryId}">${category.name}</label>
                     </c:forEach>
                 </div>
                 <div class="form-group">
                     <label>Genres:</label><br>
-                    <c:forEach var="genre" items="${genres}">
-                        <input type="checkbox" class="btn-check" id="genre-${genre.genreID}" name="genre" value="${genre.genreID}">
-                        <label class="btn btn-outline-primary" for="genre-${genre.genreID}">${genre.name}</label>
+                    <c:forEach var="genre" items="<%=genres%>">
+                        <input type="checkbox" class="btn-check" id="genre-${genre.genreId}" name="genre" value="${genre.genreId}">
+                        <label class="btn btn-outline-primary" for="genre-${genre.genreId}">${genre.name}</label>
                     </c:forEach>
                 </div>
                 <div class="form-group">

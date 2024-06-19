@@ -19,10 +19,9 @@ import jakarta.servlet.http.Part;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 import model.Media;
 import model.User;
@@ -58,11 +57,10 @@ public class UploadPFP extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //create user object to insert to database
+        MediaDAO mediaDAO = new MediaDAO();
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        MediaDAO mediaDAO = new MediaDAO();
-
         //fetch file from jsp
         Part file = request.getPart("pfp");
         String imageFileName = file.getSubmittedFileName();

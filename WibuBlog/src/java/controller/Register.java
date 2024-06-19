@@ -27,8 +27,6 @@ import validation.Validator;
 @WebServlet(name = "RegisterController", urlPatterns = {"/register"})
 public class Register extends HttpServlet {
 
-    private String verificationCode = "";
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

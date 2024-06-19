@@ -100,7 +100,7 @@ public class ChangePassword extends HttpServlet {
         String hashedNewPassword = Hash.getHash(newPassword);
         UserDAO userDAO = new UserDAO();
         userDAO.changePassword(hashedNewPassword, userSession.getUserId());
-       // ContentDelivery.sendSecurityAlert(userSession.getEmail(), userSession.getUsername());
+        ContentDelivery.sendSecurityAlert(userSession.getEmail(), userSession.getUsername());
 
         request.setAttribute("message", "Password changed successfully, please login again!");
         request.getRequestDispatcher("Login.jsp").forward(request, response);

@@ -46,22 +46,21 @@ public class GenreDAO extends DBContext {
 
     public List<Genre> getAllGenresName() {
         List<Genre> genreList = new ArrayList<>();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            String sql = "SELECT [Name] FROM Genre";
-            ps = connection.prepareStatement(sql);
-            rs = ps.executeQuery();
+        String sql = "SELECT GenreID, [Name] FROM Genre";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()) {
-                Genre genre = new Genre(rs.getString("Name"));
+                int genreID = rs.getInt("GenreID");
+                String name = rs.getString("Name");
+                Genre genre = new Genre(genreID, name);
                 genreList.add(genre);
             }
+
         } catch (SQLException ex) {
-            Logger.getLogger(GenreDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            closeResultSet(rs);
-            closePreparedStatement(ps);
+            Logger.getLogger(GenreDAO.class.getName()).log(Level.SEVERE, "Error fetching genres", ex);
         }
+
         return genreList;
     }
 
@@ -139,4 +138,5 @@ public class GenreDAO extends DBContext {
         }
     }
 
+    
 }

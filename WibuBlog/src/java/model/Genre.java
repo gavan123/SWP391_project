@@ -21,6 +21,11 @@ public class Genre {
         this.name = name;
     }
 
+    public Genre(int genreId, String name) {
+        this.genreId = genreId;
+        this.name = name;
+    }
+
     public Genre(int genreId, String name, String description) {
         this.genreId = genreId;
         this.name = name;

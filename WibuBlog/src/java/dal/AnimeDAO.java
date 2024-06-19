@@ -1,36 +1,34 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
+
+
+
 package dal;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Anime;
 
-/**
- *
- * @author ADMIN
- */
 public class AnimeDAO extends DBContext {
 
     // Lấy một Anime bằng ID
     public Anime getAnimeById(int animeId) {
         PreparedStatement ps = null;
         ResultSet rs = null;
+        Anime anime = null;
         try {
             String sql = "SELECT * FROM Anime WHERE AnimeID = ?";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, animeId);
             rs = ps.executeQuery();
             if (rs.next()) {
-                return new Anime(
+                anime = new Anime(
                         rs.getInt("AnimeID"),
                         rs.getString("Title"),
                         rs.getString("Synopsis"),
@@ -38,7 +36,8 @@ public class AnimeDAO extends DBContext {
                         rs.getInt("Episodes"),
                         rs.getString("Status"),
                         rs.getTimestamp("ReleaseDate").toLocalDateTime(),
-                        rs.getString("Studio")
+                        rs.getString("Studio"),
+                        rs.getString("ImageAnime") // Lấy giá trị từ cột ImageAnime
                 );
             }
         } catch (SQLException ex) {
@@ -47,7 +46,7 @@ public class AnimeDAO extends DBContext {
             closeResultSet(rs);
             closePreparedStatement(ps);
         }
-        return null;
+        return anime;
     }
 
     // Lấy tất cả Anime
@@ -68,7 +67,8 @@ public class AnimeDAO extends DBContext {
                         rs.getInt("Episodes"),
                         rs.getString("Status"),
                         rs.getTimestamp("ReleaseDate").toLocalDateTime(),
-                        rs.getString("Studio")
+                        rs.getString("Studio"),
+                        rs.getString("ImageAnime") // Lấy giá trị từ cột ImageAnime
                 );
                 animeList.add(anime);
             }
@@ -85,7 +85,7 @@ public class AnimeDAO extends DBContext {
     public void addAnime(Anime anime) {
         PreparedStatement ps = null;
         try {
-            String sql = "INSERT INTO Anime (Title, Synopsis, Genre, Episodes, Status, ReleaseDate, Studio) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Anime (Title, Synopsis, Genre, Episodes, Status, ReleaseDate, Studio, ImageAnime) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             ps = connection.prepareStatement(sql);
             ps.setString(1, anime.getTitle());
             ps.setString(2, anime.getSynopsis());
@@ -94,6 +94,7 @@ public class AnimeDAO extends DBContext {
             ps.setString(5, anime.getStatus());
             ps.setTimestamp(6, Timestamp.valueOf(anime.getReleaseDate()));
             ps.setString(7, anime.getStudio());
+            ps.setString(8, anime.getImageAnime());
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(AnimeDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -106,7 +107,7 @@ public class AnimeDAO extends DBContext {
     public void updateAnime(Anime anime) {
         PreparedStatement ps = null;
         try {
-            String sql = "UPDATE Anime SET Title = ?, Synopsis = ?, Genre = ?, Episodes = ?, Status = ?, ReleaseDate = ?, Studio = ? WHERE AnimeID = ?";
+            String sql = "UPDATE Anime SET Title = ?, Synopsis = ?, Genre = ?, Episodes = ?, Status = ?, ReleaseDate = ?, Studio = ?, ImageAnime = ? WHERE AnimeID = ?";
             ps = connection.prepareStatement(sql);
             ps.setString(1, anime.getTitle());
             ps.setString(2, anime.getSynopsis());
@@ -115,7 +116,8 @@ public class AnimeDAO extends DBContext {
             ps.setString(5, anime.getStatus());
             ps.setTimestamp(6, Timestamp.valueOf(anime.getReleaseDate()));
             ps.setString(7, anime.getStudio());
-            ps.setInt(8, anime.getAnimeId());
+            ps.setString(8, anime.getImageAnime());
+            ps.setInt(9, anime.getAnimeId());
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(AnimeDAO.class.getName()).log(Level.SEVERE, null, ex);

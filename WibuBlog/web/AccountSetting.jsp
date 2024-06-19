@@ -2,6 +2,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link rel="stylesheet" href="assets/css/testcss2.css">
 <link rel="stylesheet" href="assets/css/accountsetting.css">
+<link rel="stylesheet" href="assets/css/testcss3.css">
+<link rel="stylesheet" href="assets/css/testcss4.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!DOCTYPE html>
@@ -73,11 +75,50 @@
                                             </div>
                                                     
                                             <div class="form-group">
-                                                <p class="font-weight-semibold">Full name: ${user.fullName} <span><a href="" style="float: right">Change</a></span> </p></p>
+                                                <p class="font-weight-semibold">Full name: ${user.fullName} <span><a href="#" style="float: right" onclick="togglePopup3()">Change</a></span> </p></p>
                                             </div>
+                                            
+                                               <div class="popup3" id="popup-3">
+                                                <div class="overlay" onclick="togglePopup3()"></div>
+                                                <div class="content">
+                                                    <div class="close-btn" onclick="togglePopup3()">&times;</div>
+                                                    <h1>Change name</h1>
+                                                    <p>Name: ${user.fullName}</p>
+                                                    <form action="ChangeName" method="post">
+                                                        <input type="text" name="newName" id="newName" placeholder="new name" oninput="checkName()"> 
+                                                        <br>
+                                                        <span id="result3" name="result3" style="color: red"></span>
+                                                        <hr>
+                                                        <input type="submit" value="Done">
+                                                    </form>
+                                                </div>
+                                            </div>
+                                                    
                                             <div class="form-group">
-                                                <p class="font-weight-semibold" p>Password: ********  <span><a href="changePassword" style="float: right">Change</a></span> </p></p>
+                                                <p class="font-weight-semibold" p>Password: ********  <span><a href="ChangePassword" style="float: right" onclick="togglePopup4()">Change</a></span> </p></p>
                                             </div>
+                                                    
+                                              <div class="popup4" id="popup-4">
+                                                <div class="overlay" onclick="togglePopup4()"></div>
+                                                <div class="content">
+                                                    <div class="close-btn" onclick="togglePopup4()">&times;</div>
+                                                    <h1>Change password</h1>
+                                                    <p>Changing password for: ${user.username}</p>
+                                                    <form action="ChangePassword" method="post">
+                                                        <input type="password" name="oldPassword" id="oldPassword" placeholder="old password" oninput="checkPassword1()"> <br><br>
+                                                        <span id="result4" name="result4" style="color: red"></span><br>
+                                                        <input type="password" name="newPassword" id="newPassword" placeholder="new password" oninput="checkPassword2()"> <br><br>
+                                                        <span id="result5" name="result5" style="color: red"></span><br>
+                                                        <input type="password" name="newConfirmedPassword" id="newConfirmedPassword" placeholder="new confirmed password" oninput="checkPassword3()"> <br>
+                                                        <span id="result6" name="result6" style="color: red"></span><br>
+                                                        <br>
+                                                        <hr>
+                                                        <input type="submit" value="Done">
+                                                    </form>
+                                                </div>
+                                            </div>
+                                                    
+                                                    
                                               <div class="form-group">
                                                 <p class="font-weight-semibold" p>Phone Number: ${user.phoneNumber}  <span><a href="" style="float: right">Change</a></span> </p></p>
                                             </div>
@@ -110,6 +151,13 @@
               function togglePopup2() {
                 document.getElementById("popup-2").classList.toggle("active");
             }
+              function togglePopup3() {
+                document.getElementById("popup-3").classList.toggle("active");
+            }
+            
+             function togglePopup4() {
+                document.getElementById("popup-4").classList.toggle("active");
+            }
         </script>
              
         
@@ -135,6 +183,53 @@
                  type:"POST",
                  success:function(data){
                      $("#result2").html(data);
+                   },
+                 error:function(){}
+              });
+             }
+             
+                function checkName(){
+                 jQuery.ajax({
+                 url:"CheckName",
+                 data:'newName='+$("#newName").val(),
+                 type:"POST",
+                 success:function(data){
+                     $("#result3").html(data);
+                   },
+                 error:function(){}
+              });
+             }
+             
+                function checkPassword1(){
+                 jQuery.ajax({
+                 url:"CheckPassword",
+                 data:'oldPassword='+$("#oldPassword").val(),
+                 type:"POST",
+                 success:function(data){
+                     $("#result4").html(data);
+                   },
+                 error:function(){}
+              });
+             }
+                 function checkPassword2(){
+                 jQuery.ajax({
+                 url:"CheckNewPassword",
+                 data:'newPassword='+$("#newPassword").val(),
+                 type:"POST",
+                 success:function(data){
+                     $("#result5").html(data);
+                   },
+                 error:function(){}
+              });
+             }
+             
+              function checkPassword3(){
+                 jQuery.ajax({
+                 url:"CheckNewConfirmedPassword",
+                 data:'newConfirmedPassword='+$("#newConfirmedPassword").val(),
+                 type:"POST",
+                 success:function(data){
+                     $("#result6").html(data);
                    },
                  error:function(){}
               });

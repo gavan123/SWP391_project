@@ -6,6 +6,7 @@ package controller;
 
 import dal.CommentDAO;
 import dal.PostDAO;
+import dal.UserDAO;
 import jakarta.servlet.ServletException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,7 +19,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import model.Comment;
 import model.User;
 
@@ -68,7 +72,7 @@ public class PostDetail extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String postIdStr = request.getParameter("postId");
-        // Get the session from the request
+// Get the session from the request
         HttpSession session = request.getSession();
         User userSession = (User) session.getAttribute("user");
 
@@ -77,9 +81,21 @@ public class PostDetail extends HttpServlet {
                 int postId = Integer.parseInt(postIdStr);
                 PostDAO postDAO = new PostDAO();
                 CommentDAO commentDAO = new CommentDAO();
+                UserDAO userDAO = new UserDAO();
 
                 model.PostDetail post = postDAO.getPostDetailById(postId);
                 List<Comment> comments = commentDAO.getCommentsForPost(postId);
+
+                List<User> users = new ArrayList<>();
+                List<String> commentDate = new ArrayList<>();
+                for (Comment comment : comments) {
+                    User user = userDAO.getUserById(comment.getUserId());
+                    if (user != null) {
+                        users.add(user);
+                    }
+                    String formateDate = formatDate(comment.getCreateAt());
+                    commentDate.add(formateDate);
+                }
 
                 if (post != null) {
                     // Kiểm tra xem bài viết đã được xem chưa
@@ -89,13 +105,16 @@ public class PostDetail extends HttpServlet {
                         setPostViewedCookie(response, postId);
                     }
                     // Định dạng lại thời gian thành yyyy-MM-dd
-                    String formattedDate = formatDate(post.getPostTime());
+                    String postDate = formatDate(post.getPostTime());
 
                     // Set attributes for JSP rendering
                     request.setAttribute("user", userSession);
-                    request.setAttribute("commentsList", comments); // Set commentsList attribute
+                    request.setAttribute("userComment", users);
+                    request.setAttribute("commentsList", comments);
                     request.setAttribute("post", post);
-                    request.setAttribute("postTime", formattedDate);
+                    request.setAttribute("postTime", postDate);
+                    request.setAttribute("commentTime", commentDate);
+
                     request.getRequestDispatcher("PostDetail.jsp").forward(request, response);
                     return; // Thoát khỏi phương thức sau khi forward
                 }

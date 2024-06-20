@@ -18,13 +18,26 @@ public class Comment {
     private String content;
     private String status;
     private int vote;
-    private int parentId;
+    private Integer parentId;
     private LocalDateTime createAt;
 
     public Comment() {
     }
 
-    public Comment(int commentId, int postId, int userId,  String content, String status, int vote, int parentId, LocalDateTime createAt) {
+    public Comment(int postId, int userId, String content) {
+        this.postId = postId;
+        this.userId = userId;
+        this.content = content;
+    }
+
+    public Comment(int postId, int userId, String content, Integer parentId) {
+        this.postId = postId;
+        this.userId = userId;
+        this.content = content;
+        this.parentId = parentId;
+    }
+
+    public Comment(int commentId, int postId, int userId, String content, String status, int vote, Integer parentId, LocalDateTime createAt) {
         this.commentId = commentId;
         this.postId = postId;
         this.userId = userId;
@@ -59,7 +72,6 @@ public class Comment {
         this.userId = userId;
     }
 
-
     public String getContent() {
         return content;
     }
@@ -76,7 +88,7 @@ public class Comment {
         this.status = status;
     }
 
-    public int getParentId() {
+    public Integer getParentId() {
         return parentId;
     }
 

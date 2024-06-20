@@ -6,6 +6,8 @@ package dal;
 
 import model.Comment;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -53,7 +55,7 @@ public class CommentDAO extends DBContext {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM Comment WHERE PostID = ?";
+            String sql = "SELECT * FROM Comment WHERE PostID = ?  ORDER BY CreateAt DESC";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, postId);
             rs = ps.executeQuery();
@@ -83,16 +85,21 @@ public class CommentDAO extends DBContext {
     public void addComment(Comment comment) {
         PreparedStatement ps = null;
         try {
-            String sql = "INSERT INTO Comment (PostID, UserID, Content, Status, Vote, ParentID, CreatedAt) "
+            String sql = "INSERT INTO Comment (PostID, UserID, Content, Status, Vote, ParentID, CreateAt) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?)";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, comment.getPostId());
             ps.setInt(2, comment.getUserId());
             ps.setString(3, comment.getContent());
             ps.setString(4, "active");
-            ps.setInt(5, comment.getVote());
-            ps.setInt(6, comment.getParentId());
-            ps.setTimestamp(7, Timestamp.valueOf(comment.getCreateAt()));
+            ps.setInt(5, 0);
+            // Set ParentId
+            if (comment.getParentId() == null || comment.getParentId() == 0) {
+                ps.setNull(6, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(6, comment.getParentId());
+            }
+            ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"))));
             ps.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(CommentDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -158,9 +165,7 @@ public class CommentDAO extends DBContext {
 
     public static void main(String[] args) {
         CommentDAO cod = new CommentDAO();
-        List<Comment> comments = cod.getCommentsForPost(54);
-        for (Comment comment : comments) {
-            System.out.println(comment.getContent());
-        }
+        Comment comment = new Comment(53, 1, "Hello world");
+        cod.addComment(comment);
     }
 }

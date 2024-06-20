@@ -2,7 +2,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <style>
-    
+
     .comment-input-block .card-title {
         background: #FAF41F;
         color: rgba(255, 255, 255, 0.15);
@@ -16,7 +16,8 @@
         border-color: #FAF41F;
         box-shadow: 0 0 15px #FAF41F;
     }
-
+    
+    
 </style>
 <div class="col-lg-12 mb-2">
     <div class="card mb-2">
@@ -78,12 +79,13 @@
                 <c:otherwise>
                     <div class="border-0 bg-none mt-2 media align-items-center">
                         <div class="comment-avatar mr-2">
-                            <img alt="${user.username}" title="${user.username}" src="${user.profilePhoto}" onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
+                            <img alt="${user.username}" title="${user.username}" src="${user.profilePhoto}" onerror="this.src='assets/images/others/product-3.jpg'">
                         </div>
                         <div class="comment-input-block media-body">
                             <div class="d-flex justify-content-between align-items-center">
-                                <textarea class="form-control" style="height: 60px !important; border-radius: 1.25rem; background-color: white;" rows="2" id="msg" minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
-                                <button type="button" class="btn btn-success bg-transparent btn-submit-comment border-0 text-primary d-flex align-items-center justify-content-center shadow-none px-2 ml-auto" onclick="sendMsg()">
+                                <textarea class="form-control" rows="2" id="msg" minlength="30" 
+                                          required placeholder="Ta đến nói hai câu..."></textarea>
+                                <button type="button" class="btn btn-success btn-submit-comment" onclick="sendMsg()">
                                     <i class="fas fa-paper-plane fa-2x"></i>
                                 </button>
                             </div>
@@ -244,15 +246,20 @@
         if (msg.length < 30) {
             alert("Tối thiểu 30 ký tự...");
         } else {
-            var postId = "6665211975745839de997bef";
-            var postTitle = "Đế Bá: Trầm Thiên";
-            var posterId = "5fd8e6df5915dc650457f080";
-            var postSlug = "de-ba-tram-thien";
-            $.post("//vidian.vn/chi-tiet/de-ba-tram-thien/add-comment", {_msg: msg, _postId: postId, _postTitle: postTitle, _posterId: posterId, _postSlug: postSlug}, function (result) {
-                if (result == 200) {
-                    alert("Thành công! Comment cần chờ tác giả phê duyệt!");
+            $.ajax({
+                type: 'POST',
+                url: 'addComment',
+                data: {message: msg},
+                success: (response) => {
+                    alert("Comment added successfully!");
+                    // Optionally clear the textarea or update the UI
+                    $("#msg").val('');
+                    location.reload();
+                },
+                error: (error) => {
+                    alert("Error adding comment: " + error.responseText);
                 }
-            }, "json");
+            });
         }
     }
 

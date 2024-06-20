@@ -30,6 +30,8 @@
 .comment-input-block .text-truncate{margin-left:.25rem;font-weight:700;font-size:14px}
 .comment-date{display:flex;justify-content:flex-end;align-items:center;margin-top:.5rem;margin-bottom:0;width:fit-content;margin-left:auto}
 .reply-button{border:0;background:none;color:#6c757d;border-radius:.25rem;display:inline-flex;align-items:center}
+.comment-input-block .form-control{height:80px;border-radius:1.25rem;background-color:#fff}
+.btn-submit-comment{background-color:transparent;border:0;color:#007bff;display:flex;align-items:center;justify-content:center;box-shadow:none;padding-left:.5rem;padding-right:.5rem;margin-left:auto}
         </style>
     </head>
     <body>

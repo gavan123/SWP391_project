@@ -22,7 +22,7 @@ public class CommentDAO extends DBContext {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM Comments WHERE CommentID = ?";
+            String sql = "SELECT * FROM Comment WHERE CommentID = ?";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, commentId);
             rs = ps.executeQuery();
@@ -34,8 +34,8 @@ public class CommentDAO extends DBContext {
                         rs.getString("Content"),
                         rs.getString("Status"),
                         rs.getInt("Vote"),
-                        rs.getInt("ParentID"),
-                        rs.getTimestamp("CreatedAt").toLocalDateTime()
+                        rs.getInt("ParentId"),
+                        rs.getTimestamp("CreateAt").toLocalDateTime()
                 );
             }
         } catch (SQLException ex) {
@@ -53,7 +53,7 @@ public class CommentDAO extends DBContext {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM Comments WHERE PostID = ?";
+            String sql = "SELECT * FROM Comment WHERE PostID = ?";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, postId);
             rs = ps.executeQuery();
@@ -65,8 +65,8 @@ public class CommentDAO extends DBContext {
                         rs.getString("Content"),
                         rs.getString("Status"),
                         rs.getInt("Vote"),
-                        rs.getInt("ParentID"),
-                        rs.getTimestamp("CreatedAt").toLocalDateTime()
+                        rs.getInt("ParentId"),
+                        rs.getTimestamp("CreateAt").toLocalDateTime()
                 );
                 commentList.add(comment);
             }
@@ -83,7 +83,7 @@ public class CommentDAO extends DBContext {
     public void addComment(Comment comment) {
         PreparedStatement ps = null;
         try {
-            String sql = "INSERT INTO Comments (PostID, UserID, Content, Status, Vote, ParentID, CreatedAt) "
+            String sql = "INSERT INTO Comment (PostID, UserID, Content, Status, Vote, ParentID, CreatedAt) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?)";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, comment.getPostId());
@@ -105,7 +105,7 @@ public class CommentDAO extends DBContext {
     public void updateComment(Comment comment) {
         PreparedStatement ps = null;
         try {
-            String sql = "UPDATE Comments SET PostID = ?, UserID = ?, Content = ?, Status = ?, Vote = ?, "
+            String sql = "UPDATE Comment SET PostID = ?, UserID = ?, Content = ?, Status = ?, Vote = ?, "
                     + "ParentID = ?, CreatedAt = ? WHERE CommentID = ?";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, comment.getPostId());
@@ -128,7 +128,7 @@ public class CommentDAO extends DBContext {
     public void deleteComment(int commentId) {
         PreparedStatement ps = null;
         try {
-            String sql = "DELETE FROM Comments WHERE CommentID = ?";
+            String sql = "DELETE FROM Comment WHERE CommentID = ?";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, commentId);
             ps.executeUpdate();
@@ -136,6 +136,31 @@ public class CommentDAO extends DBContext {
             Logger.getLogger(CommentDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             closePreparedStatement(ps);
+        }
+    }
+
+    public boolean updateVote(int commentId, int vote) {
+        PreparedStatement ps = null;
+        try {
+            String sql = "UPDATE Comment SET Vote = ? WHERE CommentID = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, vote);
+            ps.setInt(2, commentId);
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } finally {
+            closePreparedStatement(ps);
+        }
+    }
+
+    public static void main(String[] args) {
+        CommentDAO cod = new CommentDAO();
+        List<Comment> comments = cod.getCommentsForPost(54);
+        for (Comment comment : comments) {
+            System.out.println(comment.getContent());
         }
     }
 }

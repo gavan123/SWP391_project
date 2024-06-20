@@ -2,47 +2,19 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <style>
-    .badge {
-        border-radius: 20px !important;
+    
+    .comment-input-block .card-title {
+        background: #FAF41F;
+        color: rgba(255, 255, 255, 0.15);
+        font-weight: 800;
+        position: relative;
+        -webkit-animation: shine-data-v-729833f6 1s infinite;
+        -webkit-background-clip: text;
+        -webkit-background-size: 300px;
     }
-    .anticon_vote {
-        display: inline-block;
-        width: 24px;
-        height: 24px;
-        line-height: 24px;
-        text-align: center;
-        border-radius: 50%;
-        background-color: #f0f0f0;
-        cursor: pointer;
-    }
-    .anticon-arrow-up {
-        color: green;
-    }
-    .anticon-arrow-down {
-        color: red;
-    }
-    #vote_value {
-        font-size: 18px;
-        margin-left: 8px;
-    }
-
-    .vote-section.upvoted {
-        background-color: lightgreen; /* Màu nền khi upvote */
-    }
-
-    .vote-section.downvoted {
-        background-color: salmon; /* Màu nền khi downvote */
-    }
-    .vote-section {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        border-radius: 20px; /* Độ cong của các góc */
-        border: 1px solid #ccc;
-        padding: 10px; /* Khoảng cách từ nội dung đến biên */
-        margin: 10px; /* Khoảng cách xung quanh */
-        transition: background-color 0.3s ease; /* Hiệu ứng chuyển đổi màu nền */
+    .comment-card {
+        border-color: #FAF41F;
+        box-shadow: 0 0 15px #FAF41F;
     }
 
 </style>
@@ -121,38 +93,38 @@
             </c:choose>
 
             <c:forEach var="comment" items="${commentsList}" varStatus="loop">
-                <div class="border-0 bg-none media align-items-center mt-3" style="border-top:1px solid #a7acad !important;">
-                    <div class="comment-avatar mr-2">
-                        <img alt="${comment.userName}" title="${comment.userName}" src="${comment.userAvatar}" onerror="this.src='https://vidian.vn/images/chi-dao-sang-tac.jpg'" width="45" height="45">
+                <c:set var="commentUser" value="${userComment[loop.index]}" />
+                <c:set var="commentDate" value="${commentTime[loop.index]}" />
+                <div class="comment-container media">
+                    <div class="comment-avatar">
+                        <img alt="${commentUser.username}" title="${commentUser.username}" src="${commentUser.profilePhoto}" onerror="this.src='assets/images/others/product-3.jpg'">
                     </div>
                     <div class="comment-input-block media-body" id="comment_${loop.index}">
                         <p class="card-text">
-                            <span class="card-title text-capitalize" style="background:#FAF41F; color: rgba(255, 255, 255, 0.15); font-weight:800; position: relative; -webkit-animation: shine-data-v-729833f6 1s infinite; -webkit-background-clip: text; -webkit-background-size: 300px;">
+                            <span class="card-title">
                                 ${comment.content}
                             </span>
-                            <span class="text-truncate ml-1 font-weight-bold" style="font-size:14px;" title="${comment.userName}">
-                                ${comment.userName}
+                            <span class="text-truncate" title="${commentUser.username}" >
+                                ${commentUser.username}
                             </span>
                         </p>
-                        <div class="card" style="border-color:#FAF41F;">
-                            <div class="card-body border-0 rounded fw-500" style="box-shadow: 0 0 15px #FAF41F;">
+                        <div class="card comment-card">
+                            <div class="card-body">
                                 ${comment.content}
                             </div>
                             <input id="input_${loop.index}" type="text" value="${comment.commentId}" hidden="">
                         </div>
-                        <p class="card-text text-right mt-2 mb-0">
+                        <p class="card-text comment-date">
                             <span class="badge badge-secondary">
-                                ${comment.createdAt}
+                                ${commentDate}
                             </span>
-                            <button class="btn border-0 bg-none text-secondary rounded-2"  
-                                    onclick="reply(${comment.commentId})">
-                                <i class="mdi mdi-reply text-secondary"></i> Reply
+                            <button class="btn reply-button" onclick="reply(${comment.commentId})">
+                                <i class="mdi mdi-reply"></i> Reply
                             </button>
                         </p>
                     </div>
                 </div>
             </c:forEach>
-
             <c:if test="${empty commentsList}">
                 <p>No comments found.</p>
             </c:if>
@@ -205,7 +177,7 @@
             if (!loggedIn) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Bạn cần đăng nhập để bỏ phiếu.',
+                    title: 'You need login to vote',
                     showConfirmButton: false,
                     timer: 2000
                 });

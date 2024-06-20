@@ -9,43 +9,13 @@
         <link rel="shortcut icon" href="">
         <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
         <style>
-            .card {
-                border: 5px solid #ddd;
-                border-radius: 15px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-            .card-header-h3 {
-                font-size: 18px;
-                font-weight: bold;
-            }
-            .swiper-slide {
-                width: 200px;
-                margin-right: 15px;
-            }
-            .posts-badge {
-                position: absolute;
-                top: 10px;
-                left: 10px;
-                z-index: 1;
-            }
-            .posts-badge-2 {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                z-index: 1;
-            }
-            .swiper-img {
-                max-width: 100%;
-                max-height: 150px;
-                object-fit: cover;
-            }
-            .text-truncate-2 {
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
+            .card{border:5px solid #ddd;border-radius:15px;box-shadow:0 2px 4px rgba(0,0,0,0.1)}
+            .card-header-h3{font-size:18px;font-weight:700}
+            .swiper-slide{width:200px;margin-right:15px}
+            .posts-badge{position:absolute;top:10px;left:10px;z-index:1}
+            .posts-badge-2{position:absolute;top:10px;right:10px;z-index:1}
+            .swiper-img{max-width:100%;max-height:150px;object-fit:cover}
+            .text-truncate-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis}
         </style>
     </head>
     <body>

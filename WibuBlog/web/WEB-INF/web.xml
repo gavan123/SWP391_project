@@ -30,7 +30,7 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
-        <url-pattern>/Profile.jsp</url-pattern>
+        <url-pattern>/Profile1.jsp</url-pattern>
         <url-pattern>/AddPhoneNumber.jsp</url-pattern>
     </filter-mapping>
     <servlet>

@@ -41,7 +41,7 @@ public class SignatureVerification {
 
         bmp.add(bmpFNE);
         bmp.add(bmpSignature);
-        
+
         webp.add(webpFNE);
         webp.add(webpSignature);
 
@@ -119,5 +119,29 @@ public class SignatureVerification {
         }
 
         return verifySignature(file, fne, magic);
+    }
+
+    public static boolean isImageFile(File file) {
+        try {
+            return verifyFile(file, "png") || verifyFile(file, "jpg") || verifyFile(file, "bmp") || verifyFile(file, "webp");
+        } catch (IOException ioe) {
+            return false;
+        }
+    }
+    
+    public static boolean isTextFile(File file) {
+        try {
+            return verifyFile(file, "txt");
+        } catch (IOException ioe) {
+            return false;
+        }
+    }
+    
+    public static boolean isVideoFile(File file) {
+        try {
+            return verifyFile(file, "mp4");
+        } catch (IOException ioe) {
+            return false;
+        }
     }
 }

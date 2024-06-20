@@ -84,7 +84,7 @@ public class ChangeEmail extends HttpServlet {
         }
         else {
             String verificationCode = KeyGenerator.generateVerificationCode();
-            ContentDelivery.sendEmailChangingVerification(newEmail, user.getUsername(), verificationCode);
+            ContentDelivery.sendEmailChangeVerification(newEmail, user.getUsername(), verificationCode);
             session.setAttribute("template", verificationCode);
             session.setAttribute("newEmail", newEmail);
             request.setAttribute("message", "An OTP have been sent to " + newEmail + " please login to verify to change your email.");

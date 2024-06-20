@@ -20,6 +20,6 @@
             <jsp:param name="accountHeader" value="/content/AccountContent.jsp" />
             <jsp:param name="sideNav" value="SideNav.jsp" />
             <jsp:param name="content" value="/content/ProfileContent.jsp" />
-        </jsp:include>
+        </jsp:include>            
     </body>
 </html>

@@ -5,7 +5,7 @@
 <%@ page import="model.Genre" %>
 <%@ page import="dal.GenreDAO" %>
 <%@ page import="java.util.List"%>
-
+<link rel="stylesheet" href="assets/css/testcss5.css">
 
 <!DOCTYPE html>
 <html lang="en">
@@ -58,41 +58,97 @@
     </head>
     <body>
         <div class="container mt-4">
-            <h2>Create a New Post</h2>
-            <form action="createPost" method="post">
-                <span id="username" style="font-weight: bold; color: #333;"> ${user.username} </span>
-                <div class="form-group">
-                    <label for="title">Title:</label>
-                    <input type="text" class="form-control" id="title" name="title" maxlength="150" required>
-                </div>
-                <div class="form-group">
-                    <label>Categories:</label><br>
-                    <c:forEach var="category" items="<%=categories%>">
-                        <input type="radio" class="btn-check" id="category-${category.categoryId}" name="category" value="${category.categoryId}">
-                        <label class="btn btn-outline-primary" for="category-${category.categoryId}">${category.name}</label>
-                    </c:forEach>
-                </div>
-                <div class="form-group">
-                    <label>Genres:</label><br>
-                    <c:forEach var="genre" items="<%=genres%>">
-                        <input type="radio" class="btn-check" id="genre-${genre.genreId}" name="genre" value="${genre.genreId}">
-                        <label class="btn btn-outline-primary" for="genre-${genre.genreId}">${genre.name}</label>
-                    </c:forEach>
-                </div>
-                <div class="form-group">
-                    <label for="content">Content:</label>
-                    <textarea class="form-control" id="content" name="content" rows="5" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="source">Source:</label>
-                    <input type="text" class="form-control" id="source" name="source">
-                </div>
-                <div class="form-group">
-                    <label for="image">Image URL:</label>
-                    <input type="text" class="form-control" id="image" name="image">
-                </div>
-                <button type="submit" class="btn btn-primary">Create Post</button>
-            </form>
+    <h2>Create a New Post</h2>
+    <form action="createPost" method="post" id="uploadForm" enctype="multipart/form-data">
+        <span id="username" style="font-weight: bold; color: #333;"> ${user.username} </span>
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" class="form-control" id="title" name="title" maxlength="150" required>
         </div>
+        <div class="form-group">
+            <label>Categories:</label><br>
+            <c:forEach var="category" items="<%=categories%>">
+                <input type="radio" class="btn-check" id="category-${category.categoryId}" name="category" value="${category.categoryId}">
+                <label class="btn btn-outline-primary" for="category-${category.categoryId}">${category.name}</label>
+            </c:forEach>
+        </div>
+        <div class="form-group">
+            <label>Genres:</label><br>
+            <c:forEach var="genre" items="<%=genres%>">
+                <input type="radio" class="btn-check" id="genre-${genre.genreId}" name="genre" value="${genre.genreId}">
+                <label class="btn btn-outline-primary" for="genre-${genre.genreId}">${genre.name}</label>
+            </c:forEach>
+        </div>
+        <div class="form-group">
+            <label for="content">Content:</label>
+            <textarea class="form-control" id="content" name="content" rows="5" required></textarea>
+        </div>
+        <div class="form-group">
+            <input type="file" class="upload-input" name="image" id="someId">
+            <label for="someId" class="custom-file-upload">Upload Image</label>      
+            <span id="fileName" class="file-name"></span>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Create Post</button>
+    </form>
+</div>
+        
+        
+
+<script>
+    var file = document.getElementById('someId');
+    file.onchange = function (e) {
+        var ext = this.value.match(/\.([^\.]+)$/)[1];
+        switch (ext) {
+            case 'jpg':                 
+                document.getElementById('someId').addEventListener('change', function(event) {
+                event.preventDefault();
+                const fileName = this.files[0] ? this.files[0].name : '';
+                document.getElementById('fileName').textContent = fileName;
+                });
+                break;
+            case 'jpeg':
+                 document.getElementById('someId').addEventListener('change', function(event) {
+                event.preventDefault();
+                const fileName = this.files[0] ? this.files[0].name : '';
+                document.getElementById('fileName').textContent = fileName;
+                });
+                break;
+            case 'webp':
+                 document.getElementById('someId').addEventListener('change', function(event) {
+                event.preventDefault();
+                const fileName = this.files[0] ? this.files[0].name : '';
+                document.getElementById('fileName').textContent = fileName;
+                });
+                break;
+            case 'bmp':
+                 document.getElementById('someId').addEventListener('change', function(event) {
+                event.preventDefault();
+                const fileName = this.files[0] ? this.files[0].name : '';
+                document.getElementById('fileName').textContent = fileName;
+                });
+                break;
+            case 'png':
+                 document.getElementById('someId').addEventListener('change', function(event) {
+                event.preventDefault();
+                const fileName = this.files[0] ? this.files[0].name : '';
+                document.getElementById('fileName').textContent = fileName;
+                });
+                break;
+            case 'tif':
+                 document.getElementById('someId').addEventListener('change', function(event) {
+                event.preventDefault();
+                const fileName = this.files[0] ? this.files[0].name : '';
+                document.getElementById('fileName').textContent = fileName;
+                });
+                break;
+            default:
+                alert('Not allowed');
+                this.value = '';
+        }
+    };
+</script>
+
     </body>
 </html>
+

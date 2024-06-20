@@ -10,6 +10,7 @@ import dal.PostDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,11 +20,13 @@ import java.util.List;
 import model.Category;
 import model.Genre;
 import model.Post;
+import model.User;
 
 /**
  *
- * @author minht
+ * @author admin
  */
+@WebServlet(name = "createPost2", urlPatterns = {"/createPost"})
 public class CreatePost extends HttpServlet {
 
     /**
@@ -43,10 +46,10 @@ public class CreatePost extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CreatePost</title>");
+            out.println("<title>Servlet createPost2</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CreatePost at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet createPost2 at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -87,7 +90,7 @@ public class CreatePost extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String title = request.getParameter("title");
+         String title = request.getParameter("title");
         int categoryId = Integer.parseInt(request.getParameter("category"));
         int genreId = Integer.parseInt(request.getParameter("genre"));
         String content = request.getParameter("content");
@@ -96,7 +99,8 @@ public class CreatePost extends HttpServlet {
 
         // Lấy userId từ session
         HttpSession session = request.getSession();
-        int userId = (int) session.getAttribute("userId");
+        User user = (User)session.getAttribute("user");
+        int userId = user.getUserId();
 
         // Tạo đối tượng Post mới
         Post post = new Post();
@@ -115,7 +119,7 @@ public class CreatePost extends HttpServlet {
 
         // Kiểm tra kết quả và điều hướng người dùng
         if (isPostCreated) {
-            response.sendRedirect("success.jsp"); // Điều hướng tới trang thành công
+            response.sendRedirect("Home.jsp"); // Điều hướng tới trang thành công
         } else {
             response.sendRedirect("error.jsp"); // Điều hướng tới trang lỗi
         }

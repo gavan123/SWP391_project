@@ -6,7 +6,9 @@ package controller;
 
 import dal.CategoryDAO;
 import dal.GenreDAO;
+import dal.MediaDAO;
 import dal.PostDAO;
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,10 +17,15 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import model.Category;
 import model.Genre;
+import model.Media;
 import model.Post;
 import model.User;
 
@@ -90,46 +97,37 @@ public class CreatePost extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         String title = request.getParameter("title");
+       
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        String title = request.getParameter("title");
         int categoryId = Integer.parseInt(request.getParameter("category"));
         int genreId = Integer.parseInt(request.getParameter("genre"));
         String content = request.getParameter("content");
-        String source = request.getParameter("source");
-        String image = request.getParameter("image");
-
-        // Lấy userId từ session
-        HttpSession session = request.getSession();
-        User user = (User)session.getAttribute("user");
-        int userId = user.getUserId();
-
-        // Tạo đối tượng Post mới
         Post post = new Post();
-        post.setUserId(userId);
+        post.setUserId(user.getUserId());
         post.setCategoryId(categoryId);
         post.setTitle(title);
         post.setContent(content);
-        post.setSource(source);
-        post.setImage(image);
+        post.setImage("http://localhost:9999/WibuBlog/PFP/");
         post.setPostTime(LocalDateTime.now());
         post.setStatus("active");
-
         // Lưu bài viết vào cơ sở dữ liệu
         PostDAO postDAO = new PostDAO();
         boolean isPostCreated = postDAO.createPost(post);
-
+        
         // Kiểm tra kết quả và điều hướng người dùng
         if (isPostCreated) {
-            response.sendRedirect("Home.jsp"); // Điều hướng tới trang thành công
+            postDAO.insertPostGenre(postDAO.getPostIDJustInserted(user.getUserId()), genreId);
+            session.setAttribute("postID",postDAO.getPostIDJustInserted(user.getUserId()));
+            session.setAttribute("newPost", post);
+            response.sendRedirect("ChoosePostPic.jsp"); // Điều hướng tới trang thành công
         } else {
             response.sendRedirect("error.jsp"); // Điều hướng tới trang lỗi
         }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+
     @Override
     public String getServletInfo() {
         return "Short description";

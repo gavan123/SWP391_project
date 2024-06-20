@@ -1,6 +1,19 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="model.User" %>
+<%@ page import="model.Media" %>
+<%@ page import="dal.UserDAO" %>
+<%@ page import="dal.MediaDAO" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<% User user = (User)session.getAttribute("user");
+                               UserDAO userDAO = new UserDAO();
+                               String rank = userDAO.getRankByRankID(user.getRankId());
+                               String rankColor = userDAO.getColorByRank(rank);
+                               String role = userDAO.getRoleByRoleID(user.getRoleId()); 
+                               MediaDAO mediaDAO = new MediaDAO();
+                               Media media = mediaDAO.getMedia(user.getProfilePhoto());
+%>
+
 <style>
     .badge {
         border-radius: 20px !important;
@@ -72,7 +85,6 @@
                 <br>
                 <br>
                 <br>
-                <h4>Source: ${post.source != null ? post.source : 'N/A'}</h4>
             </div>
             <hr>
             <div class="row">
@@ -106,8 +118,9 @@
                 <c:otherwise>
                     <div class="border-0 bg-none mt-2 media align-items-center">
                         <div class="comment-avatar mr-2">
-                            <img alt="${user.username}" title="${user.username}" src="${user.profilePhoto}" onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
+                            <img alt="${user.username}" title="${user.username}" src="<%=media.getPath()%>" onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
                         </div>
+                        
                         <div class="comment-input-block media-body">
                             <div class="d-flex justify-content-between align-items-center">
                                 <textarea class="form-control" style="height: 60px !important; border-radius: 1.25rem; background-color: white;" rows="2" id="msg" minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>

@@ -43,7 +43,7 @@
                                                 <p style="color:red">${errorMessage}</p><br>
                                             </c:if>
                                             <span class="font-size-13 text-muted">
-                                                <a class="small" href="home.jsp">Return to homepage</a>
+                                                <a class="small" href="Home.jsp">Return to homepage</a>
                                             </span>
                                         </div>
                                     </div>

@@ -55,7 +55,36 @@ public class PostDAO extends DBContext {
         }
         return postList;
     }
+    public void setPostImage(String url,int postID){
+        try {
+            String sql = "update [post] set image = ? where postID = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, url);
+            ps.setInt(2, postID);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+      public int getPostIDJustInserted(int userID) {
 
+        try {
+            String sql = "select top (1) * from post where [userID] = ? \n"
+                    + "order by PostTime desc";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            int mediaId = rs.getInt("PostID");
+            return mediaId;
+        } catch (SQLException ex) {
+            Logger.getLogger(MediaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
     // Lấy một số lượng giới hạn các bài đăng
     public List<Post> getLimitedPosts(int limit) {
         List<Post> postList = new ArrayList<>();
@@ -129,7 +158,19 @@ public class PostDAO extends DBContext {
         }
         return postList;
     }
-
+    
+    public void insertPostGenre(int postID,int genreID){
+        try {
+            String sql = "insert into PostGenre (PostID,GenreID) values(?,?)";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, postID);
+            ps.setInt(2, genreID);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     // Lấy tất cả các bài đăng của một danh mục cụ thể
     public List<Post> getAllPostsByCategory(int categoryId) {
         List<Post> postList = new ArrayList<>();
@@ -208,7 +249,7 @@ public class PostDAO extends DBContext {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM Post WHERE Content LIKE ?";
+            String sql = "SELECT * FROM Post WHERE Title LIKE ?";
             ps = connection.prepareStatement(sql);
             ps.setString(1, "%" + name + "%");
             rs = ps.executeQuery();
@@ -420,10 +461,11 @@ public class PostDAO extends DBContext {
         post.setStatus("active");
         post.setVote(0);
         post.setView(0);
-
+        PostDetail post1 = postDAO.getPostDetailById(54);
+        System.out.println(post1.getTitle());
         // Gọi phương thức createPost để thêm bài đăng mới
         boolean isPostCreated = postDAO.createPost(post);
-
+        
         // Kiểm tra kết quả
         if (isPostCreated) {
             System.out.println("Post has been created successfully.");

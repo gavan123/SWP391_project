@@ -18,8 +18,7 @@
 
         <%CategoryDAO categoryDAO = new CategoryDAO();
         GenreDAO genreDAO = new GenreDAO(); %>
-
-        <%List<Category> categories = categoryDAO.getCategoryNames();
+        <% List<Category> categories = categoryDAO.getCategoryNames();
         List<Genre> genres = genreDAO.getAllGenres(); %>
 
 
@@ -59,7 +58,7 @@
     <body>
         <div class="container mt-4">
     <h2>Create a New Post</h2>
-    <form action="createPost" method="post" id="uploadForm" enctype="multipart/form-data">
+    <form action="createPost" method="post" id="uploadForm">
         <span id="username" style="font-weight: bold; color: #333;"> ${user.username} </span>
         <div class="form-group">
             <label for="title">Title:</label>
@@ -83,71 +82,13 @@
             <label for="content">Content:</label>
             <textarea class="form-control" id="content" name="content" rows="5" required></textarea>
         </div>
-        <div class="form-group">
-            <input type="file" class="upload-input" name="image" id="someId">
-            <label for="someId" class="custom-file-upload">Upload Image</label>      
-            <span id="fileName" class="file-name"></span>
-        </div>
         
         <button type="submit" class="btn btn-primary">Create Post</button>
     </form>
 </div>
         
         
-
-<script>
-    var file = document.getElementById('someId');
-    file.onchange = function (e) {
-        var ext = this.value.match(/\.([^\.]+)$/)[1];
-        switch (ext) {
-            case 'jpg':                 
-                document.getElementById('someId').addEventListener('change', function(event) {
-                event.preventDefault();
-                const fileName = this.files[0] ? this.files[0].name : '';
-                document.getElementById('fileName').textContent = fileName;
-                });
-                break;
-            case 'jpeg':
-                 document.getElementById('someId').addEventListener('change', function(event) {
-                event.preventDefault();
-                const fileName = this.files[0] ? this.files[0].name : '';
-                document.getElementById('fileName').textContent = fileName;
-                });
-                break;
-            case 'webp':
-                 document.getElementById('someId').addEventListener('change', function(event) {
-                event.preventDefault();
-                const fileName = this.files[0] ? this.files[0].name : '';
-                document.getElementById('fileName').textContent = fileName;
-                });
-                break;
-            case 'bmp':
-                 document.getElementById('someId').addEventListener('change', function(event) {
-                event.preventDefault();
-                const fileName = this.files[0] ? this.files[0].name : '';
-                document.getElementById('fileName').textContent = fileName;
-                });
-                break;
-            case 'png':
-                 document.getElementById('someId').addEventListener('change', function(event) {
-                event.preventDefault();
-                const fileName = this.files[0] ? this.files[0].name : '';
-                document.getElementById('fileName').textContent = fileName;
-                });
-                break;
-            case 'tif':
-                 document.getElementById('someId').addEventListener('change', function(event) {
-                event.preventDefault();
-                const fileName = this.files[0] ? this.files[0].name : '';
-                document.getElementById('fileName').textContent = fileName;
-                });
-                break;
-            default:
-                alert('Not allowed');
-                this.value = '';
-        }
-    };
-</script>
+   
 
     </body>
 </html>

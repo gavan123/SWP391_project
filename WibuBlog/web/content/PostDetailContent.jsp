@@ -109,10 +109,12 @@
                             <img alt="${user.username}" title="${user.username}" src="${user.profilePhoto}" onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
                         </div>
                         <div class="comment-input-block media-body">
-                            <textarea class="form-control" style="height:60px !important; border-radius: 1.25rem; background-color:white;" rows="2" id="msg" minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
-                            <button type="button" class="btn btn-success bg-transparent btn-submit-comment border-0 text-primary d-flex align-items-center justify-content-center shadow-none px-2" onclick="sendMsg()">
-                                <i class="mdi mdi-send icon-24px"></i>
-                            </button>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <textarea class="form-control" style="height: 60px !important; border-radius: 1.25rem; background-color: white;" rows="2" id="msg" minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
+                                <button type="button" class="btn btn-success bg-transparent btn-submit-comment border-0 text-primary d-flex align-items-center justify-content-center shadow-none px-2 ml-auto" onclick="sendMsg()">
+                                    <i class="fas fa-paper-plane fa-2x"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </c:otherwise>
@@ -134,7 +136,7 @@
                         </p>
                         <div class="card" style="border-color:#FAF41F;">
                             <div class="card-body border-0 rounded fw-500" style="box-shadow: 0 0 15px #FAF41F;">
-                                ${comment.comment}
+                                ${comment.content}
                             </div>
                             <input id="input_${loop.index}" type="text" value="${comment.commentId}" hidden="">
                         </div>
@@ -142,8 +144,9 @@
                             <span class="badge badge-secondary">
                                 ${comment.createdAt}
                             </span>
-                            <button class="btn border-0 bg-none text-secondary rounded-2" id="button_${loop.index}" onclick="reply(${comment.commentId})">
-                                <i class="mdi mdi-reply text-secondary"></i> Trả lời
+                            <button class="btn border-0 bg-none text-secondary rounded-2"  
+                                    onclick="reply(${comment.commentId})">
+                                <i class="mdi mdi-reply text-secondary"></i> Reply
                             </button>
                         </p>
                     </div>

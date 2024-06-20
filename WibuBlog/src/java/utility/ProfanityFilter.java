@@ -93,6 +93,7 @@ public class ProfanityFilter {
         normalizedText = normalizedText.replaceAll("\\~", " ");
         normalizedText = normalizedText.replaceAll("\\`", " ");
         normalizedText = normalizedText.replaceAll("\\=", " ");
+        normalizedText = normalizedText.replaceAll("\\:", " ");
         normalizedText = normalizedText.replaceAll("\\s+", " ");
         normalizedText = normalizedText.replaceAll("\\đ", "d"); // special case bc diacritic removal ignores this
 

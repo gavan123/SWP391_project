@@ -34,6 +34,31 @@ public class CategoryDAO extends DBContext {
         return null;
     }
 
+    // Lấy một Category bằng Name
+    public Category getCategoryByName(String categoryName) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT * FROM Category WHERE Name = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, categoryName);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Category(
+                        rs.getInt("CategoryID"),
+                        rs.getString("Name"),
+                        rs.getString("Description")
+                );
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        return null;
+    }
+
     // Lấy tất cả Category
     public List<Category> getAllCategories() {
         List<Category> categoryList = new ArrayList<>();

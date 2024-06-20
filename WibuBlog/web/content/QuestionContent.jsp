@@ -18,7 +18,7 @@
                     <ul class="list-group">
                         <li class="list-group-item d-flex justify-content-between align-items-center" style="background:none;border:none">
                             <div class="col-10 text-truncate font-weight-bold">
-                                <a href="${post.source}">${post.title}</a>
+                                <a href="postDetail?postId=${post.postId}">${post.title}</a>
                             </div>
                             <!-- Display the comment count -->
                             <span class="badge badge-primary badge-pill">
@@ -31,42 +31,44 @@
         </c:forEach>
         <!-- End forEach loop -->
 
-    </div>
+        <!-- Pagination -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <c:if test="${currentPage > 1}">
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">First</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=${currentPage - 1}">Previous</a>
+                    </li>
+                </c:if>
 
-    <!-- pagination -->
-    <div class="mx-auto">
-
-        <nav>
-            <ul class="pagination" style="margin-top: 2rem;">
-
-                <!-- FIRST ITEM -->
-
-                <li class="page-item disabled">
-                    <a class="page-link" href="/n/qa/1">First</a>
-                </li>
-
-
-                <!-- ITEMS  -->
-
-
-
-
+                <!-- Current page and surrounding pages -->
+                <c:if test="${currentPage > 1}">
+                    <li class="page-item">
+                        <a class="page-link" href="?page=${currentPage - 2}">${currentPage - 2}</a>
+                    </li>
+                </c:if>
 
                 <li class="page-item active">
-                    <a class="page-link" href="/n/qa/1/">
-                        1
-                    </a>
-                </li>
-                <!-- LAST ITEM -->
-                <li class="page-item disabled">
-                    <a class="page-link" href="#">
-                        Last
-                    </a>
+                    <a class="page-link" href="?page=${currentPage}">${currentPage}</a>
                 </li>
 
+                <c:if test="${currentPage < totalPages}">
+                    <li class="page-item">
+                        <a class="page-link" href="?page=${currentPage + 2}">${currentPage + 2}</a>
+                    </li>
+                </c:if>
+
+                <c:if test="${currentPage < totalPages}">
+                    <li class="page-item">
+                        <a class="page-link" href="?page=${currentPage + 1}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=${totalPages}">Last</a>
+                    </li>
+                </c:if>
             </ul>
         </nav>
-
     </div>
-
 </div>

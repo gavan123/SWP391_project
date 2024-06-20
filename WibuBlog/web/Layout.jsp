@@ -26,6 +26,13 @@
                 height: 70px;
                 display: block;
             }
+            .app{
+                background-color: #fee2dc;
+            }
+            ::selection {
+                color: black;
+                background: #fee2dc;
+            }
         </style>
     </head>
     <body>

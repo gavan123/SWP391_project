@@ -5,6 +5,7 @@
 package controller;
 
 import dal.CategoryDAO;
+import dal.PostDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,7 +13,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 import model.Category;
+import model.Post;
 
 /**
  *
@@ -60,17 +64,55 @@ public class PostListByCategory extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String categoryIdParam = request.getParameter("categoryId");
-        int categoryId = 0;
+        String categoryNameParam = request.getParameter("name");
+
+        int postsPerPage = 10;
+
+        CategoryDAO categoryDAO = new CategoryDAO();
+        PostDAO postDAO = new PostDAO();
+
+        Category category = null;
+        List<Post> postsForPage = new ArrayList<>();
+        int totalPages = 0;
+        int page = 1;
 
         try {
-            categoryId = Integer.parseInt(categoryIdParam);
+            if (categoryIdParam != null && !categoryIdParam.isEmpty()) {
+                int categoryId = Integer.parseInt(categoryIdParam);
+                category = categoryDAO.getCategoryById(categoryId);
+            } else if (categoryNameParam != null && !categoryNameParam.isEmpty()) {
+                category = categoryDAO.getCategoryByName(categoryNameParam);
+            }
+
+            if (category != null) {
+                List<Post> allPosts = postDAO.getAllPostsByCategory(category.getCategoryId());
+                int totalPosts = allPosts.size();
+                // Lấy số trang từ request parameter, mặc định là trang đầu tiên
+                String pageParam = request.getParameter("page");
+                page = (pageParam != null && !pageParam.isEmpty()) ? Integer.parseInt(pageParam) : 1;
+                // Tính offset (vị trí bắt đầu lấy bài viết) dựa trên số trang và số lượng bài viết trên mỗi trang
+                int offset = (page - 1) * postsPerPage;
+                // Lấy danh sách bài viết cho trang hiện tại
+                for (int i = offset; i < Math.min(offset + postsPerPage, totalPosts); i++) {
+                    postsForPage.add(allPosts.get(i));
+                }
+
+                // Tính tổng số trang
+                totalPages = (int) Math.ceil((double) totalPosts / postsPerPage);
+            }
         } catch (NumberFormatException e) {
         }
 
-        CategoryDAO dao = new CategoryDAO();
-        Category category = dao.getCategoryById(categoryId);
-        request.setAttribute("category", category);
-        request.getRequestDispatcher("PostListCate.jsp").forward(request, response);
+        if (category != null) {
+            // Đặt các thuộc tính vào request để sử dụng trong JSP
+            request.setAttribute("allPosts", postsForPage);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("totalPages", totalPages);
+            request.setAttribute("category", category);
+            request.getRequestDispatcher("PostListCate.jsp").forward(request, response);
+        } else {
+            response.sendRedirect("Error.jsp");
+        }
     }
 
     /**

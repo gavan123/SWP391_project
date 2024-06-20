@@ -4,18 +4,21 @@
  */
 package controller;
 
-
 import dal.CategoryDAO;
 import dal.GenreDAO;
+import dal.PostDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 import java.util.List;
 import model.Category;
 import model.Genre;
+import model.Post;
 
 /**
  *
@@ -85,16 +88,37 @@ public class CreatePost extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String title = request.getParameter("title");
-        String[] categories = request.getParameterValues("category");
-        String[] genres = request.getParameterValues("genre");
+        int categoryId = Integer.parseInt(request.getParameter("category"));
+        int genreId = Integer.parseInt(request.getParameter("genre"));
         String content = request.getParameter("content");
         String source = request.getParameter("source");
         String image = request.getParameter("image");
 
-        // Process and save the post data
-        // This is a placeholder for your actual data processing logic
-        // For example, you can create a Post object and save it to the database
-        response.sendRedirect("CreatePost.jsp");
+        // Lấy userId từ session
+        HttpSession session = request.getSession();
+        int userId = (int) session.getAttribute("userId");
+
+        // Tạo đối tượng Post mới
+        Post post = new Post();
+        post.setUserId(userId);
+        post.setCategoryId(categoryId);
+        post.setTitle(title);
+        post.setContent(content);
+        post.setSource(source);
+        post.setImage(image);
+        post.setPostTime(LocalDateTime.now());
+        post.setStatus("active");
+
+        // Lưu bài viết vào cơ sở dữ liệu
+        PostDAO postDAO = new PostDAO();
+        boolean isPostCreated = postDAO.createPost(post);
+
+        // Kiểm tra kết quả và điều hướng người dùng
+        if (isPostCreated) {
+            response.sendRedirect("success.jsp"); // Điều hướng tới trang thành công
+        } else {
+            response.sendRedirect("error.jsp"); // Điều hướng tới trang lỗi
+        }
     }
 
     /**

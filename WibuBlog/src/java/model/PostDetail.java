@@ -36,6 +36,19 @@ public class PostDetail {
         this.image = image;
     }
 
+    public PostDetail(String username, String categoryName, String genreName, String title, String content, String source, LocalDateTime postTime, int vote, int view) {
+        this.username = username;
+        this.categoryName = categoryName;
+        this.genreName = genreName;
+        this.title = title;
+        this.content = content;
+        this.source = source;
+        this.postTime = postTime;
+        this.vote = vote;
+        this.view = view;
+    }
+
+    
     public PostDetail(int vote, int view, int aInt2, String username, String categoryName, String genreName, String title, LocalDateTime postTime, String content, int aInt3, int aInt4, String source, String image, String status, String rank, String color) {
         this.username = username;
         this.categoryName = categoryName;

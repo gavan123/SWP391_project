@@ -53,8 +53,8 @@
                     <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
                         <li class="d-flex align-items-center mr-4 font-weight-bold">
                             <div class="vote-section" id="vote-section">
-                                <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2" onclick="vote('up')" ></i>
-                                <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" onclick="vote('down')"></i>
+                                <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2" onclick="votePost('up')" ></i>
+                                <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" onclick="votePost('down')"></i>
                                 <span id="vote_value">${post.vote}</span>
                             </div>
                         </li>
@@ -198,7 +198,7 @@
         return urlParams.get(param);
     };
 
-    const vote = (type) => {
+    const votePost = (type) => {
         const voteValueElement = document.getElementById('vote_value');
         const postId = getUrlParameter('postId');
         if (!postId) {

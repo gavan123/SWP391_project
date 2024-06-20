@@ -312,6 +312,8 @@ public class PostDAO extends DBContext {
             closePreparedStatement(ps);
         }
     }
+    
+    
 
     public static void main(String[] args) {
         PostDAO postDAO = new PostDAO();
@@ -322,5 +324,7 @@ public class PostDAO extends DBContext {
         postDAO.updateView(54);
 
     }
+    
+    
 
 }

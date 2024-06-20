@@ -23,7 +23,7 @@
                     <div class="d-md-flex align-items-center">
                         <div class="text-center text-sm-left ">
 
-                            <div class="test avatar avatar-image" style="width: 150px; height: 100px;border: 2px solid grey;">                            
+                            <div class="test avatar avatar-image" style="width: 150px; height: 100px;border: 2px solid grey;">  
                                 <c:choose>
                                     <c:when test="${user.profilePhoto == 0}">
                                         <form action="UploadPFP" method="post" enctype="multipart/form-data"  >

@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.User;
+import utility.ProfanityFilter;
 
 /**
  *
@@ -39,7 +40,7 @@ public class UpdateBio extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet UpdateBio</title>");            
+            out.println("<title>Servlet UpdateBio</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet UpdateBio at " + request.getContextPath() + "</h1>");
@@ -48,28 +49,38 @@ public class UpdateBio extends HttpServlet {
         }
     }
 
- 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     }
 
-   
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String newBio = request.getParameter("newBio");
-        UserDAO userDAO = new UserDAO();
-        HttpSession session = request.getSession();
-        User user = (User)session.getAttribute("user");
-        userDAO.updateBio(newBio, user.getUserId());
-        user.setBio(newBio);
-        response.sendRedirect("Profile.jsp");
+        String newBio = (String)request.getParameter("newBio");
+        if (ProfanityFilter.checkProfanity(newBio)) {          
+            PrintWriter out = response.getWriter();
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('Please reconsider your profile');");
+            out.println("location='Profile.jsp';");
+            out.println("</script>");
+        }
+        else{
+            UserDAO userDAO = new UserDAO();
+            HttpSession session = request.getSession();
+            User user = (User) session.getAttribute("user");
+            userDAO.updateBio(newBio, user.getUserId());
+            user.setBio(newBio);
+            response.sendRedirect("Profile.jsp");
+        }
     }
 
     @Override
     public String getServletInfo() {
         return "Short description";
     }
-
+    public static void main(String[] args)  {
+        String newBio = "bucky";
+        System.out.println(ProfanityFilter.checkProfanity(newBio));
+    }
 }

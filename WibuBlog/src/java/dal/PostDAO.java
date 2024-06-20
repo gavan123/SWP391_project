@@ -314,7 +314,21 @@ public class PostDAO extends DBContext {
     }
     
     
-
+    public ArrayList<Post> getUserPost(int userID){
+        try {
+            String sql = "select * from [post] where userid = ?";
+            PreparedStatement ps = null;
+            ps = connection.prepareStatement(sql);
+            ResultSet rs =  rs = ps.executeQuery();
+            ArrayList<Post> userPostList = new ArrayList<>();
+            while(rs.next()){
+               
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     public static void main(String[] args) {
         PostDAO postDAO = new PostDAO();
 

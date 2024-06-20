@@ -132,7 +132,7 @@
                     </c:otherwise>
                     </c:choose>
                     <br>
-                    <h5>Experience</h5>
+                    <h5>Posts</h5>
                     <div class="m-t-20">
                         <div class="media m-b-30">
                             <div class="avatar avatar-image">

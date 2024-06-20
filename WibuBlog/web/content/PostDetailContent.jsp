@@ -16,8 +16,8 @@
         border-color: #FAF41F;
         box-shadow: 0 0 15px #FAF41F;
     }
-    
-    
+
+
 </style>
 <div class="col-lg-12 mb-2">
     <div class="card mb-2">
@@ -114,16 +114,23 @@
                             <div class="card-body">
                                 ${comment.content}
                             </div>
-                            <input id="input_${loop.index}" type="text" value="${comment.commentId}" hidden="">
+                            <input id="commentId" type="hidden" value="${comment.commentId}" >
                         </div>
                         <p class="card-text comment-date">
                             <span class="badge badge-secondary">
                                 ${commentDate}
                             </span>
-                            <button class="btn reply-button" onclick="reply(${comment.commentId})">
+                            <button class="btn reply-button"  data-comment-id="${comment.commentId}" onclick="toggleReply(this)">
                                 <i class="mdi mdi-reply"></i> Reply
                             </button>
                         </p>
+                        <div id="replyComment_${comment.commentId}" class="replyComment justify-content-between align-items-center d-none">
+                            <textarea class="form-control" rows="2" id="msgReply" minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
+                            <button type="button" class="btn btn-success btn-submit-comment"
+                                    data-comment-id="${comment.commentId}"  onclick="sendMsgReply(this)">
+                                <i class="fas fa-paper-plane fa-2x"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </c:forEach>
@@ -133,7 +140,7 @@
 
             <div class="border-0 bg-none media align-items-center mt-3" style="border-top:1px solid #a7acad !important;">
                 <div class="comment-avatar mr-2">
-                    <img alt="Lữ thiên thụ " title="Lữ thiên thụ " src="//vidian.vn/public-img/image-1660494445519.jpg" onerror="this.src='https:////vidian.vn/images/chi-dao-sang-tac.jpg'" width="45" height="45">
+                    <!--<img alt="Lữ thiên thụ " title="Lữ thiên thụ " src="//vidian.vn/public-img/image-1660494445519.jpg" onerror="this.src='https:////vidian.vn/images/chi-dao-sang-tac.jpg'" width="45" height="45">-->
                 </div>
                 <div class="comment-input-block media-body" id="comment_0">
                     <p class="card-text">
@@ -156,12 +163,36 @@
     </div>
 </div>
 </div>
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editCommentModal">
+    Open Modal
+</button>
+
+<!-- Edit Comment Modal -->
+<div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" aria-labelledby="editCommentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCommentModalLabel">Edit Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-control" rows="3" id="editCommentTextarea" minlength="30" required placeholder="Enter your edited comment..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="saveEditedComment()">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     // Biến để theo dõi trạng thái upvote/downvote
     let voteStatus = 'none'; // Trạng thái ban đầu
 
-// Hàm để lấy giá trị của một tham số từ URL
+    // Hàm để lấy giá trị của một tham số từ URL
     const getUrlParameter = (param) => {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
@@ -243,13 +274,18 @@
 
     function sendMsg() {
         var msg = $("#msg").val();
+        const postId = getUrlParameter('postId');
+        if (!postId) {
+            console.error("postId không tồn tại trong URL");
+            return; // Thoát ra nếu postId không tồn tại
+        }
         if (msg.length < 30) {
             alert("Tối thiểu 30 ký tự...");
         } else {
             $.ajax({
                 type: 'POST',
                 url: 'addComment',
-                data: {message: msg},
+                data: {content: msg, postId: postId},
                 success: (response) => {
                     alert("Comment added successfully!");
                     // Optionally clear the textarea or update the UI
@@ -263,22 +299,50 @@
         }
     }
 
+    function toggleReply(button) {
+        var commentId = button.getAttribute('data-comment-id');
+        console.log(commentId); // Kiểm tra xem commentId có giá trị hợp lệ hay không
 
-    function sendMsgReply(id) {
+        var replyCommentDiv = document.querySelector("#replyComment_" + commentId);
+        if (replyCommentDiv) {
+            if (replyCommentDiv.classList.contains('d-none')) {
+                replyCommentDiv.classList.remove('d-none');
+                replyCommentDiv.classList.add('d-flex');
+            } else {
+                replyCommentDiv.classList.add('d-none');
+                replyCommentDiv.classList.remove('d-flex');
+            }
+        } else {
+            console.error(`Không tìm thấy phần tử với id #replyComment_${commentId}`);
+        }
+    }
+
+
+    function sendMsgReply(button) {
         var msg = $("#msgReply").val();
-        var parent_id = $("#input_" + id).val();
+        const parentId = button.getAttribute('data-comment-id');
+        const postId = getUrlParameter('postId');
+        if (!postId) {
+            console.error("postId không tồn tại trong URL");
+            return; // Thoát ra nếu postId không tồn tại
+        }
         if (msg.length < 30) {
             alert("Tối thiểu 30 ký tự...");
         } else {
-            var postId = "6665211975745839de997bef";
-            var postTitle = "Đế Bá: Trầm Thiên";
-            var posterId = "5fd8e6df5915dc650457f080";
-            var postSlug = "de-ba-tram-thien";
-            $.post("//vidian.vn/chi-tiet/de-ba-tram-thien/add-comment-reply", {_msg: msg, _postId: postId, _postTitle: postTitle, _posterId: posterId, _postSlug: postSlug, _parent_id: parent_id}, function (result) {
-                if (result == 200) {
-                    alert("Thành công! Comment cần chờ tác giả phê duyệt!");
+            $.ajax({
+                type: 'POST',
+                url: 'addComment',
+                data: {content: msg, postId: postId, parentId: parentId},
+                success: (response) => {
+                    alert("Comment added successfully!");
+                    // Optionally clear the textarea or update the UI
+                    $("#msg").val('');
+                    location.reload();
+                },
+                error: (error) => {
+                    alert("Error adding comment: " + error.responseText);
                 }
-            }, "json");
+            });
         }
     }
 

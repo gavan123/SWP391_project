@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.CommentDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,6 +12,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.Comment;
+import model.User;
 
 /**
  *
@@ -36,7 +40,7 @@ public class AddComment extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AddComment</title>");            
+            out.println("<title>Servlet AddComment</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet AddComment at " + request.getContextPath() + "</h1>");
@@ -57,7 +61,7 @@ public class AddComment extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
     }
 
     /**
@@ -71,7 +75,26 @@ public class AddComment extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        HttpSession session = request.getSession();
+
+        // Kiểm tra xem người dùng đã đăng nhập chưa
+        if (session.getAttribute("user") == null) {
+            String errorMessage = "Session expired!";
+            request.setAttribute("errorMessage", errorMessage);
+            request.getRequestDispatcher("Login.jsp").forward(request, response);
+            return;
+        }
+
+        // Người dùng đã đăng nhập, tiếp tục quá trình thêm bình luận
+        User userSession = (User) session.getAttribute("user");
+        String content = request.getParameter("content");
+        int postId = Integer.parseInt(request.getParameter("postId")); // Chuyển đổi postId thành kiểu int
+
+        CommentDAO commentDAO = new CommentDAO();
+        Comment comment = new Comment(postId, userSession.getUserId(), content, null);
+
+        commentDAO.addComment(comment);
+
     }
 
     /**

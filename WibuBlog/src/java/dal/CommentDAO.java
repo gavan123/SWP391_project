@@ -165,7 +165,9 @@ public class CommentDAO extends DBContext {
 
     public static void main(String[] args) {
         CommentDAO cod = new CommentDAO();
-        Comment comment = new Comment(53, 1, "Hello world");
-        cod.addComment(comment);
+        List<Comment> coment = cod.getCommentsForPost(54);
+        for (Comment comment : coment) {
+            System.out.println(comment.getCommentId());
+        }
     }
 }

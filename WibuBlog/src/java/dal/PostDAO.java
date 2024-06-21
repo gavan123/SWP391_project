@@ -479,18 +479,10 @@ public class PostDAO extends DBContext {
         post.setStatus("active");
         post.setVote(0);
         post.setView(0);
-<<<<<<< Updated upstream
         PostDetail post1 = postDAO.getPostDetailById(54);
         System.out.println(post1.getTitle());
-        // Gọi phương thức createPost để thêm bài đăng mới
+
         boolean isPostCreated = postDAO.createPost(post);
-        
-        // Kiểm tra kết quả
-=======
-        
-        boolean isPostCreated = postDAO.createPost(post);
-        
->>>>>>> Stashed changes
         if (isPostCreated) {
             System.out.println("Post has been created successfully.");
         } else {

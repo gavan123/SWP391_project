@@ -4,9 +4,11 @@
  */
 package dal;
 
+import java.sql.Timestamp;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -53,7 +55,36 @@ public class PostDAO extends DBContext {
         }
         return postList;
     }
+    public void setPostImage(String url,int postID){
+        try {
+            String sql = "update [post] set image = ? where postID = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, url);
+            ps.setInt(2, postID);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+      public int getPostIDJustInserted(int userID) {
 
+        try {
+            String sql = "select top (1) * from post where [userID] = ? \n"
+                    + "order by PostTime desc";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            int mediaId = rs.getInt("PostID");
+            return mediaId;
+        } catch (SQLException ex) {
+            Logger.getLogger(MediaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
     // Lấy một số lượng giới hạn các bài đăng
     public List<Post> getLimitedPosts(int limit) {
         List<Post> postList = new ArrayList<>();
@@ -127,7 +158,19 @@ public class PostDAO extends DBContext {
         }
         return postList;
     }
-
+    
+    public void insertPostGenre(int postID,int genreID){
+        try {
+            String sql = "insert into PostGenre (PostID,GenreID) values(?,?)";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, postID);
+            ps.setInt(2, genreID);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     // Lấy tất cả các bài đăng của một danh mục cụ thể
     public List<Post> getAllPostsByCategory(int categoryId) {
         List<Post> postList = new ArrayList<>();
@@ -206,7 +249,7 @@ public class PostDAO extends DBContext {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM Post WHERE Content LIKE ?";
+            String sql = "SELECT * FROM Post WHERE Title LIKE ?";
             ps = connection.prepareStatement(sql);
             ps.setString(1, "%" + name + "%");
             rs = ps.executeQuery();
@@ -234,7 +277,7 @@ public class PostDAO extends DBContext {
         }
         return postList;
     }
-
+    
     public PostDetail getPostDetailById(int postID) {
         PostDetail postDetail = null;
         PreparedStatement ps = null;
@@ -279,7 +322,7 @@ public class PostDAO extends DBContext {
         }
         return postDetail;
     }
-
+    
     public boolean updateVote(int postId, int vote) {
         PreparedStatement ps = null;
         try {
@@ -296,7 +339,29 @@ public class PostDAO extends DBContext {
             closePreparedStatement(ps);
         }
     }
-
+    
+    public boolean hasVoted(int userId, int postId) {
+        try {
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            
+            String sql = "SELECT COUNT(*) AS count FROM Vote WHERE UserID = ? AND PostID = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ps.setInt(2, postId);
+            rs = ps.executeQuery(); 
+            if(rs.next()) {
+                int count = rs.getInt("count");
+                return count > 0; 
+            }
+            return false ; 
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
     public boolean updateView(int postId) {
         PreparedStatement ps = null;
         try {
@@ -312,15 +377,118 @@ public class PostDAO extends DBContext {
             closePreparedStatement(ps);
         }
     }
+    
+    public Integer getUserIdByUsername(String username) {
+        Integer userId = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "UserID FROM [User] WHERE username = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, username);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                userId = rs.getInt("UserID");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        return userId;
+    }
+    
+    public Integer getCategoryIdByName(String categoryName) {
+        Integer categoryId = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = " SELECT CategoryID FROM Category WHERE Name =  ?";
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, categoryName);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                categoryId = rs.getInt("CategoryID");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        return categoryId;
+    }
+    
+    public boolean createPost(Post post) {
+        PreparedStatement ps = null;
+        try {
+            String sql = "INSERT INTO Post ([UserID], [CategoryID], [Title], "
+                    + "[Content], [Source], [Image], "
+                    + "[PostTime], [Status], [Vote], [View]) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, 'active', 0, 0)";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, post.getUserId());
+            ps.setInt(2, post.getCategoryId());
+            ps.setString(3, post.getTitle());
+            ps.setString(4, post.getContent());
+            ps.setString(5, post.getSource());
+            ps.setString(6, post.getImage());
 
+            // Set the current timestamp as PostTime
+            ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
+            
+            int rowsInserted = ps.executeUpdate();
+            return rowsInserted > 0;
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } finally {
+            closePreparedStatement(ps);
+        }
+    }
+    
+    public ArrayList<Post> getUserPost(int userID) {
+        try {
+            String sql = "select * from [post] where userid = ?";
+            PreparedStatement ps = null;
+            ps = connection.prepareStatement(sql);
+            ResultSet rs = rs = ps.executeQuery();
+            ArrayList<Post> userPostList = new ArrayList<>();
+            while (rs.next()) {
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     public static void main(String[] args) {
         PostDAO postDAO = new PostDAO();
+        
+        Post post = new Post();
+        post.setUserId(1);        
+        post.setCategoryId(1);        
+        post.setTitle("Sample Post Title");
+        post.setContent("This is a sample content for the post.");
+        post.setSource("Sample Source");
+        post.setImage("sample_image.jpg");        
+        post.setPostTime(LocalDateTime.now());
+        post.setStatus("active");
+        post.setVote(0);
+        post.setView(0);
+        PostDetail post1 = postDAO.getPostDetailById(54);
+        System.out.println(post1.getTitle());
 
-        // Retrieve post detail by ID
-        int postID = 1; // Example post ID
-        PostDetail postDetail = postDAO.getPostDetailById(postID);
-        postDAO.updateView(54);
-
+        boolean isPostCreated = postDAO.createPost(post);
+        if (isPostCreated) {
+            System.out.println("Post has been created successfully.");
+        } else {
+            System.out.println("Failed to create the post.");
+        }
+        
     }
-
+    
 }

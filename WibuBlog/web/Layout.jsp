@@ -66,8 +66,11 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="javascript:void(0);" data-toggle="modal" data-target="#search-drawer">
-                                    <i class="anticon anticon-search"></i>
+                                <a>
+                                    <form action="SearchContent" method="get">
+                                    <i class="anticon anticon-search"></i> <input type="text" name="searchToken" style="width: 250px;height: 25px;font-size:15px">
+                                    <input type="submit" style="visibility: hidden;" />
+                                    </form>
                                 </a>
                             </li>
                         </ul>

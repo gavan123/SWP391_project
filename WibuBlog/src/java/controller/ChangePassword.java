@@ -22,7 +22,7 @@ import validation.Validator;
  *
  * @author mindc
  */
-@WebServlet(name = "ChangePassword", urlPatterns = {"/changePassword"})
+@WebServlet(name = "ChangePassword", urlPatterns = {"/ChangePassword"})
 public class ChangePassword extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

@@ -93,8 +93,7 @@ public class Login extends HttpServlet {
                 if (userRole != null) {
                     switch (userRole) {
                         case "Admin" ->
-                            request.getRequestDispatcher("Home.jsp").forward(request, response);
-                            
+                            request.getRequestDispatcher("Home.jsp").forward(request, response);                          
                         case "Mod" ->
                             request.getRequestDispatcher("Home.jsp").forward(request, response);
                         case "Member" ->

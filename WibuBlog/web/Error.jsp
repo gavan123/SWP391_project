@@ -1,50 +1,68 @@
-<%-- 
-    Document   : Error
-    Created on : Jun 20, 2024, 12:22:16 AM
-    Author     : ADMIN
---%>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+        <!DOCTYPE html>
+        <html lang="en">
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Error Page</title>
-         <link href="assets/css/app.min.css" rel="stylesheet">
-    </head>
-    <body>
-        <div class="container-fluid">
-            <div class="d-flex full-height p-v-20 flex-column justify-content-between">
-                <div class="d-none d-md-flex p-h-40">
-                    <img src="" alt="">
-                </div>
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-md-6">
-                            <div class="p-v-30">
-                                <h1 class="font-weight-semibold display-1 text-primary lh-1-2">404</h1>
-                                <h2 class="font-weight-light font-size-30">Whoops! Looks like you got lost</h2>
-                                <p class="lead m-b-30">We couldnt find what you were looking for.</p>
-                                <a href="home" class="btn btn-primary btn-tone">Go Back</a>
+        <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <title>Error</title>
+            <!-- Favicon -->
+            <link rel="shortcut icon" href="">
+            <!-- page css -->
+            <!-- Core css -->
+            <link href="assets/css/app.min.css" rel="stylesheet">
+
+        </head>
+
+        <!-- page css -->
+
+        <!-- Core css -->
+        <link href="assets/css/app.min.css" rel="stylesheet">
+
+        </head>
+
+        <body>
+            <div class="app">
+                <div class="container-fluid p-h-0 p-v-20 bg full-height d-flex"
+                    style="background-image: url('assets/images/others/login-3.png')">
+                    <div class="d-flex flex-column justify-content-between w-100">
+                        <div class="container d-flex h-100">
+                            <div class="row align-items-center w-100">
+                                <div class="col-md-7 col-lg-5 m-h-auto">
+                                    <div class="card shadow-lg">
+                                        <div class="card-body">
+
+                                            <div class="d-flex align-items-center justify-content-start m-b-30">
+                                                <h2 class="m-b-0">Error</h2>
+                                                <c:if test="${message != null}">
+                                                    <p style="color: green">${message}</p>
+                                                </c:if>
+                                            </div>
+                                            <c:if test="${not empty errorMessage}">
+                                                <p style="color:red">${errorMessage}</p><br>
+                                            </c:if>
+                                            <span class="font-size-13 text-muted">
+                                                <a class="small" href="Home.jsp">Return to homepage</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6 m-l-auto">
-                            <img class="img-fluid" src="assets/images/others/error-1.png" alt="">
                         </div>
                     </div>
                 </div>
-
             </div>
-        </div>
-    </div>
 
 
-    <!-- Core Vendors JS -->
-    <script src="assets/js/vendors.min.js"></script>
+            <!-- Core Vendors JS -->
+            <script src="assets/js/vendors.min.js"></script>
 
-    <!-- page js -->
+            <!-- page js -->
 
-    <!-- Core JS -->
-    <script src="assets/js/app.min.js"></script>
-</body>
-</html>
+            <!-- Core JS -->
+            <script src="assets/js/app.min.js"></script>
+
+        </body>
+
+        </html>

@@ -86,20 +86,23 @@ public class ImageUpload extends HttpServlet {
         // Lấy các file ảnh từ request và lưu vào thư mục "game"
         for (Part part : request.getParts()) {
             String submittedFileName = part.getSubmittedFileName();
+            response.getWriter().println(ImageHandler.isImageFile(submittedFileName) + gameDirectory.toString());
             if (submittedFileName != null && ImageHandler.isImageFile(submittedFileName)) {
                 fileNames.add(submittedFileName);
                 String encodedMediaName = mediaDAO.encodeMediaName(user.getUserId()) + "." + ImageHandler.getExtension(submittedFileName);
                 PostDAO postDAO = new PostDAO();
                 Post post = (Post)session.getAttribute("newPost");
-                post.setImage("http://localhost:9999/WibuBlog/images/game/" + encodedMediaName);
+                post.setImage(encodedMediaName);
                 int postID = postDAO.getPostIDJustInserted(user.getUserId());
-                postDAO.setPostImage("http://localhost:9999/WibuBlog/images/game/" + encodedMediaName, postID);
+                postDAO.updatePostImage( encodedMediaName, postID);
                 session.removeAttribute("newPost");
                 // Đọc và lưu ảnh vào thư mục "game"
+                response.getWriter().println("pre try" + gameDirectory.toString());
                 try (InputStream input = part.getInputStream()) {
                     BufferedImage image = ImageIO.read(input);
                     ImageHandler.saveImage(image, gameDirectory.toString(),
                             encodedMediaName, ImageHandler.getExtension(encodedMediaName));
+                    response.getWriter().println("Upload thành công các ảnh vào thư mục: " + gameDirectory.toString());
                 } catch (IOException e) {
                     response.getWriter().println("Error reading or saving image: " + e.getMessage());
                     return;
@@ -107,7 +110,7 @@ public class ImageUpload extends HttpServlet {
             }
         }
         
-        response.sendRedirect("Home.jsp");
+       // response.sendRedirect("Home.jsp");
         
         try {
             Thread.sleep(2);

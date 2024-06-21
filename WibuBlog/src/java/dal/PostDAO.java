@@ -56,7 +56,7 @@ public class PostDAO extends DBContext {
         return postList;
     }
 
-    public void setPostImage(String url, int postID) {
+    public void updatePostImage(String url, int postID) {
         try {
             String sql = "update [post] set image = ? where postID = ?";
             PreparedStatement ps = connection.prepareStatement(sql);

@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 public class ImageHandler {
 
     // Regex pattern for common image file extensions
-    private static final Pattern IMAGE_FILE_PATTERN = Pattern.compile("([^\\s]+\\s)*[^\\s]+(\\s[^\\s]+)*\\.(?i)(png|jpg|jpeg|bmp|gif)$");
+    private static final Pattern IMAGE_FILE_PATTERN = Pattern.compile("([^\\s]+\\s)*[^\\s]+(\\s[^\\s]+)*\\.(?i)(png|jpg|jpeg|bmp|gif|webp)$");
 
     // Base directory path for images
     private static final Path BASE_IMAGE_PATH = FileSystems.getDefault().getPath("web", "images").toAbsolutePath();

@@ -277,7 +277,7 @@ public class PostDAO extends DBContext {
         }
         return postList;
     }
-
+    
     public PostDetail getPostDetailById(int postID) {
         PostDetail postDetail = null;
         PreparedStatement ps = null;
@@ -322,7 +322,7 @@ public class PostDAO extends DBContext {
         }
         return postDetail;
     }
-
+    
     public boolean updateVote(int postId, int vote) {
         PreparedStatement ps = null;
         try {
@@ -339,7 +339,29 @@ public class PostDAO extends DBContext {
             closePreparedStatement(ps);
         }
     }
-
+    
+    public boolean hasVoted(int userId, int postId) {
+        try {
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            
+            String sql = "SELECT COUNT(*) AS count FROM Vote WHERE UserID = ? AND PostID = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ps.setInt(2, postId);
+            rs = ps.executeQuery(); 
+            if(rs.next()) {
+                int count = rs.getInt("count");
+                return count > 0; 
+            }
+            return false ; 
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+    
     public boolean updateView(int postId) {
         PreparedStatement ps = null;
         try {
@@ -355,7 +377,7 @@ public class PostDAO extends DBContext {
             closePreparedStatement(ps);
         }
     }
-
+    
     public Integer getUserIdByUsername(String username) {
         Integer userId = null;
         PreparedStatement ps = null;
@@ -376,7 +398,7 @@ public class PostDAO extends DBContext {
         }
         return userId;
     }
-
+    
     public Integer getCategoryIdByName(String categoryName) {
         Integer categoryId = null;
         PreparedStatement ps = null;
@@ -397,7 +419,7 @@ public class PostDAO extends DBContext {
         }
         return categoryId;
     }
-
+    
     public boolean createPost(Post post) {
         PreparedStatement ps = null;
         try {
@@ -415,10 +437,10 @@ public class PostDAO extends DBContext {
 
             // Set the current timestamp as PostTime
             ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
-
+            
             int rowsInserted = ps.executeUpdate();
             return rowsInserted > 0;
-
+            
         } catch (SQLException ex) {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -426,53 +448,47 @@ public class PostDAO extends DBContext {
             closePreparedStatement(ps);
         }
     }
-
-
     
-    public ArrayList<Post> getUserPost(int userID){
+    public ArrayList<Post> getUserPost(int userID) {
         try {
             String sql = "select * from [post] where userid = ?";
             PreparedStatement ps = null;
             ps = connection.prepareStatement(sql);
-            ResultSet rs =  rs = ps.executeQuery();
+            ResultSet rs = rs = ps.executeQuery();
             ArrayList<Post> userPostList = new ArrayList<>();
-            while(rs.next()){
-               
+            while (rs.next()) {
+                
             }
         } catch (SQLException ex) {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
-
     
     public static void main(String[] args) {
         PostDAO postDAO = new PostDAO();
-
-        // Khởi tạo một đối tượng Post mới
+        
         Post post = new Post();
-        post.setUserId(1); // Thay đổi giá trị này tùy thuộc vào UserID có sẵn trong cơ sở dữ liệu của bạn
-        post.setCategoryId(1); // Thay đổi giá trị này tùy thuộc vào CategoryID có sẵn trong cơ sở dữ liệu của bạn
+        post.setUserId(1);        
+        post.setCategoryId(1);        
         post.setTitle("Sample Post Title");
         post.setContent("This is a sample content for the post.");
         post.setSource("Sample Source");
-        post.setImage("sample_image.jpg"); // Nếu không có ảnh, bạn có thể để trống hoặc null
+        post.setImage("sample_image.jpg");        
         post.setPostTime(LocalDateTime.now());
         post.setStatus("active");
         post.setVote(0);
         post.setView(0);
         PostDetail post1 = postDAO.getPostDetailById(54);
         System.out.println(post1.getTitle());
-        // Gọi phương thức createPost để thêm bài đăng mới
+
         boolean isPostCreated = postDAO.createPost(post);
-        
-        // Kiểm tra kết quả
         if (isPostCreated) {
             System.out.println("Post has been created successfully.");
         } else {
             System.out.println("Failed to create the post.");
         }
-
+        
     }
-
+    
 }

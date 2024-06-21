@@ -85,7 +85,7 @@ public class AnimeDAO extends DBContext {
     public void addAnime(Anime anime) {
         PreparedStatement ps = null;
         try {
-            String sql = "INSERT INTO Anime (Title, Synopsis, Genre, Episodes, Status, ReleaseDate, Studio, ImageAnime) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Anime ([Title], [Synopsis], [Genre], [Episodes], [Status], [ReleaseDate], [Studio], [ImageAnime]) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             ps = connection.prepareStatement(sql);
             ps.setString(1, anime.getTitle());
             ps.setString(2, anime.getSynopsis());

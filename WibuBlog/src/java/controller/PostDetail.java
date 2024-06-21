@@ -6,6 +6,7 @@ package controller;
 
 import dal.CommentDAO;
 import dal.PostDAO;
+import dal.RankDAO;
 import dal.UserDAO;
 import jakarta.servlet.ServletException;
 import java.io.IOException;
@@ -24,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import model.Comment;
+import model.Rank;
 import model.User;
 
 /**
@@ -82,16 +84,22 @@ public class PostDetail extends HttpServlet {
                 PostDAO postDAO = new PostDAO();
                 CommentDAO commentDAO = new CommentDAO();
                 UserDAO userDAO = new UserDAO();
+                RankDAO rankDAO = new RankDAO();
 
                 model.PostDetail post = postDAO.getPostDetailById(postId);
                 List<Comment> comments = commentDAO.getCommentsForPost(postId);
 
                 List<User> users = new ArrayList<>();
+                List<Rank> ranks = new ArrayList<>();
                 List<String> commentDate = new ArrayList<>();
                 for (Comment comment : comments) {
                     User user = userDAO.getUserById(comment.getUserId());
+                    Rank rank = rankDAO.getRankByUserId(comment.getUserId());
                     if (user != null) {
                         users.add(user);
+                    }
+                    if (rank != null) {
+                        ranks.add(rank);
                     }
                     String formateDate = formatDate(comment.getCreateAt());
                     commentDate.add(formateDate);
@@ -109,6 +117,7 @@ public class PostDetail extends HttpServlet {
 
                     // Set attributes for JSP rendering
                     request.setAttribute("user", userSession);
+                    request.setAttribute("userRank", ranks);
                     request.setAttribute("userComment", users);
                     request.setAttribute("commentsList", comments);
                     request.setAttribute("post", post);

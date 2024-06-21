@@ -1,34 +1,10 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="model.User" %>
-<%@ page import="model.Media" %>
-<%@ page import="dal.UserDAO" %>
-<%@ page import="dal.MediaDAO" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<% User user = (User)session.getAttribute("user");
-                               UserDAO userDAO = new UserDAO();
-                               String rank = userDAO.getRankByRankID(user.getRankId());
-                               String rankColor = userDAO.getColorByRank(rank);
-                               String role = userDAO.getRoleByRoleID(user.getRoleId()); 
-                               MediaDAO mediaDAO = new MediaDAO();
-                               Media media = mediaDAO.getMedia(user.getProfilePhoto());
-%>
+
 
 <style>
 
-    .comment-input-block .card-title {
-        background: #FAF41F;
-        color: rgba(255, 255, 255, 0.15);
-        font-weight: 800;
-        position: relative;
-        -webkit-animation: shine-data-v-729833f6 1s infinite;
-        -webkit-background-clip: text;
-        -webkit-background-size: 300px;
-    }
-    .comment-card {
-        border-color: #FAF41F;
-        box-shadow: 0 0 15px #FAF41F;
-    }
 
 
 </style>
@@ -91,11 +67,9 @@
                 <c:otherwise>
                     <div class="border-0 bg-none mt-2 media align-items-center">
                         <div class="comment-avatar mr-2">
-
-                            <img alt="${user.username}" title="${user.username}" src="<%=media.getPath()%>" onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
-
+                            <img alt="${user.username}" title="${user.username}" 
+                                 src="${pageContext.request.contextPath}/${user.profilePhoto}" onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
                         </div>
-                        
                         <div class="comment-input-block media-body">
                             <div class="d-flex justify-content-between align-items-center">
                                 <textarea class="form-control" rows="2" id="msg" minlength="30" 
@@ -111,21 +85,25 @@
 
             <c:forEach var="comment" items="${commentsList}" varStatus="loop">
                 <c:set var="commentUser" value="${userComment[loop.index]}" />
+                <c:set var="commentUserRank" value="${userRank[loop.index]}" />
                 <c:set var="commentDate" value="${commentTime[loop.index]}" />
                 <div class="comment-container media">
                     <div class="comment-avatar">
-                        <img alt="${commentUser.username}" title="${commentUser.username}" src="${commentUser.profilePhoto}" onerror="this.src='assets/images/others/product-3.jpg'">
+                        <img alt="${commentUser.username}" 
+                             title="${commentUser.username}" 
+                             src="${pageContext.request.contextPath}/${commentUser.profilePhoto}" 
+                             onerror="this.src='assets/images/others/product-3.jpg'">
                     </div>
                     <div class="comment-input-block media-body" id="comment_${loop.index}">
                         <p class="card-text">
-                            <span class="card-title">
-                                ${comment.content}
+                            <span class="card-title" data-rank-color=" ${commentUserRank.color}" >
+                                ${commentUserRank.name}
                             </span>
                             <span class="text-truncate" title="${commentUser.username}" >
                                 ${commentUser.username}
                             </span>
                         </p>
-                        <div class="card comment-card">
+                        <div class="card comment-card" data-rank-color="${commentUserRank.color}">
                             <div class="card-body">
                                 ${comment.content}
                             </div>
@@ -135,9 +113,17 @@
                             <span class="badge badge-secondary">
                                 ${commentDate}
                             </span>
-                            <button class="btn reply-button"  data-comment-id="${comment.commentId}" onclick="toggleReply(this)">
-                                <i class="mdi mdi-reply"></i> Reply
-                            </button>
+                            <c:if test="${not empty user}">
+                                <c:if test="${user.userId == commentUser.userId}">
+                                    <button type="button" class="btn reply-button" data-comment-id="${comment.commentId}" 
+                                            data-toggle="modal" data-target="#editCommentModal">
+                                        Edit
+                                    </button>
+                                </c:if>
+                                <button class="btn reply-button"  data-comment-id="${comment.commentId}" onclick="toggleReply(this)">
+                                    Reply
+                                </button>
+                            </c:if>
                         </p>
                         <div id="replyComment_${comment.commentId}" class="replyComment justify-content-between align-items-center d-none">
                             <textarea class="form-control" rows="2" id="msgReply" minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
@@ -152,6 +138,7 @@
             <c:if test="${empty commentsList}">
                 <p>No comments found.</p>
             </c:if>
+
 
             <div class="border-0 bg-none media align-items-center mt-3" style="border-top:1px solid #a7acad !important;">
                 <div class="comment-avatar mr-2">
@@ -196,7 +183,7 @@
                 <textarea class="form-control" rows="3" id="editCommentTextarea" minlength="30" required placeholder="Enter your edited comment..."></textarea>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" onclick="deleteComment()">Delete</button>
                 <button type="button" class="btn btn-primary" onclick="saveEditedComment()">Save changes</button>
             </div>
         </div>
@@ -204,24 +191,50 @@
 </div>
 
 <script>
-    // Biến để theo dõi trạng thái upvote/downvote
+// Thay đổi background của .comment-input-block .card-title
+    const commentTitles = document.querySelectorAll('.comment-input-block .card-title');
+    commentTitles.forEach(title => {
+        const rankColor = title.getAttribute('data-rank-color');
+        if (rankColor) {
+            title.style.background = rankColor;
+            title.style.color = 'rgba(255, 255, 255, 0.15)';
+            title.style.fontWeight = '800';
+            title.style.position = 'relative';
+            title.style.webkitAnimation = 'shine-data-v-729833f6 1s infinite';
+            title.style.webkitBackgroundClip = 'text';
+            title.style.webkitBackgroundSize = '300px';
+        }
+    });
+
+// Thay đổi border color và box-shadow của .comment-card
+    const commentCards = document.querySelectorAll('.comment-card');
+    commentCards.forEach(card => {
+        const rankColor = card.getAttribute('data-rank-color');
+        if (rankColor) {
+            card.style.borderColor = "" + rankColor;
+            card.style.boxShadow = '0 0 15px ' + rankColor;
+        }
+    });
+
+// Biến để theo dõi trạng thái upvote/downvote
     let voteStatus = 'none'; // Trạng thái ban đầu
 
-    // Hàm để lấy giá trị của một tham số từ URL
-    const getUrlParameter = (param) => {
+// Hàm để lấy giá trị của một tham số từ URL
+    const getUrlParameter = param => {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
     };
 
-    const votePost = (type) => {
+// Hàm xử lý upvote/downvote
+    const votePost = type => {
         const voteValueElement = document.getElementById('vote_value');
         const postId = getUrlParameter('postId');
         if (!postId) {
             console.error("postId không tồn tại trong URL");
-            return; // Thoát ra nếu postId không tồn tại
+            return; // Thoát nếu không có postId
         }
 
-        isLoggedIn((loggedIn) => {
+        isLoggedIn(loggedIn => {
             if (!loggedIn) {
                 Swal.fire({
                     icon: 'error',
@@ -231,6 +244,7 @@
                 });
                 return;
             }
+
             const currentVote = parseInt(voteValueElement.innerText);
             let increment = 0;
 
@@ -252,7 +266,9 @@
                 toggleVoteClass(false, voteStatus === 'downvoted');
             }
 
-            let newVoteValue = currentVote + increment;
+            const newVoteValue = currentVote + increment;
+
+            // Cập nhật giá trị vote hiển thị
             voteValueElement.innerText = newVoteValue;
 
             // Gửi yêu cầu AJAX để cập nhật vote
@@ -268,11 +284,11 @@
         });
     };
 
-    // Check Login
-    const isLoggedIn = (callback) => {
+// Kiểm tra đăng nhập
+    const isLoggedIn = callback => {
         const xhr = new XMLHttpRequest();
         xhr.open("GET", "checkLogin", true);
-        xhr.setRequestHeader("Content-Type", "text/plain"); // Sử dụng text/plain
+        xhr.setRequestHeader("Content-Type", "text/plain");
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
@@ -287,12 +303,13 @@
         xhr.send();
     };
 
+// Gửi tin nhắn
     function sendMsg() {
-        var msg = $("#msg").val();
+        const msg = $("#msg").val();
         const postId = getUrlParameter('postId');
         if (!postId) {
             console.error("postId không tồn tại trong URL");
-            return; // Thoát ra nếu postId không tồn tại
+            return; // Thoát nếu không có postId
         }
         if (msg.length < 30) {
             alert("Tối thiểu 30 ký tự...");
@@ -301,24 +318,24 @@
                 type: 'POST',
                 url: 'addComment',
                 data: {content: msg, postId: postId},
-                success: (response) => {
+                success: response => {
                     alert("Comment added successfully!");
-                    // Optionally clear the textarea or update the UI
                     $("#msg").val('');
                     location.reload();
                 },
-                error: (error) => {
+                error: error => {
                     alert("Error adding comment: " + error.responseText);
                 }
             });
         }
     }
 
+// Chuyển đổi trạng thái hiển thị phản hồi
     function toggleReply(button) {
-        var commentId = button.getAttribute('data-comment-id');
-        console.log(commentId); // Kiểm tra xem commentId có giá trị hợp lệ hay không
+        const commentId = button.getAttribute('data-comment-id');
+        console.log(commentId);
 
-        var replyCommentDiv = document.querySelector("#replyComment_" + commentId);
+        const replyCommentDiv = document.querySelector('#replyComment_' + commentId);
         if (replyCommentDiv) {
             if (replyCommentDiv.classList.contains('d-none')) {
                 replyCommentDiv.classList.remove('d-none');
@@ -328,18 +345,18 @@
                 replyCommentDiv.classList.remove('d-flex');
             }
         } else {
-            console.error(`Không tìm thấy phần tử với id #replyComment_${commentId}`);
+            console.error('Không tìm thấy phần tử với id #replyComment_' + commentId);
         }
     }
 
-
+// Gửi phản hồi
     function sendMsgReply(button) {
-        var msg = $("#msgReply").val();
+        const msg = $("#msgReply").val();
         const parentId = button.getAttribute('data-comment-id');
         const postId = getUrlParameter('postId');
         if (!postId) {
             console.error("postId không tồn tại trong URL");
-            return; // Thoát ra nếu postId không tồn tại
+            return; // Thoát nếu không có postId
         }
         if (msg.length < 30) {
             alert("Tối thiểu 30 ký tự...");
@@ -348,13 +365,12 @@
                 type: 'POST',
                 url: 'addComment',
                 data: {content: msg, postId: postId, parentId: parentId},
-                success: (response) => {
+                success: response => {
                     alert("Comment added successfully!");
-                    // Optionally clear the textarea or update the UI
-                    $("#msg").val('');
+                    $("#msgReply").val('');
                     location.reload();
                 },
-                error: (error) => {
+                error: error => {
                     alert("Error adding comment: " + error.responseText);
                 }
             });

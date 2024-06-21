@@ -14,7 +14,7 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
         <style>
            .badge{border-radius:20px!important}
-.anticon_vote{display:inline-block;width:24px;line-height:24px;text-align:center;border-radius:50%;background-color:#f0f0f0;cursor:pointer}
+.anticon_vote{display:inline-block;padding:20px;width:24px;line-height:24px;text-align:center;border-radius:50%;background-color:#f0f0f0;cursor:pointer}
 .anticon-arrow-up{color:green}
 .anticon-arrow-down{color:red}
 #vote_value{font-size:18px;margin-left:8px}
@@ -26,7 +26,6 @@
 .comment-avatar{margin-right:.5rem}
 .card-text span{flex-direction:row}
 .comment-avatar img{width:55px;height:55px;border-radius:50%}
-.comment-input-block .card-text{flex-direction:column}
 .comment-input-block .text-truncate{margin-left:.25rem;font-weight:700;font-size:14px}
 .comment-date{display:flex;justify-content:flex-end;align-items:center;margin-top:.5rem;margin-bottom:0;width:fit-content;margin-left:auto}
 .reply-button{border:0;background:none;color:#6c757d;border-radius:.25rem;display:inline-flex;align-items:center}
@@ -40,5 +39,6 @@
             <jsp:param name="accountHeader" value="/content/AccountContent.jsp" />
             <jsp:param name="content" value="/content/PostDetailContent.jsp" />
         </jsp:include>
+
     </body>
 </html>

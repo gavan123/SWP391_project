@@ -343,36 +343,49 @@ public class PostDAO extends DBContext {
         }
     }
 
-    public boolean hasUserVoted(Post votepost) {
-        String checkSql = "SELECT COUNT(*) FROM VoteUserPost WHERE UserID = ? AND PostID = ?";
+    public boolean hasUserVoted(int userId, int postId) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT COUNT(*) FROM VoteUserPost WHERE UserID = ? AND PostID = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ps.setInt(2, postId);
 
-        try (PreparedStatement checkPs = connection.prepareStatement(checkSql)) {
-            checkPs.setInt(1, votepost.getUserId());
-            checkPs.setInt(2, votepost.getPostId());
-
-            try (ResultSet rs = checkPs.executeQuery()) {
-                if (rs.next() && rs.getInt(1) > 0) {
-                    return true;
-                }
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
             }
+            return false;
         } catch (SQLException ex) {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
         }
-
-        return false;
     }
 
-    public void addVote(Post votepost) {
-        String insertSql = "INSERT INTO VoteUserPost (UserID, PostID, Status) VALUES (?, ?, 'vote')";
+    public void addVote(int userId, int postId) {
+        PreparedStatement ps = null;
 
-        try (PreparedStatement insertPs = connection.prepareStatement(insertSql)) {
-            insertPs.setInt(1, votepost.getUserId());
-            insertPs.setInt(2, votepost.getPostId());
+        try {
+            String insertSql = "INSERT INTO VoteUserPost (UserID, PostID, Status) VALUES (?, ?, 'vote')";
+            ps = connection.prepareStatement(insertSql);
+            ps.setInt(1, userId);
+            ps.setInt(2, postId);
 
-            int rowsInserted = insertPs.executeUpdate();
+            int rowsInserted = ps.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("Vote added successfully."); // Optional: Print success message
+            } else {
+                System.out.println("Failed to add vote."); // Optional: Print failure message
+            }
 
         } catch (SQLException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closePreparedStatement(ps);
         }
     }
 

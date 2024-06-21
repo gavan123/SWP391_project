@@ -39,6 +39,8 @@ public class ImageUpload extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
@@ -111,12 +113,12 @@ public class ImageUpload extends HttpServlet {
             Thread.sleep(2);
         } catch (InterruptedException e) {
 
-        }
-        
-        
-        response.getWriter().println("Upload thành công các ảnh vào thư mục: " + gameDirectory.toString());
+        // Gửi phản hồi về client
+        response.getWriter().println("Upload thành công các ảnh vào thư mục: " + gameDirectory.toString()+"/"+fileNames.get(0));
 
-  
+        // Sau khi xử lý xong, chuyển hướng về trang Home.jsp hoặc trang khác
+        request.setAttribute("image", fileNames.isEmpty() ? null : fileNames);
+        request.getRequestDispatcher("Home.jsp").forward(request, response);
     }
 
     /**

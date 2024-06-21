@@ -9,13 +9,13 @@
         <div class="col-md-6">      
             <label for="image">What are you thinking ?</label>
             <a href="createPost">Create a post</a>
-            <form name="imageUpCopy" action="imageUpCopy" method="POST" enctype="multipart/form-data" class="border p-4">
+<!--            <form name="imageUpCopy" action="imageUpCopy" method="POST" enctype="multipart/form-data" class="border p-4">
                 <div class="form-group">
                     <label for="image">Choose Images:</label>
                     <input type="file" class="form-control-file" name="image" id="image" accept="image/png,image/jpeg,image/jpg,image/bmp,image/gif" multiple>
                 </div>
                 <button type="submit" class="btn btn-primary">Upload Images</button>
-            </form>
+            </form>-->
         </div>
     </div>
 </div>

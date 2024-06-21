@@ -109,7 +109,7 @@ public class CreatePost extends HttpServlet {
         post.setCategoryId(categoryId);
         post.setTitle(title);
         post.setContent(content);
-        post.setImage("http://localhost:9999/WibuBlog/PFP/");
+        post.setImage("ehe");
         post.setPostTime(LocalDateTime.now());
         post.setStatus("active");
         // Lưu bài viết vào cơ sở dữ liệu

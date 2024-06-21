@@ -14,14 +14,14 @@
     </head>
     <body>
         
-        <form action="ChoosePostPic" method="post" enctype="multipart/form-data">
+        <form action="imageUpload" method="post" enctype="multipart/form-data">
             <div class="form-group" style="margin: auto;width: 50%; border: 3px solid black;padding: 10px;" >
              <h1>Choose image for post</h1>
             <input type="file" class="upload-input" name="image" id="someId">
             <label for="someId" class="custom-file-upload">Upload Image</label>      
             <span id="fileName" class="file-name"></span><br>
             <p> you can skip this step </p>
-            <input type="submit" value="Done">
+            <button type="submit" >Done</button>>
         </div>    
             </form>
         

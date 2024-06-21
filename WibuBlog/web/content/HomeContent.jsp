@@ -7,10 +7,15 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">      
-                
-                    <label for="image">What are you thinking ?</label>
-                    <a href="createPost">Create a post</a>
-               
+            <label for="image">What are you thinking ?</label>
+            <a href="createPost">Create a post</a>
+<!--            <form name="imageUpload" action="imageUpload" method="POST" enctype="multipart/form-data" class="border p-4">
+                <div class="form-group">
+                    <label for="image">Choose Images:</label>
+                    <input type="file" class="form-control-file" name="image" id="image" accept="image/png,image/jpeg,image/jpg,image/bmp,image/gif" multiple>
+                </div>
+                <button type="submit" class="btn btn-primary">Upload Images</button>
+            </form>-->
         </div>
     </div>
 </div>

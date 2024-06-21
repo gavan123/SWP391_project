@@ -28,7 +28,7 @@ public class Post {
     public Post() {
     }
 
-    public Post(int postId, int userId, int categoryId, String title, String content, String source, String image, String status, int vote, int view) {
+    public Post (int postId, int userId, int categoryId, String title, String content, String source, String image, String status, int vote, int view) {
         this.postId = postId;
         this.userId = userId;
         this.categoryId = categoryId;

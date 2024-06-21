@@ -109,7 +109,12 @@
                             </div>
                             <input id="commentId" type="hidden" value="${comment.commentId}" >
                         </div>
-                        <p class="card-text comment-date">
+                        <div class="card-text comment-date">
+                            <div class="vote-section vote-section-cmt" id="vote-section-cmt">
+                                <i  id="vote_comment_up" class="anticon anticon_vote anticon-arrow-up mr-2" onclick="voteComment('up', ${comment.commentId})" style="padding: 10px"></i>
+                                <i  id="vote_comment_down" class="anticon anticon_vote anticon-arrow-down mr-2" onclick="voteComment('down', ${comment.commentId})" style="padding: 10px"></i>
+                                <span id="vote_comment_value">${comment.vote}</span>
+                            </div>
                             <span class="badge badge-secondary">
                                 ${commentDate}
                             </span>
@@ -124,7 +129,7 @@
                                     Reply
                                 </button>
                             </c:if>
-                        </p>
+                        </div>
                         <div id="replyComment_${comment.commentId}" class="replyComment justify-content-between align-items-center d-none">
                             <textarea class="form-control" rows="2" id="msgReply" minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
                             <button type="button" class="btn btn-success btn-submit-comment"

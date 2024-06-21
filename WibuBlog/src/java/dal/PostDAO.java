@@ -55,7 +55,8 @@ public class PostDAO extends DBContext {
         }
         return postList;
     }
-    public void setPostImage(String url,int postID){
+
+    public void setPostImage(String url, int postID) {
         try {
             String sql = "update [post] set image = ? where postID = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -66,10 +67,10 @@ public class PostDAO extends DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    
-      public int getPostIDJustInserted(int userID) {
+
+    public int getPostIDJustInserted(int userID) {
 
         try {
             String sql = "select top (1) * from post where [userID] = ? \n"
@@ -85,6 +86,7 @@ public class PostDAO extends DBContext {
         }
         return 0;
     }
+
     // Lấy một số lượng giới hạn các bài đăng
     public List<Post> getLimitedPosts(int limit) {
         List<Post> postList = new ArrayList<>();
@@ -158,8 +160,8 @@ public class PostDAO extends DBContext {
         }
         return postList;
     }
-    
-    public void insertPostGenre(int postID,int genreID){
+
+    public void insertPostGenre(int postID, int genreID) {
         try {
             String sql = "insert into PostGenre (PostID,GenreID) values(?,?)";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -171,6 +173,7 @@ public class PostDAO extends DBContext {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     // Lấy tất cả các bài đăng của một danh mục cụ thể
     public List<Post> getAllPostsByCategory(int categoryId) {
         List<Post> postList = new ArrayList<>();
@@ -277,7 +280,7 @@ public class PostDAO extends DBContext {
         }
         return postList;
     }
-    
+
     public PostDetail getPostDetailById(int postID) {
         PostDetail postDetail = null;
         PreparedStatement ps = null;
@@ -322,7 +325,7 @@ public class PostDAO extends DBContext {
         }
         return postDetail;
     }
-    
+
     public boolean updateVote(int postId, int vote) {
         PreparedStatement ps = null;
         try {
@@ -339,29 +342,40 @@ public class PostDAO extends DBContext {
             closePreparedStatement(ps);
         }
     }
-    
-    public boolean hasVoted(int userId, int postId) {
-        try {
-            PreparedStatement ps = null;
-            ResultSet rs = null;
-            
-            String sql = "SELECT COUNT(*) AS count FROM Vote WHERE UserID = ? AND PostID = ?";
-            ps = connection.prepareStatement(sql);
-            ps.setInt(1, userId);
-            ps.setInt(2, postId);
-            rs = ps.executeQuery(); 
-            if(rs.next()) {
-                int count = rs.getInt("count");
-                return count > 0; 
+
+    public boolean hasUserVoted(Post votepost) {
+        String checkSql = "SELECT COUNT(*) FROM VoteUserPost WHERE UserID = ? AND PostID = ?";
+
+        try (PreparedStatement checkPs = connection.prepareStatement(checkSql)) {
+            checkPs.setInt(1, votepost.getUserId());
+            checkPs.setInt(2, votepost.getPostId());
+
+            try (ResultSet rs = checkPs.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    return true;
+                }
             }
-            return false ; 
-            
         } catch (SQLException ex) {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return false;
     }
-    
+
+    public void addVote(Post votepost) {
+        String insertSql = "INSERT INTO VoteUserPost (UserID, PostID, Status) VALUES (?, ?, 'vote')";
+
+        try (PreparedStatement insertPs = connection.prepareStatement(insertSql)) {
+            insertPs.setInt(1, votepost.getUserId());
+            insertPs.setInt(2, votepost.getPostId());
+
+            int rowsInserted = insertPs.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public boolean updateView(int postId) {
         PreparedStatement ps = null;
         try {
@@ -377,7 +391,7 @@ public class PostDAO extends DBContext {
             closePreparedStatement(ps);
         }
     }
-    
+
     public Integer getUserIdByUsername(String username) {
         Integer userId = null;
         PreparedStatement ps = null;
@@ -398,7 +412,7 @@ public class PostDAO extends DBContext {
         }
         return userId;
     }
-    
+
     public Integer getCategoryIdByName(String categoryName) {
         Integer categoryId = null;
         PreparedStatement ps = null;
@@ -419,7 +433,7 @@ public class PostDAO extends DBContext {
         }
         return categoryId;
     }
-    
+
     public boolean createPost(Post post) {
         PreparedStatement ps = null;
         try {
@@ -437,10 +451,10 @@ public class PostDAO extends DBContext {
 
             // Set the current timestamp as PostTime
             ps.setTimestamp(7, Timestamp.valueOf(LocalDateTime.now()));
-            
+
             int rowsInserted = ps.executeUpdate();
             return rowsInserted > 0;
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
             return false;
@@ -448,7 +462,7 @@ public class PostDAO extends DBContext {
             closePreparedStatement(ps);
         }
     }
-    
+
     public ArrayList<Post> getUserPost(int userID) {
         try {
             String sql = "select * from [post] where userid = ?";
@@ -457,24 +471,24 @@ public class PostDAO extends DBContext {
             ResultSet rs = rs = ps.executeQuery();
             ArrayList<Post> userPostList = new ArrayList<>();
             while (rs.next()) {
-                
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
-    
+
     public static void main(String[] args) {
         PostDAO postDAO = new PostDAO();
-        
+
         Post post = new Post();
-        post.setUserId(1);        
-        post.setCategoryId(1);        
+        post.setUserId(1);
+        post.setCategoryId(1);
         post.setTitle("Sample Post Title");
         post.setContent("This is a sample content for the post.");
         post.setSource("Sample Source");
-        post.setImage("sample_image.jpg");        
+        post.setImage("sample_image.jpg");
         post.setPostTime(LocalDateTime.now());
         post.setStatus("active");
         post.setVote(0);
@@ -488,7 +502,7 @@ public class PostDAO extends DBContext {
         } else {
             System.out.println("Failed to create the post.");
         }
-        
+
     }
-    
+
 }

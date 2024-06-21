@@ -163,6 +163,40 @@ public class CommentDAO extends DBContext {
         }
     }
 
+    public boolean hasUserVoted(Comment votecmt) {
+        String checkSql = "SELECT COUNT(*) FROM VoteUserCmt WHERE [UserID] = ? AND [CommentID] = ? ";
+
+        try (PreparedStatement checkPs = connection.prepareStatement(checkSql)) {
+            checkPs.setInt(1, votecmt.getUserId());
+            checkPs.setInt(2, votecmt.getCommentId());
+
+            try (ResultSet rs = checkPs.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    return true;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return false;
+    }
+
+    public void addVoteCmt(Comment votecmt) {
+        String insertSql = "INSERT INTO VoteUserCmt ([UserID],[CommentID], [Status])\n"
+                + "values (?,?,'vote')";
+
+        try (PreparedStatement insertPs = connection.prepareStatement(insertSql)) {
+            insertPs.setInt(1, votecmt.getUserId());
+            insertPs.setInt(2, votecmt.getCommentId());
+
+            int rowsInserted = insertPs.executeUpdate();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public static void main(String[] args) {
         CommentDAO cod = new CommentDAO();
         List<Comment> coment = cod.getCommentsForPost(54);

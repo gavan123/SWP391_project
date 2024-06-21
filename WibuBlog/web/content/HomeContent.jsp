@@ -9,18 +9,18 @@
         <div class="col-md-6">      
             <label for="image">What are you thinking ?</label>
             <a href="createPost">Create a post</a>
-<!--            <form name="imageUpload" action="imageUpload" method="POST" enctype="multipart/form-data" class="border p-4">
+            <form name="imageUpCopy" action="imageUpCopy" method="POST" enctype="multipart/form-data" class="border p-4">
                 <div class="form-group">
                     <label for="image">Choose Images:</label>
                     <input type="file" class="form-control-file" name="image" id="image" accept="image/png,image/jpeg,image/jpg,image/bmp,image/gif" multiple>
                 </div>
                 <button type="submit" class="btn btn-primary">Upload Images</button>
-            </form>-->
+            </form>
         </div>
     </div>
 </div>
 <c:forEach var="fileName" items="${image}">
-    <img src="${pageContext.request.contextPath}/images/game/${fileName.img}" alt="Uploaded Image">
+    <img src="${pageContext.request.contextPath}/images/game/${fileName}" alt="Uploaded Image">
 </c:forEach>
 
 <div class="card mb-2 rounded-5 border-0">

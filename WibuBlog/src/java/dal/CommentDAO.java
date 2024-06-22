@@ -164,7 +164,8 @@ public class CommentDAO extends DBContext {
     }
 
     public boolean hasUserVoted(int userId, int commentId) {
-        String checkSql = "SELECT COUNT(*) FROM VoteUserCmt WHERE [UserID] = ? AND [CommentID] = ? ";
+        String checkSql = "SELECT COUNT(*) FROM VoteUserCmt WHERE [UserID] = ? "
+                + "AND [CommentID] = ? ";
 
         try (PreparedStatement checkPs = connection.prepareStatement(checkSql)) {
             checkPs.setInt(1, userId);
@@ -182,14 +183,14 @@ public class CommentDAO extends DBContext {
         return false;
     }
 
-    public void addVoteCmt(int userId,  int commentId) {
+    public void addVoteCmt(int userId, int commentId, String status) {
         String insertSql = "INSERT INTO VoteUserCmt ([UserID],[CommentID], [Status])\n"
-                + "values (?,?,'vote')";
+                + "values (?,?,?)";
 
         try (PreparedStatement insertPs = connection.prepareStatement(insertSql)) {
             insertPs.setInt(1, userId);
             insertPs.setInt(2, commentId);
-
+            insertPs.setString(3, status);
             int rowsInserted = insertPs.executeUpdate();
 
         } catch (SQLException ex) {

@@ -40,7 +40,7 @@
                 <div class="col-lg-4 mb-2 mx-auto">
                     <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
                         <li class="d-flex align-items-center mr-4 font-weight-bold">
-                            <div class="vote-section" id="vote-section">
+                            <div class="vote-section" id="vote-section" >
                                 <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2" onclick="votePost('up')" ></i>
                                 <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" onclick="votePost('down')"></i>
                                 <span id="vote_value">${post.vote}</span>
@@ -147,7 +147,7 @@
 
             <div class="border-0 bg-none media align-items-center mt-3" style="border-top:1px solid #a7acad !important;">
                 <div class="comment-avatar mr-2">
-                    <!--<img alt="Lữ thiên thụ " title="Lữ thiên thụ " src="//vidian.vn/public-img/image-1660494445519.jpg" onerror="this.src='https:////vidian.vn/images/chi-dao-sang-tac.jpg'" width="45" height="45">-->
+                    <img alt="Lữ thiên thụ " title="Lữ thiên thụ " src="//vidian.vn/public-img/image-1660494445519.jpg" onerror="this.src='https:////vidian.vn/images/chi-dao-sang-tac.jpg'" width="45" height="45">
                 </div>
                 <div class="comment-input-block media-body" id="comment_0">
                     <p class="card-text">
@@ -196,6 +196,72 @@
 </div>
 
 <script>
+
+    let voteStatus = 'unvote'; // Trạng thái ban đầu
+// Hàm xử lý upvote/downvote
+    const votePost = type => {
+        const voteValueElement = document.getElementById('vote_value');
+        const postId = getUrlParameter('postId');
+        if (!postId) {
+            console.error("postId không tồn tại trong URL");
+            return; // Thoát nếu không có postId
+        }
+
+        isLoggedIn(loggedIn => {
+            if (!loggedIn) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'You need login to vote',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                return;
+            }
+            const currentVote = parseInt(voteValueElement.innerText);
+            let increment = 0;
+            // Xử lý upvote và downvote
+            if (type === 'up') {
+                increment = (voteStatus === 'upvote') ? -1 : (voteStatus === 'downvote') ? 2 : 1;
+                voteStatus = (voteStatus === 'upvote') ? 'unvote' : 'upvote';
+                toggleVoteClass(voteStatus === 'upvote', false);
+            } else if (type === 'down') {
+                increment = (voteStatus === 'downvote') ? 1 : (voteStatus === 'upvote') ? -2 : -1;
+                voteStatus = (voteStatus === 'downvote') ? 'unvote' : 'downvote';
+                toggleVoteClass(false, voteStatus === 'downvote');
+            }
+            const newVoteValue = currentVote + increment;
+            // Cập nhật giá trị vote hiển thị
+            voteValueElement.innerText = newVoteValue;
+
+            // Gửi yêu cầu AJAX để cập nhật vote
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "updateVote", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    console.log(xhr.status === 200 ? "Vote updated successfully" : "Error updating vote");
+                }
+            };
+            xhr.send("postId=" + postId + "&vote_value=" + newVoteValue + "&vote_status=" + voteStatus);
+        });
+    };
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const votePostStatus = `${votePostStatus}`; // Đảm bảo votePostStatus là string
+        if (votePostStatus.trim() === "") {
+            return; // Nếu votePostStatus rỗng thì không làm gì cả và thoát khỏi hàm
+        }
+        console.log(votePostStatus);
+        if (votePostStatus === "unvote") {
+            toggleVoteClass(false, false);
+        } else if (votePostStatus === "upvote") {
+            toggleVoteClass(true, false);
+        } else if (votePostStatus === "downvote") {
+            toggleVoteClass(false, true);
+        }
+    });
+
 // Thay đổi background của .comment-input-block .card-title
     const commentTitles = document.querySelectorAll('.comment-input-block .card-title');
     commentTitles.forEach(title => {
@@ -221,8 +287,6 @@
         }
     });
 
-// Biến để theo dõi trạng thái upvote/downvote
-    let voteStatus = 'none'; // Trạng thái ban đầu
 
 // Hàm để lấy giá trị của một tham số từ URL
     const getUrlParameter = param => {
@@ -230,64 +294,14 @@
         return urlParams.get(param);
     };
 
-// Hàm xử lý upvote/downvote
-    const votePost = type => {
-        const voteValueElement = document.getElementById('vote_value');
-        const postId = getUrlParameter('postId');
-        if (!postId) {
-            console.error("postId không tồn tại trong URL");
-            return; // Thoát nếu không có postId
-        }
-
-        isLoggedIn(loggedIn => {
-            if (!loggedIn) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'You need login to vote',
-                    showConfirmButton: false,
-                    timer: 2000
-                });
-                return;
-            }
-
-            const currentVote = parseInt(voteValueElement.innerText);
-            let increment = 0;
-
-            // Hàm để xử lý thêm/loại bỏ lớp 'upvoted' và 'downvoted'
-            const toggleVoteClass = (addUpvoted, addDownvoted) => {
-                const voteSection = document.getElementById('vote-section');
-                voteSection.classList.toggle('upvoted', addUpvoted);
-                voteSection.classList.toggle('downvoted', addDownvoted);
-            };
-
-            // Xử lý upvote và downvote
-            if (type === 'up') {
-                increment = (voteStatus === 'upvoted') ? -1 : (voteStatus === 'downvoted') ? 2 : 1;
-                voteStatus = (voteStatus === 'upvoted') ? 'none' : 'upvoted';
-                toggleVoteClass(voteStatus === 'upvoted', false);
-            } else if (type === 'down') {
-                increment = (voteStatus === 'downvoted') ? 1 : (voteStatus === 'upvoted') ? -2 : -1;
-                voteStatus = (voteStatus === 'downvoted') ? 'none' : 'downvoted';
-                toggleVoteClass(false, voteStatus === 'downvoted');
-            }
-
-            const newVoteValue = currentVote + increment;
-
-            // Cập nhật giá trị vote hiển thị
-            voteValueElement.innerText = newVoteValue;
-
-            // Gửi yêu cầu AJAX để cập nhật vote
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", "updateVote", true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState === 4) {
-                    console.log(xhr.status === 200 ? "Vote updated successfully" : "Error updating vote");
-                }
-            };
-            xhr.send("postId=" + postId + "&vote_value=" + newVoteValue);
-        });
+    // Hàm để xử lý thêm/loại bỏ lớp 'upvoted' và 'downvoted'
+    const toggleVoteClass = (addUpvoted, addDownvoted) => {
+        const voteSection = document.getElementById('vote-section');
+        voteSection.classList.toggle('upvoted', addUpvoted);
+        voteSection.classList.toggle('downvoted', addDownvoted);
     };
+
+
 
 // Kiểm tra đăng nhập
     const isLoggedIn = callback => {
@@ -307,7 +321,6 @@
         };
         xhr.send();
     };
-
 // Gửi tin nhắn
     function sendMsg() {
         const msg = $("#msg").val();
@@ -339,7 +352,6 @@
     function toggleReply(button) {
         const commentId = button.getAttribute('data-comment-id');
         console.log(commentId);
-
         const replyCommentDiv = document.querySelector('#replyComment_' + commentId);
         if (replyCommentDiv) {
             if (replyCommentDiv.classList.contains('d-none')) {

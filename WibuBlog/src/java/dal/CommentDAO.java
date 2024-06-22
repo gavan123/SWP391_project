@@ -55,7 +55,7 @@ public class CommentDAO extends DBContext {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM Comment WHERE PostID = ?  ORDER BY CreateAt DESC";
+            String sql = "SELECT * FROM Comment WHERE PostID = ? ORDER BY CreateAt DESC";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, postId);
             rs = ps.executeQuery();
@@ -201,6 +201,8 @@ public class CommentDAO extends DBContext {
     public static void main(String[] args) {
         CommentDAO cod = new CommentDAO();
         List<Comment> coment = cod.getCommentsForPost(54);
+        Comment cmt = cod.getCommentById(3);
+        System.out.println(cmt.getCreateAt());
         for (Comment comment : coment) {
             System.out.println(comment.getCommentId());
         }

@@ -121,7 +121,7 @@
                                 ${commentDate}
                             </span>
                             <c:if test="${not empty user}">
-                                <c:if test="${user.userId == commentUser.userId}">
+                                <c:if test="${user.userId == commentUser.userId && comment.status eq 'active'}">
                                     <button type="button" class="btn reply-button" data-comment-id="${comment.commentId}" 
                                             data-toggle="modal" data-target="#editCommentModal">
                                         Edit
@@ -187,11 +187,12 @@
                 </button>
             </div>
             <div class="modal-body">
+                <input type="hidden" id="editCommentId" value="">
                 <textarea class="form-control" rows="3" id="editCommentTextarea" minlength="30" required placeholder="Enter your edited comment..."></textarea>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="deleteComment()">Delete</button>
-                <button type="button" class="btn btn-primary" onclick="saveEditedComment()">Save changes</button>
+                <button id="deleteCommentBtn" type="button" class="btn btn-secondary" >Delete</button>
+                <button id="saveEditedCommentBtn" type="button" class="btn btn-primary" >Save changes</button>
             </div>
         </div>
     </div>
@@ -251,7 +252,7 @@
         });
     };
 
-
+    //Show change upvote downvote
     document.addEventListener('DOMContentLoaded', function () {
         const votePostStatus = `${votePostStatus}`; // Đảm bảo votePostStatus là string
         if (votePostStatus.trim() === "") {
@@ -399,5 +400,57 @@
             });
         }
     }
+    $(document).ready(() => {
+        //Show edit comment
+        $('#editCommentModal').on('show.bs.modal', (event) => {
+            const button = $(event.relatedTarget); // Button that triggered the modal
+            const commentId = button.data('comment-id'); // Extract info from data-* attributes
 
+            $.ajax({
+                url: 'updateComment',
+                type: 'GET',
+                data: {commentId},
+                success: (data) => {
+                    // Assuming 'data' is the comment object in JSON format
+                    $('#editCommentId').val(data.commentId);
+                    $('#editCommentTextarea').val(data.content);
+                },
+                error: (xhr, status, error) => {
+                    console.error(`Failed to fetch comment: ${error}`);
+                }
+            });
+        });
+
+        // Save edited comment function
+        const saveEditedComment = () => {
+            // Get the edited comment ID and content from the modal
+            var commentId = $('#editCommentId').val();
+            var editedContent = $('#editCommentTextarea').val();
+            // Prepare the data to send in the AJAX request
+            var data = {
+                commentId: commentId,
+                content: editedContent
+            };
+            // Send an AJAX POST request to update comment
+            $.ajax({
+                type: 'POST',
+                url: 'updateComment', // Replace with your server endpoint to update comment
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    console.log('Comment edited successfully');
+                    // Optionally close the modal or perform other actions
+                    $('#editCommentModal').modal('hide'); // Example: Hide modal after successful save
+                },
+                error: function (xhr, status, error) {
+                    // Handle error
+                    console.error('Error editing comment:', error);
+                    // Optionally display an error message to the user
+                }
+            });
+        };
+
+        // Attach saveEditedComment function to the 'Save changes' button click
+        $('#saveEditedCommentBtn').on('click', saveEditedComment);
+    });
 </script>

@@ -6,9 +6,7 @@ package controller;
 
 import dal.CategoryDAO;
 import dal.GenreDAO;
-import dal.MediaDAO;
 import dal.PostDAO;
-import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -17,15 +15,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.Part;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import model.Category;
 import model.Genre;
-import model.Media;
 import model.Post;
 import model.User;
 

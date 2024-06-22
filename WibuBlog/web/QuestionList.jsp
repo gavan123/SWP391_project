@@ -12,9 +12,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Question list Page</title>
         <style>
-            .card {
-                border-radius: 15px; 
-            }
+            .card{border-radius:15px}
         </style>
     </head>
     <body>

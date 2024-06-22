@@ -40,9 +40,11 @@
                 <div class="col-lg-4 mb-2 mx-auto">
                     <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
                         <li class="d-flex align-items-center mr-4 font-weight-bold">
-                            <div class="vote-section" id="vote-section" >
-                                <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2" onclick="votePost('up')" ></i>
-                                <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" onclick="votePost('down')"></i>
+                            <div class="vote-section" id="vote-section">
+                                <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2"
+                                   onclick="votePost('up', '${votePostStatus}')"></i>
+                                <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
+                                   onclick="votePost('down', '${votePostStatus}')"></i>
                                 <span id="vote_value">${post.vote}</span>
                             </div>
                         </li>
@@ -199,7 +201,7 @@
 
     let voteStatus = 'unvote'; // Trạng thái ban đầu
 // Hàm xử lý upvote/downvote
-    const votePost = type => {
+    const votePost = (type, voteStatus) => {
         const voteValueElement = document.getElementById('vote_value');
         const postId = getUrlParameter('postId');
         if (!postId) {
@@ -243,6 +245,9 @@
                 }
             };
             xhr.send("postId=" + postId + "&vote_value=" + newVoteValue + "&vote_status=" + voteStatus);
+            setTimeout(() => {
+                location.reload();
+            }, 300); // Reload sau 1 giây (1000 milliseconds)
         });
     };
 
@@ -260,6 +265,7 @@
         } else if (votePostStatus === "downvote") {
             toggleVoteClass(false, true);
         }
+
     });
 
 // Thay đổi background của .comment-input-block .card-title

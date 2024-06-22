@@ -107,7 +107,14 @@
                         </p>
                         <div class="card comment-card" data-rank-color="${commentUserRank.color}">
                             <div class="card-body">
-                                ${comment.content}
+                                <c:choose>
+                                    <c:when test="${comment.status eq 'active'}">
+                                        ${comment.content}
+                                    </c:when>
+                                    <c:otherwise>
+                                        This comment has been deleted.
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                             <input id="commentId" type="hidden" value="${comment.commentId}" >
                         </div>

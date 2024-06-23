@@ -4,6 +4,10 @@
  */
 package controller;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+import dal.CommentDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,6 +15,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.time.LocalDateTime;
+import java.util.stream.Collectors;
+import model.Comment;
+import utility.LocalDateTimeAdapter;
 
 /**
  *
@@ -36,7 +46,7 @@ public class DeleteComment extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DeleteComment</title>");            
+            out.println("<title>Servlet DeleteComment</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet DeleteComment at " + request.getContextPath() + "</h1>");
@@ -71,7 +81,34 @@ public class DeleteComment extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            // Đọc dữ liệu JSON từ phần thân của yêu cầu
+            BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+            String jsonRequest = reader.lines().collect(Collectors.joining());
+            // Chuyển đổi JSON thành đối tượng Java sử dụng Gson
+            Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
+            Comment data = gson.fromJson(jsonRequest, Comment.class);
+            // Kiểm tra tính hợp lệ của dữ liệu đầu vào
+            if (data == null || data.getCommentId() <= 0) {
+                throw new IllegalArgumentException("Invalid data received");
+            }
+            // Lấy bình luận từ cơ sở dữ liệu
+            CommentDAO commentDAO = new CommentDAO();
+            // Cập nhật nội dung bình luận
+            commentDAO.deleteComment(data.getCommentId());
+            // Gửi phản hồi về cho client (frontend)
+            String jsonResponse = "{ \"status\": \"success\" }";
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(jsonResponse);
+        } catch (JsonSyntaxException | IOException | IllegalArgumentException e) {
+            // Xử lý ngoại lệ và gửi phản hồi lỗi về cho client
+            String errorResponse = "{ \"status\": \"error\", \"message\": \"" + e.getMessage() + "\" }";
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(errorResponse);
+        }
+
     }
 
     /**

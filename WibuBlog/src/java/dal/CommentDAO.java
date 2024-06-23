@@ -113,14 +113,18 @@ public class CommentDAO extends DBContext {
         PreparedStatement ps = null;
         try {
             String sql = "UPDATE Comment SET PostID = ?, UserID = ?, Content = ?, Status = ?, Vote = ?, "
-                    + "ParentID = ?, CreatedAt = ? WHERE CommentID = ?";
+                    + "ParentID = ?, CreateAt = ? WHERE CommentID = ?";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, comment.getPostId());
             ps.setInt(2, comment.getUserId());
             ps.setString(3, comment.getContent());
             ps.setString(4, comment.getStatus());
             ps.setInt(5, comment.getVote());
-            ps.setInt(6, comment.getParentId());
+            if (comment.getParentId() == null || comment.getParentId() == 0) {
+                ps.setNull(6, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(6, comment.getParentId());
+            }
             ps.setTimestamp(7, Timestamp.valueOf(comment.getCreateAt()));
             ps.setInt(8, comment.getCommentId());
             ps.executeUpdate();
@@ -202,9 +206,7 @@ public class CommentDAO extends DBContext {
         CommentDAO cod = new CommentDAO();
         List<Comment> coment = cod.getCommentsForPost(54);
         Comment cmt = cod.getCommentById(3);
-        System.out.println(cmt.getCreateAt());
-        for (Comment comment : coment) {
-            System.out.println(comment.getCommentId());
-        }
+        cmt.setContent("adsdasdsds");
+        cod.updateComment(cmt);
     }
 }

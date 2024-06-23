@@ -3,11 +3,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 
+
 <style>
 
-
-
 </style>
+
 <div class="col-lg-12 mb-2">
     <div class="card mb-2">
         <div class="card-body">
@@ -36,6 +36,9 @@
                 <br>
             </div>
             <hr>
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
+                <i class="fas fa-flag"></i> Report Post
+            </button>
             <div class="row">
                 <div class="col-lg-4 mb-2 mx-auto">
                     <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
@@ -70,7 +73,8 @@
                     <div class="border-0 bg-none mt-2 media align-items-center">
                         <div class="comment-avatar mr-2">
                             <img alt="${user.username}" title="${user.username}" 
-                                 src="${pageContext.request.contextPath}/${user.profilePhoto}" onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
+                                 src="${pageContext.request.contextPath}/${user.profilePhoto}"
+                                 onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
                         </div>
                         <div class="comment-input-block media-body">
                             <div class="d-flex justify-content-between align-items-center">
@@ -120,8 +124,10 @@
                         </div>
                         <div class="card-text comment-date">
                             <div class="vote-section vote-section-cmt" id="vote-section-cmt">
-                                <i  id="vote_comment_up" class="anticon anticon_vote anticon-arrow-up mr-2" onclick="voteComment('up', ${comment.commentId})" style="padding: 10px"></i>
-                                <i  id="vote_comment_down" class="anticon anticon_vote anticon-arrow-down mr-2" onclick="voteComment('down', ${comment.commentId})" style="padding: 10px"></i>
+                                <i  id="vote_comment_up" class="anticon anticon_vote anticon-arrow-up mr-2" 
+                                    onclick="voteComment('up', ${comment.commentId})" style="padding: 10px"></i>
+                                <i  id="vote_comment_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
+                                    onclick="voteComment('down', ${comment.commentId})" style="padding: 10px"></i>
                                 <span id="vote_comment_value">${comment.vote}</span>
                             </div>
                             <span class="badge badge-secondary">
@@ -139,15 +145,18 @@
                                 </button>
                             </c:if>
                         </div>
-                        <div id="replyComment_${comment.commentId}" class="replyComment justify-content-between align-items-center d-none">
-                            <textarea class="form-control" rows="2" id="msgReply" minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
-                            <button type="button" class="btn btn-success btn-submit-comment"
-                                    data-comment-id="${comment.commentId}"  onclick="sendMsgReply(this)">
-                                <i class="fas fa-paper-plane fa-2x"></i>
-                            </button>
-                        </div>
+                        <form action="replyComment" method="post">
+                            <div id="replyComment_${comment.commentId}" class="replyComment justify-content-between align-items-center d-none">
+                                <textarea class="form-control" rows="2" id="msgReply" minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
+                                <button type="submit" class="btn btn-success btn-submit-comment"
+                                        data-comment-id="${comment.commentId}"">
+                                    <i class="fas fa-paper-plane fa-2x"></i>
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
+
             </c:forEach>
             <c:if test="${empty commentsList}">
                 <p>No comments found.</p>
@@ -179,9 +188,7 @@
     </div>
 </div>
 </div>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editCommentModal">
-    Open Modal
-</button>
+
 
 <!-- Edit Comment Modal -->
 <div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" aria-labelledby="editCommentModalLabel" aria-hidden="true">
@@ -194,13 +201,76 @@
                 </button>
             </div>
             <div class="modal-body">
-                <input type="hidden" id="editCommentId" value="">
+                <input type="hidden" name="commentId" id="editCommentId" value="">
                 <textarea class="form-control" rows="3" id="editCommentTextarea" minlength="30" required placeholder="Enter your edited comment..."></textarea>
             </div>
             <div class="modal-footer">
                 <button id="deleteCommentBtn" type="button" class="btn btn-secondary" >Delete</button>
                 <button id="saveEditedCommentBtn" type="button" class="btn btn-primary" >Save changes</button>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Report Post Modal -->
+<div class="modal fade" id="reportPostModal" tabindex="-1" role="dialog" aria-labelledby="reportPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reportPostModalLabel">Report Post</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="reportPost" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="postId" id="reportPostId" value="">
+                    <div class="form-group">
+                        <label for="reportReasons">Select reasons for reporting:</label>
+                        <div id="reportReasons">
+                            <div class="checkbox-item">
+                                <div class=" checkbox-wrapper-31">
+                                    <input class="form-check-input " type="checkbox" name="reasons" id="spam" value="Spam">
+                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                                </div>
+                                <label class="form-check-label" for="spam">spam</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <div class="checkbox-wrapper-31">
+                                    <input class="form-check-input" type="checkbox" name="reasons" id="harassment" value="Harassment">
+                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                                </div>
+                                <label class="form-check-label" for="harassment">Harassment</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <div class="checkbox-wrapper-31">
+                                    <input class="form-check-input" type="checkbox" name="reasons" id="hateSpeech" value="Hate Speech">
+                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                                </div>
+                                <label class="form-check-label" for="hateSpeech">Hate Speech</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <div class="checkbox-wrapper-31">
+                                    <input class="form-check-input" type="checkbox" name="reasons" id="misinformation" value="Misinformation">
+                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                                </div>
+                                <label class="form-check-label" for="misinformation">Misinformation</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <div class="checkbox-wrapper-31">
+                                    <input class="form-check-input" type="checkbox" name="reasons" id="other" value="Other">
+                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                                </div>
+                                <label class="form-check-label" for="other">Other</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="cancelReportBtn" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button id="submitReportBtn" type="submit" class="btn btn-primary">Submit Report</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -285,9 +355,7 @@
             title.style.color = 'rgba(255, 255, 255, 0.15)';
             title.style.fontWeight = '800';
             title.style.position = 'relative';
-            title.style.webkitAnimation = 'shine-data-v-729833f6 1s infinite';
             title.style.webkitBackgroundClip = 'text';
-            title.style.webkitBackgroundSize = '300px';
         }
     });
 
@@ -441,18 +509,18 @@
             // Send an AJAX POST request to update comment
             $.ajax({
                 type: 'POST',
-                url: 'updateComment', // Replace with your server endpoint to update comment
+                url: 'updateComment',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
                 success: function (response) {
                     console.log('Comment edited successfully');
                     // Optionally close the modal or perform other actions
                     $('#editCommentModal').modal('hide'); // Example: Hide modal after successful save
+                    location.reload();
                 },
                 error: function (xhr, status, error) {
                     // Handle error
                     console.error('Error editing comment:', error);
-                    // Optionally display an error message to the user
                 }
             });
         };

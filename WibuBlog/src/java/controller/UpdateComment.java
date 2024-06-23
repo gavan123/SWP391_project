@@ -70,19 +70,14 @@ public class UpdateComment extends HttpServlet {
         try {
             // Lấy commentId từ request parameter
             int commentId = Integer.parseInt(request.getParameter("commentId"));
-
             // Gọi đến DAO để lấy thông tin bình luận
             CommentDAO commentDAO = new CommentDAO();
             Comment comment = commentDAO.getCommentById(commentId);
-
             // Kiểm tra xem bình luận có tồn tại không
             if (comment != null) {
                 // Convert comment to JSON sử dụng Gson
-                Gson gson = new GsonBuilder()
-                        .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-                        .create();
+                Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
                 String commentJson = gson.toJson(comment);
-
                 // Gửi phản hồi về cho client (frontend)
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
@@ -118,28 +113,22 @@ public class UpdateComment extends HttpServlet {
             // Đọc dữ liệu JSON từ phần thân của yêu cầu
             BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
             String jsonRequest = reader.lines().collect(Collectors.joining());
-
             // Chuyển đổi JSON thành đối tượng Java sử dụng Gson
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
             Comment data = gson.fromJson(jsonRequest, Comment.class);
-
             // Kiểm tra tính hợp lệ của dữ liệu đầu vào
             if (data == null || data.getCommentId() <= 0 || data.getContent() == null) {
                 throw new IllegalArgumentException("Invalid data received");
             }
-
             // Lấy bình luận từ cơ sở dữ liệu
             CommentDAO commentDAO = new CommentDAO();
             Comment cmt = commentDAO.getCommentById(data.getCommentId());
-
             if (cmt == null) {
                 throw new IllegalArgumentException("Comment not found with ID: " + data.getCommentId());
             }
-
             // Cập nhật nội dung bình luận
             cmt.setContent(data.getContent());
             commentDAO.updateComment(cmt);
-
             // Gửi phản hồi về cho client (frontend)
             String jsonResponse = "{ \"status\": \"success\" }";
             response.setContentType("application/json");

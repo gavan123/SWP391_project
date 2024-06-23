@@ -36,7 +36,7 @@ public class CommentDAO extends DBContext {
                         rs.getString("Content"),
                         rs.getString("Status"),
                         rs.getInt("Vote"),
-                        rs.getInt("ParentId"),
+                        rs.getObject("ParentId") != null ? rs.getInt("ParentId") : null,
                         rs.getTimestamp("CreateAt").toLocalDateTime()
                 );
             }
@@ -67,7 +67,39 @@ public class CommentDAO extends DBContext {
                         rs.getString("Content"),
                         rs.getString("Status"),
                         rs.getInt("Vote"),
-                        rs.getInt("ParentId"),
+                        rs.getObject("ParentId") != null ? rs.getInt("ParentId") : null,
+                        rs.getTimestamp("CreateAt").toLocalDateTime()
+                );
+                commentList.add(comment);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CommentDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        return commentList;
+    }
+
+    // Lấy tất cả Comment cho một bài Post
+    public List<Comment> getReplyComments(int parentId) {
+        List<Comment> commentList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT * FROM Comment WHERE CommentID = ? ORDER BY CreateAt DESC";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, parentId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Comment comment = new Comment(
+                        rs.getInt("CommentID"),
+                        rs.getInt("PostID"),
+                        rs.getInt("UserID"),
+                        rs.getString("Content"),
+                        rs.getString("Status"),
+                        rs.getInt("Vote"),
+                        rs.getObject("ParentId") != null ? rs.getInt("ParentId") : null,
                         rs.getTimestamp("CreateAt").toLocalDateTime()
                 );
                 commentList.add(comment);
@@ -205,9 +237,9 @@ public class CommentDAO extends DBContext {
     public static void main(String[] args) {
         CommentDAO cod = new CommentDAO();
         List<Comment> coment = cod.getCommentsForPost(54);
-        cod.deleteComment(3);
-        Comment cmt = cod.getCommentById(3);
-        System.out.println(cmt.getStatus());
+        for (Comment comment : coment) {
+            System.out.println(comment.getParentId());
+        }
 
     }
 }

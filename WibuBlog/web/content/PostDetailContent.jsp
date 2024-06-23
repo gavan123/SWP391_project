@@ -524,8 +524,36 @@
                 }
             });
         };
-
         // Attach saveEditedComment function to the 'Save changes' button click
         $('#saveEditedCommentBtn').on('click', saveEditedComment);
+
+        // Save edited comment function
+        const deleteComment = () => {
+            // Get the edited comment ID and content from the modal
+            var commentId = $('#editCommentId').val();
+            // Prepare the data to send in the AJAX request
+            var data = {
+                commentId: commentId,
+            };
+            // Send an AJAX POST request to update comment
+            $.ajax({
+                type: 'POST',
+                url: 'updateComment',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    console.log('Comment edited successfully');
+                    // Optionally close the modal or perform other actions
+                    $('#editCommentModal').modal('hide'); // Example: Hide modal after successful save
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    // Handle error
+                    console.error('Error editing comment:', error);
+                }
+            });
+        };
+        // Attach saveEditedComment function to the 'Save changes' button click
+        $('#deleteCommentBtn').on('click', deleteComment);
     });
 </script>

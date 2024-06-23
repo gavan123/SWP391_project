@@ -139,7 +139,7 @@ public class CommentDAO extends DBContext {
     public void deleteComment(int commentId) {
         PreparedStatement ps = null;
         try {
-            String sql = "DELETE FROM Comment WHERE CommentID = ?";
+            String sql = "UPDATE Comment SET Status='deactive', Vote = 0 WHERE CommentID = ?";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, commentId);
             ps.executeUpdate();
@@ -205,8 +205,9 @@ public class CommentDAO extends DBContext {
     public static void main(String[] args) {
         CommentDAO cod = new CommentDAO();
         List<Comment> coment = cod.getCommentsForPost(54);
+        cod.deleteComment(3);
         Comment cmt = cod.getCommentById(3);
-        cmt.setContent("adsdasdsds");
-        cod.updateComment(cmt);
+        System.out.println(cmt.getStatus());
+
     }
 }

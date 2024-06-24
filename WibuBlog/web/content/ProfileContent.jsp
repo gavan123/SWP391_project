@@ -7,7 +7,7 @@
 <%@ page import="dal.MediaDAO" %>
 <%@ page import="dal.PostDAO" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="model.Post" %>
+<%@ page import="model.PostDetail" %>
 <link rel="stylesheet" href="assets/css/testcss.css">
 <link rel="stylesheet" href="assets/css/testcss2.css">
 <% User user = (User)session.getAttribute("user");
@@ -134,17 +134,65 @@
                     </c:choose>
     <%
         PostDAO postDAO = new PostDAO();
-        ArrayList<Post> userPostList = postDAO.getUserPost(user.getUserId());
+        ArrayList<PostDetail> userPostList = postDAO.getPostDetailByUserId(user.getUserId());
     %>
                     <br>
                     <h5>Posts</h5>
                     <div class="m-t-20">
                         <c:choose>
-                        <c:when test="${userPostList == null}">
-                            <p>you've not posted anything. Get started by <a href="createPost">create a post</a></p>  
+                        <c:when test="${userPostList.isEmpty}">
+                            <p>You've not posted anything. Get started by <a href="createPost">create a post</a></p>  
                         </c:when>
                         <c:otherwise>
-                            <p>What are your thought ? Not mind sharing it by <a href="createPost">creating a post</a></p>  
+                            <p >What are your thoughts. Don't mind sharing by <a href="createPost">creating a post</a></p>  
+                            <hr>
+                            <h5>Your posts</h5>
+                            <c:forEach items="<%=userPostList%>" var="post">
+                              <div class="card mb-2" onclick="redirectToLink('${pageContext.request.contextPath}/postDetail?postId=${post.postID}')">
+                                <div class="card-body">
+                                    <header>
+                                        <h1 class="card-title" style="font-size: 26px;line-height:34px">${post.title}</h1>
+                                    </header>
+                                    <h6 class="card-subtitle mb-2 fw-700" style="font-size: small !important;">
+                                        <i class="fas fa-user"></i> 
+                                        <a href="#" style="color:blue" accesskey="a">${post.username}</a> | 
+                                        <i class="fas fa-clock"></i>
+                                        <time datetime="${postTime}">${postTime}</time> | 
+                                        <i class="fas fa-eye"></i> ${post.view}
+                                    </h6>
+                                    <h3 class="fs-14 border-bottom-badge-eee">
+                                        <span class="badge badge-info mr-1">
+                                            <a class="text-white" href="postListByCategory?name=${post.categoryName}">${post.categoryName}</a>
+                                        </span>
+                                        <span class="badge badge-primary mr-1">
+                                            <a class="text-white" href="#">${post.genreName}</a>
+                                        </span>
+                                    </h3>
+                                    <div class="card-text fs-content" style="font-size: 18px;">
+                                        ${post.content}
+                                        <br>
+                                        <br>
+                                        <br>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-lg-4 mb-2 mx-auto">
+                                            <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
+                                                <li class="d-flex align-items-center mr-4 font-weight-bold">
+                                                    <div class="vote-section" id="vote-section">
+                                                        <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2"
+                                                           onclick="votePost('up', '${votePostStatus}')"></i>
+                                                        <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
+                                                           onclick="votePost('down', '${votePostStatus}')"></i>
+                                                        <span id="vote_value">${post.vote}</span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                  </c:forEach>
                         </c:otherwise>
                             </c:choose>
                     </div>
@@ -339,12 +387,12 @@
                 this.value = '';
         }
     };
-</script>
-
-<script>
-  function togglePopup(){
+     function redirectToLink(url) {
+        window.location.href = url;
+    }
+      function togglePopup(){
       document.getElementById("popup-1").classList.toggle("active");
   } 
+
+
 </script>
-
-

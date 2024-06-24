@@ -287,7 +287,7 @@ public class PostDAO extends DBContext {
         try {
             String sql = "SELECT p.PostID, u.Username, c.[Name] AS CategoryName, g.[Name] AS GenreName, "
                     + "p.Title, p.Content, p.Source, p.[Image], p.PostTime, p.[Status], p.Vote, p.[View], "
-                    + "r.[Name] AS [Rank], r.Color "
+                    + "r.[Name] AS [Rank], r.Color ,u.[Bio]"
                     + "FROM Post AS p "
                     + "JOIN [User] AS u ON p.UserID = u.UserID "
                     + "JOIN [Category] AS c ON p.CategoryID = c.CategoryID "
@@ -313,7 +313,8 @@ public class PostDAO extends DBContext {
                         rs.getInt("Vote"),
                         rs.getInt("View"),
                         rs.getString("Rank"),
-                        rs.getString("Color")
+                        rs.getString("Color"),
+                        rs.getString("Bio")
                 );
             }
         } catch (SQLException ex) {
@@ -535,8 +536,12 @@ public class PostDAO extends DBContext {
 
     public static void main(String[] args) {
         PostDAO postDAO = new PostDAO();
-        System.out.println(postDAO.checkVoteStatus(1, 54));
-
+        PostDetail post = postDAO.getPostDetailById(54);
+        if (post != null) {
+            System.out.println(post.getBio());
+        } else {
+            System.out.println("No post found with the given postID.");
+        }
     }
 
 }

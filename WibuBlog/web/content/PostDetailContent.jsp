@@ -57,6 +57,29 @@
         </div>
     </div>
 
+<!--    Post user-->
+    <div class="card mb-2">
+        <img class="img-thumbnail rounded-circle mx-auto d-block mt-2" 
+             alt="${post.username}" title="${post.username}" 
+             style="width:120px;height:120px" 
+             src="${pageContext.request.contextPath}/${post.image}"
+             onerror="this.src='assets/images/others/product-3.jpg'">
+        <div class="card-body">
+            <p class="card-title text-center fw-700 mb-0">
+                <a style="color:blue" href="#">${post.username}</a>
+            </p>
+            <p class="text-center mb-0">
+                <span class="font-status text-capitalize" 
+                      style="background:${post.color} ;color: rgba(255, 255, 255, 0.15);font-weight:800; position: relative;-webkit-background-clip: text;">
+                    ${post.rank}
+                </span>
+            </p>
+            <hr>
+            <p class="card-text text-center font-status">"${post.bio}"</p>
+        </div>
+    </div>
+        
+    <!--     Comment                       -->
     <div class="card mb-2 border-0">
         <div class="card-body">
             <c:choose>

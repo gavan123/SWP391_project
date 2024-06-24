@@ -44,6 +44,26 @@ public class GenreDAO extends DBContext {
         return null;
     }
 
+    public List<Genre> getAllGenresName() {
+        List<Genre> genreList = new ArrayList<>();
+        String sql = "SELECT GenreID, [Name] FROM Genre";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                int genreID = rs.getInt("GenreID");
+                String name = rs.getString("Name");
+                Genre genre = new Genre(genreID, name);
+                genreList.add(genre);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(GenreDAO.class.getName()).log(Level.SEVERE, "Error fetching genres", ex);
+        }
+
+        return genreList;
+    }
+
     // Lấy tất cả Genre
     public List<Genre> getAllGenres() {
         List<Genre> genreList = new ArrayList<>();
@@ -118,4 +138,5 @@ public class GenreDAO extends DBContext {
         }
     }
 
+    
 }

@@ -34,6 +34,31 @@ public class CategoryDAO extends DBContext {
         return null;
     }
 
+    // Lấy một Category bằng Name
+    public Category getCategoryByName(String categoryName) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT * FROM Category WHERE Name = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, categoryName);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Category(
+                        rs.getInt("CategoryID"),
+                        rs.getString("Name"),
+                        rs.getString("Description")
+                );
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        return null;
+    }
+
     // Lấy tất cả Category
     public List<Category> getAllCategories() {
         List<Category> categoryList = new ArrayList<>();
@@ -110,10 +135,58 @@ public class CategoryDAO extends DBContext {
 
     public static void main(String[] args) {
         CategoryDAO cateDAO = new CategoryDAO();
-        List<Category> cate = cateDAO.getAllCategories();
+        List<Category> cate = cateDAO.getCategoryNames();
 
         for (Category category : cate) {
             System.out.println(category.getCategoryId() + ":" + category.getName());
         }
     }
+
+    //lấy tên category
+    public List<Category> getCategoryNames() {
+        List<Category> categoryList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT [CategoryID], [Name] FROM Category";
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Category category = new Category();
+                category.setCategoryId(rs.getInt("CategoryID"));
+                category.setName(rs.getString("Name"));
+                categoryList.add(category);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        closeResultSet(rs);
+        closePreparedStatement(ps);
+        return categoryList;
+    }
+
+    public List<Category> getCategoryDetail() {
+        List<Category> categoryList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT [Name], [Description] FROM Category";
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Category category = new Category(
+                        rs.getString("Name"),
+                        rs.getString("Description")
+                );
+                categoryList.add(category);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(CategoryDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        return categoryList;
+    }
+
 }

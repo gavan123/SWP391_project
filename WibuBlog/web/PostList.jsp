@@ -11,12 +11,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Post list Page</title>
         <style>
-            .posts-img {
-                width: 200px; 
-                height: auto; 
-                object-fit: cover; 
-                border-radius: 5px; 
-            }
+            .posts-img{width:200px;height:auto;object-fit:cover;border-radius:5px}
         </style>
     </head>
     <body>

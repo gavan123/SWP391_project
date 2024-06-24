@@ -37,14 +37,21 @@
 
 .popup {
     display: none; /* Ensure the popup is hidden initially */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1;
 }
 
 .popup .overlay {
-    position: fixed;
-    top: 0px;
-    left: 0px;
-    width: 100vw;
-    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(0, 0, 0, 0.7);
     z-index: 1;
 }
@@ -56,7 +63,7 @@
     transform: translate(-50%, -50%) scale(0);
     background: #fff;
     width: 450px;
-    height: 220px;
+    height: 250px;
     z-index: 2;
     text-align: center;
     padding: 20px;
@@ -87,3 +94,8 @@
 .popup.active .content {
     transform: translate(-50%, -50%) scale(1);
 }
+
+
+/**/
+
+

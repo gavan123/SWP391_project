@@ -6,7 +6,6 @@
 package utility;
 
 import java.time.LocalDateTime;
-import utility.Email;
 
 /**
  *
@@ -19,12 +18,12 @@ public class ContentDelivery {
         String subject = "Confirm registration for account " + username;
 
         String content = "Hi " + username + ",\n\n";
-        content += "Thank you for creating an account with Wibu Blog. Please use the code below to verify your email address and complete your account registration:\n\n";
+        content += "Thank you for creating an account with Wibu Forum. Please use the code below to verify your email address and complete your account registration:\n\n";
         content += code + "\n\n";
         content += "We look forward to seeing you at Wibu Blog!\n";
         content += "- Wibu Forum Team\n\n";
         content += "Sent at: " + LocalDateTime.now() + "\n";
-        content += "(This message is automated. Please do not respond to this email. Wibu Blog and the team will never ask for your password or this verifivation code)\n";
+        content += "(This message is automated. Please do not respond to this email. Wibu Forum and the team will never ask for your password or this verifivation code.)\n";
         
         Email.sendMail(from, to, subject, content);
     }
@@ -39,7 +38,7 @@ public class ContentDelivery {
         content += "If you didn't make this request, you can safely ignore this email.\n";
         content += "- Wibu Forum Team\n\n";
         content += "Sent at: " + LocalDateTime.now() + "\n";
-        content += "(This message is automated. Please do not respond to this email. Wibu Blog and the team will never ask for your password or this verifivation code)\n";
+        content += "(This message is automated. Please do not respond to this email. Wibu Forum and the team will never ask for your password or this verifivation code.)\n";
         
         Email.sendMail(from, to, subject, content);
     }
@@ -49,38 +48,38 @@ public class ContentDelivery {
 
         String content = "Hi " + username + ",\n\n";
         content += "The password for your account " + username + " has recently been updated.\n\n";
-        content += "Thank you being a member of Wibu Blog!\n";
+        content += "Thank you being a member of Wibu Forum!\n";
         content += "- Wibu Forum Team\n\n";
         content += "Sent at: " + LocalDateTime.now() + "\n";
-        content += "(This message is automated. Please do not respond to this email. Wibu Blog and the team will never ask for your password or this verifivation code)\n";
+        content += "(This message is automated. Please do not respond to this email. Wibu Blog and the team will never ask for your password or this verifivation code.)\n";
 
         Email.sendMail(from, to, subject, content);
     }
     
-     public static void sendEmailChangingVerification(String to, String username, String code) {
-        String subject = "Comfirm new email request for account " + username;
+     public static void sendEmailChangeVerification(String to, String username, String code) {
+        String subject = "Comfirm new email address for account " + username;
 
         String content = "Hi " + username + ",\n\n";
-        content += "We have received a request set new email for your account " + username + "\n";
-        content += "To set " + username +" to this email, please verify your identity using the code below:\n\n";
+        content += "We have received a request to set " + to + " as the new email address for your account " + username + "\n";
+        content += "To confirm this action, please verify your identity using the code below:\n\n";
         content += code + "\n\n";
         content += "If you didn't make this request, you can safely ignore this email.\n";
         content += "- Wibu Forum Team\n\n";
         content += "Sent at: " + LocalDateTime.now() + "\n";
-        content += "(This message is automated. Please do not respond to this email. Wibu Blog and the team will never ask for your password or this verifivation code)\n";
+        content += "(This message is automated. Please do not respond to this email. Wibu Forum and the team will never ask for your password or this verifivation code.)\n";
         
         Email.sendMail(from, to, subject, content);
     }
      
-      public static void sendChangedMailAlert(String to, String username) {
+      public static void sendEmailChangeAlert(String to, String username) {
         String subject = "Security alert for account " + username;
 
         String content = "Hi " + username + ",\n\n";
-        content += "This email has recently been set for account: " + username + ".";
+        content += "The email address " + to + " has recently been set as the email address for your account: " + username + ".";
         content += "Thank you being a member of Wibu Blog!\n";
         content += "- Wibu Forum Team\n\n";
         content += "Sent at: " + LocalDateTime.now() + "\n";
-        content += "(This message is automated. Please do not respond to this email. Wibu Blog and the team will never ask for your password)\n";
+        content += "(This message is automated. Please do not respond to this email. Wibu Blog and the team will never ask for your password.)\n";
 
         Email.sendMail(from, to, subject, content);
     }

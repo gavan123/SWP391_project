@@ -19,13 +19,13 @@ import jakarta.servlet.http.Part;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 import model.Media;
 import model.User;
+import security.SignatureVerification;
 
 @MultipartConfig
 @WebServlet(name = "UploadPFP", urlPatterns = {"/UploadPFP"})
@@ -58,11 +58,10 @@ public class UploadPFP extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //create user object to insert to database
+        MediaDAO mediaDAO = new MediaDAO();
         PrintWriter out = response.getWriter();
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-        MediaDAO mediaDAO = new MediaDAO();
-
         //fetch file from jsp
         Part file = request.getPart("pfp");
         String imageFileName = file.getSubmittedFileName();
@@ -80,34 +79,43 @@ public class UploadPFP extends HttpServlet {
             //upload file to path
             fos.write(data);
             fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
         }
-        
-        
+
         //encode file name in case of duplicate file name but different content
         File source = new File("C:\\Users\\admin\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + imageFileName); //sua duong dan 
-        File target = new File("C:\\Users\\admin\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + encodedMediaName); //sua duong dan 
-         if (source.renameTo(target)) {                   
-            out.println("File is renamed"); 
-        } 
-        else { 
-            out.println("File cannot be renamed"); 
-        } 
-        Media media = new Media(0,
-                user.getUserId(),
-                mediaDAO.encodeMediaName(user.getUserId()),
-                "http://localhost:9999/WibuBlog/PFP/" + encodedMediaName,
-                mediaDAO.getExtension(imageFileName),
-                LocalDateTime.now());
 
-        //insert into database
-        mediaDAO.insertMedia(media);
-        UserDAO userDAO = new UserDAO();
-        userDAO.updateProfilePhoto(user.getUserId(), mediaDAO.getMediaJustInserted(user.getUserId()));
-        user.setProfilePhoto(mediaDAO.getMediaJustInserted(user.getUserId()));
+        // if uploaded file is not an image file, deletes the file, set error message and redirects to profile
+        if (!SignatureVerification.isImageFile(source)) {
+            source.delete();
+            request.setAttribute("errorMessage", "Invalid file type!");
+            request.getRequestDispatcher("Profile.jsp").forward(request, response);
+        }
+
+        File target = new File("C:\\Users\\admin\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + encodedMediaName); //sua duong dan 
+        if (source.renameTo(target)) {
+            out.println("File is renamed");
+            
+            Media media = new Media(0,
+                    user.getUserId(),
+                    mediaDAO.encodeMediaName(user.getUserId()),
+                    "http://localhost:9999/WibuBlog/PFP/" + encodedMediaName,
+                    mediaDAO.getExtension(imageFileName),
+                    LocalDateTime.now());
+
+            //insert into database
+            mediaDAO.insertMedia(media);
+            UserDAO userDAO = new UserDAO();
+            userDAO.updateProfilePhoto(user.getUserId(), mediaDAO.getMediaJustInserted(user.getUserId()));
+            user.setProfilePhoto(mediaDAO.getMediaJustInserted(user.getUserId()));
+            
+        } else {
+            out.println("File cannot be renamed");
+        }
+
         //go back to profile
-         response.sendRedirect("Profile.jsp");
+        response.sendRedirect("Profile.jsp");
     }
 
     @Override

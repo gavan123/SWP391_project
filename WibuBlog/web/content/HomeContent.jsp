@@ -3,43 +3,19 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <jsp:useBean id="p" scope="request" class="dal.PostDAO" />
 
-<%--<c:choose>
-    <c:when test="${empty user}">
-        <form action="login" method="get" class="form-button m-2">
-            <button type="submit" class="btn btn-primary">Login</button>
-        </form>
-    </c:when>
-    <c:otherwise>
-        <h2>Welcome, <c:out value="${user.username}" />!</h2>
-        <p>Id: <c:out value="${user.userId}" /></p>
-        <p>Full Name: <c:out value="${user.fullName}" /></p>
-        <p>Point: <c:out value="${user.point}" /></p>
-        <p>Phone: <c:out value="${user.phoneNumber}" /></p>
-        <form action="profile" method="post" class="form-button m-2">
-            <input type="hidden" name="userId" value="<c:out value='${user.userId}' />">
-            <button type="submit" class="btn btn-primary">My Profile</button>
-        </form>
-        <form action="changePassword" method="get" class="form-button m-2">
-            <button type="submit" class="btn btn-primary">Change Password</button>
-        </form>
-        <form id="deleteAccountForm" action="deleteAccount" method="post" class="form-button m-2">
-            <button type="button" class="btn btn-primary" onclick="confirmDelete()">Delete Account</button>
-        </form>
-        <form action="logout" method="get" class="form-button m-2">
-            <button type="submit" class="btn btn-primary">Logout</button>
-        </form>
-    </c:otherwise>
-</c:choose>--%>
+
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <form name="imageUpload" action="imageUpload" method="POST" enctype="multipart/form-data" class="border p-4">
+        <div class="col-md-6">      
+            <label for="image">What are you thinking ?</label>
+            <a href="createPost">Create a post</a>
+<!--            <form name="imageUpCopy" action="imageUpCopy" method="POST" enctype="multipart/form-data" class="border p-4">
                 <div class="form-group">
                     <label for="image">Choose Images:</label>
                     <input type="file" class="form-control-file" name="image" id="image" accept="image/png,image/jpeg,image/jpg,image/bmp,image/gif" multiple>
                 </div>
                 <button type="submit" class="btn btn-primary">Upload Images</button>
-            </form>
+            </form>-->
         </div>
     </div>
 </div>
@@ -52,7 +28,7 @@
         <h3 class="card-header-h3 fs-16">
             Q &amp; A
             <span class="float-right text-uppercase">
-                <a href="question">Xem thêm</a>
+                <a href="question">More</a>
             </span>
         </h3>
     </div>
@@ -61,7 +37,7 @@
             <c:forEach var="post" items="${p.getLimitedPostsByCategory(5,10)}">
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="col-10 text-truncate font-weight-bold">
-                        <a href="${post.source}">${post.title}</a>
+                        <a href="postDetail?postId=${post.postId}">${post.title}</a>
                     </div>
                     <span class="badge badge-primary badge-pill">
                         <i class="far fa-comment-dots fa-lg"></i>
@@ -76,7 +52,7 @@
 <div class="card mb-2 rounded-3 border-0">
     <div class="card-header" id="top"><h3 class="card-header-h3 fs-16">New Post
             <span class="float-right text-uppercase">
-                <a href="postList">Xem thêm</a>
+                <a href="postList">More</a>
             </span></h3></div>
     <div class="card-body">
         <!-- Swiper slider -->
@@ -85,9 +61,9 @@
                 <c:forEach var="post" items="${p.getLimitedPosts(10)}">
                     <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
                         <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
-                        <span class="badge badge-danger posts-badge-2 text-truncate">${post.status}</span>
-                        <a href="${post.source}" id="new_post0">
-                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
+                        <a href="postDetail?postId=${post.postId}" id="new_post0">
+                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${pageContext.request.contextPath}/images/game/${post.image}" 
+                                 onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
                             <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
                         </a>
                     </div>
@@ -107,7 +83,7 @@
 <div class="card mb-2 rounded-3 border-0">
     <div class="card-header" id="top"><h3 class="card-header-h3 fs-16">Anime Reviews
             <span class="float-right text-uppercase">
-                <a href="postListByCategory?categoryId=1">Xem thêm</a>
+                <a href="postListByCategory?categoryId=1">More</a>
             </span></h3></div>
     <div class="card-body">
         <!-- Swiper slider -->
@@ -116,9 +92,8 @@
                 <c:forEach var="post" items="${p.getLimitedPostsByCategory(10, 1)}">
                     <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
                         <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
-                        <span class="badge badge-danger posts-badge-2 text-truncate">${post.status}</span>
-                        <a href="${post.source}" id="new_post0">
-                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
+                        <a href="postDetail?postId=${post.postId}" >
+                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${pageContext.request.contextPath}/images/game/${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
                             <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
                         </a>
                     </div>
@@ -136,7 +111,7 @@
 <div class="card mb-2 rounded-3 border-0">
     <div class="card-header" id="top"><h3 class="card-header-h3 fs-16">Character Analysis
             <span class="float-right text-uppercase">
-                <a href="postListByCategory?categoryId=2">Xem thêm</a>
+                <a href="postListByCategory?categoryId=2">More</a>
             </span></h3></div>
     <div class="card-body">
         <!-- Swiper slider -->
@@ -145,9 +120,8 @@
                 <c:forEach var="post" items="${p.getLimitedPostsByCategory(10, 2)}">
                     <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
                         <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
-                        <span class="badge badge-danger posts-badge-2 text-truncate">${post.status}</span>
-                        <a href="${post.source}" id="new_post0">
-                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
+                        <a href="postDetail?postId=${post.postId}" id="new_post0">
+                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${pageContext.request.contextPath}/images/game/${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
                             <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
                         </a>
                     </div>
@@ -165,7 +139,7 @@
 <div class="card mb-2 rounded-3 border-0">
     <div class="card-header" id="top"><h3 class="card-header-h3 fs-16">Plot Analysis 
             <span class="float-right text-uppercase">
-                <a href="postListByCategory?categoryId=3">Xem thêm</a>
+                <a href="postListByCategory?categoryId=3">More</a>
             </span></h3></div>
     <div class="card-body">
         <!-- Swiper slider -->
@@ -174,9 +148,9 @@
                 <c:forEach var="post" items="${p.getLimitedPostsByCategory(10, 3)}">
                     <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
                         <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
-                        <span class="badge badge-danger posts-badge-2 text-truncate">${post.status}</span>
-                        <a href="${post.source}" id="new_post0">
-                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
+<!--                        <span class="badge badge-danger posts-badge-2 text-truncate">${post.status}</span>-->
+                        <a href="postDetail?postId=${post.postId}">
+                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${pageContext.request.contextPath}/images/game/${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
                             <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
                         </a>
                     </div>
@@ -194,7 +168,7 @@
 <div class="card mb-2 rounded-3 border-0">
     <div class="card-header" id="top"><h3 class="card-header-h3 fs-16">Interviews
             <span class="float-right text-uppercase">
-                <a href="postListByCategory?categoryId=8">Xem thêm</a>
+                <a href="postListByCategory?categoryId=8">More</a>
             </span></h3></div>
     <div class="card-body">
         <!-- Swiper slider -->
@@ -203,9 +177,9 @@
                 <c:forEach var="post" items="${p.getLimitedPostsByCategory(10, 8)}">
                     <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
                         <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
-                        <span class="badge badge-danger posts-badge-2 text-truncate">${post.status}</span>
-                        <a href="${post.source}" id="new_post0">
-                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
+                        <!--<span class="badge badge-danger posts-badge-2 text-truncate">${post.status}</span>-->
+                        <a href="postDetail?postId=${post.postId}">
+                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${pageContext.request.contextPath}/images/game/${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
                             <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
                         </a>
                     </div>
@@ -219,20 +193,3 @@
         </div>
     </div>
 </div>
-<script>
-    function confirmDelete() {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById('deleteAccountForm').submit();
-            }
-        })
-    }
-</script>

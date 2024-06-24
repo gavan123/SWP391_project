@@ -26,7 +26,7 @@
             <div class="card mb-2 rounded-2">
                 <div class="card-body">
                     <h2 class="card-title">
-                        <a href="#" />${post.title}</a>
+                        <a href="postDetail?postId=${post.postId}" />${post.title}</a>
                     </h2>
                     <img class="float-left posts-img img-thumbnail mr-2" src="${post.image}" onerror="this.src='assets/images/others/product-3.jpg'">
                     <p class="card-text">${post.content}</p>
@@ -55,7 +55,44 @@
             </div>
         </div>
 
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <c:if test="${currentPage > 1}">
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">First</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=${currentPage - 1}">Previous</a>
+                    </li>
+                </c:if>
 
+                <!-- Current page and surrounding pages -->
+                <c:if test="${currentPage > 1}">
+                    <li class="page-item">
+                        <a class="page-link" href="?page=${currentPage - 2}">${currentPage - 2}</a>
+                    </li>
+                </c:if>
+
+                <li class="page-item active">
+                    <a class="page-link" href="?page=${currentPage}">${currentPage}</a>
+                </li>
+
+                <c:if test="${currentPage < totalPages}">
+                    <li class="page-item">
+                        <a class="page-link" href="?page=${currentPage + 2}">${currentPage + 2}</a>
+                    </li>
+                </c:if>
+
+                <c:if test="${currentPage < totalPages}">
+                    <li class="page-item">
+                        <a class="page-link" href="?page=${currentPage + 1}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=${totalPages}">Last</a>
+                    </li>
+                </c:if>
+            </ul>
+        </nav>
 
     </div>
 </div>

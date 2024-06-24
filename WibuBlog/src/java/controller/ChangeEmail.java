@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import model.User;
 import utility.ContentDelivery;
 import utility.KeyGenerator;
@@ -83,7 +84,7 @@ public class ChangeEmail extends HttpServlet {
         }
         else {
             String verificationCode = KeyGenerator.generateVerificationCode();
-            ContentDelivery.sendEmailChangingVerification(newEmail, user.getUsername(), verificationCode);
+            ContentDelivery.sendEmailChangeVerification(newEmail, user.getUsername(), verificationCode);
             session.setAttribute("template", verificationCode);
             session.setAttribute("newEmail", newEmail);
             request.setAttribute("message", "An OTP have been sent to " + newEmail + " please login to verify to change your email.");

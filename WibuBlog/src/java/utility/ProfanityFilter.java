@@ -30,8 +30,8 @@ public class ProfanityFilter {
     // put words where they belong!
     static {
         try {
-            var profanitiesList = new File("assets\\profanities.txt");
-            var multiWordProfanitiesList = new File("assets\\multiwordprofanities.txt");
+            var profanitiesList = new File("C:\\Users\\admin\\Documents\\GitHub\\SWP391_project\\WibuBlog\\assets\\profanities.txt");
+            var multiWordProfanitiesList = new File("C:\\Users\\admin\\Documents\\GitHub\\SWP391_project\\WibuBlog\\assets\\multiwordprofanities.txt");
 
             Scanner sc1 = new Scanner(profanitiesList);
             Scanner sc2 = new Scanner(multiWordProfanitiesList);
@@ -93,6 +93,7 @@ public class ProfanityFilter {
         normalizedText = normalizedText.replaceAll("\\~", " ");
         normalizedText = normalizedText.replaceAll("\\`", " ");
         normalizedText = normalizedText.replaceAll("\\=", " ");
+        normalizedText = normalizedText.replaceAll("\\:", " ");
         normalizedText = normalizedText.replaceAll("\\s+", " ");
         normalizedText = normalizedText.replaceAll("\\đ", "d"); // special case bc diacritic removal ignores this
 
@@ -141,6 +142,8 @@ public class ProfanityFilter {
     }
 
     public static boolean checkProfanity(String text) {
-        return calculateProfanityPercentage(text) > 0;
+        return calculateProfanityPercentage(text) > 0 ;
     }
+    
+
 }

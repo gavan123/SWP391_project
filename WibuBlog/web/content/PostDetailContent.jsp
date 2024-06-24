@@ -1,119 +1,57 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+
+
+<style>
+
+</style>
 
 <div class="col-lg-12 mb-2">
     <div class="card mb-2">
         <div class="card-body">
             <header>
-                <h1 class="card-title" style="font-size: 26px;line-height:34px">Nhĩ Căn: Cảm xúc qua từng bộ truyện</h1>
+                <h1 class="card-title" style="font-size: 26px;line-height:34px">${post.title}</h1>
             </header>
             <h6 class="card-subtitle mb-2 fw-700" style="font-size: small !important;">
-                <i class="mdi mdi-account"></i> <a href="//vidian.vn/author/6207226a7e7ba133ed79ce1b" style="color:blue" accesskey="a">Họ Bạch</a> | <i class="mdi mdi-clock"></i> <time datetime="2022-08-25">2022-08-25</time> | <i class="mdi mdi-eye"></i> 3547
+                <i class="fas fa-user"></i> 
+                <a href="#" style="color:blue" accesskey="a">${post.username}</a> | 
+                <i class="fas fa-clock"></i>
+                <time datetime="${postTime}">${postTime}</time> | 
+                <i class="fas fa-eye"></i> ${post.view}
             </h6>
             <h3 class="fs-14 border-bottom-badge-eee">
-                <span class="badge badge-info mr-1"><a class="text-white" href="////vidian.vn/danh-muc/tac-gia/1">Tác giả</a></span>
-                <span class="badge badge-primary mr-1"><a class="text-white" href="//vidian.vn/the-loai/huyen-huyen/1">Huyền huyễn</a></span>
+                <span class="badge badge-info mr-1">
+                    <a class="text-white" href="postListByCategory?name=${post.categoryName}">${post.categoryName}</a>
+                </span>
+                <span class="badge badge-primary mr-1">
+                    <a class="text-white" href="#">${post.genreName}</a>
+                </span>
             </h3>
-            <div class="card-text fs-content">
-                <p><span style="font-size:14px">Nhĩ Căn: "Có một câu, có thể ví dụ cho câu chuyện này." một câu chuyện đang được chấp bút?</span></p>
-                <p><strong><span style="color:#c0392b"><span style="font-size:16px">"Trầm mê trong liệt hỏa,</span></span></strong></p>
-                <p><strong><span style="color:#c0392b"><span style="font-size:16px">chỉ có bất tử phượng hoàng,</span></span></strong></p>
-                <p><strong><span style="color:#c0392b"><span style="font-size:16px">đôi cánh dù cháy tan,</span></span></strong></p>
-                <p><strong><span style="color:#c0392b"><span style="font-size:16px">cũng muốn ý chí ở thiên đàng bay lượn!"</span></span></strong></p>
-                <p>&nbsp;</p>
-                <p><span style="font-size:14px">Dưới đây là nguyên trích dẫn của lão.</span></p>
-                <p>&nbsp;</p>
-                <p><span style="font-size:14px">"Cảm nghĩ sau 12 năm sáng tác kiếm cơm.</span></p>
-                <p><span style="font-size:14px">Bất tri bấc giác, <strong>Tam Thốn Nhân Gian</strong> kết thúc đã được vài tháng, mà từ khi ta bắt đầu viết lách đến nay, cũng đã 12 năm.</span></p>
-                <p><span style="font-size:14px">Nhớ lại lúc ban đầu, năm 200 9 viết ra <strong>Tiên Nghịch</strong>, kết duyên cùng văn học mạng, ta cũng giống như Vương Lâm, khí thế hăng hái, một đường quật khởi, thỏa chí viết ra nhân sinh của chính mình.</span></p>
-                <p>Mà <strong>Cầu Ma</strong> sau đó, bởi vì vấn đề thành tích, ta trải qua mơ hồ, trải qua nản chí, để rồi, đến cuối cùng, ta tìm về sự biến hóa trong tâm mình - tâm biến, và <strong>Cầu Ma</strong> đã ra đời như thế.</p>
-                <p>Nhưng, ta cảm thấy, ta không thể dành cả đời chỉ để viết Tiên Nghịch 1, Tiên Nghịch 2, Tiên Nghịch 3, Tiên Nghịch 4, . . .</p>
-                <p>Vậy nên, một bên ta viết <strong>Cầu Ma</strong>, một bên ta lần mò, tìm kiếm con đường cho tiểu thuyết tiên hiệp của mình.</p>
-                <p>Ngày viết xong <strong>Cầu Ma</strong>, ta đã có một ý tưởng.</p>
-                <p>Trước nay, những tiểu thuyết tiên hiệp trên mạng, phần lớn là khổ đại cừu thâm, văn phong nghiêm túc gai góc, tính cách nhân vật phần nhiều chỉ có một kiểu, lấy kiên nghị tu hành làm chủ đạo, nói trăm truyện như một cũng có chút k HOA trương, nhưng thật sự đã có dấu hiệu như vậy.</p>
-                <p>Ta muốn thử một chút, viết về một nhân vật chính với văn phong nhẹ nhàng, có một điểm đặc biệt nào đó thú vị.</p>
-                <p>Thế là, mang theo ý tưởng mông lung này, cuối năm 2013, đầu năm 2014, ta đã sáng tác <strong>Ngã Dục Phong Thiên</strong>, giảm bớt huyết cừu sát phạt, tăng thêm cảm giác nhẹ nhàng vui vẻ, cho Mạnh Hạo cái tính cách tham tiền thích bắt người ta viết giấy nợ.</p>
-                <p>Chưa từng viết qua bao giờ, lại thêm tiểu thuyết mạng lúc ấy, thể loại như vậy như lông phượng sừng lân, thế nên lúc viết, ta bỡ ngỡ vô cùng, và rồi cứ viết cứ viết, rồi trở thành Mệnh ta như yêu, muốn phong trời cao- <strong>Ngã Dục Phong Thiên</strong>.</p>
-                <p>Còn đạo lộ nửa bộ sau, thì vẫn như trước kia.</p>
-                <p>Nhưng ta lại cảm thấy, ta còn có thể tiếp tục thử nghiệm. <strong>Ngã Dục Phong Thiên</strong> đã cho ta kinh nghiệm viết theo văn phong nhẹ nhàng, thế nên cuối năm 201 5, đầu năm 2016, ta sáng tác <strong>Nhất Niệm Vĩnh Hằng</strong>.</p>
-                <p>Một Bạch Tiểu Thuần vừa sợ chết vừa thích khoe khoang, nhưng lại không thiếu phần dũng cảm.</p>
-                <p>Những tính cách mâu thuẫn nhau, không ngừng va chạm trong con người hắn, vì thế mà có một loạt chuyện xưa trong <strong>Nhất Niệm Vĩnh Hằng</strong>.</p>
-                <p>So với <strong><span style="color:#f1c40f">Vương Lâm</span></strong>, <span style="color:#1abc9c"><strong>Mạnh Hạo</strong></span>, <strong><span style="color:#8e44ad">Tô Minh</span></strong>, thì <span style="color:#c0392b"><strong>Bạch Tiểu Thuần</strong></span> chính là may mắn của ta.</p>
-                <p>Tuy rất nhiều độc giả không thích hắn, nhưng khi bầu không khí tiểu thuyết trên mạng từ khổ đại cừu thâm chuyển dần thành nhẹ nhàng vui vẻ, đã chứng minh phán đoán của ta trước đó, mức độ nào đó là chính xác.</p>
-                <p>Nhưng, thực ra, ta còn có một cái ý tưởng, đó là sẽ gọi đây là thể loại khủng bố tiên hiệp, nghĩa cũng như tên, chính là tiểu thuyết khủng bố kết hợp với tiểu thuyết tiên hiệp. Độc giả đã đọc qua tác phẩm của ta, hẳn đều có thể cảm giác được, trong Ngã Dục Phong Thiên cùng <strong>Nhất Niệm Vĩnh Hằng</strong>, ta đã từng thử qua vài lần, nhưng sau khi thêm rồi bỏ, cuối cùng ta đã quyết định bỏ đi.</p>
-                <p>Nguyên nhân rất đơn giản, vì ta cứ viết cứ viết, viết rồi chính ta cũng sợ hãi . . .</p>
-                <p>Tiếp sau đó là <strong>Tam Thốn Nhân Gian</strong>, bộ <strong>Tam Thốn Nhân Gian</strong> này, ta kỳ thật rất không hài lòng, cực kỳ cực kỳ không hài lòng, đây cũng là một nguyên nhân tới bây giờ ta mới viết cảm nghĩ này.</p>
-                <p>Ta không hài lòng với kết cấu của bộ truyện, ta không hài lòng với những trường đoạn của bộ truyện, ta lại càng không hài lòng nhất chính là tình trạng của mình mấy năm nay, nhưng ta thật sự thích bộ truyện này . . .</p>
-                <p>Tập thể độc giả to lớn, cảm tạ mọi người đã luôn bầu bạn với ta, có người 12 năm, có người 7, 8 năm, có người năm ba năm, . . . Rất cảm tạ mọi người, ta xin lỗi, ta đã không viết tốt bộ truyện này.</p>
-                <p>Mấy năm nay, đã xảy ra rất nhiều chuyện. Thật sự thì từ 1/ 4 cuối của bộ <strong>Nhất Niệm Vĩnh Hằng</strong>, tinh thần ta đã loạn, bởi vì ta ly hôn, lại thêm bị bệnh trầm cảm.</p>
-                <p><em>Ta đã không thể hừng hực khí thế viết tốt đoạn sau cho <strong>Nhất Niệm Vĩnh Hằng</strong>, ta thật lòng xin lỗi.</em></p>
-                <p><strong>Tam Thốn Nhân Gian</strong> này, theo như kế hoạch ban đầu, ta dự tính sẽ lại viết ra một nhân vật chính sát phạt quyết đoán như Vương Lâm, bởi vì ta cảm thấy, ta không thể viết tốt loại văn chương nhẹ nhàng được nữa.</p>
-                <p>Nhưng ta cứ do dự mãi, rồi cuối cùng cũng không viết như vậy, vì với trạng thái tinh thần này, ta sợ chính mình sẽ viết đến điên loạn. Ta muốn nhẹ nhàng, ta muốn vui sướng, ta muốn cười thật to! Vậy là, một bộ <strong>Tam Thốn Nhân Gian</strong> cứ vậy ra đời, khác hẳn với dự tính ban đầu của ta. Từ cái tên của nhân vật chính - Vương Bảo Nhạc, mọi người hẳn là có thể nhận ra phần nào mọi chuyện.</p>
-                <p>Còn bệnh trầm cảm, ta không uống thuốc. Khoảng thời gian đó, ta thông qua tập thể hình, thông qua chạy bộ, thông qua vận động cường độ cao, phóng thích hết những cảm xúc trong nội tâm, cân nặng cũng từ 130kg, xuống còn 85kg.</p>
-                <p>Khoảng thời gian này, là khoảng thời gian ta viết <strong>Tam Thốn Nhân Gian</strong>. Có một trường đoạn, được viết chính ngay lúc bệnh trầm cảm của ta tái phát. Lúc ấy ta không muốn nói với các bạn, không muốn nói với bất kì ai, ta chỉ muốn an tĩnh một mình.</p>
-                <p>Sau khi chạy bộ ta bắt đầu hồi phục, mở ra những thay đổi mới, cho đến khi viết đến nửa bộ sau Tam Thốn, có một ngày, ta bỗng nhiên có cảm giác, ta . . . hồi phục hoàn toàn!</p>
-                <p>Ta không hài lòng bộ truyện này, nhưng ta muốn cảm ơn nó, ở mức độ nào đó, nó đã chữa khỏi cho ta.</p>
-                <p><strong>Tam Thốn Nhân Gian</strong>, nhân gian của các bạn, nhân gian của Vương Bảo Nhạc, cũng là nhân gian của ta.</p>
-                <p>°°°</p>
-                <p>Nói xong chuyện quá khứ, lại nói một chút chuyện của hiện tại.</p>
-                <p>Ta bây giờ, mỗi ngày ăn no ngủ kĩ, tinh thần được thả lỏng rất nhiều. Đồng thời ta cũng đang cân nhắc những chi tiết cho bộ truyện tiếp theo, ở trong đầu ta, không ngừng ấp ủ, không ngừng hoàn thiện.</p>
-                <p>Chờ tới một ngày, khi những ấp ủ trong đầu ta đã chín mùi, thời điểm nó bùng nổ, chính là thời điểm ta một lần nữa đặt tay lên bàn phím.</p>
-                <p>Một ngày này, không xa.</p>
-                <p>Chuyện cuối cùng ta muốn nói, là ta thích những câu chuyện trong bộ truyện sắp tới, nó rất đặc biệt, rất mới lạ, rất nhiệt huyết, ta tin mọi người nhất định cũng sẽ thích.</p>
-                <p>Có một câu, có thể ví dụ cho câu chuyện này.</p>
-                <p>" Trầm mê trong liệt hỏa, chỉ có bất tử phượng hoàng, đôi cánh dù cháy tan, cũng muốn ý chí ở thiên đàng bay lượn! "</p>
-                <p>Chúc mọi người thân thể khỏe mạnh, vui vẻ sung sướng, hạnh phúc mỹ mãn, sự nghiệp thuận lợi, vĩnh viễn không thư hoang!"</p>
-                <p><br>
-                    Nhĩ Căn.</p>
-                <p>Ngày 02 tháng 11 năm 2021.</p>
-                <p class="card-text">Nguồn: <a href="//vidian.vn" target="_blank"><b>TIÊN HIỀN THƯ VIỆN</b></a></p>
+            <div class="card-text fs-content" style="font-size: 18px;">
+                ${post.content}
+                <br>
+                <br>
+                <br>
             </div>
             <hr>
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
+                <i class="fas fa-flag"></i> Report Post
+            </button>
             <div class="row">
                 <div class="col-lg-4 mb-2 mx-auto">
-                    <ul class="list-unstyled m-0 d-flex flex-wrap text-center">
+                    <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
                         <li class="d-flex align-items-center mr-4 font-weight-bold">
-                            <i id="vote_love" class="svg-icon icon-react-love mr-2" style="cursor:pointer"></i>
-                            <span id="love_value">3</span>
-                        </li>
-                        <li class="d-flex align-items-center mr-4 font-weight-bold">
-                            <i id="vote_attack" class="svg-icon icon-react-attack mr-2" style="cursor:pointer"></i>
-                            <span id="attack_value">0</span>
-                        </li></ul>
-                </div>
-                <div class="col-lg-12 mb-2">
-                    <p class="card-text fs-14">Từ khóa:
-                        <span class="badge badge-info"><a href="https://vidian.vn/search-tag?keyword=nhĩ căn" class="text-white">nhĩ căn</a></span>
-                        <span class="badge badge-info"><a href="https://vidian.vn/search-tag?keyword= quang âm chi ngoại" class="text-white"> quang âm chi ngoại</a></span>
-                    </p>
-                </div>
-
-                <div class="col-lg-12 text-center">
-                    <div class="card border-0">
-                        <div class="card-body mx-auto">
-
-                            <div class="btn-group-toggle d-flex flex-wrap" data-toggle="buttons">
-                                <label class="btn btn-light input-radio mr-2 mb-2">
-                                    <input type="radio" name="flower" autocomplete="off" value="10">10
-                                    <img src="//vidian.vn/images/flower.svg">
-                                </label>
-                                <label class="btn btn-light input-radio mr-2 mb-2">
-                                    <input type="radio" name="flower" autocomplete="off" value="20">20
-                                    <img src="//vidian.vn/images/flower.svg">
-                                </label>
-                                <label class="btn btn-light input-radio mr-2 mb-2">
-                                    <input type="radio" name="flower" autocomplete="off" value="50">50
-                                    <img src="//vidian.vn/images/flower.svg">
-                                </label>
-                                <label class="btn btn-light input-radio mr-2 mb-2">
-                                    <input type="radio" name="flower" autocomplete="off" value="100">100
-                                    <img src="//vidian.vn/images/flower.svg">
-                                </label>
+                            <div class="vote-section" id="vote-section">
+                                <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2"
+                                   onclick="votePost('up', '${votePostStatus}')"></i>
+                                <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
+                                   onclick="votePost('down', '${votePostStatus}')"></i>
+                                <span id="vote_value">${post.vote}</span>
                             </div>
-
-                        </div>
-                    </div>
-                    <button class="btn btn-danger btn-sm" id="smDonate">ỦNG HỘ TÁC GIẢ</button>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -121,9 +59,109 @@
 
     <div class="card mb-2 border-0">
         <div class="card-body">
+            <c:choose>
+                <c:when test="${empty user}">
+                    <div class="card mb-2 border-0">
+                        <div class="card-body">
+                            <p class="card-text text-center">
+                                You need to <span><a style="color:blue" href="login">Login</a></span> to comment!
+                            </p>
+                        </div>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="border-0 bg-none mt-2 media align-items-center">
+                        <div class="comment-avatar mr-2">
+                            <img alt="${user.username}" title="${user.username}" 
+                                 src="${pageContext.request.contextPath}/${user.profilePhoto}"
+                                 onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
+                        </div>
+                        <div class="comment-input-block media-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <textarea class="form-control" rows="2" id="msg" minlength="30" 
+                                          required placeholder="Ta đến nói hai câu..."></textarea>
+                                <button type="button" class="btn btn-success btn-submit-comment" onclick="sendMsg()">
+                                    <i class="fas fa-paper-plane fa-2x"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </c:otherwise>
+            </c:choose>
 
+            <c:forEach var="comment" items="${commentsList}" varStatus="loop">
+                <c:set var="commentUser" value="${userComment[loop.index]}" />
+                <c:set var="commentUserRank" value="${userRank[loop.index]}" />
+                <c:set var="commentDate" value="${commentTime[loop.index]}" />
+                <div class="comment-container media">
+                    <div class="comment-avatar">
+                        <img alt="${commentUser.username}" 
+                             title="${commentUser.username}" 
+                             src="${pageContext.request.contextPath}/${commentUser.profilePhoto}" 
+                             onerror="this.src='assets/images/others/product-3.jpg'">
+                    </div>
+                    <div class="comment-input-block media-body" id="comment_${loop.index}">
+                        <p class="card-text">
+                            <span class="card-title" data-rank-color=" ${commentUserRank.color}" >
+                                ${commentUserRank.name}
+                            </span>
+                            <span class="text-truncate" title="${commentUser.username}" >
+                                ${commentUser.username}
+                            </span>
+                        </p>
+                        <div class="card comment-card" data-rank-color="${commentUserRank.color}">
+                            <div class="card-body">
+                                <c:choose>
+                                    <c:when test="${comment.status eq 'active'}">
+                                        ${comment.content}
+                                    </c:when>
+                                    <c:otherwise>
+                                        This comment has been deleted.
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                            <input id="commentId" type="hidden" value="${comment.commentId}" >
+                        </div>
+                        <div class="card-text comment-date">
+                            <div class="vote-section vote-section-cmt" id="vote-section-cmt">
+                                <i  id="vote_comment_up" class="anticon anticon_vote anticon-arrow-up mr-2" 
+                                    onclick="voteComment('up', ${comment.commentId})" style="padding: 10px"></i>
+                                <i  id="vote_comment_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
+                                    onclick="voteComment('down', ${comment.commentId})" style="padding: 10px"></i>
+                                <span id="vote_comment_value">${comment.vote}</span>
+                            </div>
+                            <span class="badge badge-secondary">
+                                ${commentDate}
+                            </span>
+                            <c:if test="${not empty user}">
+                                <c:if test="${user.userId == commentUser.userId && comment.status eq 'active'}">
+                                    <button type="button" class="btn reply-button" data-comment-id="${comment.commentId}" 
+                                            data-toggle="modal" data-target="#editCommentModal">
+                                        Edit
+                                    </button>
+                                </c:if>
+                                <button class="btn reply-button"  data-comment-id="${comment.commentId}" onclick="toggleReply(this)">
+                                    Reply
+                                </button>
+                            </c:if>
+                        </div>
+                        <form action="replyComment" method="post">
+                            <div id="replyComment_${comment.commentId}" class="replyComment justify-content-between align-items-center d-none">
+                                <textarea class="form-control" rows="2" id="msgReply" minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
+                                <button type="submit" class="btn btn-success btn-submit-comment"
+                                        data-comment-id="${comment.commentId}"">
+                                    <i class="fas fa-paper-plane fa-2x"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
 
-            <p class="card-text text-center">Thư hữu cần <span><a style="color:blue" href="////vidian.vn/dang-nhap">đăng nhập</a></span> để bình luận!</p>
+            </c:forEach>
+            <c:if test="${empty commentsList}">
+                <p>No comments found.</p>
+            </c:if>
+
 
             <div class="border-0 bg-none media align-items-center mt-3" style="border-top:1px solid #a7acad !important;">
                 <div class="comment-avatar mr-2">
@@ -146,8 +184,376 @@
                     </p>
                 </div>
             </div>
-
-            <hr>
         </div>
     </div>
 </div>
+</div>
+
+
+<!-- Edit Comment Modal -->
+<div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" aria-labelledby="editCommentModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCommentModalLabel">Edit Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="commentId" id="editCommentId" value="">
+                <textarea class="form-control" rows="3" id="editCommentTextarea" minlength="30" required placeholder="Enter your edited comment..."></textarea>
+            </div>
+            <div class="modal-footer">
+                <button id="deleteCommentBtn" type="button" class="btn btn-secondary" >Delete</button>
+                <button id="saveEditedCommentBtn" type="button" class="btn btn-primary" >Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Report Post Modal -->
+<div class="modal fade" id="reportPostModal" tabindex="-1" role="dialog" aria-labelledby="reportPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reportPostModalLabel">Report Post</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="reportPost" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="postId" id="reportPostId" value="">
+                    <div class="form-group">
+                        <label for="reportReasons">Select reasons for reporting:</label>
+                        <div id="reportReasons">
+                            <div class="checkbox-item">
+                                <div class=" checkbox-wrapper-31">
+                                    <input class="form-check-input " type="checkbox" name="reasons" id="spam" value="Spam">
+                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                                </div>
+                                <label class="form-check-label" for="spam">spam</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <div class="checkbox-wrapper-31">
+                                    <input class="form-check-input" type="checkbox" name="reasons" id="harassment" value="Harassment">
+                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                                </div>
+                                <label class="form-check-label" for="harassment">Harassment</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <div class="checkbox-wrapper-31">
+                                    <input class="form-check-input" type="checkbox" name="reasons" id="hateSpeech" value="Hate Speech">
+                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                                </div>
+                                <label class="form-check-label" for="hateSpeech">Hate Speech</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <div class="checkbox-wrapper-31">
+                                    <input class="form-check-input" type="checkbox" name="reasons" id="misinformation" value="Misinformation">
+                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                                </div>
+                                <label class="form-check-label" for="misinformation">Misinformation</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <div class="checkbox-wrapper-31">
+                                    <input class="form-check-input" type="checkbox" name="reasons" id="other" value="Other">
+                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                                </div>
+                                <label class="form-check-label" for="other">Other</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="cancelReportBtn" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button id="submitReportBtn" type="submit" class="btn btn-primary">Submit Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    let voteStatus = 'unvote'; // Trạng thái ban đầu
+// Hàm xử lý upvote/downvote
+    const votePost = (type, voteStatus) => {
+        const voteValueElement = document.getElementById('vote_value');
+        const postId = getUrlParameter('postId');
+        if (!postId) {
+            console.error("postId không tồn tại trong URL");
+            return; // Thoát nếu không có postId
+        }
+
+        isLoggedIn(loggedIn => {
+            if (!loggedIn) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'You need login to vote',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+                return;
+            }
+            const currentVote = parseInt(voteValueElement.innerText);
+            let increment = 0;
+            // Xử lý upvote và downvote
+            if (type === 'up') {
+                increment = (voteStatus === 'upvote') ? -1 : (voteStatus === 'downvote') ? 2 : 1;
+                voteStatus = (voteStatus === 'upvote') ? 'unvote' : 'upvote';
+                toggleVoteClass(voteStatus === 'upvote', false);
+            } else if (type === 'down') {
+                increment = (voteStatus === 'downvote') ? 1 : (voteStatus === 'upvote') ? -2 : -1;
+                voteStatus = (voteStatus === 'downvote') ? 'unvote' : 'downvote';
+                toggleVoteClass(false, voteStatus === 'downvote');
+            }
+            const newVoteValue = currentVote + increment;
+            // Cập nhật giá trị vote hiển thị
+            voteValueElement.innerText = newVoteValue;
+
+            // Gửi yêu cầu AJAX để cập nhật vote
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "updateVote", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    console.log(xhr.status === 200 ? "Vote updated successfully" : "Error updating vote");
+                }
+            };
+            xhr.send("postId=" + postId + "&vote_value=" + newVoteValue + "&vote_status=" + voteStatus);
+            setTimeout(() => {
+                location.reload();
+            }, 300); // Reload sau 1 giây (1000 milliseconds)
+        });
+    };
+
+    //Show change upvote downvote
+    document.addEventListener('DOMContentLoaded', function () {
+        const votePostStatus = `${votePostStatus}`; // Đảm bảo votePostStatus là string
+        if (votePostStatus.trim() === "") {
+            return; // Nếu votePostStatus rỗng thì không làm gì cả và thoát khỏi hàm
+        }
+        console.log(votePostStatus);
+        if (votePostStatus === "unvote") {
+            toggleVoteClass(false, false);
+        } else if (votePostStatus === "upvote") {
+            toggleVoteClass(true, false);
+        } else if (votePostStatus === "downvote") {
+            toggleVoteClass(false, true);
+        }
+
+    });
+
+// Thay đổi background của .comment-input-block .card-title
+    const commentTitles = document.querySelectorAll('.comment-input-block .card-title');
+    commentTitles.forEach(title => {
+        const rankColor = title.getAttribute('data-rank-color');
+        if (rankColor) {
+            title.style.background = rankColor;
+            title.style.color = 'rgba(255, 255, 255, 0.15)';
+            title.style.fontWeight = '800';
+            title.style.position = 'relative';
+            title.style.webkitBackgroundClip = 'text';
+        }
+    });
+
+// Thay đổi border color và box-shadow của .comment-card
+    const commentCards = document.querySelectorAll('.comment-card');
+    commentCards.forEach(card => {
+        const rankColor = card.getAttribute('data-rank-color');
+        if (rankColor) {
+            card.style.borderColor = "" + rankColor;
+            card.style.boxShadow = '0 0 15px ' + rankColor;
+        }
+    });
+
+
+// Hàm để lấy giá trị của một tham số từ URL
+    const getUrlParameter = param => {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    };
+
+    // Hàm để xử lý thêm/loại bỏ lớp 'upvoted' và 'downvoted'
+    const toggleVoteClass = (addUpvoted, addDownvoted) => {
+        const voteSection = document.getElementById('vote-section');
+        voteSection.classList.toggle('upvoted', addUpvoted);
+        voteSection.classList.toggle('downvoted', addDownvoted);
+    };
+
+
+
+// Kiểm tra đăng nhập
+    const isLoggedIn = callback => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", "checkLogin", true);
+        xhr.setRequestHeader("Content-Type", "text/plain");
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    const loggedIn = (xhr.responseText.trim() === 'true');
+                    callback(loggedIn);
+                } else {
+                    console.error("Lỗi khi kiểm tra đăng nhập:", xhr.status);
+                    callback(false);
+                }
+            }
+        };
+        xhr.send();
+    };
+// Gửi tin nhắn
+    function sendMsg() {
+        const msg = $("#msg").val();
+        const postId = getUrlParameter('postId');
+        if (!postId) {
+            console.error("postId không tồn tại trong URL");
+            return; // Thoát nếu không có postId
+        }
+        if (msg.length < 30) {
+            alert("Tối thiểu 30 ký tự...");
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: 'addComment',
+                data: {content: msg, postId: postId},
+                success: response => {
+                    alert("Comment added successfully!");
+                    $("#msg").val('');
+                    location.reload();
+                },
+                error: error => {
+                    alert("Error adding comment: " + error.responseText);
+                }
+            });
+        }
+    }
+
+// Chuyển đổi trạng thái hiển thị phản hồi
+    function toggleReply(button) {
+        const commentId = button.getAttribute('data-comment-id');
+        console.log(commentId);
+        const replyCommentDiv = document.querySelector('#replyComment_' + commentId);
+        if (replyCommentDiv) {
+            if (replyCommentDiv.classList.contains('d-none')) {
+                replyCommentDiv.classList.remove('d-none');
+                replyCommentDiv.classList.add('d-flex');
+            } else {
+                replyCommentDiv.classList.add('d-none');
+                replyCommentDiv.classList.remove('d-flex');
+            }
+        } else {
+            console.error('Không tìm thấy phần tử với id #replyComment_' + commentId);
+        }
+    }
+
+// Gửi phản hồi
+    function sendMsgReply(button) {
+        const msg = $("#msgReply").val();
+        const parentId = button.getAttribute('data-comment-id');
+        const postId = getUrlParameter('postId');
+        if (!postId) {
+            console.error("postId không tồn tại trong URL");
+            return; // Thoát nếu không có postId
+        }
+        if (msg.length < 30) {
+            alert("Tối thiểu 30 ký tự...");
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: 'addComment',
+                data: {content: msg, postId: postId, parentId: parentId},
+                success: response => {
+                    alert("Comment added successfully!");
+                    $("#msgReply").val('');
+                    location.reload();
+                },
+                error: error => {
+                    alert("Error adding comment: " + error.responseText);
+                }
+            });
+        }
+    }
+    $(document).ready(() => {
+        //Show edit comment
+        $('#editCommentModal').on('show.bs.modal', (event) => {
+            const button = $(event.relatedTarget); // Button that triggered the modal
+            const commentId = button.data('comment-id'); // Extract info from data-* attributes
+
+            $.ajax({
+                url: 'updateComment',
+                type: 'GET',
+                data: {commentId},
+                success: (data) => {
+                    // Assuming 'data' is the comment object in JSON format
+                    $('#editCommentId').val(data.commentId);
+                    $('#editCommentTextarea').val(data.content);
+                },
+                error: (xhr, status, error) => {
+                    console.error(`Failed to fetch comment: ${error}`);
+                }
+            });
+        });
+
+        // Save edited comment function
+        const saveEditedComment = () => {
+            // Get the edited comment ID and content from the modal
+            var commentId = $('#editCommentId').val();
+            var editedContent = $('#editCommentTextarea').val();
+            // Prepare the data to send in the AJAX request
+            var data = {
+                commentId: commentId,
+                content: editedContent
+            };
+            // Send an AJAX POST request to update comment
+            $.ajax({
+                type: 'POST',
+                url: 'updateComment',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    console.log('Comment edited successfully');
+                    // Optionally close the modal or perform other actions
+                    $('#editCommentModal').modal('hide'); // Example: Hide modal after successful save
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    // Handle error
+                    console.error('Error editing comment:', error);
+                }
+            });
+        };
+        // Attach saveEditedComment function to the 'Save changes' button click
+        $('#saveEditedCommentBtn').on('click', saveEditedComment);
+
+        // Save edited comment function
+        const deleteComment = () => {
+            // Get the edited comment ID and content from the modal
+            var commentId = $('#editCommentId').val();
+            // Prepare the data to send in the AJAX request
+            var data = {
+                commentId: commentId,
+            };
+            // Send an AJAX POST request to update comment
+            $.ajax({
+                type: 'POST',
+                url: 'updateComment',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    console.log('Comment edited successfully');
+                    // Optionally close the modal or perform other actions
+                    $('#editCommentModal').modal('hide'); // Example: Hide modal after successful save
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    // Handle error
+                    console.error('Error editing comment:', error);
+                }
+            });
+        };
+        // Attach saveEditedComment function to the 'Save changes' button click
+        $('#deleteCommentBtn').on('click', deleteComment);
+    });
+</script>

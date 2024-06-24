@@ -23,7 +23,7 @@
                     <div class="d-md-flex align-items-center">
                         <div class="text-center text-sm-left ">
 
-                            <div class="test avatar avatar-image" style="width: 150px; height: 100px;border: 2px solid grey;">                            
+                            <div class="test avatar avatar-image" style="width: 150px; height: 100px;border: 2px solid grey;">  
                                 <c:choose>
                                     <c:when test="${user.profilePhoto == 0}">
                                         <form action="UploadPFP" method="post" enctype="multipart/form-data"  >
@@ -35,7 +35,7 @@
 
                                         <form action="UploadPFP" method="post" enctype="multipart/form-data"  >
                                             <input type="file" class="upload-input" onchange="this.form.submit()" name="pfp" id="someId">         
-                                            <img src="<%=media.getPath()%>" style="width: 150px; height: 100px">
+                                            <img src="" style="width: 150px; height: 100px">
                                             <div class="upload-text">Upload an image</div>
                                         </form>               
                                     </c:otherwise>
@@ -132,7 +132,7 @@
                     </c:otherwise>
                     </c:choose>
                     <br>
-                    <h5>Experience</h5>
+                    <h5>Posts</h5>
                     <div class="m-t-20">
                         <div class="media m-b-30">
                             <div class="avatar avatar-image">

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.Anime;
 import model.Post;
 import model.PostDetail;
 
@@ -343,36 +342,91 @@ public class PostDAO extends DBContext {
         }
     }
 
-    public boolean hasUserVoted(Post votepost) {
-        String checkSql = "SELECT COUNT(*) FROM VoteUserPost WHERE UserID = ? AND PostID = ?";
+    public boolean hasUserVoted(int userId, int postId) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT COUNT(*) FROM VoteUserPost WHERE UserID = ? AND PostID = ? ";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ps.setInt(2, postId);
 
-        try (PreparedStatement checkPs = connection.prepareStatement(checkSql)) {
-            checkPs.setInt(1, votepost.getUserId());
-            checkPs.setInt(2, votepost.getPostId());
-
-            try (ResultSet rs = checkPs.executeQuery()) {
-                if (rs.next() && rs.getInt(1) > 0) {
-                    return true;
-                }
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
             }
+            return false;
         } catch (SQLException ex) {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
         }
-
-        return false;
     }
 
-    public void addVote(Post votepost) {
-        String insertSql = "INSERT INTO VoteUserPost (UserID, PostID, Status) VALUES (?, ?, 'vote')";
+    public String checkVoteStatus(int userId, int postId) {
+        String sql = "SELECT Status FROM VoteUserPost WHERE UserID = ? AND PostID = ?";
 
-        try (PreparedStatement insertPs = connection.prepareStatement(insertSql)) {
-            insertPs.setInt(1, votepost.getUserId());
-            insertPs.setInt(2, votepost.getPostId());
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, postId);
 
-            int rowsInserted = insertPs.executeUpdate();
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("Status").trim(); // Return the status
+                }
+                return null; // No vote found for this user and post
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, "Error checking vote status", ex);
+            return null; // Handle SQL exception
+        }
+    }
+
+    public void addUserVote(int userId, int postId, String status) {
+        PreparedStatement ps = null;
+
+        try {
+            String insertSql = "INSERT INTO VoteUserPost (UserID, PostID, Status) VALUES (?, ?, ?)";
+            ps = connection.prepareStatement(insertSql);
+            ps.setInt(1, userId);
+            ps.setInt(2, postId);
+            ps.setString(3, status);
+
+            int rowsInserted = ps.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("Vote added successfully."); // Optional: Print success message
+            } else {
+                System.out.println("Failed to add vote."); // Optional: Print failure message
+            }
 
         } catch (SQLException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closePreparedStatement(ps);
+        }
+    }
+
+    public void updateUserVote(int userId, int postId, String status) {
+        PreparedStatement ps = null;
+
+        try {
+            String updateSql = "UPDATE VoteUserPost SET Status = ? WHERE UserID = ? AND PostID = ?";
+            ps = connection.prepareStatement(updateSql);
+            ps.setString(1, status);
+            ps.setInt(2, userId);
+            ps.setInt(3, postId);
+
+            int rowsUpdated = ps.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Vote updated successfully."); // Optional: Print success message
+            } else {
+                System.out.println("Failed to update vote."); // Optional: Print failure message
+            }
+        } catch (SQLException ex) {
+        } finally {
+            closePreparedStatement(ps);
         }
     }
 
@@ -481,27 +535,7 @@ public class PostDAO extends DBContext {
 
     public static void main(String[] args) {
         PostDAO postDAO = new PostDAO();
-
-        Post post = new Post();
-        post.setUserId(1);
-        post.setCategoryId(1);
-        post.setTitle("Sample Post Title");
-        post.setContent("This is a sample content for the post.");
-        post.setSource("Sample Source");
-        post.setImage("sample_image.jpg");
-        post.setPostTime(LocalDateTime.now());
-        post.setStatus("active");
-        post.setVote(0);
-        post.setView(0);
-        PostDetail post1 = postDAO.getPostDetailById(54);
-        System.out.println(post1.getTitle());
-
-        boolean isPostCreated = postDAO.createPost(post);
-        if (isPostCreated) {
-            System.out.println("Post has been created successfully.");
-        } else {
-            System.out.println("Failed to create the post.");
-        }
+        System.out.println(postDAO.checkVoteStatus(1, 54));
 
     }
 

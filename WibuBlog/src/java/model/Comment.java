@@ -24,6 +24,16 @@ public class Comment {
     public Comment() {
     }
 
+    public Comment(int commentId, int postId, int userId, String content, String status, int vote, Integer parentId) {
+        this.commentId = commentId;
+        this.postId = postId;
+        this.userId = userId;
+        this.content = content;
+        this.status = status;
+        this.vote = vote;
+        this.parentId = parentId;
+    }
+
     public Comment(int postId, int userId, String content) {
         this.postId = postId;
         this.userId = userId;

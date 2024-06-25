@@ -12,15 +12,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 import model.Anime;
 
 /**
  *
  * @author minht
  */
-@WebServlet(name = "ListAnime", urlPatterns = {"/ListAnime"})
-public class ListAnime extends HttpServlet {
+@WebServlet(name = "AnimeDetail", urlPatterns = {"/AnimeDetail"})
+public class AnimeDetail extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,12 +32,19 @@ public class ListAnime extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        AnimeDAO animeDAO = new AnimeDAO();
-        List<Anime> animeList = animeDAO.getAllAnime();
-
-        request.setAttribute("animeList", animeList);
-        request.getRequestDispatcher("ListAnime.jsp").forward(request, response);
-
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet AnimeDetail</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet AnimeDetail at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -53,11 +59,27 @@ public class ListAnime extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        AnimeDAO listAnime = new AnimeDAO();
-        List<Anime> animeList = listAnime.getAllAnime();
+        String animeId = request.getParameter("animeId");
 
-        request.setAttribute("animeList", animeList);
-        request.getRequestDispatcher("ListAnime.jsp").forward(request, response);
+        if (animeId == null || animeId.isEmpty()) {
+            response.sendRedirect("Error.jsp"); // Chuyển hướng đến trang lỗi nếu không có ID hoặc ID không hợp lệ
+            return;
+        }
+
+        try {
+            AnimeDAO animeDAO = new AnimeDAO();
+            Anime anime = animeDAO.getAnimeById(Integer.parseInt(animeId));
+
+            if (anime == null) {
+                response.sendRedirect("Error.jsp"); 
+                return;
+            }
+
+            request.setAttribute("anime", anime);
+            request.getRequestDispatcher("AnimeDetail.jsp").forward(request, response); 
+        } catch (NumberFormatException | ServletException | IOException e) {
+            response.sendRedirect("Error.jsp"); 
+        }
     }
 
     /**

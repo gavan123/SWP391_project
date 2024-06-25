@@ -14,7 +14,7 @@
 <%@ page import="java.time.format.FormatStyle" %>
 <%@ page import="java.time.LocalDateTime" %>
 
-<c:set var="animeId" value="${param.animeId}" />
+<c:set var="animeId" value="<%= param.animeId%>" />
 
 <%
     // Xử lý lấy thông tin Anime từ database

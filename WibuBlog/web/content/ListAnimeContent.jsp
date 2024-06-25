@@ -10,10 +10,8 @@
 <%@ page import="model.Anime" %>
 <%@ page import="java.util.List"%>
 
-
 <% AnimeDAO animeDAO = new AnimeDAO(); %>
 <% List<Anime> animeList = animeDAO.getListAnime(); %>
-
 
 <div class="row pb-6">
     <div class="col-lg-12">

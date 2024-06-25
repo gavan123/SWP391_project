@@ -59,27 +59,31 @@ public class AnimeDetail extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String animeId = request.getParameter("animeId");
+        String animeIdParam = request.getParameter("animeId");
 
-        if (animeId == null || animeId.isEmpty()) {
-            response.sendRedirect("Error.jsp"); // Chuyển hướng đến trang lỗi nếu không có ID hoặc ID không hợp lệ
+        if (animeIdParam == null || animeIdParam.isEmpty()) {
+            response.sendRedirect("Error.jsp");
             return;
         }
 
+        int animeId;
         try {
-            AnimeDAO animeDAO = new AnimeDAO();
-            Anime anime = animeDAO.getAnimeById(Integer.parseInt(animeId));
-
-            if (anime == null) {
-                response.sendRedirect("Error.jsp"); 
-                return;
-            }
-
-            request.setAttribute("anime", anime);
-            request.getRequestDispatcher("AnimeDetail.jsp").forward(request, response); 
-        } catch (NumberFormatException | ServletException | IOException e) {
-            response.sendRedirect("Error.jsp"); 
+            animeId = Integer.parseInt(animeIdParam);
+        } catch (NumberFormatException e) {
+            response.sendRedirect("Error.jsp");
+            return;
         }
+
+        AnimeDAO animeDAO = new AnimeDAO();
+        Anime anime = animeDAO.getAnimeDetailById(animeId);
+
+        if (anime == null) {
+            response.sendRedirect("Error.jsp");
+            return;
+        }
+
+        request.setAttribute("anime", anime);
+        request.getRequestDispatcher("AnimeDetail.jsp").forward(request, response);
     }
 
     /**

@@ -6,6 +6,7 @@ package controller;
 
 import dal.CategoryDAO;
 import dal.GenreDAO;
+import dal.NotificationDAO;
 import dal.PostDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -108,10 +109,12 @@ public class CreatePost extends HttpServlet {
         // Lưu bài viết vào cơ sở dữ liệu
         PostDAO postDAO = new PostDAO();
         boolean isPostCreated = postDAO.createPost(post);
-        
+
         // Kiểm tra kết quả và điều hướng người dùng
         if (isPostCreated) {
             postDAO.insertPostGenre(postDAO.getPostIDJustInserted(user.getUserId()), genreId);
+            NotificationDAO nd = new NotificationDAO();
+            nd.createUploadedPostNotification(postDAO.getPostIDJustInserted(user.getUserId()), user.getUserId());
             session.setAttribute("postID",postDAO.getPostIDJustInserted(user.getUserId()));
             session.setAttribute("newPost", post);
             response.sendRedirect("ChoosePostPic.jsp"); // Điều hướng tới trang thành công

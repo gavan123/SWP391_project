@@ -12,10 +12,12 @@
         <title>JSP Page</title>
     </head>
     <body>
+
        <jsp:include page="Layout.jsp">
             <jsp:param name="sideNav" value="SideNav.jsp" />
             <jsp:param name="accountHeader" value="/content/AccountContent.jsp" />
             <jsp:param name="content" value="/content/ListAnimeContent.jsp" />
         </jsp:include>
+
     </body>
 </html>

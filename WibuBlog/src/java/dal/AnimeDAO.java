@@ -170,57 +170,63 @@ public class AnimeDAO extends DBContext {
         return animeList;
     }
 
-    public List<Anime> AnimeDetail() {
-        List<Anime> animeList = new ArrayList<>();
+    public Anime getAnimeDetailById(int animeId) {
+        Anime anime = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
 
         try {
-            String sql = "SELECT * FROM Anime";
+            String sql = "SELECT a.[AnimeID], a.Title, a.[Synopsis], g.[Name] AS GenreName, a.Episodes, a.[Status], a.imageAnime, a.ReleaseDate, a.Studio "
+                    + "FROM Anime a "
+                    + "JOIN Genre g ON a.GenreId = g.GenreID "
+                    + "WHERE a.AnimeID = ?";
             ps = connection.prepareStatement(sql);
+            ps.setInt(1, animeId);
             rs = ps.executeQuery();
 
-            while (rs.next()) {
-                Anime anime = new Anime(
-                        rs.getInt("AnimeId"),
+            if (rs.next()) {
+                anime = new Anime(
+                        rs.getInt("AnimeID"),
                         rs.getString("Title"),
                         rs.getString("Synopsis"),
-                        rs.getString("GenreName"), // lấy tên thể loại từ cột GenreName
+                        rs.getString("GenreName"),
                         rs.getInt("Episodes"),
                         rs.getString("Status"),
                         rs.getTimestamp("ReleaseDate").toLocalDateTime(),
                         rs.getString("Studio"),
                         rs.getString("imageAnime")
                 );
-                animeList.add(anime);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AnimeDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             closeResultSet(rs);
             closePreparedStatement(ps);
         }
 
-        return animeList;
+        return anime;
     }
 
-  public static void main(String[] args) {
+    public static void main(String[] args) {
         AnimeDAO animeDAO = new AnimeDAO();
-        List<Anime> animeList = animeDAO.getListAnime();
         
-        if (animeList.isEmpty()) {
-            System.out.println("Không có anime nào được tìm thấy.");
+        // Giả sử bạn muốn kiểm tra chi tiết của anime có ID là 1
+        int animeId = 1;
+        
+        Anime anime = animeDAO.getAnimeDetailById(animeId);
+        
+        if (anime != null) {
+            System.out.println("Anime ID: " + anime.getAnimeId());
+            System.out.println("Title: " + anime.getTitle());
+            System.out.println("Synopsis: " + anime.getSynopsis());
+            System.out.println("Genre: " + anime.getGenre());
+            System.out.println("Episodes: " + anime.getEpisodes());
+            System.out.println("Status: " + anime.getStatus());
+            System.out.println("Release Date: " + anime.getReleaseDate());
+            System.out.println("Studio: " + anime.getStudio());
+            System.out.println("Image: " + anime.getImageAnime());
         } else {
-            for (Anime anime : animeList) {
-                System.out.println("AnimeID: " + anime.getAnimeId());
-                System.out.println("Title: " + anime.getTitle());
-                System.out.println("Synopsis: " + anime.getSynopsis());
-                System.out.println("Genre Name: " + anime.getGenre());
-                System.out.println("Episodes: " + anime.getEpisodes());
-                System.out.println("Status: " + anime.getStatus());
-                System.out.println("Image: " + anime.getImageAnime());
-                System.out.println("--------------------------");
-            }
+            System.out.println("Anime not found for ID: " + animeId);
         }
     }
 }

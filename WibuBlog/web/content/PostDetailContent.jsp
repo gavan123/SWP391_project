@@ -57,7 +57,7 @@
         </div>
     </div>
 
-<!--    Post user-->
+    <!--    Post user-->
     <div class="card mb-2">
         <img class="img-thumbnail rounded-circle mx-auto d-block mt-2" 
              alt="${post.username}" title="${post.username}" 
@@ -78,7 +78,7 @@
             <p class="card-text text-center font-status">"${post.bio}"</p>
         </div>
     </div>
-        
+
     <!--     Comment                       -->
     <div class="card mb-2 border-0">
         <div class="card-body">
@@ -131,7 +131,9 @@
                             <span class="text-truncate" title="${commentUser.username}" >
                                 ${commentUser.username}
                             </span>
+
                         </p>
+                        <p>${comment.commentId}-${comment.parentId}</p>
                         <div class="card comment-card" data-rank-color="${commentUserRank.color}">
                             <div class="card-body">
                                 <c:choose>
@@ -168,15 +170,14 @@
                                 </button>
                             </c:if>
                         </div>
-                        <form action="replyComment" method="post">
-                            <div id="replyComment_${comment.commentId}" class="replyComment justify-content-between align-items-center d-none">
-                                <textarea class="form-control" rows="2" id="msgReply" minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
-                                <button type="submit" class="btn btn-success btn-submit-comment"
-                                        data-comment-id="${comment.commentId}"">
-                                    <i class="fas fa-paper-plane fa-2x"></i>
-                                </button>
-                            </div>
-                        </form>
+                        <div id="replyComment_${comment.commentId}" class="replyComment justify-content-between align-items-center d-none">
+                            <textarea class="form-control" rows="2" id="msgReply_${comment.commentId}" 
+                                      minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
+                            <button type="button" class="btn btn-success btn-submit-comment"
+                                    data-comment-id="${comment.commentId}" onclick="sendMsgReply(this)">
+                                <i class="fas fa-paper-plane fa-2x"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -470,8 +471,8 @@
 
 // Gửi phản hồi
     function sendMsgReply(button) {
-        const msg = $("#msgReply").val();
         const parentId = button.getAttribute('data-comment-id');
+        const msg = $("#msgReply_" + parentId).val();
         const postId = getUrlParameter('postId');
         if (!postId) {
             console.error("postId không tồn tại trong URL");
@@ -490,11 +491,12 @@
                     location.reload();
                 },
                 error: error => {
-                    alert("Error adding comment: " + error.responseText);
+                    console.log("Error adding comment: " + error.responseText);
                 }
             });
         }
     }
+
     $(document).ready(() => {
         //Show edit comment
         $('#editCommentModal').on('show.bs.modal', (event) => {

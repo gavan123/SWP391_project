@@ -1,6 +1,6 @@
 <%-- 
-    Document   : ListAnime
-    Created on : Jun 20, 2024, 9:56:03 PM
+    Document   : AnimeDetail
+    Created on : Jun 25, 2024, 4:22:47 PM
     Author     : minht
 --%>
 
@@ -12,10 +12,10 @@
         <title>JSP Page</title>
     </head>
     <body>
-       <jsp:include page="Layout.jsp">
+        <jsp:include page="Layout.jsp">
             <jsp:param name="sideNav" value="SideNav.jsp" />
             <jsp:param name="accountHeader" value="/content/AccountContent.jsp" />
-            <jsp:param name="content" value="/content/ListAnimeContent.jsp" />
+            <jsp:param name="content" value="/content/AnimeDetailContent.jsp" />
         </jsp:include>
     </body>
 </html>

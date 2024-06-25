@@ -10,7 +10,7 @@
 <%@ page import="model.PostDetail" %>
 <link rel="stylesheet" href="assets/css/testcss.css">
 <link rel="stylesheet" href="assets/css/testcss2.css">
-<% User user = (User)session.getAttribute("user");
+<%                             User user = (User)session.getAttribute("user");
                                UserDAO userDAO = new UserDAO();
                                String rank = userDAO.getRankByRankID(user.getRankId());
                                String rankColor = userDAO.getColorByRank(rank);

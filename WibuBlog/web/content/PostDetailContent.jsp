@@ -410,11 +410,11 @@
         const msg = $("#msg").val();
         const postId = getUrlParameter('postId');
         if (!postId) {
-            console.error("postId không tồn tại trong URL");
+            console.error("PostId doesn't exist in email");
             return; // Thoát nếu không có postId
         }
-        if (msg.length < 30) {
-            alert("Tối thiểu 30 ký tự...");
+        if (msg.trim().length < 1) {
+            alert("Please enter at least 1 character");
         } else {
             $.ajax({
                 type: 'POST',

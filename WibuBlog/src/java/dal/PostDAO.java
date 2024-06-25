@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Post;
 import model.PostDetail;
+import model.User;
 
 /**
  *
@@ -591,6 +592,22 @@ public class PostDAO extends DBContext {
         return null;
     }
 
+    
+    public int getUserIdOfPostByPostID(int postId){
+        int userId = 0;
+        try {
+            String sql = "select * from [post] where postid = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, postId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                userId = rs.getInt("UserID");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return userId;
+    }    
     public static void main(String[] args) {
         PostDAO postDAO = new PostDAO();
         System.out.println(postDAO.checkVoteStatus(1, 54));

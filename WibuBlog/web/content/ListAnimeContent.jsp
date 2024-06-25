@@ -31,7 +31,7 @@
                     </h2>
                     <img class="float-left posts-img img-thumbnail mr-2" src="${anime.imageAnime}" onerror="this.src='assets/images/others/product-3.jpg'">
                     <p class="card-text">${anime.synopsis}</p>
-                    <p class="card-text"><strong>Thể loại:</strong> ${anime.genreName}</p>
+                    <p class="card-text"><strong>Thể loại:</strong> ${anime.genre}</p>
                     <p class="card-text"><strong>Số tập:</strong> ${anime.episodes}</p>
                     <p class="card-text"><strong>Trạng thái:</strong> ${anime.status}</p>
                 </div>

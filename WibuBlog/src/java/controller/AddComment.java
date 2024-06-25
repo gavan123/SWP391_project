@@ -77,24 +77,40 @@ public class AddComment extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
 
-        // Kiểm tra xem người dùng đã đăng nhập chưa
-        if (session.getAttribute("user") == null) {
-            String errorMessage = "Session expired!";
+        try {
+            // Check if user is logged in
+            if (session.getAttribute("user") == null) {
+                String errorMessage = "Session expired! Please log in again.";
+                request.setAttribute("errorMessage", errorMessage);
+                request.getRequestDispatcher("Login.jsp").forward(request, response);
+                return;
+            }
+
+            // User is logged in, continue with adding comment
+            User userSession = (User) session.getAttribute("user");
+            String content = request.getParameter("content");
+            int postId = Integer.parseInt(request.getParameter("postId"));
+            String paString = request.getParameter("parentId");
+            int parentId = Integer.parseInt(request.getParameter("parentId"));
+
+            // Create Comment object
+            Comment comment = new Comment(postId, userSession.getUserId(), content, parentId);
+
+            // Call DAO to add comment
+            CommentDAO commentDAO = new CommentDAO();
+            commentDAO.addComment(comment);
+
+        } catch (NumberFormatException e) {
+            // Handle NumberFormatException (e.g., invalid postId or parentId)
+            String errorMessage = "Invalid postId or parentId.";
             request.setAttribute("errorMessage", errorMessage);
-            request.getRequestDispatcher("Login.jsp").forward(request, response);
-            return;
+            request.getRequestDispatcher("Error.jsp").forward(request, response);
+        } catch (ServletException | IOException e) {
+            // Handle any other unexpected exceptions
+            String errorMessage = "Error adding comment: " + e.getMessage();
+            request.setAttribute("errorMessage", errorMessage);
+            request.getRequestDispatcher("Error.jsp").forward(request, response);
         }
-
-        // Người dùng đã đăng nhập, tiếp tục quá trình thêm bình luận
-        User userSession = (User) session.getAttribute("user");
-        String content = request.getParameter("content");
-        int postId = Integer.parseInt(request.getParameter("postId")); // Chuyển đổi postId thành kiểu int
-
-        CommentDAO commentDAO = new CommentDAO();
-        Comment comment = new Comment(postId, userSession.getUserId(), content, null);
-
-        commentDAO.addComment(comment);
-
     }
 
     /**

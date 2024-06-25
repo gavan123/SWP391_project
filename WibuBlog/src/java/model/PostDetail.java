@@ -26,6 +26,7 @@ public class PostDetail {
     private int view;
     private String rank;
     private String color;
+    private String bio;
 
     public PostDetail() {
     }
@@ -48,7 +49,6 @@ public class PostDetail {
         this.view = view;
     }
 
-    
     public PostDetail(int vote, int view, int aInt2, String username, String categoryName, String genreName, String title, LocalDateTime postTime, String content, int aInt3, int aInt4, String source, String image, String status, String rank, String color) {
         this.username = username;
         this.categoryName = categoryName;
@@ -64,8 +64,6 @@ public class PostDetail {
         this.rank = rank;
         this.color = color;
     }
-    
-    
 
     public PostDetail(int postID, String username, String categoryName, String genreName, String title, String content, String source, String image, LocalDateTime postTime, String status, int vote, int view, String rank, String color) {
         this.postID = postID;
@@ -82,6 +80,24 @@ public class PostDetail {
         this.view = view;
         this.rank = rank;
         this.color = color;
+    }
+
+    public PostDetail(int postID, String username, String categoryName, String genreName, String title, String content, String source, String image, LocalDateTime postTime, String status, int vote, int view, String rank, String color, String bio) {
+        this.postID = postID;
+        this.username = username;
+        this.categoryName = categoryName;
+        this.genreName = genreName;
+        this.title = title;
+        this.content = content;
+        this.source = source;
+        this.image = image;
+        this.postTime = postTime;
+        this.status = status;
+        this.vote = vote;
+        this.view = view;
+        this.rank = rank;
+        this.color = color;
+        this.bio = bio;
     }
 
     public int getPostID() {
@@ -194,6 +210,14 @@ public class PostDetail {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 
     @Override

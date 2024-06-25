@@ -110,7 +110,7 @@ public class PostDetail extends HttpServlet {
                 List<Rank> ranks = new ArrayList<>();
                 List<String> commentDate = new ArrayList<>();
 
-                // Lặp qua từng comment để lấy thông tin user, rank và định dạng thời gian
+                // Parent Comment
                 for (Comment comment : comments) {
                     User commentUser = userDAO.getUserById(comment.getUserId());
                     Rank commentRank = rankDAO.getRankByUserId(comment.getUserId());
@@ -147,8 +147,7 @@ public class PostDetail extends HttpServlet {
                 request.getRequestDispatcher("PostDetail.jsp").forward(request, response);
                 return; // Thoát khỏi phương thức sau khi forward thành công
             } catch (NumberFormatException ex) {
-                // Xử lý ngoại lệ NumberFormatException
-                ex.printStackTrace(); // In stack trace để debug
+
             }
         }
 

@@ -36,9 +36,11 @@
                 <br>
             </div>
             <hr>
-            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
-                <i class="fas fa-flag"></i> Report Post
-            </button>
+            <c:if test="${post.username != user.username}">
+                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
+                    <i class="fas fa-flag"></i> Report Post
+                </button>
+            </c:if>
             <div class="row">
                 <div class="col-lg-4 mb-2 mx-auto">
                     <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
@@ -57,6 +59,30 @@
         </div>
     </div>
 
+    <!--    Post user-->
+
+    <div class="card mb-2">
+        <img class="img-thumbnail rounded-circle mx-auto d-block mt-2" 
+             alt="${post.username}" title="${post.username}" 
+             style="width:120px;height:120px" 
+             src="${pageContext.request.contextPath}/${post.image}"
+             onerror="this.src='assets/images/others/product-3.jpg'">
+        <div class="card-body">
+            <p class="card-title text-center fw-700 mb-0">
+                <a style="color:blue" href="#">${post.username}</a>
+            </p>
+            <p class="text-center mb-0">
+                <span class="font-status text-capitalize" 
+                      style="background:${post.color} ;color: rgba(255, 255, 255, 0.15);font-weight:800; position: relative;-webkit-background-clip: text;">
+                    ${post.rank}
+                </span>
+            </p>
+            <hr>
+            <p class="card-text text-center font-status">"${post.bio}"</p>
+        </div>
+    </div>
+
+    <!--     Comment                       -->
     <div class="card mb-2 border-0">
         <div class="card-body">
             <c:choose>
@@ -108,7 +134,9 @@
                             <span class="text-truncate" title="${commentUser.username}" >
                                 ${commentUser.username}
                             </span>
+
                         </p>
+                        <p>${comment.commentId}-${comment.parentId}</p>
                         <div class="card comment-card" data-rank-color="${commentUserRank.color}">
                             <div class="card-body">
                                 <c:choose>
@@ -145,15 +173,14 @@
                                 </button>
                             </c:if>
                         </div>
-                        <form action="replyComment" method="post">
-                            <div id="replyComment_${comment.commentId}" class="replyComment justify-content-between align-items-center d-none">
-                                <textarea class="form-control" rows="2" id="msgReply" minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
-                                <button type="submit" class="btn btn-success btn-submit-comment"
-                                        data-comment-id="${comment.commentId}"">
-                                    <i class="fas fa-paper-plane fa-2x"></i>
-                                </button>
-                            </div>
-                        </form>
+                        <div id="replyComment_${comment.commentId}" class="replyComment justify-content-between align-items-center d-none">
+                            <textarea class="form-control" rows="2" id="msgReply_${comment.commentId}" 
+                                      minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
+                            <button type="button" class="btn btn-success btn-submit-comment"
+                                    data-comment-id="${comment.commentId}" onclick="sendMsgReply(this)">
+                                <i class="fas fa-paper-plane fa-2x"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -222,55 +249,52 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="reportPost" method="post">
-                <div class="modal-body">
-                    <input type="hidden" name="postId" id="reportPostId" value="">
-                    <div class="form-group">
-                        <label for="reportReasons">Select reasons for reporting:</label>
-                        <div id="reportReasons">
-                            <div class="checkbox-item">
-                                <div class=" checkbox-wrapper-31">
-                                    <input class="form-check-input " type="checkbox" name="reasons" id="spam" value="Spam">
-                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
-                                </div>
-                                <label class="form-check-label" for="spam">spam</label>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="reportReasons">Select reasons for reporting:</label>
+                    <div id="reportReasons">
+                        <div class="checkbox-item">
+                            <div class=" checkbox-wrapper-31">
+                                <input class="form-check-input " type="checkbox" name="reasons" id="spam" value="Spam">
+                                <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
                             </div>
-                            <div class="checkbox-item">
-                                <div class="checkbox-wrapper-31">
-                                    <input class="form-check-input" type="checkbox" name="reasons" id="harassment" value="Harassment">
-                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
-                                </div>
-                                <label class="form-check-label" for="harassment">Harassment</label>
+                            <label class="form-check-label" for="spam">spam</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <div class="checkbox-wrapper-31">
+                                <input class="form-check-input" type="checkbox" name="reasons" id="harassment" value="Harassment">
+                                <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
                             </div>
-                            <div class="checkbox-item">
-                                <div class="checkbox-wrapper-31">
-                                    <input class="form-check-input" type="checkbox" name="reasons" id="hateSpeech" value="Hate Speech">
-                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
-                                </div>
-                                <label class="form-check-label" for="hateSpeech">Hate Speech</label>
+                            <label class="form-check-label" for="harassment">Harassment</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <div class="checkbox-wrapper-31">
+                                <input class="form-check-input" type="checkbox" name="reasons" id="hateSpeech" value="Hate Speech">
+                                <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
                             </div>
-                            <div class="checkbox-item">
-                                <div class="checkbox-wrapper-31">
-                                    <input class="form-check-input" type="checkbox" name="reasons" id="misinformation" value="Misinformation">
-                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
-                                </div>
-                                <label class="form-check-label" for="misinformation">Misinformation</label>
+                            <label class="form-check-label" for="hateSpeech">Hate Speech</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <div class="checkbox-wrapper-31">
+                                <input class="form-check-input" type="checkbox" name="reasons" id="misinformation" value="Misinformation">
+                                <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
                             </div>
-                            <div class="checkbox-item">
-                                <div class="checkbox-wrapper-31">
-                                    <input class="form-check-input" type="checkbox" name="reasons" id="other" value="Other">
-                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
-                                </div>
-                                <label class="form-check-label" for="other">Other</label>
+                            <label class="form-check-label" for="misinformation">Misinformation</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <div class="checkbox-wrapper-31">
+                                <input class="form-check-input" type="checkbox" name="reasons" id="other" value="Other">
+                                <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
                             </div>
+                            <label class="form-check-label" for="other">Other</label>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button id="cancelReportBtn" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                    <button id="submitReportBtn" type="submit" class="btn btn-primary">Submit Report</button>
-                </div>
-            </form>
+            </div>
+            <div class="modal-footer">
+                <button id="cancelReportBtn" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button id="submitReportBtn" type="button" class="btn btn-primary">Submit Report</button>
+            </div>
         </div>
     </div>
 </div>
@@ -417,7 +441,7 @@
             $.ajax({
                 type: 'POST',
                 url: 'addComment',
-                data: {content: msg, postId: postId},
+                data: {content: msg, postId: postId, parentId: 0},
                 success: response => {
                     alert("Comment added successfully!");
                     $("#msg").val('');
@@ -450,8 +474,8 @@
 
 // Gửi phản hồi
     function sendMsgReply(button) {
-        const msg = $("#msgReply").val();
         const parentId = button.getAttribute('data-comment-id');
+        const msg = $("#msgReply_" + parentId).val();
         const postId = getUrlParameter('postId');
         if (!postId) {
             console.error("postId không tồn tại trong URL");
@@ -470,17 +494,17 @@
                     location.reload();
                 },
                 error: error => {
-                    alert("Error adding comment: " + error.responseText);
+                    console.log("Error adding comment: " + error.responseText);
                 }
             });
         }
     }
+
     $(document).ready(() => {
         //Show edit comment
         $('#editCommentModal').on('show.bs.modal', (event) => {
             const button = $(event.relatedTarget); // Button that triggered the modal
             const commentId = button.data('comment-id'); // Extract info from data-* attributes
-
             $.ajax({
                 url: 'updateComment',
                 type: 'GET',
@@ -517,6 +541,7 @@
                     // Optionally close the modal or perform other actions
                     $('#editCommentModal').modal('hide'); // Example: Hide modal after successful save
                     location.reload();
+                    alert('Comment edited successfully');
                 },
                 error: function (xhr, status, error) {
                     // Handle error
@@ -529,31 +554,28 @@
 
         // Save edited comment function
         const deleteComment = () => {
-            // Get the edited comment ID and content from the modal
             var commentId = $('#editCommentId').val();
-            // Prepare the data to send in the AJAX request
             var data = {
                 commentId: commentId,
             };
             // Send an AJAX POST request to update comment
             $.ajax({
                 type: 'POST',
-                url: 'updateComment',
+                url: 'deleteComment',
                 contentType: 'application/json',
                 data: JSON.stringify(data),
                 success: function (response) {
                     console.log('Comment edited successfully');
-                    // Optionally close the modal or perform other actions
-                    $('#editCommentModal').modal('hide'); // Example: Hide modal after successful save
+                    $('#editCommentModal').modal('hide');
                     location.reload();
+                    alert('Comment deleted successfully');
                 },
                 error: function (xhr, status, error) {
-                    // Handle error
                     console.error('Error editing comment:', error);
                 }
             });
         };
-        // Attach saveEditedComment function to the 'Save changes' button click
+        // Attach deleteCommentBtn function to the 'Save changes' button click
         $('#deleteCommentBtn').on('click', deleteComment);
     });
 </script>

@@ -55,7 +55,7 @@ public class CommentDAO extends DBContext {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM Comment WHERE PostID = ?  ORDER BY CreateAt DESC";
+            String sql = "SELECT * FROM Comment WHERE PostID = ? ORDER BY CreateAt DESC";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, postId);
             rs = ps.executeQuery();
@@ -113,14 +113,18 @@ public class CommentDAO extends DBContext {
         PreparedStatement ps = null;
         try {
             String sql = "UPDATE Comment SET PostID = ?, UserID = ?, Content = ?, Status = ?, Vote = ?, "
-                    + "ParentID = ?, CreatedAt = ? WHERE CommentID = ?";
+                    + "ParentID = ?, CreateAt = ? WHERE CommentID = ?";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, comment.getPostId());
             ps.setInt(2, comment.getUserId());
             ps.setString(3, comment.getContent());
             ps.setString(4, comment.getStatus());
             ps.setInt(5, comment.getVote());
-            ps.setInt(6, comment.getParentId());
+            if (comment.getParentId() == null || comment.getParentId() == 0) {
+                ps.setNull(6, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(6, comment.getParentId());
+            }
             ps.setTimestamp(7, Timestamp.valueOf(comment.getCreateAt()));
             ps.setInt(8, comment.getCommentId());
             ps.executeUpdate();
@@ -163,12 +167,13 @@ public class CommentDAO extends DBContext {
         }
     }
 
-    public boolean hasUserVoted(Comment votecmt) {
-        String checkSql = "SELECT COUNT(*) FROM VoteUserCmt WHERE [UserID] = ? AND [CommentID] = ? ";
+    public boolean hasUserVoted(int userId, int commentId) {
+        String checkSql = "SELECT COUNT(*) FROM VoteUserCmt WHERE [UserID] = ? "
+                + "AND [CommentID] = ? ";
 
         try (PreparedStatement checkPs = connection.prepareStatement(checkSql)) {
-            checkPs.setInt(1, votecmt.getUserId());
-            checkPs.setInt(2, votecmt.getCommentId());
+            checkPs.setInt(1, userId);
+            checkPs.setInt(2, commentId);
 
             try (ResultSet rs = checkPs.executeQuery()) {
                 if (rs.next() && rs.getInt(1) > 0) {
@@ -182,14 +187,14 @@ public class CommentDAO extends DBContext {
         return false;
     }
 
-    public void addVoteCmt(Comment votecmt) {
+    public void addVoteCmt(int userId, int commentId, String status) {
         String insertSql = "INSERT INTO VoteUserCmt ([UserID],[CommentID], [Status])\n"
-                + "values (?,?,'vote')";
+                + "values (?,?,?)";
 
         try (PreparedStatement insertPs = connection.prepareStatement(insertSql)) {
-            insertPs.setInt(1, votecmt.getUserId());
-            insertPs.setInt(2, votecmt.getCommentId());
-
+            insertPs.setInt(1, userId);
+            insertPs.setInt(2, commentId);
+            insertPs.setString(3, status);
             int rowsInserted = insertPs.executeUpdate();
 
         } catch (SQLException ex) {
@@ -200,8 +205,8 @@ public class CommentDAO extends DBContext {
     public static void main(String[] args) {
         CommentDAO cod = new CommentDAO();
         List<Comment> coment = cod.getCommentsForPost(54);
-        for (Comment comment : coment) {
-            System.out.println(comment.getCommentId());
-        }
+        Comment cmt = cod.getCommentById(3);
+        cmt.setContent("adsdasdsds");
+        cod.updateComment(cmt);
     }
 }

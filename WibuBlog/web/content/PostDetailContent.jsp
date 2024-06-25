@@ -1,37 +1,13 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="model.User" %>
-<%@ page import="model.Media" %>
-<%@ page import="dal.UserDAO" %>
-<%@ page import="dal.MediaDAO" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<% User user = (User)session.getAttribute("user");
-                               UserDAO userDAO = new UserDAO();
-                               String rank = userDAO.getRankByRankID(user.getRankId());
-                               String rankColor = userDAO.getColorByRank(rank);
-                               String role = userDAO.getRoleByRoleID(user.getRoleId()); 
-                               MediaDAO mediaDAO = new MediaDAO();
-                               Media media = mediaDAO.getMedia(user.getProfilePhoto());
-%>
+
+
 
 <style>
 
-    .comment-input-block .card-title {
-        background: #FAF41F;
-        color: rgba(255, 255, 255, 0.15);
-        font-weight: 800;
-        position: relative;
-        -webkit-animation: shine-data-v-729833f6 1s infinite;
-        -webkit-background-clip: text;
-        -webkit-background-size: 300px;
-    }
-    .comment-card {
-        border-color: #FAF41F;
-        box-shadow: 0 0 15px #FAF41F;
-    }
-
-
 </style>
+
 <div class="col-lg-12 mb-2">
     <div class="card mb-2">
         <div class="card-body">
@@ -60,13 +36,18 @@
                 <br>
             </div>
             <hr>
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
+                <i class="fas fa-flag"></i> Report Post
+            </button>
             <div class="row">
                 <div class="col-lg-4 mb-2 mx-auto">
                     <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
                         <li class="d-flex align-items-center mr-4 font-weight-bold">
                             <div class="vote-section" id="vote-section">
-                                <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2" onclick="votePost('up')" ></i>
-                                <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" onclick="votePost('down')"></i>
+                                <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2"
+                                   onclick="votePost('up', '${votePostStatus}')"></i>
+                                <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
+                                   onclick="votePost('down', '${votePostStatus}')"></i>
                                 <span id="vote_value">${post.vote}</span>
                             </div>
                         </li>
@@ -91,11 +72,10 @@
                 <c:otherwise>
                     <div class="border-0 bg-none mt-2 media align-items-center">
                         <div class="comment-avatar mr-2">
-
-                            <img alt="${user.username}" title="${user.username}" src="<%=media.getPath()%>" onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
-
+                            <img alt="${user.username}" title="${user.username}" 
+                                 src="${pageContext.request.contextPath}/${user.profilePhoto}"
+                                 onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
                         </div>
-                        
                         <div class="comment-input-block media-body">
                             <div class="d-flex justify-content-between align-items-center">
                                 <textarea class="form-control" rows="2" id="msg" minlength="30" 
@@ -111,51 +91,81 @@
 
             <c:forEach var="comment" items="${commentsList}" varStatus="loop">
                 <c:set var="commentUser" value="${userComment[loop.index]}" />
+                <c:set var="commentUserRank" value="${userRank[loop.index]}" />
                 <c:set var="commentDate" value="${commentTime[loop.index]}" />
                 <div class="comment-container media">
                     <div class="comment-avatar">
-                        <img alt="${commentUser.username}" title="${commentUser.username}" src="${commentUser.profilePhoto}" onerror="this.src='assets/images/others/product-3.jpg'">
+                        <img alt="${commentUser.username}" 
+                             title="${commentUser.username}" 
+                             src="${pageContext.request.contextPath}/${commentUser.profilePhoto}" 
+                             onerror="this.src='assets/images/others/product-3.jpg'">
                     </div>
                     <div class="comment-input-block media-body" id="comment_${loop.index}">
                         <p class="card-text">
-                            <span class="card-title">
-                                ${comment.content}
+                            <span class="card-title" data-rank-color=" ${commentUserRank.color}" >
+                                ${commentUserRank.name}
                             </span>
                             <span class="text-truncate" title="${commentUser.username}" >
                                 ${commentUser.username}
                             </span>
                         </p>
-                        <div class="card comment-card">
+                        <div class="card comment-card" data-rank-color="${commentUserRank.color}">
                             <div class="card-body">
-                                ${comment.content}
+                                <c:choose>
+                                    <c:when test="${comment.status eq 'active'}">
+                                        ${comment.content}
+                                    </c:when>
+                                    <c:otherwise>
+                                        This comment has been deleted.
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                             <input id="commentId" type="hidden" value="${comment.commentId}" >
                         </div>
-                        <p class="card-text comment-date">
+                        <div class="card-text comment-date">
+                            <div class="vote-section vote-section-cmt" id="vote-section-cmt">
+                                <i  id="vote_comment_up" class="anticon anticon_vote anticon-arrow-up mr-2" 
+                                    onclick="voteComment('up', ${comment.commentId})" style="padding: 10px"></i>
+                                <i  id="vote_comment_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
+                                    onclick="voteComment('down', ${comment.commentId})" style="padding: 10px"></i>
+                                <span id="vote_comment_value">${comment.vote}</span>
+                            </div>
                             <span class="badge badge-secondary">
                                 ${commentDate}
                             </span>
-                            <button class="btn reply-button"  data-comment-id="${comment.commentId}" onclick="toggleReply(this)">
-                                <i class="mdi mdi-reply"></i> Reply
-                            </button>
-                        </p>
-                        <div id="replyComment_${comment.commentId}" class="replyComment justify-content-between align-items-center d-none">
-                            <textarea class="form-control" rows="2" id="msgReply" minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
-                            <button type="button" class="btn btn-success btn-submit-comment"
-                                    data-comment-id="${comment.commentId}"  onclick="sendMsgReply(this)">
-                                <i class="fas fa-paper-plane fa-2x"></i>
-                            </button>
+                            <c:if test="${not empty user}">
+                                <c:if test="${user.userId == commentUser.userId && comment.status eq 'active'}">
+                                    <button type="button" class="btn reply-button" data-comment-id="${comment.commentId}" 
+                                            data-toggle="modal" data-target="#editCommentModal">
+                                        Edit
+                                    </button>
+                                </c:if>
+                                <button class="btn reply-button"  data-comment-id="${comment.commentId}" onclick="toggleReply(this)">
+                                    Reply
+                                </button>
+                            </c:if>
                         </div>
+                        <form action="replyComment" method="post">
+                            <div id="replyComment_${comment.commentId}" class="replyComment justify-content-between align-items-center d-none">
+                                <textarea class="form-control" rows="2" id="msgReply" minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
+                                <button type="submit" class="btn btn-success btn-submit-comment"
+                                        data-comment-id="${comment.commentId}"">
+                                    <i class="fas fa-paper-plane fa-2x"></i>
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
+
             </c:forEach>
             <c:if test="${empty commentsList}">
                 <p>No comments found.</p>
             </c:if>
 
+
             <div class="border-0 bg-none media align-items-center mt-3" style="border-top:1px solid #a7acad !important;">
                 <div class="comment-avatar mr-2">
-                    <!--<img alt="Lữ thiên thụ " title="Lữ thiên thụ " src="//vidian.vn/public-img/image-1660494445519.jpg" onerror="this.src='https:////vidian.vn/images/chi-dao-sang-tac.jpg'" width="45" height="45">-->
+                    <img alt="Lữ thiên thụ " title="Lữ thiên thụ " src="//vidian.vn/public-img/image-1660494445519.jpg" onerror="this.src='https:////vidian.vn/images/chi-dao-sang-tac.jpg'" width="45" height="45">
                 </div>
                 <div class="comment-input-block media-body" id="comment_0">
                     <p class="card-text">
@@ -178,9 +188,7 @@
     </div>
 </div>
 </div>
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editCommentModal">
-    Open Modal
-</button>
+
 
 <!-- Edit Comment Modal -->
 <div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" aria-labelledby="editCommentModalLabel" aria-hidden="true">
@@ -193,35 +201,93 @@
                 </button>
             </div>
             <div class="modal-body">
+                <input type="hidden" name="commentId" id="editCommentId" value="">
                 <textarea class="form-control" rows="3" id="editCommentTextarea" minlength="30" required placeholder="Enter your edited comment..."></textarea>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="saveEditedComment()">Save changes</button>
+                <button id="deleteCommentBtn" type="button" class="btn btn-secondary" >Delete</button>
+                <button id="saveEditedCommentBtn" type="button" class="btn btn-primary" >Save changes</button>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Report Post Modal -->
+<div class="modal fade" id="reportPostModal" tabindex="-1" role="dialog" aria-labelledby="reportPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reportPostModalLabel">Report Post</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="reportPost" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="postId" id="reportPostId" value="">
+                    <div class="form-group">
+                        <label for="reportReasons">Select reasons for reporting:</label>
+                        <div id="reportReasons">
+                            <div class="checkbox-item">
+                                <div class=" checkbox-wrapper-31">
+                                    <input class="form-check-input " type="checkbox" name="reasons" id="spam" value="Spam">
+                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                                </div>
+                                <label class="form-check-label" for="spam">spam</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <div class="checkbox-wrapper-31">
+                                    <input class="form-check-input" type="checkbox" name="reasons" id="harassment" value="Harassment">
+                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                                </div>
+                                <label class="form-check-label" for="harassment">Harassment</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <div class="checkbox-wrapper-31">
+                                    <input class="form-check-input" type="checkbox" name="reasons" id="hateSpeech" value="Hate Speech">
+                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                                </div>
+                                <label class="form-check-label" for="hateSpeech">Hate Speech</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <div class="checkbox-wrapper-31">
+                                    <input class="form-check-input" type="checkbox" name="reasons" id="misinformation" value="Misinformation">
+                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                                </div>
+                                <label class="form-check-label" for="misinformation">Misinformation</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <div class="checkbox-wrapper-31">
+                                    <input class="form-check-input" type="checkbox" name="reasons" id="other" value="Other">
+                                    <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                                </div>
+                                <label class="form-check-label" for="other">Other</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="cancelReportBtn" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button id="submitReportBtn" type="submit" class="btn btn-primary">Submit Report</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
-    // Biến để theo dõi trạng thái upvote/downvote
-    let voteStatus = 'none'; // Trạng thái ban đầu
 
-    // Hàm để lấy giá trị của một tham số từ URL
-    const getUrlParameter = (param) => {
-        const urlParams = new URLSearchParams(window.location.search);
-        return urlParams.get(param);
-    };
-
-    const votePost = (type) => {
+    let voteStatus = 'unvote'; // Trạng thái ban đầu
+// Hàm xử lý upvote/downvote
+    const votePost = (type, voteStatus) => {
         const voteValueElement = document.getElementById('vote_value');
         const postId = getUrlParameter('postId');
         if (!postId) {
             console.error("postId không tồn tại trong URL");
-            return; // Thoát ra nếu postId không tồn tại
+            return; // Thoát nếu không có postId
         }
 
-        isLoggedIn((loggedIn) => {
+        isLoggedIn(loggedIn => {
             if (!loggedIn) {
                 Swal.fire({
                     icon: 'error',
@@ -233,26 +299,18 @@
             }
             const currentVote = parseInt(voteValueElement.innerText);
             let increment = 0;
-
-            // Hàm để xử lý thêm/loại bỏ lớp 'upvoted' và 'downvoted'
-            const toggleVoteClass = (addUpvoted, addDownvoted) => {
-                const voteSection = document.getElementById('vote-section');
-                voteSection.classList.toggle('upvoted', addUpvoted);
-                voteSection.classList.toggle('downvoted', addDownvoted);
-            };
-
             // Xử lý upvote và downvote
             if (type === 'up') {
-                increment = (voteStatus === 'upvoted') ? -1 : (voteStatus === 'downvoted') ? 2 : 1;
-                voteStatus = (voteStatus === 'upvoted') ? 'none' : 'upvoted';
-                toggleVoteClass(voteStatus === 'upvoted', false);
+                increment = (voteStatus === 'upvote') ? -1 : (voteStatus === 'downvote') ? 2 : 1;
+                voteStatus = (voteStatus === 'upvote') ? 'unvote' : 'upvote';
+                toggleVoteClass(voteStatus === 'upvote', false);
             } else if (type === 'down') {
-                increment = (voteStatus === 'downvoted') ? 1 : (voteStatus === 'upvoted') ? -2 : -1;
-                voteStatus = (voteStatus === 'downvoted') ? 'none' : 'downvoted';
-                toggleVoteClass(false, voteStatus === 'downvoted');
+                increment = (voteStatus === 'downvote') ? 1 : (voteStatus === 'upvote') ? -2 : -1;
+                voteStatus = (voteStatus === 'downvote') ? 'unvote' : 'downvote';
+                toggleVoteClass(false, voteStatus === 'downvote');
             }
-
-            let newVoteValue = currentVote + increment;
+            const newVoteValue = currentVote + increment;
+            // Cập nhật giá trị vote hiển thị
             voteValueElement.innerText = newVoteValue;
 
             // Gửi yêu cầu AJAX để cập nhật vote
@@ -264,15 +322,74 @@
                     console.log(xhr.status === 200 ? "Vote updated successfully" : "Error updating vote");
                 }
             };
-            xhr.send("postId=" + postId + "&vote_value=" + newVoteValue);
+            xhr.send("postId=" + postId + "&vote_value=" + newVoteValue + "&vote_status=" + voteStatus);
+            setTimeout(() => {
+                location.reload();
+            }, 300); // Reload sau 1 giây (1000 milliseconds)
         });
     };
 
-    // Check Login
-    const isLoggedIn = (callback) => {
+    //Show change upvote downvote
+    document.addEventListener('DOMContentLoaded', function () {
+        const votePostStatus = `${votePostStatus}`; // Đảm bảo votePostStatus là string
+        if (votePostStatus.trim() === "") {
+            return; // Nếu votePostStatus rỗng thì không làm gì cả và thoát khỏi hàm
+        }
+        console.log(votePostStatus);
+        if (votePostStatus === "unvote") {
+            toggleVoteClass(false, false);
+        } else if (votePostStatus === "upvote") {
+            toggleVoteClass(true, false);
+        } else if (votePostStatus === "downvote") {
+            toggleVoteClass(false, true);
+        }
+
+    });
+
+// Thay đổi background của .comment-input-block .card-title
+    const commentTitles = document.querySelectorAll('.comment-input-block .card-title');
+    commentTitles.forEach(title => {
+        const rankColor = title.getAttribute('data-rank-color');
+        if (rankColor) {
+            title.style.background = rankColor;
+            title.style.color = 'rgba(255, 255, 255, 0.15)';
+            title.style.fontWeight = '800';
+            title.style.position = 'relative';
+            title.style.webkitBackgroundClip = 'text';
+        }
+    });
+
+// Thay đổi border color và box-shadow của .comment-card
+    const commentCards = document.querySelectorAll('.comment-card');
+    commentCards.forEach(card => {
+        const rankColor = card.getAttribute('data-rank-color');
+        if (rankColor) {
+            card.style.borderColor = "" + rankColor;
+            card.style.boxShadow = '0 0 15px ' + rankColor;
+        }
+    });
+
+
+// Hàm để lấy giá trị của một tham số từ URL
+    const getUrlParameter = param => {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    };
+
+    // Hàm để xử lý thêm/loại bỏ lớp 'upvoted' và 'downvoted'
+    const toggleVoteClass = (addUpvoted, addDownvoted) => {
+        const voteSection = document.getElementById('vote-section');
+        voteSection.classList.toggle('upvoted', addUpvoted);
+        voteSection.classList.toggle('downvoted', addDownvoted);
+    };
+
+
+
+// Kiểm tra đăng nhập
+    const isLoggedIn = callback => {
         const xhr = new XMLHttpRequest();
         xhr.open("GET", "checkLogin", true);
-        xhr.setRequestHeader("Content-Type", "text/plain"); // Sử dụng text/plain
+        xhr.setRequestHeader("Content-Type", "text/plain");
         xhr.onreadystatechange = () => {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
@@ -286,13 +403,13 @@
         };
         xhr.send();
     };
-
+// Gửi tin nhắn
     function sendMsg() {
-        var msg = $("#msg").val();
+        const msg = $("#msg").val();
         const postId = getUrlParameter('postId');
         if (!postId) {
             console.error("postId không tồn tại trong URL");
-            return; // Thoát ra nếu postId không tồn tại
+            return; // Thoát nếu không có postId
         }
         if (msg.length < 30) {
             alert("Tối thiểu 30 ký tự...");
@@ -301,24 +418,23 @@
                 type: 'POST',
                 url: 'addComment',
                 data: {content: msg, postId: postId},
-                success: (response) => {
+                success: response => {
                     alert("Comment added successfully!");
-                    // Optionally clear the textarea or update the UI
                     $("#msg").val('');
                     location.reload();
                 },
-                error: (error) => {
+                error: error => {
                     alert("Error adding comment: " + error.responseText);
                 }
             });
         }
     }
 
+// Chuyển đổi trạng thái hiển thị phản hồi
     function toggleReply(button) {
-        var commentId = button.getAttribute('data-comment-id');
-        console.log(commentId); // Kiểm tra xem commentId có giá trị hợp lệ hay không
-
-        var replyCommentDiv = document.querySelector("#replyComment_" + commentId);
+        const commentId = button.getAttribute('data-comment-id');
+        console.log(commentId);
+        const replyCommentDiv = document.querySelector('#replyComment_' + commentId);
         if (replyCommentDiv) {
             if (replyCommentDiv.classList.contains('d-none')) {
                 replyCommentDiv.classList.remove('d-none');
@@ -328,18 +444,18 @@
                 replyCommentDiv.classList.remove('d-flex');
             }
         } else {
-            console.error(`Không tìm thấy phần tử với id #replyComment_${commentId}`);
+            console.error('Không tìm thấy phần tử với id #replyComment_' + commentId);
         }
     }
 
-
+// Gửi phản hồi
     function sendMsgReply(button) {
-        var msg = $("#msgReply").val();
+        const msg = $("#msgReply").val();
         const parentId = button.getAttribute('data-comment-id');
         const postId = getUrlParameter('postId');
         if (!postId) {
             console.error("postId không tồn tại trong URL");
-            return; // Thoát ra nếu postId không tồn tại
+            return; // Thoát nếu không có postId
         }
         if (msg.length < 30) {
             alert("Tối thiểu 30 ký tự...");
@@ -348,17 +464,96 @@
                 type: 'POST',
                 url: 'addComment',
                 data: {content: msg, postId: postId, parentId: parentId},
-                success: (response) => {
+                success: response => {
                     alert("Comment added successfully!");
-                    // Optionally clear the textarea or update the UI
-                    $("#msg").val('');
+                    $("#msgReply").val('');
                     location.reload();
                 },
-                error: (error) => {
+                error: error => {
                     alert("Error adding comment: " + error.responseText);
                 }
             });
         }
     }
+    $(document).ready(() => {
+        //Show edit comment
+        $('#editCommentModal').on('show.bs.modal', (event) => {
+            const button = $(event.relatedTarget); // Button that triggered the modal
+            const commentId = button.data('comment-id'); // Extract info from data-* attributes
 
+            $.ajax({
+                url: 'updateComment',
+                type: 'GET',
+                data: {commentId},
+                success: (data) => {
+                    // Assuming 'data' is the comment object in JSON format
+                    $('#editCommentId').val(data.commentId);
+                    $('#editCommentTextarea').val(data.content);
+                },
+                error: (xhr, status, error) => {
+                    console.error(`Failed to fetch comment: ${error}`);
+                }
+            });
+        });
+
+        // Save edited comment function
+        const saveEditedComment = () => {
+            // Get the edited comment ID and content from the modal
+            var commentId = $('#editCommentId').val();
+            var editedContent = $('#editCommentTextarea').val();
+            // Prepare the data to send in the AJAX request
+            var data = {
+                commentId: commentId,
+                content: editedContent
+            };
+            // Send an AJAX POST request to update comment
+            $.ajax({
+                type: 'POST',
+                url: 'updateComment',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    console.log('Comment edited successfully');
+                    // Optionally close the modal or perform other actions
+                    $('#editCommentModal').modal('hide'); // Example: Hide modal after successful save
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    // Handle error
+                    console.error('Error editing comment:', error);
+                }
+            });
+        };
+        // Attach saveEditedComment function to the 'Save changes' button click
+        $('#saveEditedCommentBtn').on('click', saveEditedComment);
+
+        // Save edited comment function
+        const deleteComment = () => {
+            // Get the edited comment ID and content from the modal
+            var commentId = $('#editCommentId').val();
+            // Prepare the data to send in the AJAX request
+            var data = {
+                commentId: commentId,
+            };
+            // Send an AJAX POST request to update comment
+            $.ajax({
+                type: 'POST',
+                url: 'updateComment',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function (response) {
+                    console.log('Comment edited successfully');
+                    // Optionally close the modal or perform other actions
+                    $('#editCommentModal').modal('hide'); // Example: Hide modal after successful save
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    // Handle error
+                    console.error('Error editing comment:', error);
+                }
+            });
+        };
+        // Attach saveEditedComment function to the 'Save changes' button click
+        $('#deleteCommentBtn').on('click', deleteComment);
+    });
 </script>

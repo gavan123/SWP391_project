@@ -16,24 +16,10 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <style>
-            .logo {
-                width: 100%; /* Hoặc đặt kích thước cố định nếu cần */
-                max-width: 300px; /* Kích thước tối đa của div logo, bạn có thể điều chỉnh giá trị này */
-                margin: 0 auto; /* Để căn giữa div logo nếu cần */
-            }
-
-            .logo img {
-                width: 100%;
-                height: 70px;
-                display: block;
-            }
-            .app{
-                background-color: #fee2dc;
-            }
-            ::selection {
-                color: black;
-                background: #fee2dc;
-            }
+          .logo{width:100%;max-width:300px;margin:0 auto}
+.logo img{width:100%;height:70px;display:block}
+.app{background-color:#fee2dc}
+::selection{color:#000;background:#fee2dc}
         </style>
     </head>
     <body>

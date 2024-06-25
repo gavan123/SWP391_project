@@ -4,9 +4,10 @@
  */
 package controller;
 
-import dal.CategoryDAO;
-import dal.GenreDAO;
-import dal.PostDAO;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonSyntaxException;
+import dal.CommentDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,20 +15,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.time.LocalDateTime;
-import java.util.List;
-import model.Category;
-import model.Genre;
-import model.Post;
-import model.User;
+import java.util.stream.Collectors;
+import model.Comment;
+import utility.LocalDateTimeAdapter;
 
 /**
  *
- * @author admin
+ * @author ADMIN
  */
-@WebServlet(name = "createPost2", urlPatterns = {"/createPost"})
-public class CreatePost extends HttpServlet {
+@WebServlet(name = "DeleteComment", urlPatterns = {"/deleteComment"})
+public class DeleteComment extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,10 +46,10 @@ public class CreatePost extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet createPost2</title>");            
+            out.println("<title>Servlet DeleteComment</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet createPost2 at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet DeleteComment at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -67,16 +67,7 @@ public class CreatePost extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        CategoryDAO categoryDAO = new CategoryDAO();
-        GenreDAO genreDAO = new GenreDAO();
-
-        List<Category> categories = categoryDAO.getCategoryNames();
-        List<Genre> genres = genreDAO.getAllGenres();
-
-        request.setAttribute("categories", categories);
-        request.setAttribute("genres", genres);
-
-        request.getRequestDispatcher("CreatePost.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -90,37 +81,41 @@ public class CreatePost extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       
-        HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
-        String title = request.getParameter("title");
-        int categoryId = Integer.parseInt(request.getParameter("category"));
-        int genreId = Integer.parseInt(request.getParameter("genre"));
-        String content = request.getParameter("content");
-        Post post = new Post();
-        post.setUserId(user.getUserId());
-        post.setCategoryId(categoryId);
-        post.setTitle(title);
-        post.setContent(content);
-        post.setImage("ehe");
-        post.setPostTime(LocalDateTime.now());
-        post.setStatus("active");
-        // Lưu bài viết vào cơ sở dữ liệu
-        PostDAO postDAO = new PostDAO();
-        boolean isPostCreated = postDAO.createPost(post);
-        
-        // Kiểm tra kết quả và điều hướng người dùng
-        if (isPostCreated) {
-            postDAO.insertPostGenre(postDAO.getPostIDJustInserted(user.getUserId()), genreId);
-            session.setAttribute("postID",postDAO.getPostIDJustInserted(user.getUserId()));
-            session.setAttribute("newPost", post);
-            response.sendRedirect("ChoosePostPic.jsp"); // Điều hướng tới trang thành công
-        } else {
-            response.sendRedirect("error.jsp"); // Điều hướng tới trang lỗi
+        try {
+            // Đọc dữ liệu JSON từ phần thân của yêu cầu
+            BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+            String jsonRequest = reader.lines().collect(Collectors.joining());
+            // Chuyển đổi JSON thành đối tượng Java sử dụng Gson
+            Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter()).create();
+            Comment data = gson.fromJson(jsonRequest, Comment.class);
+            // Kiểm tra tính hợp lệ của dữ liệu đầu vào
+            if (data == null || data.getCommentId() <= 0) {
+                throw new IllegalArgumentException("Invalid data received");
+            }
+            // Lấy bình luận từ cơ sở dữ liệu
+            CommentDAO commentDAO = new CommentDAO();
+            // Cập nhật nội dung bình luận
+            commentDAO.deleteComment(data.getCommentId());
+            // Gửi phản hồi về cho client (frontend)
+            String jsonResponse = "{ \"status\": \"success\" }";
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(jsonResponse);
+        } catch (JsonSyntaxException | IOException | IllegalArgumentException e) {
+            // Xử lý ngoại lệ và gửi phản hồi lỗi về cho client
+            String errorResponse = "{ \"status\": \"error\", \"message\": \"" + e.getMessage() + "\" }";
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(errorResponse);
         }
+
     }
 
-
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
     @Override
     public String getServletInfo() {
         return "Short description";

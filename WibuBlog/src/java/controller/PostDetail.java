@@ -6,8 +6,8 @@ package controller;
 
 import dal.CommentDAO;
 import dal.PostDAO;
+import dal.RankDAO;
 import dal.UserDAO;
-import jakarta.servlet.ServletException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -20,10 +20,9 @@ import jakarta.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 import model.Comment;
+import model.Rank;
 import model.User;
 
 /**
@@ -71,62 +70,91 @@ public class PostDetail extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Lấy giá trị postId từ request parameter
         String postIdStr = request.getParameter("postId");
-// Get the session from the request
+
+        // Lấy session hiện tại từ request để lấy thông tin người dùng
         HttpSession session = request.getSession();
         User userSession = (User) session.getAttribute("user");
 
+        // Kiểm tra xem postId có tồn tại và không rỗng
         if (postIdStr != null && !postIdStr.isEmpty()) {
             try {
+                // Chuyển đổi postId từ String sang int
                 int postId = Integer.parseInt(postIdStr);
+
+                // Khởi tạo các DAO cần thiết để truy xuất dữ liệu
                 PostDAO postDAO = new PostDAO();
                 CommentDAO commentDAO = new CommentDAO();
                 UserDAO userDAO = new UserDAO();
+                RankDAO rankDAO = new RankDAO();
 
+                // Lấy chi tiết bài viết theo postId từ database
                 model.PostDetail post = postDAO.getPostDetailById(postId);
+
+                String votePostStatus = ""; // Khởi tạo biến status ban đầu là rỗng
+
+                // Kiểm tra người dùng đã đăng nhập và đã vote cho bài viết này chưa
+                if (userSession != null) {
+                    boolean isPostVoted = postDAO.hasUserVoted(userSession.getUserId(), postId);
+                    if (isPostVoted) {
+                        votePostStatus = postDAO.checkVoteStatus(userSession.getUserId(), postId);
+                    }
+                }
+
+                // Lấy danh sách comment của bài viết từ database
                 List<Comment> comments = commentDAO.getCommentsForPost(postId);
 
+                // Chuẩn bị danh sách user và rank tương ứng với mỗi comment
                 List<User> users = new ArrayList<>();
+                List<Rank> ranks = new ArrayList<>();
                 List<String> commentDate = new ArrayList<>();
+
+                // Lặp qua từng comment để lấy thông tin user, rank và định dạng thời gian
                 for (Comment comment : comments) {
-                    User user = userDAO.getUserById(comment.getUserId());
-                    if (user != null) {
-                        users.add(user);
+                    User commentUser = userDAO.getUserById(comment.getUserId());
+                    Rank commentRank = rankDAO.getRankByUserId(comment.getUserId());
+                    if (commentUser != null) {
+                        users.add(commentUser);
                     }
-                    String formateDate = formatDate(comment.getCreateAt());
-                    commentDate.add(formateDate);
+                    if (commentRank != null) {
+                        ranks.add(commentRank);
+                    }
+                    String formattedDate = formatDate(comment.getCreateAt());
+                    commentDate.add(formattedDate);
                 }
 
-                if (post != null) {
-                    // Kiểm tra xem bài viết đã được xem chưa
-                    if (!isPostViewed(request, postId)) {
-                        // Cập nhật số lượt xem và tạo cookie
-                        postDAO.updateView(postId);
-                        setPostViewedCookie(response, postId);
-                    }
-                    // Định dạng lại thời gian thành yyyy-MM-dd
-                    String postDate = formatDate(post.getPostTime());
-
-                    // Set attributes for JSP rendering
-                    request.setAttribute("user", userSession);
-                    request.setAttribute("userComment", users);
-                    request.setAttribute("commentsList", comments);
-                    request.setAttribute("post", post);
-                    request.setAttribute("postTime", postDate);
-                    request.setAttribute("commentTime", commentDate);
-
-                    request.getRequestDispatcher("PostDetail.jsp").forward(request, response);
-                    return; // Thoát khỏi phương thức sau khi forward
+                // Kiểm tra và cập nhật số lượt xem bài viết nếu chưa từng được xem
+                if (post != null && !isPostViewed(request, postId)) {
+                    postDAO.updateView(postId); // Cập nhật số lượt xem của bài viết
+                    setPostViewedCookie(response, postId); // Tạo cookie cho việc đã xem bài viết
                 }
+
+                // Định dạng lại thời gian của bài viết
+                String postDate = formatDate(post.getPostTime());
+
+                // Set các attribute cần thiết cho JSP rendering
+                request.setAttribute("user", userSession); // Thông tin người dùng hiện tại
+                request.setAttribute("post", post); // Chi tiết bài viết
+                request.setAttribute("postTime", postDate); // Thời gian đăng bài viết
+                request.setAttribute("userRank", ranks); // Danh sách rank của các user comment
+                request.setAttribute("userComment", users); // Danh sách user của các comment
+                request.setAttribute("commentsList", comments); // Danh sách comment của bài viết
+                request.setAttribute("commentTime", commentDate); // Thời gian của từng comment
+                request.setAttribute("votePostStatus", votePostStatus); // Trạng thái phiếu bầu của người dùng
+
+                // Forward request tới trang PostDetail.jsp để hiển thị chi tiết bài viết
+                request.getRequestDispatcher("PostDetail.jsp").forward(request, response);
+                return; // Thoát khỏi phương thức sau khi forward thành công
             } catch (NumberFormatException ex) {
-                ex.printStackTrace();
+                // Xử lý ngoại lệ NumberFormatException
+                ex.printStackTrace(); // In stack trace để debug
             }
         }
 
-        response.sendRedirect("Error.jsp"); // Xử lý khi không thành công
-
+        // Nếu không thỏa mãn điều kiện kiểm tra ban đầu hoặc userSession là null, redirect người dùng tới trang Error.jsp
+        response.sendRedirect("Error.jsp");
     }
-// Phương thức kiểm tra xem bài viết đã được xem chưa
 
     private boolean isPostViewed(HttpServletRequest request, int postId) {
         Cookie[] cookies = request.getCookies();

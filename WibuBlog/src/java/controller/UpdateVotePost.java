@@ -20,7 +20,7 @@ import model.User;
  * @author ADMIN
  */
 @WebServlet(name = "UpdateVote", urlPatterns = {"/updateVote"})
-public class UpdateVote extends HttpServlet {
+public class UpdateVotePost extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -76,30 +76,43 @@ public class UpdateVote extends HttpServlet {
             throws ServletException, IOException {
         String postIdStr = request.getParameter("postId");
         String voteValueStr = request.getParameter("vote_value");
+        String voteStatusStr = request.getParameter("vote_status");
         HttpSession session = request.getSession();
         User userSession = (User) session.getAttribute("user");
 
-        if (userSession != null && postIdStr != null
-                && !postIdStr.isEmpty() && voteValueStr != null
-                && !voteValueStr.isEmpty()) {
-            try {
-                int postId = Integer.parseInt(postIdStr);
-                int voteValue = Integer.parseInt(voteValueStr);
-                if (voteValue < 0) {
-                    voteValue = 0;
-                }
-                PostDAO postDAO = new PostDAO();
-                boolean updateSuccess = postDAO.updateVote(postId, voteValue);
+        PostDAO postDAO = new PostDAO();
+        // Kiểm tra các tham số từ request
+        if (userSession == null || postIdStr == null || postIdStr.isEmpty()
+                || voteValueStr == null || voteValueStr.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
 
-                if (updateSuccess) {
-                    response.setStatus(HttpServletResponse.SC_OK);
-                } else {
-                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                }
-            } catch (NumberFormatException ex) {
-                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        try {
+            // Chuyển đổi các tham số thành số nguyên
+            int postId = Integer.parseInt(postIdStr);
+            int voteValue = Integer.parseInt(voteValueStr);
+            int userId = userSession.getUserId();
+
+            // Kiểm tra nếu người dùng đã bầu chọn cho bài đăng này
+            boolean isPostVoted = postDAO.hasUserVoted(userId, postId);
+            if (!isPostVoted) {
+                // Nếu chưa bầu chọn, thêm phiếu bầu mới
+                postDAO.addUserVote(userId, postId, voteStatusStr);
+            } else {
+                // Nếu đã bầu chọn, kiểm tra trạng thái bầu chọn và cập nhật lại
+                postDAO.updateUserVote(userId, postId, voteStatusStr);
             }
-        } else {
+            if (voteValue < 0) {
+                voteValue = 0;
+            }
+            // Cập nhật giá trị phiếu bầu của bài đăng
+            boolean updateSuccess = postDAO.updateVote(postId, voteValue);
+
+            // Kiểm tra kết quả cập nhật và thiết lập trạng thái phản hồi HTTP tương ứng
+            response.setStatus(updateSuccess ? HttpServletResponse.SC_OK : HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (NumberFormatException ex) {
+            // Xử lý ngoại lệ nếu không thể chuyển đổi thành số nguyên và thiết lập trạng thái phản hồi là Bad Request
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
     }

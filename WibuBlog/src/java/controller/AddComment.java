@@ -90,8 +90,8 @@ public class AddComment extends HttpServlet {
             User userSession = (User) session.getAttribute("user");
             String content = request.getParameter("content");
             int postId = Integer.parseInt(request.getParameter("postId"));
+            String paString = request.getParameter("parentId");
             int parentId = Integer.parseInt(request.getParameter("parentId"));
-
 
             // Create Comment object
             Comment comment = new Comment(postId, userSession.getUserId(), content, parentId);

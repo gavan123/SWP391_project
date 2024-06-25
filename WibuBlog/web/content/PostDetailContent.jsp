@@ -441,7 +441,7 @@
             $.ajax({
                 type: 'POST',
                 url: 'addComment',
-                data: {content: msg, postId: postId},
+                data: {content: msg, postId: postId, parentId: 0},
                 success: response => {
                     alert("Comment added successfully!");
                     $("#msg").val('');

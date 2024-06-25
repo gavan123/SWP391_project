@@ -177,7 +177,8 @@
                             <textarea class="form-control" rows="2" id="msgReply_${comment.commentId}" 
                                       minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
                             <button type="button" class="btn btn-success btn-submit-comment"
-                                    data-comment-id="${comment.commentId}" onclick="sendMsgReply(this)">
+                                    data-comment-id="${comment.commentId}" 
+                                    data-reply-user="${commentUser.username}" onclick="sendMsgReply(this)">
                                 <i class="fas fa-paper-plane fa-2x"></i>
                             </button>
                         </div>
@@ -475,6 +476,7 @@
 // Gửi phản hồi
     function sendMsgReply(button) {
         const parentId = button.getAttribute('data-comment-id');
+        const userReply = button.getAttribute('data-reply-user');
         const msg = $("#msgReply_" + parentId).val();
         const postId = getUrlParameter('postId');
         if (!postId) {
@@ -487,7 +489,7 @@
             $.ajax({
                 type: 'POST',
                 url: 'addComment',
-                data: {content: msg, postId: postId, parentId: parentId},
+                data: {content: "@" + userReply + " " + msg, postId: postId, parentId: parentId},
                 success: response => {
                     alert("Comment added successfully!");
                     $("#msgReply").val('');

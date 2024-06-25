@@ -36,9 +36,11 @@
                 <br>
             </div>
             <hr>
-            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
-                <i class="fas fa-flag"></i> Report Post
-            </button>
+            <c:if test="${post.username != user.username}">
+                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
+                    <i class="fas fa-flag"></i> Report Post
+                </button>
+            </c:if>
             <div class="row">
                 <div class="col-lg-4 mb-2 mx-auto">
                     <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
@@ -58,6 +60,7 @@
     </div>
 
     <!--    Post user-->
+
     <div class="card mb-2">
         <img class="img-thumbnail rounded-circle mx-auto d-block mt-2" 
              alt="${post.username}" title="${post.username}" 

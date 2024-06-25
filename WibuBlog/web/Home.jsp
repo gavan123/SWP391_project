@@ -33,8 +33,8 @@
             spaceBetween: 15,
             pagination: {
                 el: '.swiper-pagination',
-                clickable: true
-            }
+                clickable: true,
+            },
         });
     </script>
 </html>

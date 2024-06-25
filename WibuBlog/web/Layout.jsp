@@ -4,12 +4,7 @@
     Author     : ADMIN
 --%>
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="model.Notification"%>
-<%@ page import="dal.NotificationDAO"%>
-<%@ page import="java.util.ArrayList"%>
-<%@ page import="model.User"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -28,7 +23,6 @@
         </style>
     </head>
     <body>
-        
         <div class="app">
             <div class="layout">
                 <!-- Header START -->
@@ -67,12 +61,10 @@
                             </li>
                         </ul>
                         <ul class="nav-right">
-                            <c:if test="${user != null}">
                             <li class="dropdown dropdown-animated scale-left">
                                 <a href="javascript:void(0);" data-toggle="dropdown">
                                     <i class="anticon anticon-bell notification-badge"></i>
                                 </a>
-                              
                                 <div class="dropdown-menu pop-notification">
                                     <div class="p-v-15 p-h-25 border-bottom d-flex justify-content-between align-items-center">
                                         <p class="text-dark font-weight-semibold m-b-0">
@@ -85,49 +77,54 @@
                                     </div>
                                     <div class="relative">
                                         <div class="overflow-y-auto relative scrollable" style="max-height: 300px">
-                                            <c:if test="${user != null}">
-                                               <%      
-                                                    NotificationDAO nd = new NotificationDAO();
-                                                    User user = (User)session.getAttribute("user");
-                                                    ArrayList<Notification> notificationList = nd.getTop10Notification(user.getUserId());
-                                                    pageContext.setAttribute("notificationList", notificationList);
-                                                %>
-                                                </c:if>
-                                            <c:forEach items="${notificationList}" var="noti">     
-                                                <c:if test="${noti.sourceUserId != noti.targetUserId}">
-                                                <c:choose>
-                                                <c:when test="${noti.sourcePostId != null}">
-                                                      <a href="postDetail?postId=${noti.sourcePostId}" class="dropdown-item d-block p-15 border-bottom">
-                                                </c:when>
-                                                 <c:otherwise>
-                                                    <a href="Profile.jsp" class="dropdown-item d-block p-15 border-bottom">
-                                                   </c:otherwise>
-                                                </c:choose>
+                                            <a href="javascript:void(0);" class="dropdown-item d-block p-15 border-bottom">
                                                 <div class="d-flex">
                                                     <div class="avatar avatar-blue avatar-icon">
-                                                         <c:choose>
-                                                <c:when test="${noti.sourcePostId != null}">
-                                                      <i class="anticon anticon-project"></i>
-                                                </c:when>
-                                                 <c:otherwise>
-                                                    <i class="anticon anticon-profile"></i>
-                                                   </c:otherwise>
-                                                </c:choose>
+                                                        <i class="anticon anticon-mail"></i>
                                                     </div>
                                                     <div class="m-l-15">
-                                                        <p class="m-b-0 text-dark">${noti.content}</p>
-                                                        <p class="m-b-0"><small>${noti.postTime}</small></p>
+                                                        <p class="m-b-0 text-dark">You received a new message</p>
+                                                        <p class="m-b-0"><small>8 min ago</small></p>
                                                     </div>
                                                 </div>
                                             </a>
-                                                    </c:if>
-                                            </c:forEach> 
+                                            <a href="javascript:void(0);" class="dropdown-item d-block p-15 border-bottom">
+                                                <div class="d-flex">
+                                                    <div class="avatar avatar-cyan avatar-icon">
+                                                        <i class="anticon anticon-user-add"></i>
+                                                    </div>
+                                                    <div class="m-l-15">
+                                                        <p class="m-b-0 text-dark">New user registered</p>
+                                                        <p class="m-b-0"><small>7 hours ago</small></p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <a href="javascript:void(0);" class="dropdown-item d-block p-15 border-bottom">
+                                                <div class="d-flex">
+                                                    <div class="avatar avatar-red avatar-icon">
+                                                        <i class="anticon anticon-user-add"></i>
+                                                    </div>
+                                                    <div class="m-l-15">
+                                                        <p class="m-b-0 text-dark">System Alert</p>
+                                                        <p class="m-b-0"><small>8 hours ago</small></p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                            <a href="javascript:void(0);" class="dropdown-item d-block p-15 ">
+                                                <div class="d-flex">
+                                                    <div class="avatar avatar-gold avatar-icon">
+                                                        <i class="anticon anticon-user-add"></i>
+                                                    </div>
+                                                    <div class="m-l-15">
+                                                        <p class="m-b-0 text-dark">You have a new update</p>
+                                                        <p class="m-b-0"><small>2 days ago</small></p>
+                                                    </div>
+                                                </div>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
-                            
                             </li>
-                            </c:if>
                             <jsp:include page="${param.accountHeader}" />
                             <li>
                                 <a href="javascript:void(0);" data-toggle="modal" data-target="#quick-view">

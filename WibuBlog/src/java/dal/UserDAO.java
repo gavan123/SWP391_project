@@ -37,7 +37,7 @@ public class UserDAO extends DBContext {
                         rs.getString("Email"),
                         rs.getString("Fullname"),
                         rs.getInt("RankID"),
-                        rs.getString("ProfilePhoto") != null ? rs.getString("ProfilePhoto"): null,
+                        rs.getInt("ProfilePhoto"),
                         rs.getString("PhoneNumber"),
                         rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
                         rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null);
@@ -70,7 +70,7 @@ public class UserDAO extends DBContext {
                         rs.getString("Email"),
                         rs.getString("Fullname"),
                         rs.getInt("RankID"),
-                        rs.getString("ProfilePhoto")  != null ? rs.getString("ProfilePhoto"): null ,
+                        rs.getInt("ProfilePhoto"),
                         rs.getString("PhoneNumber"),
                         rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
                         rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null);
@@ -182,7 +182,7 @@ public class UserDAO extends DBContext {
                         rs.getString("Email"),
                         rs.getString("Fullname"),
                         rs.getInt("RankID"),
-                        rs.getString("ProfilePhoto")  != null ? rs.getString("ProfilePhoto"): null,
+                        rs.getInt("ProfilePhoto"),
                         rs.getString("PhoneNumber"),
                         rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
                         rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null,
@@ -275,12 +275,12 @@ public class UserDAO extends DBContext {
         }
     }
 
-    public void updateProfilePhoto(int userId, String profilePhotoID) {
+    public void updateProfilePhoto(int userId, int profilePhotoID) {
         PreparedStatement ps = null;
         try {
             String sql = "UPDATE [user] SET ProfilePhoto = ? WHERE UserID = ?";
             ps = connection.prepareStatement(sql);
-            ps.setString(1, profilePhotoID);
+            ps.setInt(1, profilePhotoID);
             ps.setInt(2, userId);
             ps.execute();
             ps.close();

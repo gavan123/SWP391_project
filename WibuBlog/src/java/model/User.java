@@ -21,7 +21,7 @@ public class User {
     private String email;
     private String fullName;
     private int rankId;
-    private String profilePhoto;
+    private int profilePhoto;
     private String phoneNumber;
     private LocalDateTime dateOfBirth;
     private LocalDateTime creationDate;
@@ -31,7 +31,7 @@ public class User {
     public User() {
     }
 
-    public User(int userId, String username, String passwordHash, int roleId, int point, String status, String email, String fullName, int rankId, String profilePhoto, String phoneNumber, LocalDateTime dateOfBirth, LocalDateTime creationDate, String bio) {
+    public User(int userId, String username, String passwordHash, int roleId, int point, String status, String email, String fullName, int rankId, int profilePhoto, String phoneNumber, LocalDateTime dateOfBirth, LocalDateTime creationDate, String bio) {
         this.userId = userId;
         this.username = username;
         this.passwordHash = passwordHash;
@@ -49,7 +49,7 @@ public class User {
     }
 
     
-    public User(int userId, String username, String passwordHash, int roleId, int point, String status, String email, String fullName, int rankId, String profilePhoto, String phoneNumber, LocalDateTime dateOfBirth, LocalDateTime creationDate) {
+    public User(int userId, String username, String passwordHash, int roleId, int point, String status, String email, String fullName, int rankId, int profilePhoto, String phoneNumber, LocalDateTime dateOfBirth, LocalDateTime creationDate) {
         this.userId = userId;
         this.username = username;
         this.passwordHash = passwordHash;
@@ -65,7 +65,7 @@ public class User {
         this.creationDate = creationDate;
     }
 
-        public User(int userId, String username, String passwordHash, int roleId, int point, String status, String email, String fullName, int rankId, String profilePhoto, String phoneNumber, LocalDateTime creationDate) {
+        public User(int userId, String username, String passwordHash, int roleId, int point, String status, String email, String fullName, int rankId, int profilePhoto, String phoneNumber, LocalDateTime creationDate) {
         this.userId = userId;
         this.username = username;
         this.passwordHash = passwordHash;
@@ -80,7 +80,7 @@ public class User {
         this.creationDate = creationDate;
     }
 
-    public User(int userId, String username, String fullName, String profilePhoto, String phoneNumber, LocalDateTime dateOfBirth) {
+    public User(int userId, String username, String fullName, int profilePhoto, String phoneNumber, LocalDateTime dateOfBirth) {
         this.userId = userId;
         this.username = username;
         this.fullName = fullName;
@@ -192,11 +192,11 @@ public class User {
         this.rankId = rankId;
     }
 
-    public String getProfilePhoto() {
+    public int getProfilePhoto() {
         return profilePhoto;
     }
 
-    public void setProfilePhoto(String profilePhoto) {
+    public void setProfilePhoto(int profilePhoto) {
         this.profilePhoto = profilePhoto;
     }
 

@@ -35,7 +35,7 @@
 
                                         <form action="UploadPFP" method="post" enctype="multipart/form-data"  >
                                             <input type="file" class="upload-input" onchange="this.form.submit()" name="pfp" id="someId">         
-                                            <img src="<%=media.getPath()%>" style="width: 150px; height: 100px">
+                                            <img src="" style="width: 150px; height: 100px">
                                             <div class="upload-text">Upload an image</div>
                                         </form>               
                                     </c:otherwise>

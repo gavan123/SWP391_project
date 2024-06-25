@@ -21,7 +21,7 @@
             <label for="someId" class="custom-file-upload">Upload Image</label>      
             <span id="fileName" class="file-name"></span><br>
             <p> you can skip this step </p>
-            <button type="submit" >Done</button>>
+            <button type="submit" >Done</button>
         </div>    
             </form>
         

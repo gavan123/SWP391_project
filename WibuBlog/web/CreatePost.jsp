@@ -59,7 +59,7 @@
         <div class="container mt-4">
     <h2>Create a New Post</h2>
     <form action="createPost" method="post" id="uploadForm">
-        <span id="username" style="font-weight: bold; color: #333;"> ${user.username} </span>
+        <span id="username" style="font-weight: bold; color: #333;"> UserName: ${user.username} </span>
         <div class="form-group">
             <label for="title">Title:</label>
             <input type="text" class="form-control" id="title" name="title" maxlength="150" required>

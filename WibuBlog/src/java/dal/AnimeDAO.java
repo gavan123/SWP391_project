@@ -13,26 +13,32 @@ import model.Anime;
 public class AnimeDAO extends DBContext {
 
     // Lấy một Anime bằng ID
-    public Anime getAnimeById(int animeId) {
+    public Anime getAnimeDetailById(int animeId) {
+        Anime anime = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        Anime anime = null;
+
         try {
-            String sql = "SELECT * FROM Anime WHERE AnimeID = ?";
+            String sql = "SELECT a.[AnimeID], a.Title, a.[Synopsis], g.[Name] AS GenreName,"
+                    + " a.Episodes, a.[Status], a.imageAnime, a.ReleaseDate, a.Studio "
+                    + "FROM Anime a "
+                    + "JOIN Genre g ON a.GenreId = g.GenreID "
+                    + "WHERE a.AnimeID = ?";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, animeId);
             rs = ps.executeQuery();
+
             if (rs.next()) {
                 anime = new Anime(
                         rs.getInt("AnimeID"),
                         rs.getString("Title"),
                         rs.getString("Synopsis"),
-                        rs.getString("Genre"),
+                        rs.getString("GenreName"),
                         rs.getInt("Episodes"),
                         rs.getString("Status"),
                         rs.getTimestamp("ReleaseDate").toLocalDateTime(),
                         rs.getString("Studio"),
-                        rs.getString("ImageAnime") // Lấy giá trị từ cột ImageAnime
+                        rs.getString("imageAnime")
                 );
             }
         } catch (SQLException ex) {
@@ -41,6 +47,7 @@ public class AnimeDAO extends DBContext {
             closeResultSet(rs);
             closePreparedStatement(ps);
         }
+
         return anime;
     }
 
@@ -80,7 +87,7 @@ public class AnimeDAO extends DBContext {
     public void addAnime(Anime anime) {
         PreparedStatement ps = null;
         try {
-            String sql = "INSERT INTO Anime ([Title], [Synopsis], [Genre], [Episodes], [Status], [ReleaseDate], [Studio], [ImageAnime]) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Anime (Title, Synopsis, Genre, Episodes, Status, ReleaseDate, Studio, ImageAnime) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             ps = connection.prepareStatement(sql);
             ps.setString(1, anime.getTitle());
             ps.setString(2, anime.getSynopsis());
@@ -170,51 +177,13 @@ public class AnimeDAO extends DBContext {
         return animeList;
     }
 
-    public Anime getAnimeDetailById(int animeId) {
-        Anime anime = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        try {
-            String sql = "SELECT a.[AnimeID], a.Title, a.[Synopsis], g.[Name] AS GenreName, a.Episodes, a.[Status], a.imageAnime, a.ReleaseDate, a.Studio "
-                    + "FROM Anime a "
-                    + "JOIN Genre g ON a.GenreId = g.GenreID "
-                    + "WHERE a.AnimeID = ?";
-            ps = connection.prepareStatement(sql);
-            ps.setInt(1, animeId);
-            rs = ps.executeQuery();
-
-            if (rs.next()) {
-                anime = new Anime(
-                        rs.getInt("AnimeID"),
-                        rs.getString("Title"),
-                        rs.getString("Synopsis"),
-                        rs.getString("GenreName"),
-                        rs.getInt("Episodes"),
-                        rs.getString("Status"),
-                        rs.getTimestamp("ReleaseDate").toLocalDateTime(),
-                        rs.getString("Studio"),
-                        rs.getString("imageAnime")
-                );
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(AnimeDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            closeResultSet(rs);
-            closePreparedStatement(ps);
-        }
-
-        return anime;
-    }
-
     public static void main(String[] args) {
         AnimeDAO animeDAO = new AnimeDAO();
-        
-        // Giả sử bạn muốn kiểm tra chi tiết của anime có ID là 1
+
         int animeId = 1;
-        
+
         Anime anime = animeDAO.getAnimeDetailById(animeId);
-        
+
         if (anime != null) {
             System.out.println("Anime ID: " + anime.getAnimeId());
             System.out.println("Title: " + anime.getTitle());

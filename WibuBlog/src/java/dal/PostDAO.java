@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -70,7 +71,6 @@ public class PostDAO extends DBContext {
     }
 
     public int getPostIDJustInserted(int userID) {
-
         try {
             String sql = "select top (1) * from post where [userID] = ? \n"
                     + "order by PostTime desc";
@@ -81,7 +81,6 @@ public class PostDAO extends DBContext {
             int mediaId = rs.getInt("PostID");
             return mediaId;
         } catch (SQLException ex) {
-            Logger.getLogger(MediaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
     }
@@ -534,13 +533,34 @@ public class PostDAO extends DBContext {
         return null;
     }
 
+    public boolean deletePost(int postId) {
+        PreparedStatement ps = null;
+        try {
+            String sql = "UPDATE Post SET Status = 'deactive' WHERE PostID = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, postId);
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } finally {
+            closePreparedStatement(ps);
+        }
+    }
+
+    public String encodeImageName(int userID) {
+        LocalDateTime datetime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_hhmmss");
+        String formattedDateTime = datetime.format(formatter);
+        return userID + "_" + formattedDateTime;
+    }
+
     public static void main(String[] args) {
         PostDAO postDAO = new PostDAO();
-        PostDetail post = postDAO.getPostDetailById(54);
-        if (post != null) {
-            System.out.println(post.getBio());
-        } else {
-            System.out.println("No post found with the given postID.");
+        List<Post> post = postDAO.getLimitedPosts(4);
+        for (Post post1 : post) {
+            System.out.println(post1.getPostId());
         }
     }
 

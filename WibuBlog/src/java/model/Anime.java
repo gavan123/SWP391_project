@@ -35,6 +35,17 @@ public class Anime {
         this.imageAnime = imageAnime;
     }
 
+    public Anime(String title, String synopsis, String genre, int episodes, String status, LocalDateTime releaseDate, String studio, String imageAnime) {
+        this.title = title;
+        this.synopsis = synopsis;
+        this.genre = genre;
+        this.episodes = episodes;
+        this.status = status;
+        this.releaseDate = releaseDate;
+        this.studio = studio;
+        this.imageAnime = imageAnime;
+    }
+
     
 
     public Anime(int animeId, String title, String synopsis, String genre, int episodes, String status, LocalDateTime releaseDate, String studio, String imageAnime) {

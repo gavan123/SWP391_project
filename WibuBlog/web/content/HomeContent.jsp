@@ -9,13 +9,13 @@
         <div class="col-md-6">      
             <label for="image">What are you thinking ?</label>
             <a href="createPost">Create a post</a>
-<!--            <form name="imageUpCopy" action="imageUpCopy" method="POST" enctype="multipart/form-data" class="border p-4">
-                <div class="form-group">
-                    <label for="image">Choose Images:</label>
-                    <input type="file" class="form-control-file" name="image" id="image" accept="image/png,image/jpeg,image/jpg,image/bmp,image/gif" multiple>
-                </div>
-                <button type="submit" class="btn btn-primary">Upload Images</button>
-            </form>-->
+            <!--            <form name="imageUpCopy" action="imageUpCopy" method="POST" enctype="multipart/form-data" class="border p-4">
+                            <div class="form-group">
+                                <label for="image">Choose Images:</label>
+                                <input type="file" class="form-control-file" name="image" id="image" accept="image/png,image/jpeg,image/jpg,image/bmp,image/gif" multiple>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Upload Images</button>
+                        </form>-->
         </div>
     </div>
 </div>
@@ -35,15 +35,17 @@
     <div class="card-body">
         <ul class="list-group list-group-flush">
             <c:forEach var="post" items="${p.getLimitedPostsByCategory(5,10)}">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div class="col-10 text-truncate font-weight-bold">
-                        <a href="postDetail?postId=${post.postId}">${post.title}</a>
-                    </div>
-                    <span class="badge badge-primary badge-pill">
-                        <i class="far fa-comment-dots fa-lg"></i>
-                        <span style="font-size: larger;">${post.view}</span> 
-                    </span>
-                </li>
+                <c:if test="${post.status=='active'}">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="col-10 text-truncate font-weight-bold">
+                            <a href="postDetail?postId=${post.postId}">${post.title}</a>
+                        </div>
+                        <span class="badge badge-primary badge-pill">
+                            <i class="far fa-comment-dots fa-lg"></i>
+                            <span style="font-size: larger;">${post.view}</span> 
+                        </span>
+                    </li> 
+                </c:if>
             </c:forEach>
         </ul>
     </div>
@@ -59,8 +61,9 @@
         <div class="swiper-container swiper-container-initialized swiper-container-horizontal" style="min-height:220px">
             <div class="swiper-wrapper" id="swiper-wrapper" aria-live="polite" style="transform: translate3d(-603.333px, 0px, 0px); transition-duration: 0ms;">
                 <c:forEach var="post" items="${p.getLimitedPosts(10)}">
-                    <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
-                        <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
+                    <c:if test="${post.status=='active'}"></c:if>
+                        <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
+                            <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
                         <a href="postDetail?postId=${post.postId}" id="new_post0">
                             <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${pageContext.request.contextPath}/images/game/${post.image}" 
                                  onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
@@ -90,13 +93,15 @@
         <div class="swiper-container swiper-container-initialized swiper-container-horizontal" style="min-height:220px">
             <div class="swiper-wrapper" id="swiper-wrapper" aria-live="polite" style="transform: translate3d(-603.333px, 0px, 0px); transition-duration: 0ms;">
                 <c:forEach var="post" items="${p.getLimitedPostsByCategory(10, 1)}">
-                    <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
-                        <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
-                        <a href="postDetail?postId=${post.postId}" >
-                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${pageContext.request.contextPath}/images/game/${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
-                            <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
-                        </a>
-                    </div>
+                    <c:if test="${post.status=='active'}">
+                        <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
+                            <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
+                            <a href="postDetail?postId=${post.postId}" >
+                                <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${pageContext.request.contextPath}/images/game/${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
+                                <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
+                            </a>
+                        </div>
+                    </c:if>
                 </c:forEach>
             </div>
             <!-- Add Pagination -->
@@ -118,13 +123,15 @@
         <div class="swiper-container swiper-container-initialized swiper-container-horizontal" style="min-height:220px">
             <div class="swiper-wrapper" id="swiper-wrapper" aria-live="polite" style="transform: translate3d(-603.333px, 0px, 0px); transition-duration: 0ms;">
                 <c:forEach var="post" items="${p.getLimitedPostsByCategory(10, 2)}">
-                    <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
-                        <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
-                        <a href="postDetail?postId=${post.postId}" id="new_post0">
-                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${pageContext.request.contextPath}/images/game/${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
-                            <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
-                        </a>
-                    </div>
+                    <c:if test="${post.status=='active'}">
+                        <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
+                            <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
+                            <a href="postDetail?postId=${post.postId}" id="new_post0">
+                                <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${pageContext.request.contextPath}/images/game/${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
+                                <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
+                            </a>
+                        </div>
+                    </c:if>
                 </c:forEach>
             </div>
             <!-- Add Pagination -->
@@ -146,14 +153,16 @@
         <div class="swiper-container swiper-container-initialized swiper-container-horizontal" style="min-height:220px">
             <div class="swiper-wrapper" id="swiper-wrapper" aria-live="polite" style="transform: translate3d(-603.333px, 0px, 0px); transition-duration: 0ms;">
                 <c:forEach var="post" items="${p.getLimitedPostsByCategory(10, 3)}">
-                    <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
-                        <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
-<!--                        <span class="badge badge-danger posts-badge-2 text-truncate">${post.status}</span>-->
-                        <a href="postDetail?postId=${post.postId}">
-                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${pageContext.request.contextPath}/images/game/${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
-                            <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
-                        </a>
-                    </div>
+                    <c:if test="${post.status=='active'}">
+                        <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
+                            <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
+    <!--                        <span class="badge badge-danger posts-badge-2 text-truncate">${post.status}</span>-->
+                            <a href="postDetail?postId=${post.postId}">
+                                <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${pageContext.request.contextPath}/images/game/${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
+                                <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
+                            </a>
+                        </div>
+                    </c:if>
                 </c:forEach>
             </div>
             <!-- Add Pagination -->
@@ -175,14 +184,16 @@
         <div class="swiper-container swiper-container-initialized swiper-container-horizontal" style="min-height:220px">
             <div class="swiper-wrapper" id="swiper-wrapper" aria-live="polite" style="transform: translate3d(-603.333px, 0px, 0px); transition-duration: 0ms;">
                 <c:forEach var="post" items="${p.getLimitedPostsByCategory(10, 8)}">
-                    <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
-                        <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
-                        <!--<span class="badge badge-danger posts-badge-2 text-truncate">${post.status}</span>-->
-                        <a href="postDetail?postId=${post.postId}">
-                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${pageContext.request.contextPath}/images/game/${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
-                            <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
-                        </a>
-                    </div>
+                    <c:if test="${post.status=='active'}">
+                        <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
+                            <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
+                            <!--<span class="badge badge-danger posts-badge-2 text-truncate">${post.status}</span>-->
+                            <a href="postDetail?postId=${post.postId}">
+                                <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${pageContext.request.contextPath}/images/game/${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
+                                <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
+                            </a>
+                        </div>
+                    </c:if>
                 </c:forEach>
             </div>
             <!-- Add Pagination -->

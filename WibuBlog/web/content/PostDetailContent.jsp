@@ -9,55 +9,72 @@
 </style>
 
 <div class="col-lg-12 mb-2">
-    <div class="card mb-2">
-        <div class="card-body">
-            <header>
-                <h1 class="card-title" style="font-size: 26px;line-height:34px">${post.title}</h1>
-            </header>
-            <h6 class="card-subtitle mb-2 fw-700" style="font-size: small !important;">
-                <i class="fas fa-user"></i> 
-                <a href="#" style="color:blue" accesskey="a">${post.username}</a> | 
-                <i class="fas fa-clock"></i>
-                <time datetime="${postTime}">${postTime}</time> | 
-                <i class="fas fa-eye"></i> ${post.view}
-            </h6>
-            <h3 class="fs-14 border-bottom-badge-eee">
-                <span class="badge badge-info mr-1">
-                    <a class="text-white" href="postListByCategory?name=${post.categoryName}">${post.categoryName}</a>
-                </span>
-                <span class="badge badge-primary mr-1">
-                    <a class="text-white" href="#">${post.genreName}</a>
-                </span>
-            </h3>
-            <div class="card-text fs-content" style="font-size: 18px;">
-                ${post.content}
-                <br>
-                <br>
-                <br>
-            </div>
-            <hr>
-            <c:if test="${post.username != user.username}">
-                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
-                    <i class="fas fa-flag"></i> Report Post
-                </button>
-            </c:if>
-            <div class="row">
-                <div class="col-lg-4 mb-2 mx-auto">
-                    <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
-                        <li class="d-flex align-items-center mr-4 font-weight-bold">
-                            <div class="vote-section" id="vote-section">
-                                <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2"
-                                   onclick="votePost('up', '${votePostStatus}')"></i>
-                                <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
-                                   onclick="votePost('down', '${votePostStatus}')"></i>
-                                <span id="vote_value">${post.vote}</span>
-                            </div>
-                        </li>
-                    </ul>
+    <c:choose>
+        <c:when test="${post.status == 'active'}">
+            <div class="card mb-2">
+                <div class="card-body">
+                    <header>
+                        <h1 class="card-title" style="font-size: 26px;line-height:34px">${post.title}</h1>
+                    </header>
+                    <h6 class="card-subtitle mb-2 fw-700 " style="font-size: small !important;">
+                        <i class="fas fa-user"></i> 
+                        <a href="#" style="color:blue" accesskey="a">${post.username}</a> | 
+                        <i class="fas fa-clock"></i>
+                        <time datetime="${postTime}">${postTime}</time> | 
+                        <i class="fas fa-eye"></i> ${post.view}
+                        <c:if test="${post.username == user.username}">
+                            <button type="button" class="btn btn-danger" style="margin-left: 50%">
+                                <i class="fas fa-trash"></i> Delete Post
+                            </button>
+                        </c:if>
+                    </h6>
+
+                    <h3 class="fs-14 border-bottom-badge-eee">
+                        <span class="badge badge-info mr-1">
+                            <a class="text-white" href="postListByCategory?name=${post.categoryName}">${post.categoryName}</a>
+                        </span>
+                        <span class="badge badge-primary mr-1">
+                            <a class="text-white" href="#">${post.genreName}</a>
+                        </span>
+                    </h3>
+                    <div class="card-text fs-content" style="font-size: 18px;">
+                        ${post.content}
+                        <br>
+                        <br>
+                        <br>
+                    </div>
+                    <hr>
+                    <c:if test="${post.username != user.username}">
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
+                            <i class="fas fa-flag"></i> Report Post
+                        </button>
+                    </c:if>
+                    <div class="row">
+                        <div class="col-lg-4 mb-2 mx-auto">
+                            <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
+                                <li class="d-flex align-items-center mr-4 font-weight-bold">
+                                    <div class="vote-section" id="vote-section">
+                                        <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2"
+                                           onclick="votePost('up', '${votePostStatus}')"></i>
+                                        <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
+                                           onclick="votePost('down', '${votePostStatus}')"></i>
+                                        <span id="vote_value">${post.vote}</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </c:when>
+        <c:when test="${post.status == 'hide'}">
+            <p>The post is hide by author.</p>
+        </c:when>
+        <c:otherwise>
+            <p>The post has been delete</p>
+        </c:otherwise>
+    </c:choose>
+
 
     <!--    Post user-->
 
@@ -85,35 +102,39 @@
     <!--     Comment                       -->
     <div class="card mb-2 border-0">
         <div class="card-body">
-            <c:choose>
-                <c:when test="${empty user}">
-                    <div class="card mb-2 border-0">
-                        <div class="card-body">
-                            <p class="card-text text-center">
-                                You need to <span><a style="color:blue" href="login">Login</a></span> to comment!
-                            </p>
-                        </div>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <div class="border-0 bg-none mt-2 media align-items-center">
-                        <div class="comment-avatar mr-2">
-                            <img alt="${user.username}" title="${user.username}" 
-                                 src="${pageContext.request.contextPath}/${user.profilePhoto}"
-                                 onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
-                        </div>
-                        <div class="comment-input-block media-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <textarea class="form-control" rows="2" id="msg" minlength="30" 
-                                          required placeholder="Ta đến nói hai câu..."></textarea>
-                                <button type="button" class="btn btn-success btn-submit-comment" onclick="sendMsg()">
-                                    <i class="fas fa-paper-plane fa-2x"></i>
-                                </button>
+            <c:if test="${post.status == 'active'}">
+                <c:choose>
+                    <c:when test="${empty user}">
+                        <div class="card mb-2 border-0">
+                            <div class="card-body">
+                                <p class="card-text text-center">
+                                    You need to <span><a style="color:blue" href="login">Login</a></span> to comment!
+                                </p>
                             </div>
                         </div>
-                    </div>
-                </c:otherwise>
-            </c:choose>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="border-0 bg-none mt-2 media align-items-center">
+                            <div class="comment-avatar mr-2">
+                                <img alt="${user.username}" title="${user.username}" 
+                                     src="${pageContext.request.contextPath}/${user.profilePhoto}"
+                                     onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
+                            </div>
+                            <div class="comment-input-block media-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <textarea class="form-control" rows="2" id="msg" minlength="30" 
+                                              required placeholder="Ta đến nói hai câu..."></textarea>
+                                    <button type="button" class="btn btn-success btn-submit-comment" onclick="sendMsg()">
+                                        <i class="fas fa-paper-plane fa-2x"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </c:if>
+
+
 
             <c:forEach var="comment" items="${commentsList}" varStatus="loop">
                 <c:set var="commentUser" value="${userComment[loop.index]}" />
@@ -153,7 +174,7 @@
                                 <span class="badge badge-secondary">
                                     ${commentDate}
                                 </span>
-                                <c:if test="${not empty user}">
+                                <c:if test="${not empty user && post.status == 'active'}">
                                     <c:if test="${user.userId == commentUser.userId && comment.status eq 'active'}">
                                         <button type="button" class="btn reply-button" data-comment-id="${comment.commentId}" 
                                                 data-toggle="modal" data-target="#editCommentModal">
@@ -183,7 +204,7 @@
                     <c:set var="commentUserRank" value="${userRank[loop.index]}" />
                     <c:set var="commentDate" value="${commentTime[loop.index]}" />
                     <c:if test="${commentReply.parentId !=null && commentReply.parentId == comment.commentId}">
-                        <div class="comment-container media" style="margin-left: 50px">
+                        <div class="comment-container media" style="margin-left: 7%">
                             <div class="comment-avatar ">
                                 <img alt="${commentUser.username}" 
                                      title="${commentUser.username}" 
@@ -217,7 +238,7 @@
                                     <span class="badge badge-secondary">
                                         ${commentDate}
                                     </span>
-                                    <c:if test="${not empty user}">
+                                    <c:if test="${not empty user && post.status == 'active'}">
                                         <c:if test="${user.userId == commentUser.userId && comment.status eq 'active'}">
                                             <button type="button" class="btn reply-button" data-comment-id="${commentReply.commentId}" 
                                                     data-toggle="modal" data-target="#editCommentModal">

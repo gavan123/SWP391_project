@@ -24,15 +24,17 @@
         </div>
         <!-- Start forEach loop to iterate through posts -->
         <c:forEach var="post" items="${p.getAllPostsByCategory(category.categoryId)}">
-            <div class="card mb-2 rounded-2">
-                <div class="card-body">
-                    <h2 class="card-title">
-                        <a href="postDetail?postId=${post.postId}" />${post.title}</a>
-                    </h2>
-                    <img class="float-left posts-img img-thumbnail mr-2" src="${post.image}" onerror="this.src='assets/images/others/product-3.jpg'">
-                    <p class="card-text">${post.content}</p>
+            <c:if test="${post.status=='active'}">
+                <div class="card mb-2 rounded-2">
+                    <div class="card-body">
+                        <h2 class="card-title">
+                            <a href="postDetail?postId=${post.postId}" />${post.title}</a>
+                        </h2>
+                        <img class="float-left posts-img img-thumbnail mr-2" src="${post.image}" onerror="this.src='assets/images/others/product-3.jpg'">
+                        <p class="card-text">${post.content}</p>
+                    </div>
                 </div>
-            </div>
+            </c:if>
         </c:forEach>
         <!-- End forEach loop -->
 

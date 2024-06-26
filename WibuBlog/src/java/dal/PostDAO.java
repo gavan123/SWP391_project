@@ -97,7 +97,7 @@ public class PostDAO extends DBContext {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Post post = new Post(
-                        rs.getInt("PostID"),
+                         rs.getInt("PostID"),
                         rs.getInt("UserID"),
                         rs.getInt("CategoryID"),
                         rs.getString("Title"),
@@ -558,7 +558,7 @@ public class PostDAO extends DBContext {
 
     public static void main(String[] args) {
         PostDAO postDAO = new PostDAO();
-        List<Post> post = postDAO.getLimitedPosts(4);
+        List<Post> post = postDAO.getLimitedPosts(10);
         for (Post post1 : post) {
             System.out.println(post1.getPostId());
         }

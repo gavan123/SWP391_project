@@ -30,7 +30,7 @@
                         <h2 class="card-title">
                             <a href="postDetail?postId=${post.postId}" />${post.title}</a>
                         </h2>
-                        <img class="float-left posts-img img-thumbnail mr-2" src="${post.image}" onerror="this.src='assets/images/others/product-3.jpg'">
+                        <img class="float-left posts-img img-thumbnail mr-2" src="${pageContext.request.contextPath}/images/${post.image}" onerror="this.src='assets/images/others/product-3.jpg'">
                         <p class="card-text">${post.content}</p>
                     </div>
                 </div>

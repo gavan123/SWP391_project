@@ -20,6 +20,7 @@
         <link href="assets/css/app.min.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <style>
           .logo{width:100%;max-width:300px;margin:0 auto}
 .logo img{width:100%;height:70px;display:block}
@@ -97,7 +98,9 @@
                                                 <c:if test="${noti.sourceUserId != noti.targetUserId}">
                                                 <c:choose>
                                                 <c:when test="${noti.sourcePostId != null}">
-                                                      <a href="postDetail?postId=${noti.sourcePostId}" class="dropdown-item d-block p-15 border-bottom">
+                                                     <p class="link" style="float:right;margin-right: 30px" onclick="deleteNotification(${noti.notificationId})">x</p>
+                                                    
+                                                    <a href="postDetail?postId=${noti.sourcePostId}" class="dropdown-item d-block p-15 border-bottom">                                            
                                                 </c:when>
                                                  <c:otherwise>
                                                     <a href="Profile.jsp" class="dropdown-item d-block p-15 border-bottom">
@@ -107,7 +110,8 @@
                                                     <div class="avatar avatar-blue avatar-icon">
                                                          <c:choose>
                                                 <c:when test="${noti.sourcePostId != null}">
-                                                      <i class="anticon anticon-project"></i>
+                                                      <i class="anticon anticon-project">*</i>
+                                                 
                                                 </c:when>
                                                  <c:otherwise>
                                                     <i class="anticon anticon-profile"></i>
@@ -115,11 +119,12 @@
                                                 </c:choose>
                                                     </div>
                                                     <div class="m-l-15">
-                                                        <p class="m-b-0 text-dark">${noti.content}</p>
-                                                        <p class="m-b-0"><small>${noti.postTime}</small></p>
+                                                        <p class="m-b-0 text-dark">${noti.content} 
+                                                        <p class="m-b-0"><small>${noti.postTime}</small></p>  
+                                                      
                                                     </div>
                                                 </div>
-                                            </a>
+                                              </a>
                                                     </c:if>
                                             </c:forEach> 
                                         </div>
@@ -234,5 +239,29 @@
         <script src="assets/js/vendors.min.js"></script>
 
         <script src="assets/js/app.min.js"></script>
+         <style>
+            .link {
+              color: red;
+              text-decoration: underline;
+              cursor: pointer;
+            }
+        </style>
+        
+                  <script>
+                function deleteNotification(notificationId) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('GET', 'DeleteNotification?NotificationId=' + notificationId, true);
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            // Handle the response from the server
+                            console.log('Notification deleted successfully');
+                            // Refresh the page
+                            window.location.reload();
+                        }
+                    };
+                    xhr.send();
+                }
+                </script>
     </body>
+   
 </html>

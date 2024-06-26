@@ -55,7 +55,32 @@ public class PostDAO extends DBContext {
         }
         return postList;
     }
-
+        
+    public void deleteGenre(int postId){
+        try {
+            String sql = "delete from [postgenre] where Postid = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, postId);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void deletePost(int postId){
+         try {
+            String sql = "delete from [post] where Postid = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, postId);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    
     public void updatePostImage(String url, int postID) {
         try {
             String sql = "update [post] set image = ? where postID = ?";
@@ -492,7 +517,7 @@ public class PostDAO extends DBContext {
             closePreparedStatement(ps);
         }
     }
-
+    
     public boolean updateView(int postId) {
         PreparedStatement ps = null;
         try {

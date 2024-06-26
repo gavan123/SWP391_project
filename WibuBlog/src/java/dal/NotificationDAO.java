@@ -128,8 +128,30 @@ public class NotificationDAO extends DBContext {
         }
         return null;
     }
-
     
+    public void deleteNotificationByNotificationId(int notificationId){
+        try {
+            String sql = "delete from [Notification] where NotificationId = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, notificationId);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(NotificationDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void deleteNotificationBySourcePostId(int sourcePostId){
+        try {
+            String sql = "delete from [Notification] where SourcePostId = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, sourcePostId);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(NotificationDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     public static void main(String[] args) {
         NotificationDAO nd = new NotificationDAO();
         ArrayList<Notification> list = nd.getTop10Notification(6);
@@ -137,4 +159,6 @@ public class NotificationDAO extends DBContext {
             System.out.println(x.getContent() + " " + x.getPostTime());
         }
     }
+    
+    
 }

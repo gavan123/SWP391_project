@@ -13,7 +13,11 @@
     <div class="card mb-2">
         <div class="card-body">
             <header>
+                <c:if test="${post.username == user.username}">
+                    <a style="float: right" href="#" onclick="confirmDelete(${post.postID})">Delete post</a>
+                </c:if>
                 <h1 class="card-title" style="font-size: 26px;line-height:34px">${post.title}</h1>
+                
             </header>
             <h6 class="card-subtitle mb-2 fw-700" style="font-size: small !important;">
                 <i class="fas fa-user"></i> 
@@ -129,7 +133,6 @@
                     <div class="comment-avatar">
                         <img alt="${commentUser.username}" 
                              title="${commentUser.username}" 
-
                              src="${pageContext.request.contextPath}/images/game/${commentUser.profilePhoto}" 
                              onerror="this.src='assets/images/others/product-3.jpg'">
                     </div>
@@ -586,4 +589,15 @@
         // Attach deleteCommentBtn function to the 'Save changes' button click
         $('#deleteCommentBtn').on('click', deleteComment);
     });
+</script>
+<script>
+function confirmDelete(postID) {
+    if (confirm('Do you want to delete this post?')) {
+        // Redirect to the DeletePost servlet with the PostId parameter
+        window.location.href = 'DeletePost?Flag=a&PostId=' + postID;
+    } else {
+        // Do nothing if the user cancels
+        return false;
+    }
+}
 </script>

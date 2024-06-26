@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.NotificationDAO;
 import dal.PostDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -79,6 +80,8 @@ public class UpdateVotePost extends HttpServlet {
         String voteStatusStr = request.getParameter("vote_status");
         HttpSession session = request.getSession();
         User userSession = (User) session.getAttribute("user");
+        NotificationDAO nd = new NotificationDAO();
+        
 
         PostDAO postDAO = new PostDAO();
         // Kiểm tra các tham số từ request
@@ -101,27 +104,24 @@ public class UpdateVotePost extends HttpServlet {
                 postDAO.addUserVote(userId, postId, voteStatusStr);
             } else {
                 // Nếu đã bầu chọn, kiểm tra trạng thái bầu chọn và cập nhật lại
-                postDAO.updateUserVote(userId, postId, voteStatusStr);
+                postDAO.updateUserVote(userId, postId, voteStatusStr);          
             }
-            if (voteValue < 0) {
-                voteValue = 0;
-            }
+           
             // Cập nhật giá trị phiếu bầu của bài đăng
             boolean updateSuccess = postDAO.updateVote(postId, voteValue);
-
-            // Kiểm tra kết quả cập nhật và thiết lập trạng thái phản hồi HTTP tương ứng
-            response.setStatus(updateSuccess ? HttpServletResponse.SC_OK : HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            
+            if(updateSuccess){
+            response.setStatus(HttpServletResponse.SC_OK);
+            }
+            else{
+               response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
         } catch (NumberFormatException ex) {
             // Xử lý ngoại lệ nếu không thể chuyển đổi thành số nguyên và thiết lập trạng thái phản hồi là Bad Request
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

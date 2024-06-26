@@ -151,7 +151,7 @@
                             <input id="commentId" type="hidden" value="${comment.commentId}" >
                         </div>
                         <div class="card-text comment-date">
-                            <div class="vote-section vote-section-cmt" id="vote-section-cmt">
+                            <div class="vote-section vote-section-cmt" id="vote-section-cmt_${comment.commentId}">
                                 <i  id="vote_comment_up" class="anticon anticon_vote anticon-arrow-up mr-2" 
                                     onclick="voteComment('up', ${comment.commentId})" style="padding: 10px"></i>
                                 <i  id="vote_comment_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
@@ -328,11 +328,11 @@
             if (type === 'up') {
                 increment = (voteStatus === 'upvote') ? -1 : (voteStatus === 'downvote') ? 2 : 1;
                 voteStatus = (voteStatus === 'upvote') ? 'unvote' : 'upvote';
-                toggleVoteClass(voteStatus === 'upvote', false);
+                toggleVotePostClass(voteStatus === 'upvote', false);
             } else if (type === 'down') {
                 increment = (voteStatus === 'downvote') ? 1 : (voteStatus === 'upvote') ? -2 : -1;
                 voteStatus = (voteStatus === 'downvote') ? 'unvote' : 'downvote';
-                toggleVoteClass(false, voteStatus === 'downvote');
+                toggleVotePostClass(false, voteStatus === 'downvote');
             }
             const newVoteValue = currentVote + increment;
             // Cập nhật giá trị vote hiển thị
@@ -340,7 +340,7 @@
 
             // Gửi yêu cầu AJAX để cập nhật vote
             const xhr = new XMLHttpRequest();
-            xhr.open("POST", "updateVote", true);
+            xhr.open("POST", "updateVotePost", true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4) {
@@ -348,9 +348,10 @@
                 }
             };
             xhr.send("postId=" + postId + "&vote_value=" + newVoteValue + "&vote_status=" + voteStatus);
+            location.reload();
             setTimeout(() => {
                 location.reload();
-            }, 300); // Reload sau 1 giây (1000 milliseconds)
+            }, 200); // Reload sau 0.2 giây 
         });
     };
 
@@ -362,11 +363,11 @@
         }
         console.log(votePostStatus);
         if (votePostStatus === "unvote") {
-            toggleVoteClass(false, false);
+            toggleVotePostClass(false, false);
         } else if (votePostStatus === "upvote") {
-            toggleVoteClass(true, false);
+            toggleVotePostClass(true, false);
         } else if (votePostStatus === "downvote") {
-            toggleVoteClass(false, true);
+            toggleVotePostClass(false, true);
         }
 
     });
@@ -401,13 +402,12 @@
         return urlParams.get(param);
     };
 
-    // Hàm để xử lý thêm/loại bỏ lớp 'upvoted' và 'downvoted'
-    const toggleVoteClass = (addUpvoted, addDownvoted) => {
+    // Hàm để xử lý thêm/loại bỏ lớp 'upvoted' và 'downvoted' cửa post
+    const toggleVotePostClass = (addUpvoted, addDownvoted) => {
         const voteSection = document.getElementById('vote-section');
         voteSection.classList.toggle('upvoted', addUpvoted);
         voteSection.classList.toggle('downvoted', addDownvoted);
     };
-
 
 
 // Kiểm tra đăng nhập
@@ -437,7 +437,7 @@
             return; // Thoát nếu không có postId
         }
         if (msg.length < 30) {
-            alert("Tối thiểu 30 ký tự...");
+            alert("Enter at least 30 word...");
         } else {
             $.ajax({
                 type: 'POST',
@@ -484,7 +484,7 @@
             return; // Thoát nếu không có postId
         }
         if (msg.length < 30) {
-            alert("Tối thiểu 30 ký tự...");
+            alert("Enter at least 30 word...");
         } else {
             $.ajax({
                 type: 'POST',

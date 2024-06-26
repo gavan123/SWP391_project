@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:useBean id="p" scope="request" class="dal.PostDAO" />
 <jsp:useBean id="c" scope="request" class="dal.CategoryDAO" />
+
 <div class="row pb-6">
 
 

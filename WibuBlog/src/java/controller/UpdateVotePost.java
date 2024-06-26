@@ -19,7 +19,7 @@ import model.User;
  *
  * @author ADMIN
  */
-@WebServlet(name = "UpdateVote", urlPatterns = {"/updateVote"})
+@WebServlet(name = "UpdateVotePost", urlPatterns = {"/updateVotePost"})
 public class UpdateVotePost extends HttpServlet {
 
     /**
@@ -103,9 +103,7 @@ public class UpdateVotePost extends HttpServlet {
                 // Nếu đã bầu chọn, kiểm tra trạng thái bầu chọn và cập nhật lại
                 postDAO.updateUserVote(userId, postId, voteStatusStr);
             }
-            if (voteValue < 0) {
-                voteValue = 0;
-            }
+           
             // Cập nhật giá trị phiếu bầu của bài đăng
             boolean updateSuccess = postDAO.updateVote(postId, voteValue);
 

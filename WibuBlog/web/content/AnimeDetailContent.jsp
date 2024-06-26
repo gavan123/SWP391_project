@@ -15,16 +15,21 @@
 <%@ page import="java.time.LocalDateTime" %>
 
 
-<c:set var="animeId" value="${param.animeId}" />
+
 
 <%
-    String animeIdParam = request.getParameter("animeId");
-    if (animeIdParam != null) {
-        try {
-            int animeId = Integer.parseInt(animeIdParam);
-            AnimeDAO animeDAO = new AnimeDAO();
-            Anime anime = animeDAO.getAnimeDetailById(animeId);
-            
+    String animeIdS = (String)request.getParameter("animeId");
+    int animeId = -1;
+    try {
+        animeId = Integer.parseInt(animeIdS);
+    } catch (NumberFormatException nfe) {}
+    
+    
+    Anime anime = null; 
+    if  (animeId != -1) {
+           AnimeDAO animeDAO = new AnimeDAO();
+           anime = animeDAO.getAnimeDetailById(animeId);
+    }         
 %>
 
 <!DOCTYPE html>
@@ -38,12 +43,11 @@
               crossorigin="anonymous">
         <style>
             .card {
-                
+
             }
         </style>
     </head>
     <body>
-
         <div class="container mt-4">
             <div class="row">
                 <div class="col-lg-8">

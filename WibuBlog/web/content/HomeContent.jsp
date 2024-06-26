@@ -2,22 +2,21 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <jsp:useBean id="p" scope="request" class="dal.PostDAO" />
+<link rel="stylesheet" href="assets/css/testcss6.css">
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 
-
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">      
-            <label for="image">What are you thinking ?</label>
-            <a href="createPost">Create a post</a>
-<!--            <form name="imageUpCopy" action="imageUpCopy" method="POST" enctype="multipart/form-data" class="border p-4">
-                <div class="form-group">
-                    <label for="image">Choose Images:</label>
-                    <input type="file" class="form-control-file" name="image" id="image" accept="image/png,image/jpeg,image/jpg,image/bmp,image/gif" multiple>
-                </div>
-                <button type="submit" class="btn btn-primary">Upload Images</button>
-            </form>-->
+<div class="thinking-card">
+    <label for="image">What are your thought?</label>
+    <a href="createPost">Create a post</a>
+    <!-- Uncomment this form if you need it in the future
+    <form name="imageUpCopy" action="imageUpCopy" method="POST" enctype="multipart/form-data" class="border p-4 mt-4">
+        <div class="form-group">
+            <label for="image">Choose Images:</label>
+            <input type="file" class="form-control-file" name="image" id="image" accept="image/png,image/jpeg,image/jpg,image/bmp,image/gif" multiple>
         </div>
-    </div>
+        <button type="submit" class="btn btn-primary">Upload Images</button>
+    </form>
+    -->
 </div>
 <c:forEach var="fileName" items="${image}">
     <img src="${pageContext.request.contextPath}/images/game/${fileName}" alt="Uploaded Image">
@@ -193,3 +192,5 @@
         </div>
     </div>
 </div>
+    
+    

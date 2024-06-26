@@ -5,6 +5,9 @@
 package controller;
 
 import dal.CommentDAO;
+import model.Comment;
+import dal.NotificationDAO;
+import dal.PostDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -76,6 +79,7 @@ public class AddComment extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
+        PostDAO pd = new PostDAO();
 
         try {
             // Check if user is logged in
@@ -111,16 +115,23 @@ public class AddComment extends HttpServlet {
             request.setAttribute("errorMessage", errorMessage);
             request.getRequestDispatcher("Error.jsp").forward(request, response);
         }
+        // Người dùng đã đăng nhập, tiếp tục quá trình thêm bình luận
+        User userSession = (User) session.getAttribute("user");
+        String content = request.getParameter("content");
+        int postId = Integer.parseInt(request.getParameter("postId")); // Chuyển đổi postId thành kiểu int
+        CommentDAO commentDAO = new CommentDAO();
+        Comment comment = new Comment(postId, userSession.getUserId(), content.trim(), null);
+        commentDAO.addComment(comment);
+        NotificationDAO nd = new NotificationDAO();
+        nd.createCommentNotification(postId, userSession.getUserId(), pd.getUserIdOfPostByPostID(postId));
+
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+
     @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 
 }

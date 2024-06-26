@@ -36,11 +36,14 @@
                 <br>
             </div>
             <hr>
-            <c:if test="${post.username != user.username}">
-                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
-                    <i class="fas fa-flag"></i> Report Post
-                </button>
+
+
+            <c:if test="${user.username != post.username}">
+            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
+                <i class="fas fa-flag"></i> Report Post
+            </button>
             </c:if>
+
             <div class="row">
                 <div class="col-lg-4 mb-2 mx-auto">
                     <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
@@ -99,7 +102,7 @@
                     <div class="border-0 bg-none mt-2 media align-items-center">
                         <div class="comment-avatar mr-2">
                             <img alt="${user.username}" title="${user.username}" 
-                                 src="${pageContext.request.contextPath}/${user.profilePhoto}"
+                                 src="${pageContext.request.contextPath}/images/game/${user.profilePhoto}"
                                  onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
                         </div>
                         <div class="comment-input-block media-body">
@@ -123,7 +126,8 @@
                     <div class="comment-avatar">
                         <img alt="${commentUser.username}" 
                              title="${commentUser.username}" 
-                             src="${pageContext.request.contextPath}/${commentUser.profilePhoto}" 
+
+                             src="${pageContext.request.contextPath}/images/game/${commentUser.profilePhoto}" 
                              onerror="this.src='assets/images/others/product-3.jpg'">
                     </div>
                     <div class="comment-input-block media-body" id="comment_${loop.index}">
@@ -432,11 +436,12 @@
         const msg = $("#msg").val();
         const postId = getUrlParameter('postId');
         if (!postId) {
-            console.error("postId không tồn tại trong URL");
+
+            console.error("PostId doesn't exist in email");
             return; // Thoát nếu không có postId
         }
-        if (msg.length < 30) {
-            alert("Tối thiểu 30 ký tự...");
+        if (msg.trim().length < 1) {
+            alert("Please enter at least 1 character");
         } else {
             $.ajax({
                 type: 'POST',

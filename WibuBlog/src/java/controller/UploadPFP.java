@@ -66,70 +66,10 @@ public class UploadPFP extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        //create user object to insert to database
-//        MediaDAO mediaDAO = new MediaDAO();
-//        PrintWriter out = response.getWriter();
-//        HttpSession session = request.getSession();
-//        User user = (User) session.getAttribute("user");
-//        //fetch file from jsp
-//        Part file = request.getPart("pfp");
-//        String imageFileName = file.getSubmittedFileName();
-//        String encodedMediaName = mediaDAO.encodeMediaName(user.getUserId()) + "." + mediaDAO.getExtension(imageFileName);
-//
-//        //set an upload path to store media
-//        String uploadPath = "C:/Users/admin/Documents/GitHub/SWP391_project/WibuBlog/web/PFP/" + imageFileName; //sua duong dan 
-//        try {
-//            FileOutputStream fos = new FileOutputStream(uploadPath);
-//            InputStream is = file.getInputStream();
-//
-//            byte[] data = new byte[is.available()];
-//            is.read(data);
-//
-//            //upload file to path
-//            fos.write(data);
-//            fos.close();
-//        } catch (IOException ioe) {
-//            ioe.printStackTrace();
-//        }
-//
-//        //encode file name in case of duplicate file name but different content
-//        File source = new File("C:\\Users\\admin\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + imageFileName); //sua duong dan 
-//
-//        // if uploaded file is not an image file, deletes the file, set error message and redirects to profile
-//        if (!SignatureVerification.isImageFile(source)) {
-//            source.delete();
-//            request.setAttribute("errorMessage", "Invalid file type!");
-//            request.getRequestDispatcher("Profile.jsp").forward(request, response);
-//        }
-//
-//        File target = new File("C:\\Users\\admin\\Documents\\GitHub\\SWP391_project\\WibuBlog\\web\\PFP\\" + encodedMediaName); //sua duong dan 
-//        if (source.renameTo(target)) {
-//            out.println("File is renamed");
-//            
-//            Media media = new Media(0,
-//                    user.getUserId(),
-//                    mediaDAO.encodeMediaName(user.getUserId()),
-//                    "http://localhost:9999/WibuBlog/PFP/" + encodedMediaName,
-//                    mediaDAO.getExtension(imageFileName),
-//                    LocalDateTime.now());
-//
-//            //insert into database
-//            mediaDAO.insertMedia(media);
-//            UserDAO userDAO = new UserDAO();
-//            userDAO.updateProfilePhoto(user.getUserId(), mediaDAO.getMediaJustInserted(user.getUserId()));
-//           // user.setProfilePhoto(mediaDAO.getMediaJustInserted(user.getUserId()));
-//            
-//        } else {
-//            out.println("File cannot be renamed");
-//        }
-//
-//        //go back to profile
-//        response.sendRedirect("Profile.jsp");
         String realPath = request.getServletContext().getRealPath("/");
         MediaDAO mediaDAO = new MediaDAO();
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
-
         // Xây dựng đường dẫn tuyệt đối đến thư mục images và cắt bỏ phần "build" nếu có
         Path gameDirectory = ImageHandler
                 .removeBuildFromPath(Paths.get(realPath, "images"))

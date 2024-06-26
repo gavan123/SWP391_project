@@ -1,8 +1,9 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-
+<%@ page import= "dal.PostDAO" %>
+<%@ page import= "model.Post" %>
+<%@ page import= "model.PostDetail" %>
 
 <style>
 
@@ -39,9 +40,9 @@
 
 
             <c:if test="${user.username != post.username}">
-            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
-                <i class="fas fa-flag"></i> Report Post
-            </button>
+                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
+                    <i class="fas fa-flag"></i> Report Post
+                </button>
             </c:if>
 
             <div class="row">
@@ -63,12 +64,14 @@
     </div>
 
     <!--    Post user-->
-
+    <% PostDAO pd = new PostDAO();
+       String authorProfilePhoto = pd.getUserProfilePhotoByUsername((String)request.getAttribute("postUser"));
+    %>
     <div class="card mb-2">
         <img class="img-thumbnail rounded-circle mx-auto d-block mt-2" 
              alt="${post.username}" title="${post.username}" 
              style="width:120px;height:120px" 
-             src="${pageContext.request.contextPath}/${post.image}"
+             src="${pageContext.request.contextPath}/images/game/<%=authorProfilePhoto%>"
              onerror="this.src='assets/images/others/product-3.jpg'">
         <div class="card-body">
             <p class="card-title text-center fw-700 mb-0">
@@ -140,7 +143,7 @@
                             </span>
 
                         </p>
-                        <p>${comment.commentId}-${comment.parentId}</p>
+                        <!--<p>${comment.commentId}-${comment.parentId}</p>-->
                         <div class="card comment-card" data-rank-color="${commentUserRank.color}">
                             <div class="card-body">
                                 <c:choose>

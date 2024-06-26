@@ -142,7 +142,8 @@ public class PostDetail extends HttpServlet {
                 request.setAttribute("commentsList", comments); // Danh sách comment của bài viết
                 request.setAttribute("commentTime", commentDate); // Thời gian của từng comment
                 request.setAttribute("votePostStatus", votePostStatus); // Trạng thái phiếu bầu của người dùng
-
+                request.setAttribute("postUser", post.getUsername()); 
+                PrintWriter out = response.getWriter();
                 // Forward request tới trang PostDetail.jsp để hiển thị chi tiết bài viết
                 request.getRequestDispatcher("PostDetail.jsp").forward(request, response);
                 return; // Thoát khỏi phương thức sau khi forward thành công

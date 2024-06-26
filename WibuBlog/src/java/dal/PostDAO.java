@@ -69,7 +69,22 @@ public class PostDAO extends DBContext {
         }
 
     }
-
+    
+    public String getUserProfilePhotoByUsername(String username){
+        try {
+        String sql = "select * from [user] where username = ?";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, username);
+        ResultSet rs = ps.executeQuery();
+        if(rs.next()){
+              return rs.getString("ProfilePhoto");
+        }
+       } catch (SQLException ex) {
+            Logger.getLogger(MediaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+    
     public int getPostIDJustInserted(int userID) {
 
         try {

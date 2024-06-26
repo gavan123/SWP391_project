@@ -119,72 +119,129 @@
                 <c:set var="commentUser" value="${userComment[loop.index]}" />
                 <c:set var="commentUserRank" value="${userRank[loop.index]}" />
                 <c:set var="commentDate" value="${commentTime[loop.index]}" />
-                <div class="comment-container media">
-                    <div class="comment-avatar">
-                        <img alt="${commentUser.username}" 
-                             title="${commentUser.username}" 
-                             src="${pageContext.request.contextPath}/${commentUser.profilePhoto}" 
-                             onerror="this.src='assets/images/others/product-3.jpg'">
-                    </div>
-                    <div class="comment-input-block media-body" id="comment_${loop.index}">
-                        <p class="card-text">
-                            <span class="card-title" data-rank-color=" ${commentUserRank.color}" >
-                                ${commentUserRank.name}
-                            </span>
-                            <span class="text-truncate" title="${commentUser.username}" >
-                                ${commentUser.username}
-                            </span>
-
-                        </p>
-                        <p>${comment.commentId}-${comment.parentId}</p>
-                        <div class="card comment-card" data-rank-color="${commentUserRank.color}">
-                            <div class="card-body">
-                                <c:choose>
-                                    <c:when test="${comment.status eq 'active'}">
-                                        ${comment.content}
-                                    </c:when>
-                                    <c:otherwise>
-                                        This comment has been deleted.
-                                    </c:otherwise>
-                                </c:choose>
-                            </div>
-                            <input id="commentId" type="hidden" value="${comment.commentId}" >
+                <c:if test="${comment.parentId ==null}">
+                    <div class="comment-container media">
+                        <div class="comment-avatar">
+                            <img alt="${commentUser.username}" 
+                                 title="${commentUser.username}" 
+                                 src="${pageContext.request.contextPath}/${commentUser.profilePhoto}" 
+                                 onerror="this.src='assets/images/others/product-3.jpg'">
                         </div>
-                        <div class="card-text comment-date">
-                            <div class="vote-section vote-section-cmt" id="vote-section-cmt_${comment.commentId}">
-                                <i  id="vote_comment_up" class="anticon anticon_vote anticon-arrow-up mr-2" 
-                                    onclick="voteComment('up', ${comment.commentId})" style="padding: 10px"></i>
-                                <i  id="vote_comment_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
-                                    onclick="voteComment('down', ${comment.commentId})" style="padding: 10px"></i>
-                                <span id="vote_comment_value">${comment.vote}</span>
+                        <div class="comment-input-block media-body" id="comment_${loop.index}">
+                            <p class="card-text">
+                                <span class="card-title" data-rank-color=" ${commentUserRank.color}" >
+                                    ${commentUserRank.name}
+                                </span>
+                                <span class="text-truncate" title="${commentUser.username}" >
+                                    ${commentUser.username}
+                                </span>
+                            </p>
+                            <div class="card comment-card" data-rank-color="${commentUserRank.color}">
+                                <div class="card-body">
+                                    <c:choose>
+                                        <c:when test="${comment.status eq 'active'}">
+                                            ${comment.content}
+                                        </c:when>
+                                        <c:otherwise>
+                                            This comment has been deleted.
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                                <input id="commentId" type="hidden" value="${comment.commentId}" >
                             </div>
-                            <span class="badge badge-secondary">
-                                ${commentDate}
-                            </span>
-                            <c:if test="${not empty user}">
-                                <c:if test="${user.userId == commentUser.userId && comment.status eq 'active'}">
-                                    <button type="button" class="btn reply-button" data-comment-id="${comment.commentId}" 
-                                            data-toggle="modal" data-target="#editCommentModal">
-                                        Edit
+                            <div class="card-text comment-date">
+                                <span class="badge badge-secondary">
+                                    ${commentDate}
+                                </span>
+                                <c:if test="${not empty user}">
+                                    <c:if test="${user.userId == commentUser.userId && comment.status eq 'active'}">
+                                        <button type="button" class="btn reply-button" data-comment-id="${comment.commentId}" 
+                                                data-toggle="modal" data-target="#editCommentModal">
+                                            Edit
+                                        </button>
+                                    </c:if>
+                                    <button class="btn reply-button"  data-comment-id="${comment.commentId}" onclick="toggleReply(this)">
+                                        Reply
                                     </button>
                                 </c:if>
-                                <button class="btn reply-button"  data-comment-id="${comment.commentId}" onclick="toggleReply(this)">
-                                    Reply
+                            </div>
+                            <div id="replyComment_${comment.commentId}" class="replyComment justify-content-between align-items-center d-none">
+                                <textarea class="form-control" rows="2" id="msgReply_${comment.commentId}" 
+                                          minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
+                                <button type="button" class="btn btn-success btn-submit-comment"
+                                        data-comment-id="${comment.commentId}" 
+                                        data-reply-user="${commentUser.username}" onclick="sendMsgReply(this)">
+                                    <i class="fas fa-paper-plane fa-2x"></i>
                                 </button>
-                            </c:if>
-                        </div>
-                        <div id="replyComment_${comment.commentId}" class="replyComment justify-content-between align-items-center d-none">
-                            <textarea class="form-control" rows="2" id="msgReply_${comment.commentId}" 
-                                      minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
-                            <button type="button" class="btn btn-success btn-submit-comment"
-                                    data-comment-id="${comment.commentId}" 
-                                    data-reply-user="${commentUser.username}" onclick="sendMsgReply(this)">
-                                <i class="fas fa-paper-plane fa-2x"></i>
-                            </button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </c:if>
 
+                <c:forEach var="commentReply" items="${commentsList}" varStatus="loop">
+                    <c:set var="commentUser" value="${userComment[loop.index]}" />
+                    <c:set var="commentUserRank" value="${userRank[loop.index]}" />
+                    <c:set var="commentDate" value="${commentTime[loop.index]}" />
+                    <c:if test="${commentReply.parentId !=null && commentReply.parentId == comment.commentId}">
+                        <div class="comment-container media" style="margin-left: 50px">
+                            <div class="comment-avatar ">
+                                <img alt="${commentUser.username}" 
+                                     title="${commentUser.username}" 
+                                     src="${pageContext.request.contextPath}/${commentUser.profilePhoto}" 
+                                     onerror="this.src='assets/images/others/product-3.jpg'">
+                            </div>
+                            <div class="comment-input-block media-body" id="comment_${loop.index}">
+                                <p class="card-text">
+                                    <span class="card-title" data-rank-color=" ${commentUserRank.color}" >
+                                        ${commentUserRank.name}
+                                    </span>
+                                    <span class="text-truncate" title="${commentUser.username}" >
+                                        ${commentUser.username}
+                                    </span>
+
+                                </p>
+                                <div class="card comment-card" data-rank-color="${commentUserRank.color}">
+                                    <div class="card-body">
+                                        <c:choose>
+                                            <c:when test="${commentReply.status eq 'active'}">
+                                                ${commentReply.content}
+                                            </c:when>
+                                            <c:otherwise>
+                                                This comment has been deleted.
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+                                    <input id="commentId" type="hidden" value="${commentReply.commentId}" >
+                                </div>
+                                <div class="card-text comment-date">
+                                    <span class="badge badge-secondary">
+                                        ${commentDate}
+                                    </span>
+                                    <c:if test="${not empty user}">
+                                        <c:if test="${user.userId == commentUser.userId && comment.status eq 'active'}">
+                                            <button type="button" class="btn reply-button" data-comment-id="${commentReply.commentId}" 
+                                                    data-toggle="modal" data-target="#editCommentModal">
+                                                Edit
+                                            </button>
+                                        </c:if>
+                                        <button class="btn reply-button"  data-comment-id="${commentReply.commentId}" onclick="toggleReply(this)">
+                                            Reply
+                                        </button>
+                                    </c:if>
+                                </div>
+                                <div id="replyComment_${commentReply.commentId}" class="replyComment justify-content-between align-items-center d-none">
+                                    <textarea class="form-control" rows="2" id="msgReply_${commentReply.commentId}" 
+                                              minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
+                                    <button type="button" class="btn btn-success btn-submit-comment"
+                                            data-comment-id="${comment.commentId}" 
+                                            data-reply-user="${commentUser.username}" onclick="sendMsgReply(this)">
+                                        <i class="fas fa-paper-plane fa-2x"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </c:if>
+                </c:forEach>
             </c:forEach>
             <c:if test="${empty commentsList}">
                 <p>No comments found.</p>

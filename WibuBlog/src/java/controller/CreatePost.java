@@ -93,10 +93,12 @@ public class CreatePost extends HttpServlet {
        
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
+        
         String title = request.getParameter("title");
         int categoryId = Integer.parseInt(request.getParameter("category"));
         int genreId = Integer.parseInt(request.getParameter("genre"));
         String content = request.getParameter("content");
+        
         Post post = new Post();
         post.setUserId(user.getUserId());
         post.setCategoryId(categoryId);

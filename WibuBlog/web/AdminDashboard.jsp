@@ -5,7 +5,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Home Page</title>
+        <title>DashBoard</title>
         <link rel="shortcut icon" href="">
         <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet">
         <style>
@@ -22,7 +22,7 @@
         <jsp:include page="Layout.jsp">
             <jsp:param name="sideNav" value="SideNav.jsp" />
             <jsp:param name="accountHeader" value="/content/AccountContent.jsp" />
-            <jsp:param name="content" value="/content/HomeContent.jsp" />
+            <jsp:param name="content" value="/content/AdminDashboardContent.jsp" />
         </jsp:include>
     </body>
 

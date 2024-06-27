@@ -73,7 +73,7 @@ public class PostDAO extends DBContext {
     public int getPostIDJustInserted(int userID) {
         try {
             String sql = "select top (1) * from post where [userID] = ? \n"
-                    + "order by PostTime desc";
+                    + "order by PostId desc";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, userID);
             ResultSet rs = ps.executeQuery();

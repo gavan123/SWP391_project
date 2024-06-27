@@ -109,7 +109,6 @@
                     <textarea class="form-control" id="content" name="content" rows="5" placeholder="Enter the content" required></textarea>
                 </div>
                 <div class="form-group">
-                    <input type="hidden" id="contentHTML" name="contentHTML">
                     <label for="image">Image:</label>
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="image" name="image" 
@@ -127,16 +126,12 @@
     <script>
                 CKEDITOR.replace('content', {
                     extraPlugins: 'imagebrowser',
-                    removePlugins:'image',
+                    removePlugins: 'image',
                     filebrowserBrowseUrl: 'ckeditor/plugins/imagebrowser/browser/browser.html',
                     filebrowserUploadUrl: '/imageUpCopy',
                     filebrowserUploadMethod: 'form'
                 });
 
-                document.getElementById('uploadForm').addEventListener('submit', function (event) {
-                    var contentHTML = CKEDITOR.instances['content'].getData();
 
-                    document.getElementById('contentHTML').value = contentHTML;
-                });
     </script>
 </html>

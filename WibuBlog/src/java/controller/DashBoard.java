@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.PostDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -42,7 +43,15 @@ public class DashBoard extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User)session.getAttribute("user");
         if(user.getRoleId() == 1){
-            response.sendRedirect("AdminDashboard.jsp");
+            PostDAO pd = new PostDAO();
+            request.setAttribute("NumberOfPostLast3Days", pd.getTotalPostLast3Days());
+            request.setAttribute("AvgPostPerDay", pd.getAvgPostPerDayLastMonth());
+            request.setAttribute("TotalPost", pd.getTotalPost());     
+            request.setAttribute("TotalMember", pd.getTotalMember());
+            request.setAttribute("Top10User", pd.getTop10UserByPoint());
+            request.setAttribute("Top6Post", pd.getTop6VotedPost());
+        
+            request.getRequestDispatcher("AdminDashboard.jsp").forward(request, response);    
             return;
         }
         else if (user.getRoleId() == 2){

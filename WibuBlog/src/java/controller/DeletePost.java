@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.PostDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -36,7 +37,7 @@ public class DeletePost extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DeletePost</title>");            
+            out.println("<title>Servlet DeletePost</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet DeletePost at " + request.getContextPath() + "</h1>");
@@ -71,7 +72,27 @@ public class DeletePost extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String postIdStr = request.getParameter("postId");
+        if (postIdStr == null) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
+
+        try {
+            int postId = Integer.parseInt(postIdStr);
+
+            // Assuming you have a method to delete a post by its ID
+            PostDAO postDAO = new PostDAO();
+            boolean success = postDAO.deletePost(postId);
+
+            if (success) {
+                response.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            }
+        } catch (NumberFormatException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
     }
 
     /**

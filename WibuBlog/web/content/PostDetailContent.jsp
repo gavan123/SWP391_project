@@ -23,7 +23,7 @@
                         <time datetime="${postTime}">${postTime}</time> | 
                         <i class="fas fa-eye"></i> ${post.view}
                         <c:if test="${post.username == user.username}">
-                            <button type="button" class="btn btn-danger" style="margin-left: 50%">
+                            <button type="button" class="btn btn-danger" id="deletePostButton" style="margin-left: 50%">
                                 <i class="fas fa-trash"></i> Delete Post
                             </button>
                         </c:if>
@@ -379,7 +379,7 @@
 </div>
 
 <script>
-
+    
     let voteStatus = 'unvote'; // Trạng thái ban đầu
 // Hàm xử lý upvote/downvote
     const votePost = (type, voteStatus) => {
@@ -389,7 +389,7 @@
             console.error("postId không tồn tại trong URL");
             return; // Thoát nếu không có postId
         }
-
+        
         isLoggedIn(loggedIn => {
             if (!loggedIn) {
                 Swal.fire({
@@ -415,7 +415,7 @@
             const newVoteValue = currentVote + increment;
             // Cập nhật giá trị vote hiển thị
             voteValueElement.innerText = newVoteValue;
-
+            
             // Gửi yêu cầu AJAX để cập nhật vote
             const xhr = new XMLHttpRequest();
             xhr.open("POST", "updateVotePost", true);
@@ -432,7 +432,7 @@
             }, 200); // Reload sau 0.2 giây 
         });
     };
-
+    
     //Show change upvote downvote
     document.addEventListener('DOMContentLoaded', function () {
         const votePostStatus = `${votePostStatus}`; // Đảm bảo votePostStatus là string
@@ -447,9 +447,9 @@
         } else if (votePostStatus === "downvote") {
             toggleVotePostClass(false, true);
         }
-
+        
     });
-
+    
 // Thay đổi background của .comment-input-block .card-title
     const commentTitles = document.querySelectorAll('.comment-input-block .card-title');
     commentTitles.forEach(title => {
@@ -462,7 +462,7 @@
             title.style.webkitBackgroundClip = 'text';
         }
     });
-
+    
 // Thay đổi border color và box-shadow của .comment-card
     const commentCards = document.querySelectorAll('.comment-card');
     commentCards.forEach(card => {
@@ -472,22 +472,22 @@
             card.style.boxShadow = '0 0 15px ' + rankColor;
         }
     });
-
-
+    
+    
 // Hàm để lấy giá trị của một tham số từ URL
     const getUrlParameter = param => {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
     };
-
+    
     // Hàm để xử lý thêm/loại bỏ lớp 'upvoted' và 'downvoted' cửa post
     const toggleVotePostClass = (addUpvoted, addDownvoted) => {
         const voteSection = document.getElementById('vote-section');
         voteSection.classList.toggle('upvoted', addUpvoted);
         voteSection.classList.toggle('downvoted', addDownvoted);
     };
-
-
+    
+    
 // Kiểm tra đăng nhập
     const isLoggedIn = callback => {
         const xhr = new XMLHttpRequest();
@@ -532,7 +532,7 @@
             });
         }
     }
-
+    
 // Chuyển đổi trạng thái hiển thị phản hồi
     function toggleReply(button) {
         const commentId = button.getAttribute('data-comment-id');
@@ -550,7 +550,7 @@
             console.error('Không tìm thấy phần tử với id #replyComment_' + commentId);
         }
     }
-
+    
 // Gửi phản hồi
     function sendMsgReply(button) {
         const parentId = button.getAttribute('data-comment-id');
@@ -579,7 +579,7 @@
             });
         }
     }
-
+    
     $(document).ready(() => {
         //Show edit comment
         $('#editCommentModal').on('show.bs.modal', (event) => {
@@ -599,7 +599,7 @@
                 }
             });
         });
-
+        
         // Save edited comment function
         const saveEditedComment = () => {
             // Get the edited comment ID and content from the modal
@@ -631,7 +631,7 @@
         };
         // Attach saveEditedComment function to the 'Save changes' button click
         $('#saveEditedCommentBtn').on('click', saveEditedComment);
-
+        
         // Save edited comment function
         const deleteComment = () => {
             var commentId = $('#editCommentId').val();
@@ -657,5 +657,25 @@
         };
         // Attach deleteCommentBtn function to the 'Save changes' button click
         $('#deleteCommentBtn').on('click', deleteComment);
+        
+        $('#deletePostButton').click(function () {
+            const postId = getUrlParameter('postId');
+            if (confirm('Are you sure you want to delete this post?')) {
+                $.ajax({
+                    url: 'deletePost',
+                    type: 'POST',
+                    data: {postId: postId},
+                    success: (response) => {
+                        alert('Post deleted successfully');
+                        window.location.href = 'home';
+                    },
+                    error: (xhr, status, error) => {
+                        console.log(error);
+                        alert('Failed to delete post');
+                        location.reload();
+                    }
+                });
+            }
+        });
     });
 </script>

@@ -810,11 +810,5 @@ public class PostDAO extends DBContext {
     public String trimPostTitle(String title){
         return title.substring(0,12) + "...";
     }
-    public static void main(String[] args) {
-        PostDAO pd = new PostDAO();
-        ArrayList<User> list = pd.getTop10UserByPoint();
-        for(User x : list){
-            System.out.println(x.getProfilePhoto());
-        }
-    }
+   
 }

@@ -22,16 +22,47 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>AdminFilter</filter-name>
-        <url-pattern>/empty</url-pattern>
+        <url-pattern>/AdminDashboard.jsp</url-pattern>
+        <url-pattern>/createAnime</url-pattern>
+        <url-pattern>/dashboard</url-pattern>
+        <url-pattern>/updateAnime</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>ModFilter</filter-name>
-        <url-pattern>/empty</url-pattern>
+        <url-pattern>/validateReport</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
-        <url-pattern>/Profile1.jsp</url-pattern>
+        <url-pattern>/Profile.jsp</url-pattern>
         <url-pattern>/AddPhoneNumber.jsp</url-pattern>
+        <url-pattern>/CreatePost.jsp</url-pattern>
+        <url-pattern>/ChangePass.jsp</url-pattern>
+        <url-pattern>/AccountSettings.jsp</url-pattern>
+        <url-pattern>/AddPhoneNumber.jsp</url-pattern>
+        <url-pattern>/ChoosePostPic.jsp</url-pattern>
+        <url-pattern>/VerifyChangedEmail.jsp</url-pattern>
+        <url-pattern>/createPost</url-pattern>
+        <url-pattern>/addComment</url-pattern>
+        <url-pattern>/addPhoneNumber</url-pattern>
+        <url-pattern>/changeEmail</url-pattern>
+        <url-pattern>/changeName</url-pattern>
+        <url-pattern>/changePassword</url-pattern>
+        <url-pattern>/changePhoneNumber</url-pattern>
+        <url-pattern>/changeUsername</url-pattern>
+        <url-pattern>/createPost</url-pattern>
+        <url-pattern>/createReport</url-pattern>
+        <url-pattern>/deleteAccount</url-pattern>
+        <url-pattern>/deleteComment</url-pattern>
+        <url-pattern>/deleteNotification</url-pattern>
+        <url-pattern>/deletePost</url-pattern>
+        <url-pattern>/deleteReport</url-pattern>
+        <url-pattern>/profile</url-pattern>
+        <url-pattern>/setBio</url-pattern>
+        <url-pattern>/updateBio</url-pattern>    
+        <url-pattern>/updateComment</url-pattern>
+        <url-pattern>/updateVotePost</url-pattern>
+        <url-pattern>/uploadPFP</url-pattern>
+        <url-pattern>/verifyChangedEmail</url-pattern>
     </filter-mapping>
     <servlet>
         <servlet-name>blank</servlet-name>

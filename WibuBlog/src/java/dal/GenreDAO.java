@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Genre;
+import model.TopViewedGenre;
 
 /**
  *
@@ -138,5 +139,46 @@ public class GenreDAO extends DBContext {
         }
     }
 
-    
+    public ArrayList<TopViewedGenre> getTop6ViewedGenre() {
+        try {
+            String sql = "SELECT top 6 \n"
+                    + "    g.Name AS Genre,\n"
+                    + "    COUNT(DISTINCT p.PostID) AS TotalPosts,\n"
+                    + "    SUM(p.[View]) AS TotalView\n"
+                    + "FROM \n"
+                    + "    Genre g\n"
+                    + "JOIN \n"
+                    + "    PostGenre pg ON g.GenreID = pg.GenreID\n"
+                    + "JOIN \n"
+                    + "    (\n"
+                    + "        SELECT \n"
+                    + "            p.PostID,\n"
+                    + "            p.[View]\n"
+                    + "        FROM \n"
+                    + "            Post p\n"
+                    + "        WHERE \n"
+                    + "            p.Status = 'Active' -- Assuming there's a status column in Post table\n"
+                    + "    ) p ON pg.PostID = p.PostID\n"
+                    + "GROUP BY \n"
+                    + "    g.Name\n"
+                    + "ORDER BY \n"
+                    + "    TotalView DESC;";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            ArrayList<TopViewedGenre> list = new ArrayList();
+            while (rs.next()) {
+                list.add(new TopViewedGenre(rs.getString("Genre"),
+                        rs.getInt("TotalPosts"),
+                        rs.getInt("TotalView")));
+            }
+            return list;
+        } catch (SQLException ex) {
+            Logger.getLogger(GenreDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    public static void main(String[] args) {
+       
+    }
+
 }

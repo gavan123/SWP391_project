@@ -26,7 +26,7 @@ public class UserDAO extends DBContext {
             ps = connection.prepareStatement(sql);
             ps.setString(1, email);
             rs = ps.executeQuery();
-            if (rs.next()) {    
+            if (rs.next()) {
                 return new User(
                         rs.getInt("UserID"),
                         rs.getString("Username"),
@@ -37,11 +37,11 @@ public class UserDAO extends DBContext {
                         rs.getString("Email"),
                         rs.getString("Fullname"),
                         rs.getInt("RankID"),
-                        rs.getInt("ProfilePhoto"),
+                        rs.getString("ProfilePhoto") != null ? rs.getString("ProfilePhoto") : null,
                         rs.getString("PhoneNumber"),
                         rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
                         rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null);
-                }                      
+            }
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -49,6 +49,31 @@ public class UserDAO extends DBContext {
             closePreparedStatement(ps);
         }
         return null;
+    }
+
+    public int getUserTotalPostLast3Days(int userId) {
+        try {
+            int totalUserPost = 0;
+            String sql = "SELECT \n"
+                    + "    [UserID],\n"
+                    + "    COUNT(*) AS TotalPosts\n"
+                    + "FROM \n"
+                    + "    [dbo].[Post]\n"
+                    + "WHERE \n"
+                    + "    [PostTime] >= DATEADD(day, -3, GETDATE()) and userid = ? \n"
+                    + "GROUP BY \n"
+                    + "    [UserID];";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                totalUserPost = rs.getInt("TotalPosts");
+                return totalUserPost;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
     }
 
     public User getUserById(int userId) {
@@ -70,7 +95,7 @@ public class UserDAO extends DBContext {
                         rs.getString("Email"),
                         rs.getString("Fullname"),
                         rs.getInt("RankID"),
-                        rs.getInt("ProfilePhoto"),
+                        rs.getString("ProfilePhoto") != null ? rs.getString("ProfilePhoto") : null,
                         rs.getString("PhoneNumber"),
                         rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
                         rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null);
@@ -83,7 +108,8 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    public void changePhoneNumber(String phonenumber, int userID){
+
+    public void changePhoneNumber(String phonenumber, int userID) {
         PreparedStatement ps = null;
         try {
             String sql = "update [user] set phonenumber = ? where UserID = ? ";
@@ -97,6 +123,7 @@ public class UserDAO extends DBContext {
             closePreparedStatement(ps);
         }
     }
+
     public boolean emailExists(String email) {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -131,8 +158,9 @@ public class UserDAO extends DBContext {
             closePreparedStatement(ps);
         }
     }
-       public void changeName(String newName, int userID){
-           PreparedStatement ps = null;
+
+    public void changeName(String newName, int userID) {
+        PreparedStatement ps = null;
         try {
             String sql = "update [user] set Fullname = ? where UserID = ? ";
             ps = connection.prepareStatement(sql);
@@ -144,10 +172,9 @@ public class UserDAO extends DBContext {
         } finally {
             closePreparedStatement(ps);
         }
-       }
-       
-       
-       public void changeEmail(String newEmail, int userID) {
+    }
+
+    public void changeEmail(String newEmail, int userID) {
         PreparedStatement ps = null;
         try {
             String sql = "update [user] set email = ? where UserID = ? ";
@@ -162,7 +189,6 @@ public class UserDAO extends DBContext {
         }
     }
 
-
     public User getUserByUsername(String username) {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -171,7 +197,7 @@ public class UserDAO extends DBContext {
             ps = connection.prepareStatement(sql);
             ps.setString(1, username);
             rs = ps.executeQuery();
-            if (rs.next()) {              
+            if (rs.next()) {
                 return new User(
                         rs.getInt("UserID"),
                         rs.getString("Username"),
@@ -182,13 +208,13 @@ public class UserDAO extends DBContext {
                         rs.getString("Email"),
                         rs.getString("Fullname"),
                         rs.getInt("RankID"),
-                        rs.getInt("ProfilePhoto"),
-                        rs.getString("PhoneNumber"),
+                        rs.getString("ProfilePhoto") != null ? rs.getString("ProfilePhoto") : null,
+                        rs.getString("PhoneNumber") != null ? rs.getString("PhoneNumber") : null,
                         rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
                         rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null,
                         rs.getString("Bio") != null ? rs.getString("Bio") : null);
 
-            }        
+            }
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -275,18 +301,18 @@ public class UserDAO extends DBContext {
         }
     }
 
-    public void updateProfilePhoto(int userId, int profilePhotoID) {
+    public void updateProfilePhoto(int userId, String profilePhotoID) {
         PreparedStatement ps = null;
         try {
             String sql = "UPDATE [user] SET ProfilePhoto = ? WHERE UserID = ?";
             ps = connection.prepareStatement(sql);
-            ps.setInt(1, profilePhotoID);
+            ps.setString(1, profilePhotoID);
             ps.setInt(2, userId);
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);          
-        } 
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 //    @Override
@@ -330,8 +356,8 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    
-    public String getRoleByRoleID(int roleID){
+
+    public String getRoleByRoleID(int roleID) {
         try {
             String sql = "select * from [Role] where RoleID = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -345,8 +371,8 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    
-    public String getColorByRank(String rank){
+
+    public String getColorByRank(String rank) {
         try {
             String sql = "select * from [Rank] where name = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -360,49 +386,49 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    
-    public void setPhoneNumber(String phoneNumber, int userID){
+
+    public void setPhoneNumber(String phoneNumber, int userID) {
         try {
             String sql = "update [user] set PhoneNumber = ? where userid = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, phoneNumber);
-            ps.setInt(2,userID);
-            ps.execute();
-            ps.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-      public boolean checkPhoneNumber(String phoneNumber){
-        try {
-            String sql = "select * from user where PhoneNumber = ?";
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, phoneNumber);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                return true;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return false;
-      }
-      
-      public void updateBio(String content, int userID){
-        try {
-            String sql = "update [user] set bio = ? where userID = ? ";
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1,content);
             ps.setInt(2, userID);
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-      }
-      
-      public void changeUsername(String newUsername, int userID){ 
+    }
+
+    public boolean checkPhoneNumber(String phoneNumber) {
+        try {
+            String sql = "select * from user where PhoneNumber = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, phoneNumber);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    public void updateBio(String content, int userID) {
+        try {
+            String sql = "update [user] set bio = ? where userID = ? ";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, content);
+            ps.setInt(2, userID);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void changeUsername(String newUsername, int userID) {
         try {
             String sql = "update [user] set username = ? where userID = ? ";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -413,6 +439,12 @@ public class UserDAO extends DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-          
-      }
+
+    }
+
+    public static void main(String[] args) {
+        UserDAO ud = new UserDAO();
+        PostDAO pd = new PostDAO();
+        System.out.println(ud.getUserTotalPostLast3Days(6));
+    }
 }

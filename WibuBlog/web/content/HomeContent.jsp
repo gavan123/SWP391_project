@@ -61,8 +61,8 @@
         <div class="swiper-container swiper-container-initialized swiper-container-horizontal" style="min-height:220px">
             <div class="swiper-wrapper" id="swiper-wrapper" aria-live="polite" style="transform: translate3d(-603.333px, 0px, 0px); transition-duration: 0ms;">
                 <c:forEach var="post" items="${p.getLimitedPosts(10)}">
-                    <c:if test="${post.status=='active'}"></c:if>
-                        <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
+                    <c:if test="${post.status=='active'}">
+                         <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
                             <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
                         <a href="postDetail?postId=${post.postId}" id="new_post0">
                             <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${pageContext.request.contextPath}/images/${post.image}" 
@@ -70,6 +70,7 @@
                             <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
                         </a>
                     </div>
+                    </c:if>
                 </c:forEach>
             </div>
             <!-- Add Pagination -->

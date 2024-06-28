@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.time.LocalDateTime;
+
 /**
  *
  * @author admin
@@ -11,17 +13,39 @@ package model;
 public class Report {
     private int reportId;
     private int userId;
+    private LocalDateTime timeCreated;
     private String reason;
     private int postId;
+    private String status;
 
     public Report() {
     }
-
-    public Report(int reportId, int userId, String reason, int postId) {
-        this.reportId = reportId;
+    
+    public Report(int userId, LocalDateTime timeCreated, String reason, int postId) {
+        this.reportId = 0;
         this.userId = userId;
+        this.timeCreated = timeCreated;
         this.reason = reason;
         this.postId = postId;
+        this.status = "Pending";
+    }
+
+    public Report(int reportId, int userId, LocalDateTime timeCreated, String reason, int postId) {
+        this.reportId = reportId;
+        this.userId = userId;
+        this.timeCreated = timeCreated;
+        this.reason = reason;
+        this.postId = postId;
+        this.status = "Pending";
+    }
+
+    public Report(int reportId, int userId, LocalDateTime timeCreated, String reason, int postId, String status) {
+        this.reportId = reportId;
+        this.userId = userId;
+        this.timeCreated = timeCreated;
+        this.reason = reason;
+        this.postId = postId;
+        this.status = status;
     }
 
     public int getReportId() {
@@ -54,6 +78,22 @@ public class Report {
 
     public void setPostId(int postId) {
         this.postId = postId;
+    }
+
+    public LocalDateTime getTimeCreated() {
+        return timeCreated;
+    }
+
+    public void setTimeCreated(LocalDateTime timeCreated) {
+        this.timeCreated = timeCreated;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
     
     

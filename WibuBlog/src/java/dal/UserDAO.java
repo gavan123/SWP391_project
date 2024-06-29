@@ -461,7 +461,23 @@ public class UserDAO extends DBContext {
             closePreparedStatement(ps);
         }
     }
-    
+
+    public void AccountBanDuration(int userId, int duration) {
+        String sql = "INSERT INTO [dbo].[UserBan] ([UserID], [BanStartDate], [BanEndDate]) "
+                + "VALUES (?, GETDATE(), DATEADD(HOUR, ?, GETDATE()))";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, duration);
+            // Thực thi câu lệnh INSERT
+            ps.executeUpdate();
+            // Hiển thị thông báo thành công
+            System.out.println("User with ID " + userId + " has been banned for " + duration + " hours.");
+        } catch (SQLException ex) {
+            System.err.println("Insert to UserBan failed: " + ex.getMessage());
+        }
+    }
+
     public boolean RemoveAccountFromBan(int userId) {
         PreparedStatement ps = null;
         ResultSet rs = null;

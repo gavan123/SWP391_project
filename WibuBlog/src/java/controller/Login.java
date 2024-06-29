@@ -106,6 +106,17 @@ public class Login extends HttpServlet {
             return;
         }
 
+        boolean isBanTimeout = userdao.isAccountBanTimeExpired(user.getUserId());
+
+        // Check if the account is ban
+        if (!isBanTimeout) {
+            request.setAttribute("errorMessage", "Login failed! Account has been temporary ban.");
+            request.getRequestDispatcher("Login.jsp").forward(request, response);
+            return;
+        } else {
+            userdao.RemoveAccountFromBan(user.getUserId());
+        }
+
         // Create a session and set the user attribute if the login is successful
         HttpSession session = request.getSession();
         session.setMaxInactiveInterval(30 * 60); // Set session timeout to 30 minutes
@@ -117,7 +128,7 @@ public class Login extends HttpServlet {
             request.getRequestDispatcher("Login.jsp").forward(request, response);
             return;
         }
-        
+
         switch (userRole) {
             case "Admin" ->
                 request.getRequestDispatcher("Home.jsp").forward(request, response);

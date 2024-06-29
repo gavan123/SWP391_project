@@ -444,6 +444,29 @@ public class UserDAO extends DBContext {
         ResultSet rs = null;
         try {
             String sql = "SELECT * FROM [UserBan]\n"
+                    + "WHERE [UserID] = ? ";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
+            }
+            return false;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+    }
+
+    public boolean isAccountBanTimeExpired(int userId) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT Count(*) FROM [UserBan]\n"
                     + "WHERE [UserID] = ? AND GETDATE() > [BanEndDate]";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, userId);

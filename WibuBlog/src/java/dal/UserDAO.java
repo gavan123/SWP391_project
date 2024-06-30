@@ -485,9 +485,9 @@ public class UserDAO extends DBContext {
         }
     }
 
-    public void AccountBanDuration(int userId, int duration) {
+    public void BanUser(int userId, int duration) {
         String sql = "INSERT INTO [dbo].[UserBan] ([UserID], [BanStartDate], [BanEndDate]) "
-                + "VALUES (?, GETDATE(), DATEADD(HOUR, ?, GETDATE()))";
+                + "VALUES (?, GETDATE(), DATEADD(DAY, ?, GETDATE()))";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, userId);

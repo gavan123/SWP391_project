@@ -97,7 +97,7 @@ public class Login extends HttpServlet {
             return;
         }
 
-        boolean isActive = userdao.checkAccountIsActive(user.getUserId());
+        boolean isActive = userdao.checkUserIsActive(user.getUserId());
 
         // Check if the account is active
         if (!isActive) {
@@ -106,7 +106,7 @@ public class Login extends HttpServlet {
             return;
         }
 
-        boolean isBanTimeout = userdao.isAccountBanTimeExpired(user.getUserId());
+        boolean isBanTimeout = userdao.isUserBanTimeExpired(user.getUserId());
 
         // Check if the account is ban
         if (!isBanTimeout) {
@@ -114,7 +114,7 @@ public class Login extends HttpServlet {
             request.getRequestDispatcher("Login.jsp").forward(request, response);
             return;
         } else {
-            userdao.RemoveAccountFromBan(user.getUserId());
+            userdao.RemoveUserFromBan(user.getUserId());
         }
 
         // Create a session and set the user attribute if the login is successful

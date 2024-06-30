@@ -417,7 +417,7 @@ public class UserDAO extends DBContext {
 
     }
 
-    public boolean checkAccountIsActive(int userId) {
+    public boolean checkUserIsActive(int userId) {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
@@ -439,7 +439,7 @@ public class UserDAO extends DBContext {
         }
     }
 
-    public boolean checkAccountIsBan(int userId) {
+    public boolean checkUserIsBan(int userId) {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
@@ -462,7 +462,7 @@ public class UserDAO extends DBContext {
         }
     }
 
-    public boolean isAccountBanTimeExpired(int userId) {
+    public boolean isUserBanTimeExpired(int userId) {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
@@ -501,7 +501,7 @@ public class UserDAO extends DBContext {
         }
     }
 
-    public boolean RemoveAccountFromBan(int userId) {
+    public boolean RemoveUserFromBan(int userId) {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {

@@ -56,6 +56,7 @@ public class SearchUser extends HttpServlet {
         PostDAO pd = new PostDAO();
         UserDAO ud = new UserDAO();
         ArrayList<User> list = ud.searchUser(txtSearch);
+        if(request.getParameter("flag") == null){
         request.setAttribute("searchList", list);
         request.setAttribute("NumberOfPostLast3Days", pd.getTotalPostLast3Days());
         request.setAttribute("AvgPostPerDay", pd.getAvgPostPerDayLastMonth());
@@ -63,7 +64,12 @@ public class SearchUser extends HttpServlet {
         request.setAttribute("TotalMember", pd.getTotalMember());
         request.setAttribute("Top10User", pd.getTop10UserByPoint());
         request.setAttribute("Top6Post", pd.getTop6VotedPost());
-        request.getRequestDispatcher("AdminDashboard.jsp").forward(request, response);    
+        request.getRequestDispatcher("AdminDashboard.jsp").forward(request, response);   
+        }
+        else{
+            request.setAttribute("searchList", list);
+            request.getRequestDispatcher("AllMember.jsp").forward(request, response);
+        }
     }
 
     @Override

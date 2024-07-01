@@ -152,6 +152,23 @@ public class NotificationDAO extends DBContext {
             Logger.getLogger(NotificationDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public void createBanNotification(int sourceUserId, int targetUserId,String content, String expireTime){
+         try {
+            String sql = "insert into [notification] (SourceUserId,TargetUserId,Content,TimeCreated) values (?, ?, ?, ?)";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, sourceUserId);
+            ps.setInt(2, targetUserId);
+            ps.setString(3, "You have been banned from Wibu Forum for: " + content + " until " + expireTime);
+            ps.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"))));
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(NotificationDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+   
     public static void main(String[] args) {
         NotificationDAO nd = new NotificationDAO();
         ArrayList<Notification> list = nd.getTop10Notification(6);

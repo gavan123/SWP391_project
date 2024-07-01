@@ -29,7 +29,7 @@ public class AdjustRole extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AdjustRole</title>");            
+            out.println("<title>Servlet AdjustRole</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet AdjustRole at " + request.getContextPath() + "</h1>");
@@ -44,27 +44,35 @@ public class AdjustRole extends HttpServlet {
         String action = request.getParameter("Action");
         int userId = Integer.parseInt(request.getParameter("UserId"));
         PostDAO pd = new PostDAO();
-        if(action.equals("Promote")){
-            UserDAO ud = new UserDAO();
-            ud.setUserRoleIdByUserId(userId, 2);
-            request.setAttribute("NumberOfPostLast3Days", pd.getTotalPostLast3Days());
-            request.setAttribute("AvgPostPerDay", pd.getAvgPostPerDayLastMonth());
-            request.setAttribute("TotalPost", pd.getTotalPost());     
-            request.setAttribute("TotalMember", pd.getTotalMember());
-            request.setAttribute("Top10User", pd.getTop10UserByPoint());
-            request.getRequestDispatcher("AdminDashboard.jsp").forward(request, response);    
-            return;
-        }
-        else{
-            UserDAO ud = new UserDAO();
+        UserDAO ud = new UserDAO();
+        ud.setUserRoleIdByUserId(userId, 2);
+        request.setAttribute("NumberOfPostLast3Days", pd.getTotalPostLast3Days());
+        request.setAttribute("AvgPostPerDay", pd.getAvgPostPerDayLastMonth());
+        request.setAttribute("TotalPost", pd.getTotalPost());
+        request.setAttribute("TotalMember", pd.getTotalMember());
+        request.setAttribute("Top10User", pd.getTop10UserByPoint());
+        if (action.equals("Promote")) {
+            if (request.getParameter("Flag") == null) {
+                request.getRequestDispatcher("AdminDashboard.jsp").forward(request, response);
+                return;
+            } else {
+                response.sendRedirect("AllMember.jsp");
+                return;
+            }
+        } else {
             ud.setUserRoleIdByUserId(userId, 3);
             request.setAttribute("NumberOfPostLast3Days", pd.getTotalPostLast3Days());
             request.setAttribute("AvgPostPerDay", pd.getAvgPostPerDayLastMonth());
-            request.setAttribute("TotalPost", pd.getTotalPost());     
+            request.setAttribute("TotalPost", pd.getTotalPost());
             request.setAttribute("TotalMember", pd.getTotalMember());
             request.setAttribute("Top10User", pd.getTop10UserByPoint());
-            request.getRequestDispatcher("AdminDashboard.jsp").forward(request, response);    
-            return;
+            if (request.getParameter("Flag") == null) {
+                request.getRequestDispatcher("AdminDashboard.jsp").forward(request, response);
+                return;
+            } else {
+                response.sendRedirect("AllMember.jsp");
+                return;
+            }
         }
     }
 

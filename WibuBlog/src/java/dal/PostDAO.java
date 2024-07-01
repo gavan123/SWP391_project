@@ -780,9 +780,67 @@ public class PostDAO extends DBContext {
         return null;
     }
     
+     public ArrayList<User> getAllUser() {
+        try {
+            String sql = "select * from [user]";
+            ArrayList<User> userList = new ArrayList();
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                userList.add(new User(rs.getInt("UserId"),
+                        rs.getString("Username"),
+                        rs.getString("Password"),
+                        rs.getInt("RoleId"),
+                        rs.getInt("Point"),
+                        rs.getString("Status"),
+                        rs.getString("Email"),
+                        rs.getString("Fullname"),
+                        rs.getInt("RankID"),
+                        rs.getString("ProfilePhoto") != null ? rs.getString("ProfilePhoto") : null,
+                        rs.getString("PhoneNumber") != null ? rs.getString("PhoneNumber") : null,
+                        rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
+                        rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null,
+                        rs.getString("Bio") != null ? rs.getString("Bio") : null));
+            }
+            return userList;
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+       
+    public ArrayList<User> AllDeactivatedUser() {
+        try {
+            String sql = "select * from [user] where [status] = 'Deactive' ";
+            ArrayList<User> deactivatedUserList = new ArrayList();
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                deactivatedUserList.add(new User(rs.getInt("UserId"),
+                        rs.getString("Username"),
+                        rs.getString("Password"),
+                        rs.getInt("RoleId"),
+                        rs.getInt("Point"),
+                        rs.getString("Status"),
+                        rs.getString("Email"),
+                        rs.getString("Fullname"),
+                        rs.getInt("RankID"),
+                        rs.getString("ProfilePhoto") != null ? rs.getString("ProfilePhoto") : null,
+                        rs.getString("PhoneNumber") != null ? rs.getString("PhoneNumber") : null,
+                        rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
+                        rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null,
+                        rs.getString("Bio") != null ? rs.getString("Bio") : null));
+            }
+            return deactivatedUserList;
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     public ArrayList<Post> getTop6VotedPost(){
         try {
-            String sql = "SELECT TOP 6 * FROM [dbo].[Post] WHERE [PostTime] >= DATEADD(day, -3, GETDATE())\n" +
+            String sql = "SELECT TOP 6 * FROM [dbo].[Post] WHERE [PostTime] >= DATEADD(day, -14, GETDATE())\n" +
                     " ORDER BY [Vote] DESC;";
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();

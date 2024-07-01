@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.User;
@@ -50,7 +51,47 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-
+    public void setUserStatusByUserId(int userId, String userStatus){
+        try {
+            String sql = "update [user] set Status = ? where userid = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, userStatus);
+            ps.setInt(2, userId);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public ArrayList<User> getTop10User() {
+        try {
+            String sql = "select top(10) * from [user]";
+            ArrayList<User> top10UserList = new ArrayList();
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                top10UserList.add(new User(rs.getInt("UserId"),
+                        rs.getString("Username"),
+                        rs.getString("Password"),
+                        rs.getInt("RoleId"),
+                        rs.getInt("Point"),
+                        rs.getString("Status"),
+                        rs.getString("Email"),
+                        rs.getString("Fullname"),
+                        rs.getInt("RankID"),
+                        rs.getString("ProfilePhoto") != null ? rs.getString("ProfilePhoto") : null,
+                        rs.getString("PhoneNumber") != null ? rs.getString("PhoneNumber") : null,
+                        rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
+                        rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null,
+                        rs.getString("Bio") != null ? rs.getString("Bio") : null));
+            }
+            return top10UserList;
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     public int getUserTotalPostLast3Days(int userId) {
         try {
             int totalUserPost = 0;
@@ -76,6 +117,47 @@ public class UserDAO extends DBContext {
         return 0;
     }
 
+    public ArrayList<User> searchUser(String username) {
+        try {
+            String sql = "select * from [user] where username like '%" + username + "%'";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            ArrayList<User> list = new ArrayList();
+            while(rs.next()){
+                list.add(new User(rs.getInt("UserId"),
+                        rs.getString("Username"),
+                        rs.getString("Password"),
+                        rs.getInt("RoleId"),
+                        rs.getInt("Point"),
+                        rs.getString("Status"),
+                        rs.getString("Email"),
+                        rs.getString("Fullname"),
+                        rs.getInt("RankID"),
+                        rs.getString("ProfilePhoto") != null ? rs.getString("ProfilePhoto") : null,
+                        rs.getString("PhoneNumber") != null ? rs.getString("PhoneNumber") : null,
+                        rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
+                        rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null,
+                        rs.getString("Bio") != null ? rs.getString("Bio") : null));
+            }
+            return list;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    public void setUserRoleIdByUserId(int userId,int roleId){
+        try {
+            String sql = "Update [user] set roleid = ? where userid = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, roleId);
+            ps.setInt(2, userId);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
     public User getUserById(int userId) {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -442,9 +524,5 @@ public class UserDAO extends DBContext {
 
     }
 
-    public static void main(String[] args) {
-        UserDAO ud = new UserDAO();
-        PostDAO pd = new PostDAO();
-        System.out.println(ud.getUserTotalPostLast3Days(6));
-    }
+
 }

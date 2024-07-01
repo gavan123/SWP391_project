@@ -17,7 +17,7 @@
                     <a style="float: right" href="#" onclick="confirmDelete(${post.postID})">Delete post</a>
                 </c:if>
                 <h1 class="card-title" style="font-size: 26px;line-height:34px">${post.title}</h1>
-                
+
             </header>
             <h6 class="card-subtitle mb-2 fw-700" style="font-size: small !important;">
                 <i class="fas fa-user"></i> 
@@ -43,27 +43,31 @@
             <hr>
 
 
-            <c:if test="${user.username != post.username}">
+            <c:if test="${user.username != post.username && user.status == 'active'}">
                 <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
                     <i class="fas fa-flag"></i> Report Post
                 </button>
             </c:if>
-
-            <div class="row">
-                <div class="col-lg-4 mb-2 mx-auto">
-                    <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
-                        <li class="d-flex align-items-center mr-4 font-weight-bold">
-                            <div class="vote-section" id="vote-section">
-                                <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2"
-                                   onclick="votePost('up', '${votePostStatus}')"></i>
-                                <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
-                                   onclick="votePost('down', '${votePostStatus}')"></i>
-                                <span id="vote_value">${post.vote}</span>
-                            </div>
-                        </li>
-                    </ul>
+            <c:if test="${user.status == 'active'}">
+                <div class="row">
+                    <div class="col-lg-4 mb-2 mx-auto">
+                        <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
+                            <li class="d-flex align-items-center mr-4 font-weight-bold">
+                                <div class="vote-section" id="vote-section">
+                                    <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2"
+                                       onclick="votePost('up', '${votePostStatus}')"></i>
+                                    <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
+                                       onclick="votePost('down', '${votePostStatus}')"></i>
+                                    <span id="vote_value">${post.vote}</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
+            </c:if>
+             <c:if test="${user.status == 'deactive'}">
+                 <p>You are now allowed to vote whilst banned</p>
+            </c:if>
         </div>
     </div>
 
@@ -112,6 +116,7 @@
                                  src="${pageContext.request.contextPath}/images/game/${user.profilePhoto}"
                                  onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
                         </div>
+                                 <c:if test="${user.status == 'active'}"> 
                         <div class="comment-input-block media-body">
                             <div class="d-flex justify-content-between align-items-center">
                                 <textarea class="form-control" rows="2" id="msg" minlength="30" 
@@ -121,6 +126,10 @@
                                 </button>
                             </div>
                         </div>
+                         </c:if>
+                                    <c:if test="${user.status == 'deactive'}"> 
+                                        <p>You are not allowed to comment whilst banned</p>
+                         </c:if>
                     </div>
                 </c:otherwise>
             </c:choose>
@@ -160,6 +169,7 @@
                             </div>
                             <input id="commentId" type="hidden" value="${comment.commentId}" >
                         </div>
+                            <c:if test="${user.status == 'active'}">
                         <div class="card-text comment-date">
                             <div class="vote-section vote-section-cmt" id="vote-section-cmt">
                                 <i  id="vote_comment_up" class="anticon anticon_vote anticon-arrow-up mr-2" 
@@ -168,9 +178,7 @@
                                     onclick="voteComment('down', ${comment.commentId})" style="padding: 10px"></i>
                                 <span id="vote_comment_value">${comment.vote}</span>
                             </div>
-                            <span class="badge badge-secondary">
-                                ${commentDate}
-                            </span>
+                          
                             <c:if test="${not empty user}">
                                 <c:if test="${user.userId == commentUser.userId && comment.status eq 'active'}">
                                     <button type="button" class="btn reply-button" data-comment-id="${comment.commentId}" 
@@ -183,6 +191,10 @@
                                 </button>
                             </c:if>
                         </div>
+                            </c:if>
+                            <span class="badge badge-secondary">
+                                ${commentDate}
+                            </span>
                         <div id="replyComment_${comment.commentId}" class="replyComment justify-content-between align-items-center d-none">
                             <textarea class="form-control" rows="2" id="msgReply_${comment.commentId}" 
                                       minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
@@ -591,13 +603,13 @@
     });
 </script>
 <script>
-function confirmDelete(postID) {
-    if (confirm('Do you want to delete this post?')) {
-        // Redirect to the DeletePost servlet with the PostId parameter
-        window.location.href = 'DeletePost?Flag=a&PostId=' + postID;
-    } else {
-        // Do nothing if the user cancels
-        return false;
+    function confirmDelete(postID) {
+        if (confirm('Do you want to delete this post?')) {
+            // Redirect to the DeletePost servlet with the PostId parameter
+            window.location.href = 'DeletePost?Flag=a&PostId=' + postID;
+        } else {
+            // Do nothing if the user cancels
+            return false;
+        }
     }
-}
 </script>

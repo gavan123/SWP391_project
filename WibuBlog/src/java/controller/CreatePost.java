@@ -30,6 +30,7 @@ import model.Genre;
 import model.Post;
 import model.User;
 import utility.ImageHandler;
+import utility.ProfanityFilter;
 
 /**
  *
@@ -114,6 +115,15 @@ public class CreatePost extends HttpServlet {
         String submittedFileName = part.getSubmittedFileName();
 
         // Kiểm tra nếu nguồn không được cung cấp, mặc định là "Anime Forum"
+        if (ProfanityFilter.checkProfanity(source) || ProfanityFilter.checkProfanity(content)) {
+            PrintWriter out = response.getWriter();
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('Please RECONSIDER YOUR PROFILE');");
+            out.println("location='CreatePost.jsp';");
+            out.println("</script>");
+            response.sendRedirect("CreatePost.jsp");
+            return;
+        }
         if (source == null || source.isEmpty()) {
             source = "Anime Forum";
         }

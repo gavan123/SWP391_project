@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 
@@ -56,7 +58,8 @@ public class ImageHandler {
 //            System.err.println("Error saving image: " + e.getMessage());
 //        }
 //    }
-
+    
+    
     public static void saveImage(BufferedImage image, Path filePath, String format) {
         if (!isImageFile(filePath.toString())) {
             System.err.println("The file path " + filePath + " is not a valid image file.");
@@ -86,6 +89,13 @@ public class ImageHandler {
             return extension;
         }
         return null;
+    }
+
+    public String encodeImageName(int userID) {
+        LocalDateTime datetime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_hhmmss");
+        String formattedDateTime = datetime.format(formatter);
+        return userID + "_" + formattedDateTime;
     }
 
     public static void main(String[] args) {

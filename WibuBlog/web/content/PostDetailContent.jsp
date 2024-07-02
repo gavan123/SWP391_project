@@ -171,7 +171,7 @@
                             </div>
                             <input id="commentId" type="hidden" value="${comment.commentId}" >
                         </div>
-                             <%if (ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
+                             <%if (ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
                         <div class="card-text comment-date">
                             <div class="vote-section vote-section-cmt" id="vote-section-cmt">
                                 <i  id="vote_comment_up" class="anticon anticon_vote anticon-arrow-up mr-2" 
@@ -377,7 +377,7 @@
         });
     };
 
-    //Show change upvote downvote
+    //Show change downvote
     document.addEventListener('DOMContentLoaded', function () {
         const votePostStatus = `${votePostStatus}`; // Đảm bảo votePostStatus là string
         if (votePostStatus.trim() === "") {
@@ -506,8 +506,8 @@
             console.error("postId không tồn tại trong URL");
             return; // Thoát nếu không có postId
         }
-        if (msg.length < 30) {
-            alert("Tối thiểu 30 ký tự...");
+        if (msg.length < 1) {
+            alert("Empty comment");
         } else {
             $.ajax({
                 type: 'POST',

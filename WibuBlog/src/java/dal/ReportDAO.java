@@ -13,8 +13,6 @@ import java.util.logging.Logger;
 import model.Report;
 
 public class ReportDAO extends DBContext {
-
-   /* 
     public Report getReportById(int reportId) {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -245,7 +243,7 @@ public class ReportDAO extends DBContext {
             closePreparedStatement(ps);
         }
     } 
-    */
+    
     public Integer getUserIdByUsername(String username) {
         Integer userId = null;
         PreparedStatement ps = null;

@@ -5,6 +5,9 @@
 
 package controller;
 
+import dal.PostDAO;
+import dal.ReportDAO;
+import dal.TicketDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,6 +15,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.time.LocalDateTime;
+import model.Report;
+import model.Ticket;
+import model.User;
 
 /**
  *
@@ -68,7 +76,21 @@ public class CreateTicket extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        TicketDAO td = new TicketDAO();
+
+        User user = (User) session.getAttribute("user");
+        String content = request.getParameter("content");
+        int postId = Integer.parseInt(request.getParameter("postid"));
+
+        if (user != null && content.length() > 0 && postId > 1) {
+            Ticket ticket = new Ticket(user.getUserId(), LocalDateTime.now(), content);
+            td.addTicket(ticket);
+            request.getRequestDispatcher("Home.jsp" + postId).forward(request, response);
+        } else {
+            request.setAttribute("errorMessage", "Something went wrong.");
+            request.getRequestDispatcher("Error.jsp").forward(request, response);
+        }
     }
 
     /** 

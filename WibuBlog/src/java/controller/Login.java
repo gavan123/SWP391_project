@@ -86,7 +86,7 @@ public class Login extends HttpServlet {
             HttpSession session = request.getSession();
             // Set session timeout to 30 minutes (30 minutes * 60 seconds)
             session.setMaxInactiveInterval(30 * 60);
-            UserDAO userdao = new UserDAO();
+            UserDAO userdao = new UserDAO();          
             User user = userdao.getUserByUsername(username);
             if (user != null) {
                 session.setAttribute("user", user);

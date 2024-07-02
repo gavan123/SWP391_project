@@ -11,9 +11,8 @@
 <link rel="stylesheet" href="assets/css/testcss.css">
 <link rel="stylesheet" href="assets/css/testcss2.css">
 <%                             User user = (User)session.getAttribute("user");
-                               UserDAO userDAO = new UserDAO();
-                               String rank = userDAO.getRankByRankID(user.getRankId());
-                               String rankColor = userDAO.getColorByRank(rank);
+                               UserDAO userDAO = new UserDAO();                            
+                               String rankColor = userDAO.getColorByRank(userDAO.getRankByUserId(user.getUserId()));
                                String role = userDAO.getRoleByRoleID(user.getRoleId()); 
                                
 %>
@@ -46,7 +45,7 @@
                         </div>                                        
                         <div class="text-center text-sm-left m-v-15 p-l-30">
                             <h2 class="m-b-5">${user.username}</h2>
-                            <i class="text-opacity font-size-15" style="color:<%=rankColor%>" ><b><%=rank%>(${user.point})</b></i>
+                            <i class="text-opacity font-size-15" style="color:<%=rankColor%>" ><b><%=userDAO.getRankByUserId(user.getUserId())%>(<%=userDAO.getUserByUserId(user.getUserId()).getPoint()%>)</b></i>
                             <p class="text-dark m-b-20"><%=role%></p>
                         </div>
                     </div>
@@ -141,23 +140,22 @@
                     <div class="m-t-20">
                         <c:choose>
                             <c:when test="${userPostList.isEmpty}">
-                                <c:if test="${user.status == 'active'}">
+                                <%if (userDAO.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
                                     <p>You've not posted anything. Get started by <a href="createPost">create a post</a></p>  
-                                </c:if>
-
-                                <c:if test="${user.status == 'deactive'}">
+                                     <%}%>
+                                 <%if (userDAO.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
                                     <label>You are currently banned please wait for your ban to expire to post</label>
-                                </c:if>
+                                <%}%>
                                     
                             </c:when>
                             <c:otherwise>
-                                 <c:if test="${user.status == 'active'}">
+                                 <%if (userDAO.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
                                     <p >What are your thoughts. Don't mind sharing by <a href="createPost">creating a post</a></p>  
-                                </c:if>
+                                <%}%>
 
-                                <c:if test="${user.status == 'deactive'}">
+                                 <%if (userDAO.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
                                     <label>You are currently banned please wait for your ban to expire to post</label>
-                                </c:if>
+                                <%}%>
                                
                                 <hr>
                                 <h5>Your posts</h5>

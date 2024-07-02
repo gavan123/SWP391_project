@@ -92,6 +92,21 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
+    
+    public String getUserStatusByUserId(int userId){
+        try {
+            String sql = "select * from [user] where userid = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getString("Status");
+            }     
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     public int getUserTotalPostLast3Days(int userId) {
         try {
             int totalUserPost = 0;
@@ -305,6 +320,41 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
+    
+    public User getUserByUserId(int userId) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "select * from [user] where userId = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return new User(
+                        rs.getInt("UserID"),
+                        rs.getString("Username"),
+                        rs.getString("Password"),
+                        rs.getInt("RoleID"),
+                        rs.getInt("Point"),
+                        rs.getString("Status"),
+                        rs.getString("Email"),
+                        rs.getString("Fullname"),
+                        rs.getInt("RankID"),
+                        rs.getString("ProfilePhoto") != null ? rs.getString("ProfilePhoto") : null,
+                        rs.getString("PhoneNumber") != null ? rs.getString("PhoneNumber") : null,
+                        rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
+                        rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null,
+                        rs.getString("Bio") != null ? rs.getString("Bio") : null);
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        return null;
+    }
 
     public void addUser(User user) {
         PreparedStatement ps = null;
@@ -438,6 +488,23 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
+    
+    public String getRankByUserId(int userId){
+        try {
+            String sql = "select * from [rank] where rankid = (select rankid from [user] where userid = ?)";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            String rank = rs.getString("name");
+            return rank;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+   
 
     public String getRoleByRoleID(int roleID) {
         try {

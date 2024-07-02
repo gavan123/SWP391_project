@@ -45,6 +45,10 @@ public class Report {
         this.note = note;
     }
 
+    public Report(int userId, LocalDateTime now, String reason, int postId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     public int getReportId() {
         return reportId;
     }

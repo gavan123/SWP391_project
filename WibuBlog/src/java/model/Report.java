@@ -17,6 +17,7 @@ public class Report {
     private String reason;
     private int postId;
     private String status;
+    private String note;
 
     public Report() {
     }
@@ -28,6 +29,7 @@ public class Report {
         this.reason = reason;
         this.postId = postId;
         this.status = "Pending";
+        this.note = "";
     }
 
     public Report(int reportId, int userId, LocalDateTime timeCreated, String reason, int postId) {
@@ -37,15 +39,17 @@ public class Report {
         this.reason = reason;
         this.postId = postId;
         this.status = "Pending";
+        this.note = "";
     }
 
-    public Report(int reportId, int userId, LocalDateTime timeCreated, String reason, int postId, String status) {
+    public Report(int reportId, int userId, LocalDateTime timeCreated, String reason, int postId, String status, String note) {
         this.reportId = reportId;
         this.userId = userId;
         this.timeCreated = timeCreated;
         this.reason = reason;
         this.postId = postId;
         this.status = status;
+        this.note = note;
     }
 
     public int getReportId() {
@@ -94,6 +98,14 @@ public class Report {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
     
     

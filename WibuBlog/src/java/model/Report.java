@@ -17,20 +17,39 @@ public class Report {
     private LocalDateTime postReportTime;
     private String reason;
     private int postId;
-    private String statusReport;
-    private String usernameReport;
-    private String titleReport;
+    private String status;
+    private String note;
 
     public Report() {
     }
+    
+    public Report(int userId, LocalDateTime timeCreated, String reason, int postId) {
+        this.reportId = 0;
+        this.userId = userId;
+        this.timeCreated = timeCreated;
+        this.reason = reason;
+        this.postId = postId;
+        this.status = "Pending";
+        this.note = "";
+    }
 
-    public Report(int reportId, LocalDateTime postReportTime, String reason, String statusReport, String usernameReport, String titleReport) {
+    public Report(int reportId, int userId, LocalDateTime timeCreated, String reason, int postId) {
         this.reportId = reportId;
         this.postReportTime = postReportTime;
         this.reason = reason;
-        this.statusReport = statusReport;
-        this.usernameReport = usernameReport;
-        this.titleReport = titleReport;
+        this.postId = postId;
+        this.status = "Pending";
+        this.note = "";
+    }
+
+    public Report(int reportId, int userId, LocalDateTime timeCreated, String reason, int postId, String status, String note) {
+        this.reportId = reportId;
+        this.userId = userId;
+        this.timeCreated = timeCreated;
+        this.reason = reason;
+        this.postId = postId;
+        this.status = status;
+        this.note = note;
     }
 
     public int getReportId() {
@@ -97,4 +116,13 @@ public class Report {
         this.titleReport = titleReport;
     }
 
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+    
+    
 }

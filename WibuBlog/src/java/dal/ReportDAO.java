@@ -14,15 +14,15 @@ import model.Report;
 
 public class ReportDAO extends DBContext {
 
-    public List<Report> ListReportByID(int reportId) {
+public List<Report> listReportByID(int reportId) {
         List<Report> reportList = new ArrayList<>();
         PreparedStatement ps = null;
         ResultSet rs = null;
         String sql = "SELECT rp.ReportID, rp.UserID, rp.PostReport, rp.Reason, rp.PostID, rp.Status, "
-                + "p.Title, u.Username, rp.Note "
+                + "p.Title AS PostTitle, u.Username AS Username, rp.Note "
                 + "FROM Report rp "
                 + "JOIN Post p ON p.PostID = rp.PostID "
-                + "JOIN [User] u ON rp.UserID = u.UserID "
+                + "JOIN [User] u ON u.UserID = rp.UserID "
                 + "WHERE rp.ReportID = ?";
         try {
             ps = connection.prepareStatement(sql);
@@ -30,15 +30,15 @@ public class ReportDAO extends DBContext {
             rs = ps.executeQuery();
             while (rs.next()) {
                 int userId = rs.getInt("UserID");
-                LocalDateTime postReport = rs.getTimestamp("PostReport").toLocalDateTime();
+                LocalDateTime postReportTime = rs.getTimestamp("PostReport").toLocalDateTime();
                 String reason = rs.getString("Reason");
                 int postId = rs.getInt("PostID");
                 String status = rs.getString("Status");
-                String title = rs.getString("Title");
-                String username = rs.getString("Username");
+                String titleReport = rs.getString("PostTitle");
+                String usernameReport = rs.getString("Username");
                 String note = rs.getString("Note");
 
-                Report report = new Report(reportId, postReport, reason, status, username, title, note);
+                Report report = new Report(reportId, postReportTime, reason, postId, status, usernameReport, titleReport, note);
                 reportList.add(report);
             }
         } catch (SQLException ex) {
@@ -50,14 +50,16 @@ public class ReportDAO extends DBContext {
         return reportList;
     }
 
+    // Method to retrieve a report by reportId
     public Report getReportById(int reportId) {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT rp.ReportID, p.Title, u.Username, rp.Reason, rp.TimeCreated, rp.[Status], rp.[note] "
+            String sql = "SELECT rp.ReportID, rp.UserID, rp.PostReport, rp.Reason, rp.PostID, rp.Status, "
+                    + "p.Title AS PostTitle, u.Username AS Username, rp.Note "
                     + "FROM Report rp "
                     + "JOIN Post p ON p.PostID = rp.PostID "
-                    + "JOIN [User] u ON rp.UserID = u.UserID "
+                    + "JOIN [User] u ON u.UserID = rp.UserID "
                     + "WHERE rp.ReportID = ?";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, reportId);
@@ -65,12 +67,13 @@ public class ReportDAO extends DBContext {
             if (rs.next()) {
                 return new Report(
                         rs.getInt("ReportID"),
-                        rs.getTimestamp("TimeCreated").toLocalDateTime(),
+                        rs.getTimestamp("PostReport").toLocalDateTime(),
                         rs.getString("Reason"),
+                        rs.getInt("PostID"),
                         rs.getString("Status"),
                         rs.getString("Username"),
-                        rs.getString("Title"),
-                        rs.getString("note")
+                        rs.getString("PostTitle"),
+                        rs.getString("Note")
                 );
             }
         } catch (SQLException ex) {
@@ -80,6 +83,118 @@ public class ReportDAO extends DBContext {
             closePreparedStatement(ps);
         }
         return null;
+    }
+
+    // Method to retrieve a list of reports by userId
+    public List<Report> getReportsByUserId(int userId) {
+        List<Report> reportList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT rp.ReportID, rp.PostReport, rp.Reason, rp.PostID, rp.Status, rp.Note, "
+                    + "p.Title AS PostTitle, u.Username AS Username "
+                    + "FROM Report rp "
+                    + "JOIN Post p ON p.PostID = rp.PostID "
+                    + "JOIN [User] u ON u.UserID = rp.UserID "
+                    + "WHERE rp.UserID = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Report report = new Report(
+                        rs.getInt("ReportID"),
+                        rs.getTimestamp("PostReport").toLocalDateTime(),
+                        rs.getString("Reason"),
+                        rs.getInt("PostID"),
+                        rs.getString("Status"),
+                        rs.getString("Username"),
+                        rs.getString("PostTitle"),
+                        rs.getString("Note")
+                );
+                reportList.add(report);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        return reportList;
+    }
+
+    // Method to retrieve a list of reports by postId
+    public List<Report> getReportsByPostId(int postId) {
+        List<Report> reportList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT rp.ReportID, rp.UserID, rp.PostReport, rp.Reason, rp.PostID, rp.Status, "
+                    + "p.Title AS PostTitle, u.Username AS Username, rp.Note "
+                    + "FROM Report rp "
+                    + "JOIN Post p ON p.PostID = rp.PostID "
+                    + "JOIN [User] u ON u.UserID = rp.UserID "
+                    + "WHERE rp.PostID = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, postId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Report report = new Report(
+                        rs.getInt("ReportID"),
+                        rs.getTimestamp("PostReport").toLocalDateTime(),
+                        rs.getString("Reason"),
+                        rs.getInt("PostID"),
+                        rs.getString("Status"),
+                        rs.getString("Username"),
+                        rs.getString("PostTitle"),
+                        rs.getString("Note")
+                );
+                reportList.add(report);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        return reportList;
+    }
+
+    // Method to retrieve a list of reports by status
+    public List<Report> getReportsByStatus(String status) {
+        List<Report> reportList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT rp.ReportID, rp.UserID, rp.PostReport, rp.Reason, rp.PostID, rp.Status, rp.Note, "
+                    + "p.Title AS PostTitle, u.Username AS Username "
+                    + "FROM Report rp "
+                    + "JOIN Post p ON p.PostID = rp.PostID "
+                    + "JOIN [User] u ON u.UserID = rp.UserID "
+                    + "WHERE rp.Status = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setString(1, status);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Report report = new Report(
+                        rs.getInt("ReportID"),
+                        rs.getTimestamp("PostReport").toLocalDateTime(),
+                        rs.getString("Reason"),
+                        rs.getInt("UserID"),
+                        rs.getString("Status"),
+                        rs.getString("Note"),
+                        rs.getString("PostTitle"),
+                        rs.getString("Username")
+                );
+
+                reportList.add(report);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        return reportList;
     }
 
     public boolean setStatusPending(int reportId) {

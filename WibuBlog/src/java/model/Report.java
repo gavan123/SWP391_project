@@ -12,26 +12,36 @@ import java.time.LocalDateTime;
  */
 public class Report {
 
-    private int reportId;
+   private int reportId;
     private int userId;
     private LocalDateTime postReportTime;
     private String reason;
     private int postId;
     private String statusReport;
     private String usernameReport;
-    private String tilteReport;
+    private String titleReport;
     private String note;
 
     public Report() {
     }
 
-    public Report(int reportId, LocalDateTime postReportTime, String reason, String statusReport, String usernameReport, String tilteReport, String note) {
+     public Report(int userId, LocalDateTime postReportTime, String reason, int postId, String statusReport, String note, String string3, String string4) {
+        this.userId = userId;
+        this.postReportTime = postReportTime;
+        this.reason = reason;
+        this.postId = postId;
+        this.statusReport = statusReport;
+        this.note = note;
+    }
+    
+
+    public Report(int reportId, LocalDateTime postReportTime, String reason, String statusReport, String usernameReport, String titleReport, String note) {
         this.reportId = reportId;
         this.postReportTime = postReportTime;
         this.reason = reason;
         this.statusReport = statusReport;
         this.usernameReport = usernameReport;
-        this.tilteReport = tilteReport;
+        this.titleReport = titleReport;
         this.note = note;
     }
 
@@ -91,12 +101,12 @@ public class Report {
         this.usernameReport = usernameReport;
     }
 
-    public String getTilteReport() {
-        return tilteReport;
+    public String getTitleReport() {
+        return titleReport;
     }
 
-    public void setTilteReport(String tilteReport) {
-        this.tilteReport = tilteReport;
+    public void setTitleReport(String titleReport) {
+        this.titleReport = titleReport;
     }
 
     public String getNote() {
@@ -106,5 +116,6 @@ public class Report {
     public void setNote(String note) {
         this.note = note;
     }
-
+    
+    
 }

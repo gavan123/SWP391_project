@@ -25,7 +25,7 @@ public class Report {
     public Report() {
     }
 
-     public Report(int userId, LocalDateTime postReportTime, String reason, int postId, String statusReport, String note, String string3, String string4) {
+    public Report(int userId, LocalDateTime postReportTime, String reason, int postId, String statusReport, String note, String string3, String string4) {
         this.userId = userId;
         this.postReportTime = postReportTime;
         this.reason = reason;

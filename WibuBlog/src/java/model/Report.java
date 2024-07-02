@@ -19,18 +19,20 @@ public class Report {
     private int postId;
     private String statusReport;
     private String usernameReport;
-    private String titleReport;
+    private String tilteReport;
+    private String note;
 
     public Report() {
     }
 
-    public Report(int reportId, LocalDateTime postReportTime, String reason, String statusReport, String usernameReport, String titleReport) {
+    public Report(int reportId, LocalDateTime postReportTime, String reason, String statusReport, String usernameReport, String tilteReport, String note) {
         this.reportId = reportId;
         this.postReportTime = postReportTime;
         this.reason = reason;
         this.statusReport = statusReport;
         this.usernameReport = usernameReport;
-        this.titleReport = titleReport;
+        this.tilteReport = tilteReport;
+        this.note = note;
     }
 
     public int getReportId() {
@@ -89,12 +91,20 @@ public class Report {
         this.usernameReport = usernameReport;
     }
 
-    public String getTitleReport() {
-        return titleReport;
+    public String getTilteReport() {
+        return tilteReport;
     }
 
-    public void setTitleReport(String titleReport) {
-        this.titleReport = titleReport;
+    public void setTilteReport(String tilteReport) {
+        this.tilteReport = tilteReport;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
 }

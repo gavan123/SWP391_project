@@ -14,23 +14,64 @@ import model.Report;
 
 public class ReportDAO extends DBContext {
 
-   /* 
+    public List<Report> ListReportByID(int reportId) {
+        List<Report> reportList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String sql = "SELECT rp.ReportID, rp.UserID, rp.PostReport, rp.Reason, rp.PostID, rp.Status, "
+                + "p.Title, u.Username, rp.Note "
+                + "FROM Report rp "
+                + "JOIN Post p ON p.PostID = rp.PostID "
+                + "JOIN [User] u ON rp.UserID = u.UserID "
+                + "WHERE rp.ReportID = ?";
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, reportId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int userId = rs.getInt("UserID");
+                LocalDateTime postReport = rs.getTimestamp("PostReport").toLocalDateTime();
+                String reason = rs.getString("Reason");
+                int postId = rs.getInt("PostID");
+                String status = rs.getString("Status");
+                String title = rs.getString("Title");
+                String username = rs.getString("Username");
+                String note = rs.getString("Note");
+
+                Report report = new Report(reportId, postReport, reason, status, username, title, note);
+                reportList.add(report);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        return reportList;
+    }
+
     public Report getReportById(int reportId) {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM [Report] WHERE ReportID = ?";
+            String sql = "SELECT rp.ReportID, p.Title, u.Username, rp.Reason, rp.TimeCreated, rp.[Status], rp.[note] "
+                    + "FROM Report rp "
+                    + "JOIN Post p ON p.PostID = rp.PostID "
+                    + "JOIN [User] u ON rp.UserID = u.UserID "
+                    + "WHERE rp.ReportID = ?";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, reportId);
             rs = ps.executeQuery();
             if (rs.next()) {
                 return new Report(
                         rs.getInt("ReportID"),
-                        rs.getInt("UserID"),
                         rs.getTimestamp("TimeCreated").toLocalDateTime(),
                         rs.getString("Reason"),
-                        rs.getInt("PostID"),
-                        rs.getString("Status"));
+                        rs.getString("Status"),
+                        rs.getString("Username"),
+                        rs.getString("Title"),
+                        rs.getString("note")
+                );
             }
         } catch (SQLException ex) {
             Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -39,104 +80,6 @@ public class ReportDAO extends DBContext {
             closePreparedStatement(ps);
         }
         return null;
-    }
-
-    public List<Report> getReportsByUserId(int userId) {
-        List<Report> reportList = new ArrayList<>();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            String sql = "select * from [Report] where UserID = ?";
-            ps = connection.prepareStatement(sql);
-            ps.setInt(1, userId);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Report report = new Report(
-                        rs.getInt("ReportID"),
-                        rs.getInt("UserID"),
-                        rs.getTimestamp("TimeCreated").toLocalDateTime(),
-                        rs.getString("Reason"),
-                        rs.getInt("PostID"),
-                        rs.getString("Status"));
-
-                reportList.add(report);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            closeResultSet(rs);
-            closePreparedStatement(ps);
-        }
-        return reportList;
-    }
-
-    public List<Report> getReportsByPostId(int postId) {
-        List<Report> reportList = new ArrayList<>();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            String sql = "select * from [Report] where PostID = ?";
-            ps = connection.prepareStatement(sql);
-            ps.setInt(1, postId);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Report report = new Report(
-                        rs.getInt("ReportID"),
-                        rs.getInt("UserID"),
-                        rs.getTimestamp("TimeCreated").toLocalDateTime(),
-                        rs.getString("Reason"),
-                        rs.getInt("PostID"),
-                        rs.getString("Status"));
-
-                reportList.add(report);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            closeResultSet(rs);
-            closePreparedStatement(ps);
-        }
-        return reportList;
-    }
-
-    public void addReport(Report report) {
-        PreparedStatement ps = null;
-        try {
-            String sql = "INSERT INTO [Report] (UserID, TimeCreated, Reason, PostID, Status) "
-                    + "VALUES (?, ?, ?, ?)";
-            ps = connection.prepareStatement(sql);
-            ps.setInt(1, report.getUserId());
-            ps.setTimestamp(2, Timestamp.valueOf(report.getTimeCreated()));
-            ps.setString(3, report.getReason());
-            ps.setInt(4, report.getPostId());
-            ps.setString(5, report.getStatus());
-
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            closePreparedStatement(ps);
-        }
-    }
-
-    public void addReport(int userId, LocalDateTime timeCreated, String reason, int postId) {
-        PreparedStatement ps = null;
-        try {
-            String sql = "INSERT INTO [Report] (UserID, TimeCreated, Reason, PostID, Status) "
-                    + "VALUES (?, ?, ?, ?)";
-            ps = connection.prepareStatement(sql);
-            ps.setInt(1, userId);
-            ps.setTimestamp(2, Timestamp.valueOf(timeCreated));
-            ps.setString(3, reason);
-            ps.setInt(4, postId);
-            ps.setString(5, "Pending");
-
-            ps.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            closePreparedStatement(ps);
-        }
     }
 
     public boolean setStatusPending(int reportId) {
@@ -205,8 +148,8 @@ public class ReportDAO extends DBContext {
         } finally {
             closePreparedStatement(ps);
         }
-    } 
-    */
+    }
+
     public Integer getUserIdByUsername(String username) {
         Integer userId = null;
         PreparedStatement ps = null;
@@ -248,7 +191,8 @@ public class ReportDAO extends DBContext {
         }
         return postId;
     }
-    
+
+    // tạo report 
     public boolean createReport(String username, String postTitle, String reason) {
         Integer userId = getUserIdByUsername(username);
         Integer postId = getPostIdByPostTitle(postTitle);
@@ -260,10 +204,8 @@ public class ReportDAO extends DBContext {
 
         PreparedStatement ps = null;
         try {
-            // Get current LocalDateTime
             LocalDateTime now = LocalDateTime.now();
 
-            // Convert LocalDateTime to Timestamp
             Timestamp timestamp = Timestamp.valueOf(now);
 
             String sql = "INSERT INTO Report (UserID, TimeCreated, Reason, PostID, [Status]) VALUES (?, ?, ?, ?, 'Pending')";
@@ -282,5 +224,5 @@ public class ReportDAO extends DBContext {
             closePreparedStatement(ps);
         }
     }
-    
+
 }

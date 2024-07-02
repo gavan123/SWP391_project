@@ -25,6 +25,7 @@
     public Report() {
     }
 
+    
     public Report(int reportId, LocalDateTime postReportTime, String reason, String statusReport, String usernameReport, String titleReport, String note) {
         this.reportId = reportId;
         this.postReportTime = postReportTime;

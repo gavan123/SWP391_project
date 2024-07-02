@@ -51,7 +51,8 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    public void setUserStatusByUserId(int userId, String userStatus){
+
+    public void setUserStatusByUserId(int userId, String userStatus) {
         try {
             String sql = "update [user] set Status = ? where userid = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -63,7 +64,7 @@ public class UserDAO extends DBContext {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public ArrayList<User> getTop10User() {
         try {
             String sql = "select top(10) * from [user]";
@@ -92,6 +93,7 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
+
     public int getUserTotalPostLast3Days(int userId) {
         try {
             int totalUserPost = 0;
@@ -123,7 +125,7 @@ public class UserDAO extends DBContext {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             ArrayList<User> list = new ArrayList();
-            while(rs.next()){
+            while (rs.next()) {
                 list.add(new User(rs.getInt("UserId"),
                         rs.getString("Username"),
                         rs.getString("Password"),
@@ -145,7 +147,8 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    public void setUserRoleIdByUserId(int userId,int roleId){
+
+    public void setUserRoleIdByUserId(int userId, int roleId) {
         try {
             String sql = "Update [user] set roleid = ? where userid = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -156,8 +159,9 @@ public class UserDAO extends DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
+
     public User getUserById(int userId) {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -524,5 +528,109 @@ public class UserDAO extends DBContext {
 
     }
 
+    public boolean checkUserIsActive(int userId) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT COUNT(*) FROM [User] WHERE [Status] = 'active' AND [UserID] = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
+            }
+            return false;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+    }
 
+    public boolean checkUserIsBan(int userId) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT * FROM [UserBan]\n"
+                    + "WHERE [UserID] = ? ";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
+            }
+            return false;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+    }
+
+    public boolean isUserBanTimeExpired(int userId) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT Count(*) FROM [UserBan]\n"
+                    + "WHERE [UserID] = ? AND GETDATE() > [BanEndDate]";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
+            }
+            return false;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+    }
+
+    public void BanUser(int userId, int duration) {
+        String sql = "INSERT INTO [dbo].[UserBan] ([UserID], [BanStartDate], [BanEndDate]) "
+                + "VALUES (?, GETDATE(), DATEADD(DAY, ?, GETDATE()))";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, duration);
+            // Thực thi câu lệnh INSERT
+            ps.executeUpdate();
+            // Hiển thị thông báo thành công
+            System.out.println("User with ID " + userId + " has been banned for " + duration + " hours.");
+        } catch (SQLException ex) {
+            System.err.println("Insert to UserBan failed: " + ex.getMessage());
+        }
+    }
+
+    public boolean RemoveUserFromBan(int userId) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "DELETE FROM [UserBan] WHERE [UserID] = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
+            }
+            return false;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+    }
 }

@@ -1,9 +1,3 @@
-<%-- 
-    Document   : CreatePost2
-    Created on : Jun 20, 2024, 11:48:32 PM
-    Author     : admin
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <link rel="stylesheet" href="assets/css/testcss5.css">

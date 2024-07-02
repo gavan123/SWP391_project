@@ -1,8 +1,3 @@
-<%-- 
-    Document   : Header
-    Created on : May 31, 2024, 8:07:48 PM
-    Author     : ADMIN
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

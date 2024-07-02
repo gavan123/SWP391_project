@@ -14,9 +14,6 @@
 <%@ page import="java.time.format.FormatStyle" %>
 <%@ page import="java.time.LocalDateTime" %>
 
-
-
-
 <%
     String animeIdS = (String)request.getParameter("animeId");
     int animeId = -1;

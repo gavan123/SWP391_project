@@ -5,7 +5,6 @@
     .side-nav{
         background-color: #5ce0e6;
     }
-
 </style>
 <div class="side-nav">
     <div class="side-nav-inner">

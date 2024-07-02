@@ -1,9 +1,3 @@
-<%-- 
-    Document   : ListAnime
-    Created on : Jun 20, 2024, 9:56:03 PM
-    Author     : minht
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

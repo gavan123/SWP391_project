@@ -1,9 +1,3 @@
-<%-- 
-    Document   : PostList
-    Created on : Jun 13, 2024, 4:17:19 PM
-    Author     : ADMIN
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

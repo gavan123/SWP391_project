@@ -3,7 +3,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <jsp:useBean id="p" scope="request" class="dal.PostDAO" />
 
-
 <div class="card mb-2 rounded-5 border-0">
     <div class="card-header">
         <h3 class="card-header-h3 fs-16">

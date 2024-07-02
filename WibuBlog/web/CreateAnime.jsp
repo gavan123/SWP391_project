@@ -1,8 +1,3 @@
-<%-- 
-    Document   : CreateAnime
-    Created on : Jun 26, 2024, 3:53:49 AM
-    Author     : minht
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

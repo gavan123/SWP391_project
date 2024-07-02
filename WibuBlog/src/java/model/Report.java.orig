@@ -14,9 +14,17 @@ public class Report {
 
     private int reportId;
     private int userId;
-    private LocalDateTime timeCreated;
+    private LocalDateTime postReportTime;
     private String reason;
     private int postId;
+<<<<<<< HEAD
+    private String statusReport;
+    private String usernameReport;
+    private String titleReport;
+
+    public Report() {
+    }
+=======
     private String status;
     private String note;
 
@@ -32,11 +40,17 @@ public class Report {
         this.status = "Pending";
         this.note = "";
     }
+>>>>>>> fats/dev
 
-    public Report(int reportId, int userId, LocalDateTime timeCreated, String reason, int postId) {
+    public Report(int reportId, LocalDateTime postReportTime, String reason, String statusReport, String usernameReport, String titleReport) {
         this.reportId = reportId;
-        this.timeCreated = timeCreated;
+        this.postReportTime = postReportTime;
         this.reason = reason;
+<<<<<<< HEAD
+        this.statusReport = statusReport;
+        this.usernameReport = usernameReport;
+        this.titleReport = titleReport;
+=======
         this.postId = postId;
         this.status = "Pending";
         this.note = "";
@@ -50,6 +64,7 @@ public class Report {
         this.postId = postId;
         this.status = status;
         this.note = note;
+>>>>>>> fats/dev
     }
 
     public int getReportId() {
@@ -68,12 +83,12 @@ public class Report {
         this.userId = userId;
     }
 
-    public LocalDateTime getTimeCreated() {
-        return timeCreated;
+    public LocalDateTime getPostReportTime() {
+        return postReportTime;
     }
 
-    public void setTimeCreated(LocalDateTime timeCreated) {
-        this.timeCreated = timeCreated;
+    public void setPostReportTime(LocalDateTime postReportTime) {
+        this.postReportTime = postReportTime;
     }
 
     public String getReason() {
@@ -92,14 +107,32 @@ public class Report {
         this.postId = postId;
     }
 
-    public String getStatus() {
-        return status;
+    public String getStatusReport() {
+        return statusReport;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatusReport(String statusReport) {
+        this.statusReport = statusReport;
     }
 
+    public String getUsernameReport() {
+        return usernameReport;
+    }
+
+    public void setUsernameReport(String usernameReport) {
+        this.usernameReport = usernameReport;
+    }
+
+<<<<<<< HEAD
+    public String getTitleReport() {
+        return titleReport;
+    }
+
+    public void setTitleReport(String titleReport) {
+        this.titleReport = titleReport;
+    }
+
+=======
     public String getNote() {
         return note;
     }
@@ -109,4 +142,5 @@ public class Report {
     }
     
     
+>>>>>>> fats/dev
 }

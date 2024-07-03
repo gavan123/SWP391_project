@@ -24,11 +24,7 @@
 
 <%
     UserDAO ud = new UserDAO();
-
 %>
-
-<%= ud.getUserById(1).getFullName()%>
-
 
 <div class="card mb-2 rounded-5 border-0">
     <div class="card-header">
@@ -41,18 +37,19 @@
     </div>
     <div class="card-body">
         <ul class="list-group list-group-flush">
-            <c:set var="userId" value="0" />
+            <c:set var="userId1" value="0" />
             <c:forEach var="ticket" items="${t.getPendingTickets()}">
-                <c:set var="userId" value="${ticket.userId}" />
+                <c:set var="userId1" value="${ticket.userId}" />
                 <%
-                    Integer userId = (Integer) pageContext.getAttribute("userId");
-                    User user = ud.getUserById(userId);
+                    Integer userId1 = (Integer) pageContext.getAttribute("userId1");
+                    User user1 = ud.getUserById(userId1);
                 %>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="col-10 text-truncate font-weight-bold">
                         <a href="javascript:void(0);" onclick="openPopup('<%= user.getUsername() %>', '${ticket.content}')">
                             <%= user.getUsername() %>: ${ticket.content}
                         </a>
+
                     </div>
                     <span class="badge badge-primary badge-pill">
                         <i class="far fa-comment-dots fa-lg"></i>
@@ -86,10 +83,16 @@
     </div>
     <div class="card-body">
         <ul class="list-group list-group-flush">
+            <c:set var="userId2" value="0" />
             <c:forEach var="ticket" items="${t.getResolvedTickets()}">
+                <c:set var="userId2" value="${ticket.userId}" />
+                <%
+                    Integer userId2 = (Integer) pageContext.getAttribute("userId2");
+                    User user2 = ud.getUserById(userId2);
+                %>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="col-10 text-truncate font-weight-bold">
-                        <a href="TicketDetail?ticketId=${ticket.ticketId}">${ticket.content}</a>
+                        <a href="TicketDetail?ticketId=${ticket.ticketId}"><%= user2.getUsername() %>: ${ticket.content}</a>
                     </div>
                     <span class="badge badge-primary badge-pill">
                         <i class="far fa-comment-dots fa-lg"></i>
@@ -99,6 +102,7 @@
             </c:forEach>
         </ul>
     </div>
+
 </div>
 <script>
     function openPopup(username, content) {
@@ -170,3 +174,6 @@
             z-index: 999;
         }
     </style>
+
+</div>
+

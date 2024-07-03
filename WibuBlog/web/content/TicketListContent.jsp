@@ -22,6 +22,10 @@
 <%@page import="model.Ticket"%>
 <%@page import="java.util.ArrayList"%>
 
+<%
+    UserDAO ud = new UserDAO();
+%>
+
 <div class="card mb-2 rounded-5 border-0">
     <div class="card-header">
         <h3 class="card-header-h3 fs-16">
@@ -42,7 +46,7 @@
                 %>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="col-10 text-truncate font-weight-bold">
-                        <a href="TicketDetail?ticketId=${ticket.ticketId}"><%= user.getUsername() %>: ${ticket.content}</a>
+                        <a href="TicketDetail?ticketId=${ticket.ticketId}"><%= user.getUsername()%>: ${ticket.content}</a>
                     </div>
                     <span class="badge badge-primary badge-pill">
                         <i class="far fa-comment-dots fa-lg"></i>
@@ -66,7 +70,7 @@
             <c:forEach var="ticket" items="${t.getResolvedTickets()}">
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="col-10 text-truncate font-weight-bold">
-                        <a href="TicketDetail?ticketId=${ticket.ticketId}">${ticket.content}</a>
+                        <a href="TicketDetail?ticketId=${ticket.ticketId}"><%= user.getUsername()%>: ${ticket.content}</a>
                     </div>
                     <span class="badge badge-primary badge-pill">
                         <i class="far fa-comment-dots fa-lg"></i>

@@ -60,6 +60,7 @@
                         <%}%>
                     </c:if>
                      <%if (user == null || ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
+                     <c:if test="${post.username != user.username}">
                     <div class="row">
                         <div class="col-lg-4 mb-2 mx-auto">
                             <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
@@ -75,6 +76,7 @@
                             </ul>
                         </div>
                     </div>
+                                    </c:if>
                                     <%}%>
                                      <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
                                      <p style="color: red">You are not allowed to vote whilst banned</p>

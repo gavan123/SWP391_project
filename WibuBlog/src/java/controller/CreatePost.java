@@ -117,13 +117,16 @@ public class CreatePost extends HttpServlet {
         MediaDAO mediaDAO = new MediaDAO();
 
         // Kiểm tra nếu nguồn không được cung cấp, mặc định là "Anime Forum"
-        if (ProfanityFilter.checkProfanity(source) || ProfanityFilter.checkProfanity(content)) {
+        if (ProfanityFilter.checkProfanity(source) || ProfanityFilter.checkProfanity(content) || ProfanityFilter.checkProfanity(title)) {
             PrintWriter out = response.getWriter();
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Please RECONSIDER YOUR PROFILE');");
-            out.println("location='CreatePost.jsp';");
-            out.println("</script>");
-            response.sendRedirect("CreatePost.jsp");
+            CategoryDAO categoryDAO = new CategoryDAO();
+            GenreDAO genreDAO = new GenreDAO();
+            List<Category> categories = categoryDAO.getCategoryNames();
+            List<Genre> genres = genreDAO.getAllGenres();
+            request.setAttribute("categories", categories);
+            request.setAttribute("genres", genres);
+            request.setAttribute("profanityDetected", true); 
+            request.getRequestDispatcher("CreatePost.jsp").forward(request, response);
             return;
         }
         if (source == null || source.isEmpty()) {
@@ -143,10 +146,10 @@ public class CreatePost extends HttpServlet {
                 .removeBuildFromPath(Paths.get(realPath, "images"))
                 .resolve("post");
         Files.createDirectories(gameDirectory);
-        
+
         PostDAO postDAO = new PostDAO();
         // Tạo tên file ảnh mới bằng cách mã hóa và kết hợp với tên gốc
-        String imageFinal = mediaDAO.encodeMediaName(user.getUserId()) + "." + ImageHandler.getExtension(submittedFileName); 
+        String imageFinal = mediaDAO.encodeMediaName(user.getUserId()) + "." + ImageHandler.getExtension(submittedFileName);
 
         // Tạo đối tượng Post
         Post post = new Post(user.getUserId(), categoryId, title, content,

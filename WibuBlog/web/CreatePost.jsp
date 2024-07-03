@@ -78,6 +78,9 @@
     </head>
 
     <body>
+        <c:if test="${message != null}">
+            <p>${message}</p>
+        </c:if>
         <div class="container mt-4">
             <h2>Create a New Post</h2>
             <form action="createPost" method="post" id="uploadForm" enctype="multipart/form-data" onsubmit="return validateForm();">
@@ -133,5 +136,14 @@
                 });
 
 
+    </script>
+      <script type="text/javascript">
+        window.onload = function() {
+            // Check if the profanityDetected attribute is set
+            var profanityDetected = "<%= request.getAttribute("profanityDetected") %>";
+            if (profanityDetected === "true") {
+                alert("Please RECONSIDER YOUR POST.");
+            }
+        };
     </script>
 </html>

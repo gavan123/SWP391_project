@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -68,17 +69,7 @@ public class PostDAO extends DBContext {
         }
     }
 
-    public void deletePost(int postId) {
-        try {
-            String sql = "delete from [post] where Postid = ?";
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, postId);
-            ps.execute();
-            ps.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+
 
     public void updatePostImage(String url, int postID) {
         try {
@@ -110,10 +101,9 @@ public class PostDAO extends DBContext {
     }
 
     public int getPostIDJustInserted(int userID) {
-
         try {
             String sql = "select top (1) * from post where [userID] = ? \n"
-                    + "order by PostTime desc";
+                    + "order by PostId desc";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, userID);
             ResultSet rs = ps.executeQuery();
@@ -121,7 +111,6 @@ public class PostDAO extends DBContext {
             int mediaId = rs.getInt("PostID");
             return mediaId;
         } catch (SQLException ex) {
-            Logger.getLogger(MediaDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return 0;
     }
@@ -138,7 +127,7 @@ public class PostDAO extends DBContext {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Post post = new Post(
-                        rs.getInt("PostID"),
+                         rs.getInt("PostID"),
                         rs.getInt("UserID"),
                         rs.getInt("CategoryID"),
                         rs.getString("Title"),
@@ -647,7 +636,32 @@ public class PostDAO extends DBContext {
         return null;
     }
 
-    public int getUserIdOfPostByPostID(int postId) {
+
+    public boolean deletePost(int postId) {
+        PreparedStatement ps = null;
+        try {
+            String sql = "UPDATE Post SET Status = 'deactive' WHERE PostID = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, postId);
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } finally {
+            closePreparedStatement(ps);
+        }
+    }
+
+    public String encodeImageName(int userID) {
+        LocalDateTime datetime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_hhmmss");
+        String formattedDateTime = datetime.format(formatter);
+        return userID + "_" + formattedDateTime;
+    }
+
+
+    public int getUserIdOfPostByPostID(int postId){
         int userId = 0;
         try {
             String sql = "select * from [post] where postid = ?";
@@ -661,6 +675,16 @@ public class PostDAO extends DBContext {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return userId;
+    }    
+
+
+    public static void main(String[] args) {
+        PostDAO postDAO = new PostDAO();
+        List<Post> post = postDAO.getLimitedPosts(10);
+        for (Post post1 : post) {
+            System.out.println(post1.getPostId());
+        }
+
     }
 
     public int getTotalPostLast3Days() {
@@ -858,11 +882,5 @@ public class PostDAO extends DBContext {
     public String trimPostTitle(String title){
         return title.substring(0,12) + "...";
     }
-    public static void main(String[] args) {
-        PostDAO pd = new PostDAO();
-        ArrayList<User> list = pd.getTop10UserByPoint();
-        for(User x : list){
-            System.out.println(x.getProfilePhoto());
-        }
-    }
+   
 }

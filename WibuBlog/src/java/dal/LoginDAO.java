@@ -36,9 +36,9 @@ public class LoginDAO extends DBContext {
     }
 
     public String getUserRole(String username) {
-        String query = "SELECT RoleName FROM [User] \n"
-                + "	JOIN Role ON [User].RoleID = Role.RoleID \n"
-                + "	Where [User].Username = ?";
+        String query = "SELECT RoleName FROM [User] "
+                + "JOIN Role ON [User].RoleID = Role.RoleID "
+                + "WHERE [User].Username = ?";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, username);
             try (ResultSet rs = statement.executeQuery()) {
@@ -50,5 +50,17 @@ public class LoginDAO extends DBContext {
             Logger.getLogger(LoginDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public boolean isAdmin(String username) {
+        return "Admin".equals(getUserRole(username));
+    }
+
+    public boolean isMod(String username) {
+        return "Mod".equals(getUserRole(username));
+    }
+
+    public boolean isMember(String username) {
+        return "Member".equals(getUserRole(username));
     }
 }

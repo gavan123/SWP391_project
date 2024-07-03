@@ -169,6 +169,33 @@ public class NotificationDAO extends DBContext {
     }
     
    
+    public void createPromoteNotification(int targetUserId){
+        try {
+            String sql = "insert into [notification] (TargetUserId,Content,TimeCreated) values (?, ?, ?)";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, targetUserId);
+            ps.setString(2, "You have been promoted to Mod");
+            ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"))));
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(NotificationDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void createDemoteNotification(int targetUserId){
+        try {
+            String sql = "insert into [notification] (TargetUserId,Content,TimeCreated) values (?, ?, ?)";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, targetUserId);
+            ps.setString(2, "You have been demoted from Mod");
+            ps.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"))));
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(NotificationDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     public static void main(String[] args) {
         NotificationDAO nd = new NotificationDAO();
         ArrayList<Notification> list = nd.getTop10Notification(6);

@@ -49,24 +49,16 @@ public class UpdateAnime extends HttpServlet {
         String studio = request.getParameter("studio");
         String imageAnime = request.getParameter("imageAnime");
 
-        Anime anime = new Anime();
-        anime.setAnimeId(animeId);
-        anime.setTitle(title);
-        anime.setSynopsis(synopsis);
-        anime.setGenre(genre);
-        anime.setEpisodes(episodes);
-        anime.setStatus(status);
-        anime.setReleaseDate(releaseDate);
-        anime.setStudio(studio);
-        anime.setImageAnime(imageAnime);
+        Anime anime = new Anime(animeId, title, synopsis, genre, episodes, status, releaseDate, studio, imageAnime);
 
         AnimeDAO animeDAO = new AnimeDAO();
         try {
             animeDAO.updateAnime(anime);
-            response.sendRedirect("success.jsp");
-        } catch (IOException ex) {
+            response.sendRedirect("ListAnime.jsp");
+        } catch (Exception ex) {
             Logger.getLogger(UpdateAnime.class.getName()).log(Level.SEVERE, null, ex);
-            response.sendRedirect("error.jsp");
+            request.setAttribute("errorMessage", "Failed to update anime. Please try again later.");
+            request.getRequestDispatcher("Error.jsp").forward(request, response);
         }
     }
 

@@ -82,6 +82,7 @@ public class AnimeDetail extends HttpServlet {
             return;
         }
 
+        request.setAttribute("animeId", animeIdParam);
         request.setAttribute("anime", anime);
         request.getRequestDispatcher("AnimeDetail.jsp").forward(request, response);
     }

@@ -180,7 +180,7 @@ public class AnimeDAO extends DBContext {
     public static void main(String[] args) {
         AnimeDAO animeDAO = new AnimeDAO();
 
-        int animeId = 1;
+        int animeId = 2;
 
         Anime anime = animeDAO.getAnimeDetailById(animeId);
 

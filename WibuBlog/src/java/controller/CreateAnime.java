@@ -4,7 +4,6 @@ import dal.AnimeDAO;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.ServletException;
@@ -16,8 +15,8 @@ import model.Anime;
 
 @WebServlet("/createAnime")
 public class CreateAnime extends HttpServlet {
-    
-     @Override
+
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
     }
@@ -40,7 +39,7 @@ public class CreateAnime extends HttpServlet {
             releaseDate = LocalDateTime.parse(releaseDateStr, formatter);
         } catch (Exception e) {
             Logger.getLogger(CreateAnime.class.getName()).log(Level.SEVERE, "Invalid release date format", e);
-            response.sendRedirect("error.jsp"); // Chuyển hướng tới trang lỗi nếu có lỗi xảy ra
+            response.sendRedirect("Error.jsp"); // Chuyển hướng tới trang lỗi nếu có lỗi xảy ra
             return;
         }
 
@@ -48,23 +47,15 @@ public class CreateAnime extends HttpServlet {
         String imageAnime = request.getParameter("imageAnime");
 
         // Tạo đối tượng Anime từ dữ liệu form
-        Anime anime = new Anime();
-        anime.setTitle(title);
-        anime.setSynopsis(synopsis);
-        anime.setGenre(genre);
-        anime.setEpisodes(episodes);
-        anime.setStatus(status);
-        anime.setReleaseDate(releaseDate);
-        anime.setStudio(studio);
-        anime.setImageAnime(imageAnime);
+        Anime anime = new Anime(title, synopsis, genre, episodes, status, releaseDate, studio, imageAnime);
 
         AnimeDAO animeDAO = new AnimeDAO();
         try {
             animeDAO.addAnime(anime);
-            response.sendRedirect("success.jsp");
-        } catch (IOException ex) {
-            Logger.getLogger(CreateAnime.class.getName()).log(Level.SEVERE, null, ex);
-            response.sendRedirect("Error.jsp");
+            response.sendRedirect("ListAnime.jsp");
+        } catch (Exception ex) {
+            request.setAttribute("errorMessage", "Failed to add anime. Please try again later.");
+            request.getRequestDispatcher("Error.jsp").forward(request, response);
         }
     }
 }

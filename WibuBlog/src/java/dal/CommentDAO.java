@@ -171,7 +171,7 @@ public class CommentDAO extends DBContext {
     public void deleteComment(int commentId) {
         PreparedStatement ps = null;
         try {
-            String sql = "UPDATE Comment SET Status='deactive', Vote = 0 WHERE CommentID = ?";
+            String sql = "UPDATE Comment SET Status='deactive', Vote = 0, Content=null  WHERE CommentID = ?";
             ps = connection.prepareStatement(sql);
             ps.setInt(1, commentId);
             ps.executeUpdate();
@@ -182,57 +182,84 @@ public class CommentDAO extends DBContext {
         }
     }
 
-    public boolean updateVote(int commentId, int vote) {
-        PreparedStatement ps = null;
-        try {
-            String sql = "UPDATE Comment SET Vote = ? WHERE CommentID = ?";
-            ps = connection.prepareStatement(sql);
-            ps.setInt(1, vote);
-            ps.setInt(2, commentId);
-            int rowsUpdated = ps.executeUpdate();
-            return rowsUpdated > 0;
-        } catch (SQLException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        } finally {
-            closePreparedStatement(ps);
-        }
-    }
-
-    public boolean hasUserVoted(int userId, int commentId) {
-        String checkSql = "SELECT COUNT(*) FROM VoteUserCmt WHERE [UserID] = ? "
-                + "AND [CommentID] = ? ";
-
-        try (PreparedStatement checkPs = connection.prepareStatement(checkSql)) {
-            checkPs.setInt(1, userId);
-            checkPs.setInt(2, commentId);
-
-            try (ResultSet rs = checkPs.executeQuery()) {
-                if (rs.next() && rs.getInt(1) > 0) {
-                    return true;
-                }
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        return false;
-    }
-
-    public void addVoteCmt(int userId, int commentId, String status) {
-        String insertSql = "INSERT INTO VoteUserCmt ([UserID],[CommentID], [Status])\n"
-                + "values (?,?,?)";
-
-        try (PreparedStatement insertPs = connection.prepareStatement(insertSql)) {
-            insertPs.setInt(1, userId);
-            insertPs.setInt(2, commentId);
-            insertPs.setString(3, status);
-            int rowsInserted = insertPs.executeUpdate();
-
-        } catch (SQLException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+//    public boolean updateVote(int commentId, int vote) {
+//        PreparedStatement ps = null;
+//        try {
+//            String sql = "UPDATE Comment SET Vote = ? WHERE CommentID = ?";
+//            ps = connection.prepareStatement(sql);
+//            ps.setInt(1, vote);
+//            ps.setInt(2, commentId);
+//            int rowsUpdated = ps.executeUpdate();
+//            return rowsUpdated > 0;
+//        } catch (SQLException ex) {
+//            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+//            return false;
+//        } finally {
+//            closePreparedStatement(ps);
+//        }
+//    }
+//
+//    public boolean hasUserVoted(int userId, int commentId) {
+//        String checkSql = "SELECT COUNT(*) FROM VoteUserCmt WHERE [UserID] = ? "
+//                + "AND [CommentID] = ? ";
+//
+//        try (PreparedStatement checkPs = connection.prepareStatement(checkSql)) {
+//            checkPs.setInt(1, userId);
+//            checkPs.setInt(2, commentId);
+//
+//            try (ResultSet rs = checkPs.executeQuery()) {
+//                if (rs.next() && rs.getInt(1) > 0) {
+//                    return true;
+//                }
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        return false;
+//    }
+//
+//    public void addVoteCmt(int userId, int commentId, String status) {
+//        String insertSql = "INSERT INTO VoteUserCmt ([UserID],[CommentID], [Status])\n"
+//                + "values (?,?,?)";
+//
+//        try (PreparedStatement insertPs = connection.prepareStatement(insertSql)) {
+//            insertPs.setInt(1, userId);
+//            insertPs.setInt(2, commentId);
+//            insertPs.setString(3, status);
+//            int rowsInserted = insertPs.executeUpdate();
+//            if (rowsInserted > 0) {
+//                System.out.println("Vote added successfully."); 
+//            } else {
+//                System.out.println("Failed to add vote."); 
+//            }
+//
+//        } catch (SQLException ex) {
+//            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
+//
+//    public void updateVoteCmt(int userId, int commentID, String status) {
+//        PreparedStatement ps = null;
+//
+//        try {
+//            String updateSql = "UPDATE VoteUserCmt SET Status = ? WHERE UserID = ? AND CommentID = ?";
+//            ps = connection.prepareStatement(updateSql);
+//            ps.setString(1, status);
+//            ps.setInt(2, userId);
+//            ps.setInt(3, commentID);
+//
+//            int rowsUpdated = ps.executeUpdate();
+//            if (rowsUpdated > 0) {
+//                System.out.println("Vote updated successfully."); // Optional: Print success message
+//            } else {
+//                System.out.println("Failed to update vote."); // Optional: Print failure message
+//            }
+//        } catch (SQLException ex) {
+//        } finally {
+//            closePreparedStatement(ps);
+//        }
+//    }
 
     public static void main(String[] args) {
         CommentDAO cod = new CommentDAO();

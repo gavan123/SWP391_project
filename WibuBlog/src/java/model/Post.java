@@ -28,6 +28,17 @@ public class Post {
     public Post() {
     }
 
+    public Post(int userId, int categoryId, String title, String content, String source, String image, LocalDateTime postTime, String status) {
+        this.userId = userId;
+        this.categoryId = categoryId;
+        this.title = title;
+        this.content = content;
+        this.source = source;
+        this.image = image;
+        this.postTime = postTime;
+        this.status = status;
+    }
+
     public Post (int postId, int userId, int categoryId, String title, String content, String source, String image, String status, int vote, int view) {
         this.postId = postId;
         this.userId = userId;

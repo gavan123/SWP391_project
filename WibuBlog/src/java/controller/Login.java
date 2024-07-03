@@ -66,6 +66,7 @@ public class Login extends HttpServlet {
 
         // Check if the username or password is empty and set an error message if true
         if (username == null || password == null) {
+
             request.setAttribute("errorMessage", "Username or password is empty!");
             request.getRequestDispatcher("Login.jsp").forward(request, response);
         }
@@ -86,7 +87,7 @@ public class Login extends HttpServlet {
             HttpSession session = request.getSession();
             // Set session timeout to 30 minutes (30 minutes * 60 seconds)
             session.setMaxInactiveInterval(30 * 60);
-            UserDAO userdao = new UserDAO();          
+            UserDAO userdao = new UserDAO();
             User user = userdao.getUserByUsername(username);
             if (user != null) {
                 session.setAttribute("user", user);
@@ -94,7 +95,7 @@ public class Login extends HttpServlet {
                 if (userRole != null) {
                     switch (userRole) {
                         case "Admin" ->
-                            request.getRequestDispatcher("Home.jsp").forward(request, response);                          
+                            request.getRequestDispatcher("Home.jsp").forward(request, response);
                         case "Mod" ->
                             request.getRequestDispatcher("Home.jsp").forward(request, response);
                         case "Member" ->
@@ -111,11 +112,15 @@ public class Login extends HttpServlet {
             // Set an error message if the login fails due to invalid username or password
             request.setAttribute("errorMessage", "Login failed! Invalid username or password.");
             request.getRequestDispatcher("Login.jsp").forward(request, response);
-        }
-    }
 
-    @Override
-    public String getServletInfo() {
+            return;
+        }
+
+    
+}
+
+@Override
+public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
 

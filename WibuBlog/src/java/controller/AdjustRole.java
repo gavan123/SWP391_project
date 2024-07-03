@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.NotificationDAO;
 import dal.PostDAO;
 import dal.UserDAO;
 import java.io.IOException;
@@ -45,7 +46,9 @@ public class AdjustRole extends HttpServlet {
         int userId = Integer.parseInt(request.getParameter("UserId"));
         PostDAO pd = new PostDAO();
         UserDAO ud = new UserDAO();
+        NotificationDAO nd = new NotificationDAO();
         ud.setUserRoleIdByUserId(userId, 2);
+        nd.createPromoteNotification(userId);
         request.setAttribute("NumberOfPostLast3Days", pd.getTotalPostLast3Days());
         request.setAttribute("AvgPostPerDay", pd.getAvgPostPerDayLastMonth());
         request.setAttribute("TotalPost", pd.getTotalPost());
@@ -61,6 +64,7 @@ public class AdjustRole extends HttpServlet {
             }
         } else {
             ud.setUserRoleIdByUserId(userId, 3);
+            nd.createDemoteNotification(userId);
             request.setAttribute("NumberOfPostLast3Days", pd.getTotalPostLast3Days());
             request.setAttribute("AvgPostPerDay", pd.getAvgPostPerDayLastMonth());
             request.setAttribute("TotalPost", pd.getTotalPost());

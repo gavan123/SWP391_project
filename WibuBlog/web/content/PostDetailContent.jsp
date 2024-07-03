@@ -1,82 +1,98 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import= "dal.PostDAO" %>
-<%@ page import= "dal.UserDAO" %>
-<%@ page import= "model.Post" %>
-<%@ page import= "model.PostDetail" %>
-<%@ page import= "model.User" %>
+<%@ page import="model.User" %>
+<%@ page import="model.Media" %>
+<%@ page import="dal.UserDAO" %>
+<%@ page import="dal.MediaDAO" %>
+<%@ page import="dal.PostDAO" %>
+
+<%                             User user = (User)session.getAttribute("user");
+                               UserDAO ud = new UserDAO();                                                        
+%>
+
+
 <style>
 
 </style>
- <% UserDAO ud = new UserDAO();
-    User user = (User)session.getAttribute("user");%>
+
 <div class="col-lg-12 mb-2">
-    <div class="card mb-2">
-        <div class="card-body">
-            <header>
-                <c:if test="${post.username == user.username}">
-                    <a style="float: right" href="#" onclick="confirmDelete(${post.postID})">Delete post</a>
-                </c:if>
-                <h1 class="card-title" style="font-size: 26px;line-height:34px">${post.title}</h1>
-                
-            </header>
-            <h6 class="card-subtitle mb-2 fw-700" style="font-size: small !important;">
-                <i class="fas fa-user"></i> 
-                <a href="#" style="color:blue" accesskey="a">${post.username}</a> | 
-                <i class="fas fa-clock"></i>
-                <time datetime="${postTime}">${postTime}</time> | 
-                <i class="fas fa-eye"></i> ${post.view}
-                
-            </h6>
-            <h3 class="fs-14 border-bottom-badge-eee">
-                <span class="badge badge-info mr-1">
-                    <a class="text-white" href="postListByCategory?name=${post.categoryName}">${post.categoryName}</a>
-                </span>
-                <span class="badge badge-primary mr-1">
-                    <a class="text-white" href="#">${post.genreName}</a>
-                </span>
-            </h3>
-            <div class="card-text fs-content" style="font-size: 18px;">
-                ${post.content}
-                <br>
-                <br>
-                <br>
-            </div>
-            <hr>
-            <c:if test="${user != null}">
-           <%if (ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>
-                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
-                    <i class="fas fa-flag"></i> Report Post  
-                </button>
-            <%}%>
-            </c:if>
-            
-            <%if ( user != null && ud.getUserStatusByUserId(user.getUserId()).equals("active") ){%>        
-                <div class="row">
-                    <div class="col-lg-4 mb-2 mx-auto">
-                        <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
-                            <li class="d-flex align-items-center mr-4 font-weight-bold">
-                                <div class="vote-section" id="vote-section">
-                                    <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2"
-                                       onclick="votePost('up', '${votePostStatus}')"></i>
-                                    <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
-                                       onclick="votePost('down', '${votePostStatus}')"></i>
-                                    <span id="vote_value">${post.vote}</span>
-                                </div>
-                            </li>
-                        </ul>
+    <c:choose>
+        <c:when test="${post.status == 'active'}">
+            <div class="card mb-2">
+                <div class="card-body">
+                    <header>
+                        <h1 class="card-title" style="font-size: 26px;line-height:34px">${post.title}</h1>
+                    </header>
+                    <h6 class="card-subtitle mb-2 fw-700 " style="font-size: small !important;">
+                        <i class="fas fa-user"></i> 
+                        <a href="#" style="color:blue" accesskey="a">${post.username}</a> | 
+                        <i class="fas fa-clock"></i>
+                        <time datetime="${postTime}">${postTime}</time> | 
+                        <i class="fas fa-eye"></i> ${post.view}
+                        <c:if test="${post.username == user.username}">
+                            <button type="button" class="btn btn-danger" id="deletePostButton" style="margin-left: 50%">
+                                <i class="fas fa-trash"></i> Delete Post
+                            </button>
+                        </c:if>
+                    </h6>
+
+                    <h3 class="fs-14 border-bottom-badge-eee">
+                        <span class="badge badge-info mr-1">
+                            <a class="text-white" href="postListByCategory?name=${post.categoryName}">${post.categoryName}</a>
+                        </span>
+                        <span class="badge badge-primary mr-1">
+                            <a class="text-white" href="#">${post.genreName}</a>
+                        </span>
+                    </h3>
+                    <div class="card-text fs-content" style="font-size: 18px;">
+                        ${post.content}
+                        <br>
+                        <br>
+                        <br>
                     </div>
+                    <hr>
+                    <c:if test="${post.username != user.username}">
+                         <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
+                            <i class="fas fa-flag"></i> Report Post
+                        </button>
+                        <%}%>
+                    </c:if>
+                     <%if (user == null || ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
+                    <div class="row">
+                        <div class="col-lg-4 mb-2 mx-auto">
+                            <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
+                                <li class="d-flex align-items-center mr-4 font-weight-bold">
+                                    <div class="vote-section" id="vote-section">
+                                        <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2"
+                                           onclick="votePost('up', '${votePostStatus}')"></i>
+                                        <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
+                                           onclick="votePost('down', '${votePostStatus}')"></i>
+                                        <span id="vote_value">${post.vote}</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                                    <%}%>
+                                     <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
+                                     <p style="color: red">You are not allowed to vote whilst banned</p>
+                                     <%}%>
                 </div>
-            <%}%>
-            <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
-                 <p>You are now allowed to vote whilst banned</p>
-                 <%}%>
-        </div>
-    </div>
+            </div>
+        </c:when>
+        <c:when test="${post.status == 'hide'}">
+            <p>The post is hide by author.</p>
+        </c:when>
+        <c:otherwise>
+            <p>The post has been delete</p>
+        </c:otherwise>
+    </c:choose>
+
 
     <!--    Post user-->
-    <% PostDAO pd = new PostDAO();
+<% PostDAO pd = new PostDAO();
        String authorProfilePhoto = pd.getUserProfilePhotoByUsername((String)request.getAttribute("postUser"));
     %>
     <div class="card mb-2">
@@ -103,40 +119,44 @@
     <!--     Comment                       -->
     <div class="card mb-2 border-0">
         <div class="card-body">
-            <c:choose>
-                <c:when test="${empty user}">
-                    <div class="card mb-2 border-0">
-                        <div class="card-body">
-                            <p class="card-text text-center">
-                                You need to <span><a style="color:blue" href="login">Login</a></span> to comment!
-                            </p>
-                        </div>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <div class="border-0 bg-none mt-2 media align-items-center">
-                        <div class="comment-avatar mr-2">
-                            <img alt="${user.username}" title="${user.username}" 
-                                 src="${pageContext.request.contextPath}/images/game/${user.profilePhoto}"
-                                 onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
-                        </div>
-                                 <%if (ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
-                        <div class="comment-input-block media-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <textarea class="form-control" rows="2" id="msg" minlength="30" 
-                                          required placeholder="Ta đến nói hai câu..."></textarea>
-                                <button type="button" class="btn btn-success btn-submit-comment" onclick="sendMsg()">
-                                    <i class="fas fa-paper-plane fa-2x"></i>
-                                </button>
+            <c:if test="${post.status == 'active'}">
+                <c:choose>
+                    <c:when test="${empty user}">
+                        <div class="card mb-2 border-0">
+                            <div class="card-body">
+                                <p class="card-text text-center">
+                                    You need to <span><a style="color:blue" href="login">Login</a></span> to comment!
+                                </p>
                             </div>
-                        </div>    
-                        <%}%>
-                                     <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
-                                        <p>You are not allowed to comment whilst banned</p>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                         <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
+                        <div class="border-0 bg-none mt-2 media align-items-center">
+                            <div class="comment-avatar mr-2">
+                                <img alt="${user.username}" title="${user.username}" 
+                                     src="${pageContext.request.contextPath}/images/game/${user.profilePhoto}"
+                                     onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
+                            </div>
+                            <div class="comment-input-block media-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <textarea class="form-control" rows="2" id="msg" minlength="30" 
+                                              required placeholder="Ta đến nói hai câu..."></textarea>
+                                    <button type="button" class="btn btn-success btn-submit-comment" onclick="sendMsg()">
+                                        <i class="fas fa-paper-plane fa-2x"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                                      <%}%>
-                    </div>
-                </c:otherwise>
-            </c:choose>
+                                      <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
+                                      <p style="color: red">You are not allowed to comment whilst banned</p>
+                                     <%}%>
+                    </c:otherwise>
+                </c:choose>
+            </c:if>
+
+
 
             <c:forEach var="comment" items="${commentsList}" varStatus="loop">
                 <c:set var="commentUser" value="${userComment[loop.index]}" />
@@ -173,7 +193,7 @@
                             </div>
                             <input id="commentId" type="hidden" value="${comment.commentId}" >
                         </div>
-                             <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
+                             <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
                         <div class="card-text comment-date">
                             <div class="vote-section vote-section-cmt" id="vote-section-cmt">
                                 <i  id="vote_comment_up" class="anticon anticon_vote anticon-arrow-up mr-2" 
@@ -182,7 +202,7 @@
                                     onclick="voteComment('down', ${comment.commentId})" style="padding: 10px"></i>
                                 <span id="vote_comment_value">${comment.vote}</span>
                             </div>
-                          
+                           <%}%>
                             <c:if test="${not empty user}">
                                 <c:if test="${user.userId == commentUser.userId && comment.status eq 'active'}">
                                     <button type="button" class="btn reply-button" data-comment-id="${comment.commentId}" 
@@ -195,7 +215,7 @@
                                 </button>
                             </c:if>
                         </div>                         
-                          <%}%>
+                         
                             <span class="badge badge-secondary">
                                 ${commentDate}
                             </span>
@@ -266,10 +286,12 @@
 </div>
 
 <!-- Report Post Modal -->
+
 <div class="modal fade" id="reportPostModal" tabindex="-1" role="dialog" aria-labelledby="reportPostModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                
                 <h5 class="modal-title" id="reportPostModalLabel">Report Post</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -326,7 +348,7 @@
 </div>
 
 <script>
-
+    
     let voteStatus = 'unvote'; // Trạng thái ban đầu
 // Hàm xử lý upvote/downvote
     const votePost = (type, voteStatus) => {
@@ -336,7 +358,7 @@
             console.error("postId không tồn tại trong URL");
             return; // Thoát nếu không có postId
         }
-
+        
         isLoggedIn(loggedIn => {
             if (!loggedIn) {
                 Swal.fire({
@@ -353,19 +375,19 @@
             if (type === 'up') {
                 increment = (voteStatus === 'upvote') ? -1 : (voteStatus === 'downvote') ? 2 : 1;
                 voteStatus = (voteStatus === 'upvote') ? 'unvote' : 'upvote';
-                toggleVoteClass(voteStatus === 'upvote', false);
+                toggleVotePostClass(voteStatus === 'upvote', false);
             } else if (type === 'down') {
                 increment = (voteStatus === 'downvote') ? 1 : (voteStatus === 'upvote') ? -2 : -1;
                 voteStatus = (voteStatus === 'downvote') ? 'unvote' : 'downvote';
-                toggleVoteClass(false, voteStatus === 'downvote');
+                toggleVotePostClass(false, voteStatus === 'downvote');
             }
             const newVoteValue = currentVote + increment;
             // Cập nhật giá trị vote hiển thị
             voteValueElement.innerText = newVoteValue;
-
+            
             // Gửi yêu cầu AJAX để cập nhật vote
             const xhr = new XMLHttpRequest();
-            xhr.open("POST", "updateVote", true);
+            xhr.open("POST", "updateVotePost", true);
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4) {
@@ -373,13 +395,14 @@
                 }
             };
             xhr.send("postId=" + postId + "&vote_value=" + newVoteValue + "&vote_status=" + voteStatus);
+            location.reload();
             setTimeout(() => {
                 location.reload();
-            }, 300); // Reload sau 1 giây (1000 milliseconds)
+            }, 200); // Reload sau 0.2 giây 
         });
     };
-
-    //Show change downvote
+    
+    //Show change upvote downvote
     document.addEventListener('DOMContentLoaded', function () {
         const votePostStatus = `${votePostStatus}`; // Đảm bảo votePostStatus là string
         if (votePostStatus.trim() === "") {
@@ -387,15 +410,15 @@
         }
         console.log(votePostStatus);
         if (votePostStatus === "unvote") {
-            toggleVoteClass(false, false);
+            toggleVotePostClass(false, false);
         } else if (votePostStatus === "upvote") {
-            toggleVoteClass(true, false);
+            toggleVotePostClass(true, false);
         } else if (votePostStatus === "downvote") {
-            toggleVoteClass(false, true);
+            toggleVotePostClass(false, true);
         }
-
+        
     });
-
+    
 // Thay đổi background của .comment-input-block .card-title
     const commentTitles = document.querySelectorAll('.comment-input-block .card-title');
     commentTitles.forEach(title => {
@@ -408,7 +431,7 @@
             title.style.webkitBackgroundClip = 'text';
         }
     });
-
+    
 // Thay đổi border color và box-shadow của .comment-card
     const commentCards = document.querySelectorAll('.comment-card');
     commentCards.forEach(card => {
@@ -418,23 +441,22 @@
             card.style.boxShadow = '0 0 15px ' + rankColor;
         }
     });
-
-
+    
+    
 // Hàm để lấy giá trị của một tham số từ URL
     const getUrlParameter = param => {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
     };
-
-    // Hàm để xử lý thêm/loại bỏ lớp 'upvoted' và 'downvoted'
-    const toggleVoteClass = (addUpvoted, addDownvoted) => {
+    
+    // Hàm để xử lý thêm/loại bỏ lớp 'upvoted' và 'downvoted' cửa post
+    const toggleVotePostClass = (addUpvoted, addDownvoted) => {
         const voteSection = document.getElementById('vote-section');
         voteSection.classList.toggle('upvoted', addUpvoted);
         voteSection.classList.toggle('downvoted', addDownvoted);
     };
-
-
-
+    
+    
 // Kiểm tra đăng nhập
     const isLoggedIn = callback => {
         const xhr = new XMLHttpRequest();
@@ -458,12 +480,11 @@
         const msg = $("#msg").val();
         const postId = getUrlParameter('postId');
         if (!postId) {
-
-            console.error("PostId doesn't exist in email");
+            console.error("postId không tồn tại trong URL");
             return; // Thoát nếu không có postId
         }
-        if (msg.trim().length < 1) {
-            alert("Please enter at least 1 character");
+        if (msg.length < 1) {
+            alert("Enter at least 30 word...");
         } else {
             $.ajax({
                 type: 'POST',
@@ -480,7 +501,7 @@
             });
         }
     }
-
+    
 // Chuyển đổi trạng thái hiển thị phản hồi
     function toggleReply(button) {
         const commentId = button.getAttribute('data-comment-id');
@@ -498,10 +519,11 @@
             console.error('Không tìm thấy phần tử với id #replyComment_' + commentId);
         }
     }
-
+    
 // Gửi phản hồi
     function sendMsgReply(button) {
         const parentId = button.getAttribute('data-comment-id');
+        const userReply = button.getAttribute('data-reply-user');
         const msg = $("#msgReply_" + parentId).val();
         const postId = getUrlParameter('postId');
         if (!postId) {
@@ -514,7 +536,7 @@
             $.ajax({
                 type: 'POST',
                 url: 'addComment',
-                data: {content: msg, postId: postId, parentId: parentId},
+                data: {content: "@" + userReply + " " + msg, postId: postId, parentId: parentId},
                 success: response => {
                     alert("Comment added successfully!");
                     $("#msgReply").val('');
@@ -526,7 +548,7 @@
             });
         }
     }
-
+    
     $(document).ready(() => {
         //Show edit comment
         $('#editCommentModal').on('show.bs.modal', (event) => {
@@ -546,7 +568,7 @@
                 }
             });
         });
-
+        
         // Save edited comment function
         const saveEditedComment = () => {
             // Get the edited comment ID and content from the modal
@@ -578,7 +600,7 @@
         };
         // Attach saveEditedComment function to the 'Save changes' button click
         $('#saveEditedCommentBtn').on('click', saveEditedComment);
-
+        
         // Save edited comment function
         const deleteComment = () => {
             var commentId = $('#editCommentId').val();
@@ -604,16 +626,25 @@
         };
         // Attach deleteCommentBtn function to the 'Save changes' button click
         $('#deleteCommentBtn').on('click', deleteComment);
+        
+        $('#deletePostButton').click(function () {
+            const postId = getUrlParameter('postId');
+            if (confirm('Are you sure you want to delete this post?')) {
+                $.ajax({
+                    url: 'deletePost',
+                    type: 'POST',
+                    data: {postId: postId},
+                    success: (response) => {
+                        alert('Post deleted successfully');
+                        window.location.href = 'home';
+                    },
+                    error: (xhr, status, error) => {
+                        console.log(error);
+                        alert('Failed to delete post');
+                        location.reload();
+                    }
+                });
+            }
+        });
     });
-</script>
-<script>
-    function confirmDelete(postID) {
-        if (confirm('Do you want to delete this post?')) {
-            // Redirect to the DeletePost servlet with the PostId parameter
-            window.location.href = 'DeletePost?Flag=a&PostId=' + postID;
-        } else {
-            // Do nothing if the user cancels
-            return false;
-        }
-    }
 </script>

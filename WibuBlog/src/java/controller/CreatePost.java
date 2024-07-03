@@ -6,27 +6,38 @@ package controller;
 
 import dal.CategoryDAO;
 import dal.GenreDAO;
-import dal.NotificationDAO;
+import dal.MediaDAO;
 import dal.PostDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.imageio.ImageIO;
 import model.Category;
 import model.Genre;
 import model.Post;
 import model.User;
+import utility.ImageHandler;
+import utility.ProfanityFilter;
 
 /**
  *
  * @author admin
  */
+@MultipartConfig
 @WebServlet(name = "createPost2", urlPatterns = {"/createPost"})
 public class CreatePost extends HttpServlet {
 
@@ -47,7 +58,7 @@ public class CreatePost extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet createPost2</title>");            
+            out.println("<title>Servlet createPost2</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet createPost2 at " + request.getContextPath() + "</h1>");
@@ -91,37 +102,84 @@ public class CreatePost extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       
+
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
+
+        // Lấy thông tin từ form
         String title = request.getParameter("title");
         int categoryId = Integer.parseInt(request.getParameter("category"));
         int genreId = Integer.parseInt(request.getParameter("genre"));
+        String source = request.getParameter("source");
         String content = request.getParameter("content");
-        Post post = new Post();
-        post.setUserId(user.getUserId());
-        post.setCategoryId(categoryId);
-        post.setTitle(title);
-        post.setContent(content);
-        post.setPostTime(LocalDateTime.now());
-        post.setStatus("active");
-        // Lưu bài viết vào cơ sở dữ liệu
+        Part part = request.getPart("image");
+        String submittedFileName = part.getSubmittedFileName();
+        MediaDAO mediaDAO = new MediaDAO();
+
+        // Kiểm tra nếu nguồn không được cung cấp, mặc định là "Anime Forum"
+        if (ProfanityFilter.checkProfanity(source) || ProfanityFilter.checkProfanity(content)) {
+            PrintWriter out = response.getWriter();
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('Please RECONSIDER YOUR PROFILE');");
+            out.println("location='CreatePost.jsp';");
+            out.println("</script>");
+            response.sendRedirect("CreatePost.jsp");
+            return;
+        }
+        if (source == null || source.isEmpty()) {
+            source = "Anime Forum";
+        }
+
+        // Kiểm tra nếu không phải là file ảnh
+        if (submittedFileName == null || !ImageHandler.isImageFile(submittedFileName)) {
+            response.getWriter().println("File " + submittedFileName + " is not an image.");
+            return;
+        }
+
+        // Lấy đường dẫn thực tế đến thư mục gốc của ứng dụng web
+        String realPath = request.getServletContext().getRealPath("/");
+        // Xây dựng đường dẫn tuyệt đối đến thư mục images và cắt bỏ phần "build" nếu có
+        Path gameDirectory = ImageHandler
+                .removeBuildFromPath(Paths.get(realPath, "images"))
+                .resolve("post");
+        Files.createDirectories(gameDirectory);
+        
         PostDAO postDAO = new PostDAO();
+        // Tạo tên file ảnh mới bằng cách mã hóa và kết hợp với tên gốc
+        String imageFinal = mediaDAO.encodeMediaName(user.getUserId()) + "." + ImageHandler.getExtension(submittedFileName); 
+
+        // Tạo đối tượng Post
+        Post post = new Post(user.getUserId(), categoryId, title, content,
+                source, imageFinal, LocalDateTime.MIN, "active");
+
+        // Thực hiện lưu bài post vào cơ sở dữ liệu
         boolean isPostCreated = postDAO.createPost(post);
 
         // Kiểm tra kết quả và điều hướng người dùng
         if (isPostCreated) {
+            // Lưu thể loại của post
             postDAO.insertPostGenre(postDAO.getPostIDJustInserted(user.getUserId()), genreId);
-            NotificationDAO nd = new NotificationDAO();
-            nd.createUploadedPostNotification(postDAO.getPostIDJustInserted(user.getUserId()), user.getUserId());
-            session.setAttribute("postID",postDAO.getPostIDJustInserted(user.getUserId()));
-            session.setAttribute("newPost", post);
-            response.sendRedirect("ChoosePostPic.jsp"); // Điều hướng tới trang thành công
-        } else {
-            response.sendRedirect("error.jsp"); // Điều hướng tới trang lỗi
-        }
-    }
 
+            // Lưu file ảnh vào thư mục "post"
+            try (InputStream input = part.getInputStream()) {
+                BufferedImage image = ImageIO.read(input);
+                ImageHandler.saveImage(image, gameDirectory.toString(), imageFinal, ImageHandler.getExtension(submittedFileName));
+                response.getWriter().println("Upload thành công ảnh vào thư mục: " + gameDirectory.toString());
+            } catch (IOException e) {
+                response.getWriter().println("Error reading or saving image: " + e.getMessage());
+                return;
+            }
+            try {
+                Thread.sleep(3000); // Giả lập thời gian chờ
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            response.sendRedirect("Home.jsp"); // Điều hướng tới trang thành công
+        } else {
+            response.sendRedirect("Error.jsp"); // Điều hướng tới trang lỗi
+        }
+
+    }
 
     @Override
     public String getServletInfo() {

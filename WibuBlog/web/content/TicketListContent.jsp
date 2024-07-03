@@ -22,14 +22,6 @@
 <%@page import="model.Ticket"%>
 <%@page import="java.util.ArrayList"%>
 
-<%
-    UserDAO ud = new UserDAO();
-
-%>
-
-<%= ud.getUserById(1).getFullName()%>
-
-
 <div class="card mb-2 rounded-5 border-0">
     <div class="card-header">
         <h3 class="card-header-h3 fs-16">

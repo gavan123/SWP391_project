@@ -2,14 +2,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="model.User" %>
-<%@ page import="model.Media" %>
-<%@ page import="dal.UserDAO" %>
-<%@ page import="dal.MediaDAO" %>
 <%@ page import="dal.PostDAO" %>
-
-<%                             User user = (User)session.getAttribute("user");
-                               UserDAO ud = new UserDAO();                                                        
-%>
 
 
 <style>
@@ -52,33 +45,33 @@
                         <br>
                     </div>
                     <hr>
-                    <c:if test="${post.username != user.username}">
-                         <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
+                    <c:if test="${post.username != user.username && user != null && user.status eq 'active'}">
                         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
                             <i class="fas fa-flag"></i> Report Post
                         </button>
-                        <%}%>
                     </c:if>
-                     <%if (user == null || ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
-                    <div class="row">
-                        <div class="col-lg-4 mb-2 mx-auto">
-                            <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
-                                <li class="d-flex align-items-center mr-4 font-weight-bold">
-                                    <div class="vote-section" id="vote-section">
-                                        <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2"
-                                           onclick="votePost('up', '${votePostStatus}')"></i>
-                                        <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
-                                           onclick="votePost('down', '${votePostStatus}')"></i>
-                                        <span id="vote_value">${post.vote}</span>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                                    <%}%>
-                                     <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
-                                     <p style="color: red">You are not allowed to vote whilst banned</p>
-                                     <%}%>
+                    <c:choose>
+                        <c:when test="${user == null || user.status eq 'active'}">
+                            <div class="row">
+                                <div class="col-lg-4 mb-2 mx-auto">
+                                    <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
+                                        <li class="d-flex align-items-center mr-4 font-weight-bold">
+                                            <div class="vote-section" id="vote-section">
+                                                <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2"
+                                                   onclick="votePost('up', '${votePostStatus}')"></i>
+                                                <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
+                                                   onclick="votePost('down', '${votePostStatus}')"></i>
+                                                <span id="vote_value">${post.vote}</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </c:when>
+                        <c:when test="${user != null && user.status eq 'deactive'}">
+                            <p style="color: red">You are not allowed to vote while banned.</p>
+                        </c:when>
+                    </c:choose>
                 </div>
             </div>
         </c:when>
@@ -92,14 +85,14 @@
 
 
     <!--    Post user-->
-<% PostDAO pd = new PostDAO();
-       String authorProfilePhoto = pd.getUserProfilePhotoByUsername((String)request.getAttribute("postUser"));
+    <% PostDAO pd = new PostDAO();
+           String authorProfilePhoto = pd.getUserProfilePhotoByUsername((String)request.getAttribute("postUser"));
     %>
     <div class="card mb-2">
         <img class="img-thumbnail rounded-circle mx-auto d-block mt-2" 
              alt="${post.username}" title="${post.username}" 
              style="width:120px;height:120px" 
-             src="${pageContext.request.contextPath}/images/game/<%=authorProfilePhoto%>"
+             src="${pageContext.request.contextPath}/images/<%=authorProfilePhoto%>"
              onerror="this.src='assets/images/others/product-3.jpg'">
         <div class="card-body">
             <p class="card-title text-center fw-700 mb-0">
@@ -131,27 +124,27 @@
                         </div>
                     </c:when>
                     <c:otherwise>
-                         <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
-                        <div class="border-0 bg-none mt-2 media align-items-center">
-                            <div class="comment-avatar mr-2">
-                                <img alt="${user.username}" title="${user.username}" 
-                                     src="${pageContext.request.contextPath}/images/game/${user.profilePhoto}"
-                                     onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
-                            </div>
-                            <div class="comment-input-block media-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <textarea class="form-control" rows="2" id="msg" minlength="30" 
-                                              required placeholder="Ta đến nói hai câu..."></textarea>
-                                    <button type="button" class="btn btn-success btn-submit-comment" onclick="sendMsg()">
-                                        <i class="fas fa-paper-plane fa-2x"></i>
-                                    </button>
+                        <c:if test="${user.status eq 'active'}">
+                            <div class="border-0 bg-none mt-2 media align-items-center">
+                                <div class="comment-avatar mr-2">
+                                    <img alt="${user.username}" title="${user.username}" 
+                                         src="${pageContext.request.contextPath}/images/game/${user.profilePhoto}"
+                                         onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
+                                </div>
+                                <div class="comment-input-block media-body">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <textarea class="form-control" rows="2" id="msg" minlength="30" 
+                                                  required placeholder="Type your comment..."></textarea>
+                                        <button type="button" class="btn btn-success btn-submit-comment" onclick="sendMsg()">
+                                            <i class="fas fa-paper-plane fa-2x"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                                     <%}%>
-                                      <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
-                                      <p style="color: red">You are not allowed to comment whilst banned</p>
-                                     <%}%>
+                        </c:if>
+                        <c:if test="${user.status eq 'deactive'}">
+                            <p style="color: red">You are not allowed to comment while banned</p>
+                        </c:if>
                     </c:otherwise>
                 </c:choose>
             </c:if>
@@ -193,16 +186,14 @@
                             </div>
                             <input id="commentId" type="hidden" value="${comment.commentId}" >
                         </div>
-                             <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
                         <div class="card-text comment-date">
-                            <div class="vote-section vote-section-cmt" id="vote-section-cmt">
-                                <i  id="vote_comment_up" class="anticon anticon_vote anticon-arrow-up mr-2" 
-                                    onclick="voteComment('up', ${comment.commentId})" style="padding: 10px"></i>
-                                <i  id="vote_comment_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
-                                    onclick="voteComment('down', ${comment.commentId})" style="padding: 10px"></i>
-                                <span id="vote_comment_value">${comment.vote}</span>
-                            </div>
-                           <%}%>
+                            <!--                            <div class="vote-section vote-section-cmt" id="vote-section-cmt">
+                                                            <i  id="vote_comment_up" class="anticon anticon_vote anticon-arrow-up mr-2" 
+                                                                onclick="voteComment('up', ${comment.commentId})" style="padding: 10px"></i>
+                                                            <i  id="vote_comment_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
+                                                                onclick="voteComment('down', ${comment.commentId})" style="padding: 10px"></i>
+                                                            <span id="vote_comment_value">${comment.vote}</span>
+                                                        </div>-->
                             <c:if test="${not empty user}">
                                 <c:if test="${user.userId == commentUser.userId && comment.status eq 'active'}">
                                     <button type="button" class="btn reply-button" data-comment-id="${comment.commentId}" 
@@ -215,10 +206,10 @@
                                 </button>
                             </c:if>
                         </div>                         
-                         
-                            <span class="badge badge-secondary">
-                                ${commentDate}
-                            </span>
+
+                        <span class="badge badge-secondary">
+                            ${commentDate}
+                        </span>
                         <div id="replyComment_${comment.commentId}" class="replyComment justify-content-between align-items-center d-none">
                             <textarea class="form-control" rows="2" id="msgReply_${comment.commentId}" 
                                       minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
@@ -291,7 +282,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                
+
                 <h5 class="modal-title" id="reportPostModalLabel">Report Post</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -348,7 +339,7 @@
 </div>
 
 <script>
-    
+
     let voteStatus = 'unvote'; // Trạng thái ban đầu
 // Hàm xử lý upvote/downvote
     const votePost = (type, voteStatus) => {
@@ -358,7 +349,7 @@
             console.error("postId không tồn tại trong URL");
             return; // Thoát nếu không có postId
         }
-        
+
         isLoggedIn(loggedIn => {
             if (!loggedIn) {
                 Swal.fire({
@@ -384,7 +375,7 @@
             const newVoteValue = currentVote + increment;
             // Cập nhật giá trị vote hiển thị
             voteValueElement.innerText = newVoteValue;
-            
+
             // Gửi yêu cầu AJAX để cập nhật vote
             const xhr = new XMLHttpRequest();
             xhr.open("POST", "updateVotePost", true);
@@ -401,7 +392,7 @@
             }, 200); // Reload sau 0.2 giây 
         });
     };
-    
+
     //Show change upvote downvote
     document.addEventListener('DOMContentLoaded', function () {
         const votePostStatus = `${votePostStatus}`; // Đảm bảo votePostStatus là string
@@ -416,9 +407,9 @@
         } else if (votePostStatus === "downvote") {
             toggleVotePostClass(false, true);
         }
-        
+
     });
-    
+
 // Thay đổi background của .comment-input-block .card-title
     const commentTitles = document.querySelectorAll('.comment-input-block .card-title');
     commentTitles.forEach(title => {
@@ -431,7 +422,7 @@
             title.style.webkitBackgroundClip = 'text';
         }
     });
-    
+
 // Thay đổi border color và box-shadow của .comment-card
     const commentCards = document.querySelectorAll('.comment-card');
     commentCards.forEach(card => {
@@ -441,22 +432,22 @@
             card.style.boxShadow = '0 0 15px ' + rankColor;
         }
     });
-    
-    
+
+
 // Hàm để lấy giá trị của một tham số từ URL
     const getUrlParameter = param => {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
     };
-    
+
     // Hàm để xử lý thêm/loại bỏ lớp 'upvoted' và 'downvoted' cửa post
     const toggleVotePostClass = (addUpvoted, addDownvoted) => {
         const voteSection = document.getElementById('vote-section');
         voteSection.classList.toggle('upvoted', addUpvoted);
         voteSection.classList.toggle('downvoted', addDownvoted);
     };
-    
-    
+
+
 // Kiểm tra đăng nhập
     const isLoggedIn = callback => {
         const xhr = new XMLHttpRequest();
@@ -501,7 +492,7 @@
             });
         }
     }
-    
+
 // Chuyển đổi trạng thái hiển thị phản hồi
     function toggleReply(button) {
         const commentId = button.getAttribute('data-comment-id');
@@ -519,7 +510,7 @@
             console.error('Không tìm thấy phần tử với id #replyComment_' + commentId);
         }
     }
-    
+
 // Gửi phản hồi
     function sendMsgReply(button) {
         const parentId = button.getAttribute('data-comment-id');
@@ -548,7 +539,7 @@
             });
         }
     }
-    
+
     $(document).ready(() => {
         //Show edit comment
         $('#editCommentModal').on('show.bs.modal', (event) => {
@@ -568,7 +559,7 @@
                 }
             });
         });
-        
+
         // Save edited comment function
         const saveEditedComment = () => {
             // Get the edited comment ID and content from the modal
@@ -600,7 +591,7 @@
         };
         // Attach saveEditedComment function to the 'Save changes' button click
         $('#saveEditedCommentBtn').on('click', saveEditedComment);
-        
+
         // Save edited comment function
         const deleteComment = () => {
             var commentId = $('#editCommentId').val();
@@ -626,7 +617,7 @@
         };
         // Attach deleteCommentBtn function to the 'Save changes' button click
         $('#deleteCommentBtn').on('click', deleteComment);
-        
+
         $('#deletePostButton').click(function () {
             const postId = getUrlParameter('postId');
             if (confirm('Are you sure you want to delete this post?')) {

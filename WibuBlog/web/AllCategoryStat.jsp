@@ -1,8 +1,4 @@
-<%-- 
-    Document   : AllCategoryStat
-    Created on : Jun 29, 2024, 11:49:38 PM
-    Author     : admin
---%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

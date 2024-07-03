@@ -50,7 +50,9 @@
                 %>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="col-10 text-truncate font-weight-bold">
-                        <a href="TicketDetail?ticketId=${ticket.ticketId}"><%= user.getUsername() %>: ${ticket.content}</a>
+                        <a href="javascript:void(0);" onclick="openPopup('<%= user.getUsername() %>', '${ticket.content}')">
+                            <%= user.getUsername() %>: ${ticket.content}
+                        </a>
                     </div>
                     <span class="badge badge-primary badge-pill">
                         <i class="far fa-comment-dots fa-lg"></i>
@@ -60,6 +62,19 @@
             </c:forEach>
         </ul>
     </div>
+            <div id="popup-overlay" class="popup-overlay"></div>
+
+<div id="popup" class="popup">
+    <div class="popup-header" id="popup-header">Username</div>
+    <div class="popup-content" id="popup-content">Ticket Content</div>
+    <div class="popup-note">
+        <textarea id="popup-note" rows="6" style="width: 100%;" placeholder="Enter your note here..."></textarea>
+    </div>
+    <div class="popup-buttons">
+        <button onclick="reject()" class="btn btn-danger">Reject</button>
+        <button onclick="approve()"class="btn btn-success">Approve</button>
+    </div>
+</div>
 
     <div class="card-header">
         <h3 class="card-header-h3 fs-16">
@@ -85,3 +100,73 @@
         </ul>
     </div>
 </div>
+<script>
+    function openPopup(username, content) {
+        document.getElementById('popup-header').innerText = username;
+        document.getElementById('popup-content').innerText = content;
+        document.getElementById('popup-overlay').style.display = 'block';
+        document.getElementById('popup').style.display = 'block';
+    }
+
+    function closePopup() {
+        document.getElementById('popup-overlay').style.display = 'none';
+        document.getElementById('popup').style.display = 'none';
+    }
+
+    function reject() {
+        const note = document.getElementById('popup-note').value;
+        alert('Ticket Rejected\nNote: ' + note);
+        closePopup();
+    }
+
+    function approve() {
+        const note = document.getElementById('popup-note').value;
+        alert('Ticket Approved\nNote: ' + note);
+        closePopup();
+    }
+
+    document.getElementById('popup-overlay').addEventListener('click', closePopup);
+</script>
+  <style>    
+        .popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid #ccc;
+            padding: 30px;
+            background: white;
+            z-index: 1000;
+            width: 500px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        .popup-header {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .popup-content {
+            margin-bottom: 20px;
+        }
+        .popup-note {
+            margin-bottom: 20px;
+        }
+        .popup-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+        .popup-buttons button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>

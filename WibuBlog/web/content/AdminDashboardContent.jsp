@@ -203,7 +203,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="m-b-0">Ticket</h5>
                             <div>
-                                <a href="ViewAll?Data=Ticket" class="btn btn-sm btn-default">View All
+                                <a href="Ticket" class="btn btn-sm btn-default">View All
                                 </a>
                             </div>
                         </div>

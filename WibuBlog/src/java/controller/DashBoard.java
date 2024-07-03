@@ -50,7 +50,6 @@ public class DashBoard extends HttpServlet {
             request.setAttribute("TotalMember", pd.getTotalMember());
             request.setAttribute("Top10User", pd.getTop10UserByPoint());
             request.setAttribute("Top6Post", pd.getTop6VotedPost());
-        
             request.getRequestDispatcher("AdminDashboard.jsp").forward(request, response);    
             return;
         }

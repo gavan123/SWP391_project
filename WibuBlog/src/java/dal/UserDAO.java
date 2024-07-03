@@ -93,30 +93,6 @@ public class UserDAO extends DBContext {
         return null;
     }
     
-    public void subtractUserPointByUserId(int userId){
-        try {
-            String sql = "update [user] set point = point - 1 where userid = ?";
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, userId);
-            ps.execute();
-            ps.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }     
-    }
-    
-       public void addUserPointByUserId(int userId){
-        try {
-            String sql = "update [user] set point = point + 1 where userid = ?";
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, userId);
-            ps.execute();
-            ps.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }     
-    }
-       
     public String getUserStatusByUserId(int userId){
         try {
             String sql = "select * from [user] where userid = ?";

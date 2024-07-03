@@ -98,18 +98,18 @@ public class Login extends HttpServlet {
             return;
         }
 
-       // boolean isActive = userdao.checkUserIsActive(user.getUserId());
-
-        // Check if the account is active
+//        boolean isActive = userdao.checkUserIsActive(user.getUserId());
+//
+//        // Check if the account is active
 //        if (!isActive) {
 //            request.setAttribute("errorMessage", "Login failed! Account must be active.");
 //            request.getRequestDispatcher("Login.jsp").forward(request, response);
 //            return;
 //        }
-
-        boolean isBanTimeout = userdao.isUserBanTimeExpired(user.getUserId());
-
-        // Check if the account is ban
+//
+//        boolean isBanTimeout = userdao.isUserBanTimeExpired(user.getUserId());
+//
+//        // Check if the account is ban
 //        if (!isBanTimeout) {
 //            request.setAttribute("errorMessage", "Login failed! Account has been temporary ban.");
 //            request.getRequestDispatcher("Login.jsp").forward(request, response);

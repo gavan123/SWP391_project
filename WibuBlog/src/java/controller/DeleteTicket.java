@@ -5,6 +5,9 @@
 
 package controller;
 
+import dal.PostDAO;
+import dal.ReportDAO;
+import dal.TicketDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,6 +15,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -68,7 +72,20 @@ public class DeleteTicket extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        TicketDAO td = new TicketDAO();
+        PostDAO pd = new PostDAO();
+
+        int reportId = Integer.parseInt((String) request.getParameter("ticketId"));
+
+        if (reportId <= 0) {
+            request.setAttribute("errorMessage", "Failed to retrieve ticket ID.");
+            request.getRequestDispatcher("Error.jsp").forward(request, response);
+        }
+
+        
+
+        request.getRequestDispatcher("ReportDetails").forward(request, response);
     }
 
     /** 

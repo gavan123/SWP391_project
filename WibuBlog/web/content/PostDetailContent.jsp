@@ -11,7 +11,6 @@
 </style>
  <% UserDAO ud = new UserDAO();
     User user = (User)session.getAttribute("user");%>
-    <p>gay</p>
 <div class="col-lg-12 mb-2">
     <div class="card mb-2">
         <div class="card-body">
@@ -45,13 +44,15 @@
                 <br>
             </div>
             <hr>
-
+            <c:if test="${user != null}">
            <%if (ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>
                 <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
                     <i class="fas fa-flag"></i> Report Post  
                 </button>
             <%}%>
-            <%if (ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>        
+            </c:if>
+            
+            <%if ( user != null && ud.getUserStatusByUserId(user.getUserId()).equals("active") ){%>        
                 <div class="row">
                     <div class="col-lg-4 mb-2 mx-auto">
                         <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
@@ -68,7 +69,7 @@
                     </div>
                 </div>
             <%}%>
-            <%if (ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
+            <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
                  <p>You are now allowed to vote whilst banned</p>
                  <%}%>
         </div>
@@ -130,7 +131,7 @@
                             </div>
                         </div>    
                         <%}%>
-                                     <%if (ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
+                                     <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
                                         <p>You are not allowed to comment whilst banned</p>
                                      <%}%>
                     </div>
@@ -172,7 +173,7 @@
                             </div>
                             <input id="commentId" type="hidden" value="${comment.commentId}" >
                         </div>
-                             <%if (ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
+                             <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
                         <div class="card-text comment-date">
                             <div class="vote-section vote-section-cmt" id="vote-section-cmt">
                                 <i  id="vote_comment_up" class="anticon anticon_vote anticon-arrow-up mr-2" 

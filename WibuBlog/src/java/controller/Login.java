@@ -64,7 +64,7 @@ public class Login extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-// Check if the username or password is empty and set an error message if true
+        // Check if the username or password is empty and set an error message if true
         if (username == null || username.isEmpty() || password == null || password.isEmpty()) {
             request.setAttribute("errorMessage", "Username or password is empty!");
             request.getRequestDispatcher("Login.jsp").forward(request, response);
@@ -129,6 +129,11 @@ public class Login extends HttpServlet {
             request.getRequestDispatcher("Login.jsp").forward(request, response);
             return;
         }
+
+        // Set attributes for role checks
+        session.setAttribute("isAdmin", dao.isAdmin(username));
+        session.setAttribute("isMod", dao.isMod(username));
+        session.setAttribute("isMember", dao.isMember(username));
 
         switch (userRole) {
             case "Admin" ->

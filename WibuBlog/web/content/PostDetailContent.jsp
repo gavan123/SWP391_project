@@ -59,7 +59,7 @@
                         </button>
                         <%}%>
                     </c:if>
-                     <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
+                     <%if (user == null || ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
                     <div class="row">
                         <div class="col-lg-4 mb-2 mx-auto">
                             <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
@@ -200,7 +200,7 @@
                                     onclick="voteComment('down', ${comment.commentId})" style="padding: 10px"></i>
                                 <span id="vote_comment_value">${comment.vote}</span>
                             </div>
-                          
+                           <%}%>
                             <c:if test="${not empty user}">
                                 <c:if test="${user.userId == commentUser.userId && comment.status eq 'active'}">
                                     <button type="button" class="btn reply-button" data-comment-id="${comment.commentId}" 
@@ -213,7 +213,7 @@
                                 </button>
                             </c:if>
                         </div>                         
-                          <%}%>
+                         
                             <span class="badge badge-secondary">
                                 ${commentDate}
                             </span>
@@ -528,8 +528,8 @@
             console.error("postId không tồn tại trong URL");
             return; // Thoát nếu không có postId
         }
-        if (msg.length < 30) {
-            alert("Enter at least 30 word...");
+        if (msg.length < 1) {
+            alert("Empty comment");
         } else {
             $.ajax({
                 type: 'POST',

@@ -15,15 +15,17 @@
                                UserDAO ud = new UserDAO();   
                                PostDAO pd = new PostDAO();
 %>
-<div class="thinking-card">
-     <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
+ <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
+<div class="thinking-card">    
     <label for="image">What are your thought?</label>
     <a href="createPost">Create a post</a>
-    <%}%>
-     <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
-    <label for="image">You are currently banned please wait for your ban to expire to post</label>
-    <%}%>
 </div>
+    <%}%>
+ <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
+<div class="thinking-card">   
+    <label for="image">You are currently banned please wait for your ban to expire to post</label>
+</div>
+    <%}%>   
 <c:forEach var="fileName" items="${image}">
     <img src="${pageContext.request.contextPath}/images/game/${fileName}" alt="Uploaded Image">
 </c:forEach>

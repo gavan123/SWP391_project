@@ -15,6 +15,10 @@ import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.User;
 
 /**
  *
@@ -100,6 +104,20 @@ public class ModFilter implements Filter {
 	if (debug) log("ModFilter:doFilter()");
 
 	doBeforeProcessing(request, response);
+        
+        HttpServletRequest req = (HttpServletRequest)request;
+        HttpServletResponse res = (HttpServletResponse)response;
+        HttpSession session = req.getSession();
+        User user = (User)session.getAttribute("user");
+        if (user == null) {
+            request.setAttribute("errorMessage", "You must be logged in to continue this action.");
+            request.getRequestDispatcher("Login.jsp").forward(request, response);
+        } else {
+            if (user.getRoleId() > 2) {
+                request.setAttribute("errorMessage", "You are not authorised to perform this action.");
+                request.getRequestDispatcher("Error.jsp").forward(request, response);
+            }
+        }
 	
 	Throwable problem = null;
 	try {

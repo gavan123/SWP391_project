@@ -9,14 +9,16 @@
 <div class="side-nav">
     <div class="side-nav-inner">
         <ul class="side-nav-menu scrollable">
+            <c:if test="${user != null}">
             <li class="nav-item dropdown">
-                <a class="dropdown-toggle" href="">
+                <a class="dropdown-toggle" href="DashBoard">
                     <span class="icon-holder">
                         <i class="anticon anticon-dashboard"></i>
                     </span>
                     <span class="title">Dashboard</span>
                 </a>
             </li>
+            </c:if>
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle" href="javascript:void(0);">
                     <span class="icon-holder">

@@ -5,15 +5,16 @@
 <%@ page import="model.Media" %>
 <%@ page import="dal.UserDAO" %>
 <%@ page import="dal.MediaDAO" %>
+<%@ page import="dal.PostDAO" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="model.PostDetail" %>
 <link rel="stylesheet" href="assets/css/testcss.css">
 <link rel="stylesheet" href="assets/css/testcss2.css">
-<% User user = (User)session.getAttribute("user");
-                               UserDAO userDAO = new UserDAO();
-                               String rank = userDAO.getRankByRankID(user.getRankId());
-                               String rankColor = userDAO.getColorByRank(rank);
+<%                             User user = (User)session.getAttribute("user");
+                               UserDAO userDAO = new UserDAO();                            
+                               String rankColor = userDAO.getColorByRank(userDAO.getRankByUserId(user.getUserId()));
                                String role = userDAO.getRoleByRoleID(user.getRoleId()); 
-                               MediaDAO mediaDAO = new MediaDAO();
-                               Media media = mediaDAO.getMedia(user.getProfilePhoto());
+                               
 %>
 <div class="container">
     <div class="card">
@@ -25,17 +26,16 @@
 
                             <div class="test avatar avatar-image" style="width: 150px; height: 100px;border: 2px solid grey;">  
                                 <c:choose>
-                                    <c:when test="${user.profilePhoto == 0}">
+                                    <c:when test="${user.profilePhoto == null}">
                                         <form action="UploadPFP" method="post" enctype="multipart/form-data"  >
                                             <input type="file" class="upload-input" onchange="this.form.submit()" name="pfp" id="someId">                                       
                                             <div class="upload-text">Upload an image</div>
                                         </form>
                                     </c:when>                                     
                                     <c:otherwise>
-
                                         <form action="UploadPFP" method="post" enctype="multipart/form-data"  >
                                             <input type="file" class="upload-input" onchange="this.form.submit()" name="pfp" id="someId">         
-                                            <img src="" style="width: 150px; height: 100px">
+                                            <img src="${pageContext.request.contextPath}/images/game/${user.profilePhoto}" style="width: 150px; height: 100px">
                                             <div class="upload-text">Upload an image</div>
                                         </form>               
                                     </c:otherwise>
@@ -45,7 +45,7 @@
                         </div>                                        
                         <div class="text-center text-sm-left m-v-15 p-l-30">
                             <h2 class="m-b-5">${user.username}</h2>
-                            <i class="text-opacity font-size-15" style="color:<%=rankColor%>" ><b><%=rank%></b></i>
+                            <i class="text-opacity font-size-15" style="color:<%=rankColor%>" ><b><%=userDAO.getRankByUserId(user.getUserId())%>(<%=userDAO.getUserByUserId(user.getUserId()).getPoint()%>)</b></i>
                             <p class="text-dark m-b-20"><%=role%></p>
                         </div>
                     </div>
@@ -95,169 +95,124 @@
                     <h5>Bio</h5>     
                     <c:choose>
                         <c:when test="${user.bio == null}">
-                    <form action="SetBio" method="post" id="UpdateBio">
-                     <label for="bio"></label>
-                    <textarea id="bio" name="bio" rows="5" cols="90" placeholder="Hãy thể hiện cá tính của bạn!!"></textarea>             
-                  </form>
-                    <input type="submit" value="Lưu" form="UpdateBio"> 
-                    </c:when>
-                    <c:otherwise>
-                        <div class="w3-container w3-pale-blue w3-leftbar w3-border-blue">
-                            <p>${user.bio}</p>
-                            <hr style="color: aqua">
-                            
-                        </div>
-                            <div>
-                          
-                            <a href="#" onclick="togglePopup()" style="float:right">Edit</a>
+                            <form action="SetBio" method="post" id="UpdateBio">
+                                <label for="bio"></label>
+                                <textarea id="bio" name="bio" rows="5" cols="90" placeholder="Show your bio!"></textarea>             
+                            </form>
+                            <input type="submit" value="Lưu" form="UpdateBio"> 
+                        </c:when>
+                        <c:otherwise>
+                            <div class="w3-container w3-pale-blue w3-leftbar w3-border-blue">
+                                <p>${user.bio}</p>
+                                <hr style="color: aqua">
+
                             </div>
-    <div class="popup" id="popup-1">
-        <div class="overlay" onclick="togglePopup()"></div>
-        <div class="content">
-            <div class="close-btn" onclick="togglePopup()">&times;</div>
-            <h1>Change new bio</h1>
-            <p>Enter new bio</p>
-            <form action="UpdateBio" method="post">
-                <textarea name="newBio" rows="4" cols="50" placeholder="Your new bio 😍"></textarea>
-                <br>
-                <input type="submit" value="Done">
-            </form>
-        </div>
-    </div>
-    <script>
-        function togglePopup() {
-            document.getElementById("popup-1").classList.toggle("active");
-        }
-    </script>
-                    </c:otherwise>
+                            <div>
+
+                                <a href="#" onclick="togglePopup()" style="float:right">Edit</a>
+                            </div>
+                            <div class="popup" id="popup-1">
+                                <div class="overlay" onclick="togglePopup()"></div>
+                                <div class="content">
+                                    <div class="close-btn" onclick="togglePopup()">&times;</div>
+                                    <h1>Change new bio</h1>
+                                    <p>Enter new bio</p>
+                                    <form action="UpdateBio" method="post">
+                                        <textarea name="newBio" rows="4" cols="50" placeholder="Your new bio 😍"></textarea>
+                                        <br>
+                                        <input type="submit" value="Done">
+                                    </form>
+                                </div>
+                            </div>
+                            <script>
+                                function togglePopup() {
+                                    document.getElementById("popup-1").classList.toggle("active");
+                                }
+                            </script>
+                        </c:otherwise>
                     </c:choose>
+                    <%
+                        PostDAO postDAO = new PostDAO();
+                        ArrayList<PostDetail> userPostList = postDAO.getPostDetailByUserId(user.getUserId());
+                    %>
                     <br>
                     <h5>Posts</h5>
                     <div class="m-t-20">
-                        <div class="media m-b-30">
-                            <div class="avatar avatar-image">
-                                <img src="assets/images/others/adobe-thumb.png" alt="">
-                            </div>
-                            <div class="media-body m-l-20">
-                                <h6 class="m-b-0">UI/UX Designer, Adobe Inc.</h6>
-                                <span class="font-size-13 text-gray">Jul 2018</span>
-                            </div>
-                        </div>
-                        <div class="media m-b-30">
-                            <div class="avatar avatar-image">
-                                <img src="assets/images/others/amazon-thumb.png" alt="">
-                            </div>
-                            <div class="media-body m-l-20">
-                                <h6 class="m-b-0">Product Developer, Amazon.com Inc.</h6>
-                                <span class="font-size-13 text-gray">Jul-2017 - Jul 2018</span>
-                            </div>
-                        </div>
-                        <div class="media m-b-30">
-                            <div class="avatar avatar-image">
-                                <img src="assets/images/others/nvidia-thumb.png" alt="">
-                            </div>
-                            <div class="media-body m-l-20">
-                                <h6 class="m-b-0">Interface Designer, Nvidia Corporation</h6>
-                                <span class="font-size-13 text-gray">Jul-2016 - Jul 2017</span>
-                            </div>
-                        </div>
+                        <c:choose>
+                            <c:when test="${userPostList.isEmpty}">
+                                <%if (userDAO.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
+                                    <p>You've not posted anything. Get started by <a href="createPost">create a post</a></p>  
+                                     <%}%>
+                                 <%if (userDAO.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
+                                    <label>You are currently banned please wait for your ban to expire to post</label>
+                                <%}%>
+                                    
+                            </c:when>
+                            <c:otherwise>
+                                 <%if (userDAO.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
+                                    <p >What are your thoughts. Don't mind sharing by <a href="createPost">creating a post</a></p>  
+                                <%}%>
+
+                                 <%if (userDAO.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
+                                    <label>You are currently banned please wait for your ban to expire to post</label>
+                                <%}%>
+                               
+                                <hr>
+                                <h5>Your posts</h5>
+                                <c:forEach items="<%=userPostList%>" var="post">
+                                    <div class="card mb-2" onclick="redirectToLink('${pageContext.request.contextPath}/postDetail?postId=${post.postID}')">
+                                        <div class="card-body">
+                                            <header>
+                                                <h1 class="card-title" style="font-size: 26px;line-height:34px">${post.title}</h1>
+                                            </header>
+                                            <h6 class="card-subtitle mb-2 fw-700" style="font-size: small !important;">
+                                                <i class="fas fa-user"></i> 
+                                                <a href="#" style="color:blue" accesskey="a">${post.username}</a> | 
+                                                <i class="fas fa-clock"></i>
+                                                <time datetime="${postTime}">${postTime}</time> | 
+                                                <i class="fas fa-eye"></i> ${post.view}
+                                            </h6>
+                                            <h3 class="fs-14 border-bottom-badge-eee">
+                                                <span class="badge badge-info mr-1">
+                                                    <a class="text-white" href="postListByCategory?name=${post.categoryName}">${post.categoryName}</a>
+                                                </span>
+                                                <span class="badge badge-primary mr-1">
+                                                    <a class="text-white" href="#">${post.genreName}</a>
+                                                </span>
+                                            </h3>
+                                            <div class="card-text fs-content" style="font-size: 18px;">
+                                                ${post.content}
+                                                <br>
+                                                <br>
+                                                <br>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-lg-4 mb-2 mx-auto">
+                                                    <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
+                                                        <li class="d-flex align-items-center mr-4 font-weight-bold">
+                                                            <div class="vote-section" id="vote-section">
+                                                                <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2"
+                                                                   onclick="votePost('up', '${votePostStatus}')"></i>
+                                                                <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
+                                                                   onclick="votePost('down', '${votePostStatus}')"></i>
+                                                                <span id="vote_value">${post.vote}</span>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                     <hr>
-                    <h5>Education</h5>
-                    <div class="m-t-20">
-                        <div class="media m-b-30">
-                            <div class="avatar avatar-image">
-                                <img src="assets/images/others/cambridge-thumb.png" alt="">
-                            </div>
-                            <div class="media-body m-l-20">
-                                <h6 class="m-b-0">MSt in Social Innovation, Cambridge University</h6>
-                                <span class="font-size-13 text-gray">Jul-2012 - Jul 2016</span>
-                            </div>
-                        </div>
-                        <div class="media m-b-30">
-                            <div class="avatar avatar-image">
-                                <img src="assets/images/others/phillips-academy-thumb.png" alt="">
-                            </div>
-                            <div class="media-body m-l-20">
-                                <h6 class="m-b-0">Phillips Academy</h6>
-                                <span class="font-size-13 text-gray">Jul-2005 - Jul 2011</span>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
-            <div class="card">
-                <div class="card-body">
-                    <h5>Reviews (18)</h5>
-                    <div class="m-t-20">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item p-h-0">
-                                <div class="media m-b-15">
-                                    <div class="avatar avatar-image">
-                                        <img src="assets/images/avatars/thumb-8.jpg" alt="">
-                                    </div>
-                                    <div class="media-body m-l-20">
-                                        <h6 class="m-b-0">
-                                            <a href="" class="text-dark">Lillian Stone</a>
-                                        </h6>
-                                        <span class="font-size-13 text-gray">28th Jul 2018</span>
-                                    </div>
-                                </div>
-                                <span>The palatable sensation we lovingly refer to as The Cheeseburger has a distinguished and illustrious history. It was born from humble roots, only to rise to well-seasoned greatness.</span>
-                                <div class="star-rating m-t-15">
-                                    <input type="radio" id="star1-5" name="rating-1" value="5" checked disabled/><label for="star1-5" title="5 star"></label>
-                                    <input type="radio" id="star1-4" name="rating-1" value="4" disabled/><label for="star1-4" title="4 star"></label>
-                                    <input type="radio" id="star1-3" name="rating-1" value="3" disabled/><label for="star1-3" title="3 star"></label>
-                                    <input type="radio" id="star1-2" name="rating-1" value="2" disabled/><label for="star1-2" title="2 star"></label>
-                                    <input type="radio" id="star1-1" name="rating-1" value="1" disabled/><label for="star1-1" title="1 star"></label>
-                                </div>
-                            </li>
-                            <li class="list-group-item p-h-0">
-                                <div class="media m-b-15">
-                                    <div class="avatar avatar-image">
-                                        <img src="assets/images/avatars/thumb-9.jpg" alt="">
-                                    </div>
-                                    <div class="media-body m-l-20">
-                                        <h6 class="m-b-0">
-                                            <a href="" class="text-dark">Victor Terry</a>
-                                        </h6>
-                                        <span class="font-size-13 text-gray">28th Jul 2018</span>
-                                    </div>
-                                </div>
-                                <span>The palatable sensation we lovingly refer to as The Cheeseburger has a distinguished and illustrious history. It was born from humble roots, only to rise to well-seasoned greatness.</span>
-                                <div class="star-rating m-t-15">
-                                    <input type="radio" id="star2-5" name="rating-2" value="5" disabled/><label for="star2-5" title="5 star"></label>
-                                    <input type="radio" id="star2-4" name="rating-2" value="4" checked disabled/><label for="star2-4" title="4 star"></label>
-                                    <input type="radio" id="star2-3" name="rating-2" value="3" disabled/><label for="star2-3" title="3 star"></label>
-                                    <input type="radio" id="star2-2" name="rating-2" value="2" disabled/><label for="star2-2" title="2 star"></label>
-                                    <input type="radio" id="star2-1" name="rating-2" value="1" disabled/><label for="star2-1" title="1 star"></label>
-                                </div>
-                            </li>
-                            <li class="list-group-item p-h-0">
-                                <div class="media m-b-15">
-                                    <div class="avatar avatar-image">
-                                        <img src="assets/images/avatars/thumb-10.jpg" alt="">
-                                    </div>
-                                    <div class="media-body m-l-20">
-                                        <h6 class="m-b-0">
-                                            <a href="" class="text-dark">Wilma Young</a>
-                                        </h6>
-                                        <span class="font-size-13 text-gray">28th Jul 2018</span>
-                                    </div>
-                                </div>
-                                <span>The palatable sensation we lovingly refer to as The Cheeseburger has a distinguished and illustrious history. It was born from humble roots, only to rise to well-seasoned greatness.</span>
-                                <div class="star-rating m-t-15">
-                                    <input type="radio" id="star3-5" name="rating-3" value="5" checked disabled/><label for="star3-5" title="5 star"></label>
-                                    <input type="radio" id="star3-4" name="rating-3" value="4" disabled/><label for="star3-4" title="4 star"></label>
-                                    <input type="radio" id="star3-3" name="rating-3" value="3" disabled/><label for="star3-3" title="3 star"></label>
-                                    <input type="radio" id="star3-2" name="rating-3" value="2" disabled/><label for="star3-2" title="2 star"></label>
-                                    <input type="radio" id="star3-1" name="rating-3" value="1" disabled/><label for="star3-1" title="1 star"></label>
-                                </div>
-                            </li>
-                        </ul> 
-                    </div>  
-                </div>
-            </div>
+
         </div>
         <div class="col-md-4">
             <div class="card">
@@ -416,7 +371,7 @@
         </div>
     </div>
 </div>
-                                
+
 <script>
     var file = document.getElementById('someId');
     file.onchange = function (e) {
@@ -444,12 +399,12 @@
                 this.value = '';
         }
     };
+    function redirectToLink(url) {
+        window.location.href = url;
+    }
+    function togglePopup() {
+        document.getElementById("popup-1").classList.toggle("active");
+    }
+
+
 </script>
-
-<script>
-  function togglePopup(){
-      document.getElementById("popup-1").classList.toggle("active");
-  } 
-</script>
-
-

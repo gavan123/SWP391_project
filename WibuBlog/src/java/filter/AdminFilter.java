@@ -113,7 +113,7 @@ public class AdminFilter implements Filter {
             request.setAttribute("errorMessage", "You must be logged in to continue this action.");
             request.getRequestDispatcher("Login.jsp").forward(request, response);
         } else {
-            if (user.getRoleId() != 1) {
+            if (user.getRoleId() > 1) {
                 request.setAttribute("errorMessage", "You are not authorised to perform this action.");
                 request.getRequestDispatcher("Error.jsp").forward(request, response);
             }

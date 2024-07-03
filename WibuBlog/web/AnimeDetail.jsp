@@ -10,9 +10,7 @@
 <%@ page import="model.Anime" %>
 <%@ page import="dal.AnimeDAO" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page import="java.time.format.FormatStyle" %>
-<%@ page import="java.time.LocalDateTime" %>
+
 
 <%
     String animeIdS = (String)request.getParameter("animeId");
@@ -34,6 +32,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title> <%= anime.getTitle() %></title>
     </head>
+    
     <body>
         <jsp:include page="Layout.jsp">
             <jsp:param name="sideNav" value="SideNav.jsp" />

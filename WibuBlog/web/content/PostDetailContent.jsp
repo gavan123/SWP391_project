@@ -1,7 +1,15 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="model.User" %>
+<%@ page import="model.Media" %>
+<%@ page import="dal.UserDAO" %>
+<%@ page import="dal.MediaDAO" %>
+<%@ page import="dal.PostDAO" %>
 
+<%                             User user = (User)session.getAttribute("user");
+                               UserDAO ud = new UserDAO();                                                        
+%>
 
 
 <style>
@@ -45,10 +53,13 @@
                     </div>
                     <hr>
                     <c:if test="${post.username != user.username}">
+                         <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
                         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
                             <i class="fas fa-flag"></i> Report Post
                         </button>
+                        <%}%>
                     </c:if>
+                     <%if (user == null || ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
                     <div class="row">
                         <div class="col-lg-4 mb-2 mx-auto">
                             <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
@@ -64,6 +75,10 @@
                             </ul>
                         </div>
                     </div>
+                                    <%}%>
+                                     <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
+                                     <p style="color: red">You are not allowed to vote whilst banned</p>
+                                     <%}%>
                 </div>
             </div>
         </c:when>
@@ -77,12 +92,14 @@
 
 
     <!--    Post user-->
-
+<% PostDAO pd = new PostDAO();
+       String authorProfilePhoto = pd.getUserProfilePhotoByUsername((String)request.getAttribute("postUser"));
+    %>
     <div class="card mb-2">
         <img class="img-thumbnail rounded-circle mx-auto d-block mt-2" 
              alt="${post.username}" title="${post.username}" 
              style="width:120px;height:120px" 
-             src="${pageContext.request.contextPath}/${post.image}"
+             src="${pageContext.request.contextPath}/images/game/<%=authorProfilePhoto%>"
              onerror="this.src='assets/images/others/product-3.jpg'">
         <div class="card-body">
             <p class="card-title text-center fw-700 mb-0">
@@ -114,10 +131,11 @@
                         </div>
                     </c:when>
                     <c:otherwise>
+                         <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
                         <div class="border-0 bg-none mt-2 media align-items-center">
                             <div class="comment-avatar mr-2">
                                 <img alt="${user.username}" title="${user.username}" 
-                                     src="${pageContext.request.contextPath}/${user.profilePhoto}"
+                                     src="${pageContext.request.contextPath}/images/game/${user.profilePhoto}"
                                      onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
                             </div>
                             <div class="comment-input-block media-body">
@@ -130,6 +148,10 @@
                                 </div>
                             </div>
                         </div>
+                                     <%}%>
+                                      <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
+                                      <p style="color: red">You are not allowed to comment whilst banned</p>
+                                     <%}%>
                     </c:otherwise>
                 </c:choose>
             </c:if>
@@ -140,129 +162,74 @@
                 <c:set var="commentUser" value="${userComment[loop.index]}" />
                 <c:set var="commentUserRank" value="${userRank[loop.index]}" />
                 <c:set var="commentDate" value="${commentTime[loop.index]}" />
-                <c:if test="${comment.parentId ==null}">
-                    <div class="comment-container media">
-                        <div class="comment-avatar">
-                            <img alt="${commentUser.username}" 
-                                 title="${commentUser.username}" 
-                                 src="${pageContext.request.contextPath}/${commentUser.profilePhoto}" 
-                                 onerror="this.src='assets/images/others/product-3.jpg'">
-                        </div>
-                        <div class="comment-input-block media-body" id="comment_${loop.index}">
-                            <p class="card-text">
-                                <span class="card-title" data-rank-color=" ${commentUserRank.color}" >
-                                    ${commentUserRank.name}
-                                </span>
-                                <span class="text-truncate" title="${commentUser.username}" >
-                                    ${commentUser.username}
-                                </span>
-                            </p>
-                            <div class="card comment-card" data-rank-color="${commentUserRank.color}">
-                                <div class="card-body">
-                                    <c:choose>
-                                        <c:when test="${comment.status eq 'active'}">
-                                            ${comment.content}
-                                        </c:when>
-                                        <c:otherwise>
-                                            This comment has been deleted.
-                                        </c:otherwise>
-                                    </c:choose>
-                                </div>
-                                <input id="commentId" type="hidden" value="${comment.commentId}" >
+                <div class="comment-container media">
+                    <div class="comment-avatar">
+                        <img alt="${commentUser.username}" 
+                             title="${commentUser.username}" 
+                             src="${pageContext.request.contextPath}/images/game/${commentUser.profilePhoto}" 
+                             onerror="this.src='assets/images/others/product-3.jpg'">
+                    </div>
+                    <div class="comment-input-block media-body" id="comment_${loop.index}">
+                        <p class="card-text">
+                            <span class="card-title" data-rank-color=" ${commentUserRank.color}" >
+                                ${commentUserRank.name}
+                            </span>
+                            <span class="text-truncate" title="${commentUser.username}" >
+                                ${commentUser.username}
+                            </span>
+
+                        </p>
+                        <!--<p>${comment.commentId}-${comment.parentId}</p>-->
+                        <div class="card comment-card" data-rank-color="${commentUserRank.color}">
+                            <div class="card-body">
+                                <c:choose>
+                                    <c:when test="${comment.status eq 'active'}">
+                                        ${comment.content}
+                                    </c:when>
+                                    <c:otherwise>
+                                        This comment has been deleted.
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
-                            <div class="card-text comment-date">
-                                <span class="badge badge-secondary">
-                                    ${commentDate}
-                                </span>
-                                <c:if test="${not empty user && post.status == 'active'}">
-                                    <c:if test="${user.userId == commentUser.userId && comment.status eq 'active'}">
-                                        <button type="button" class="btn reply-button" data-comment-id="${comment.commentId}" 
-                                                data-toggle="modal" data-target="#editCommentModal">
-                                            Edit
-                                        </button>
-                                    </c:if>
-                                    <button class="btn reply-button"  data-comment-id="${comment.commentId}" onclick="toggleReply(this)">
-                                        Reply
+                            <input id="commentId" type="hidden" value="${comment.commentId}" >
+                        </div>
+                             <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
+                        <div class="card-text comment-date">
+                            <div class="vote-section vote-section-cmt" id="vote-section-cmt">
+                                <i  id="vote_comment_up" class="anticon anticon_vote anticon-arrow-up mr-2" 
+                                    onclick="voteComment('up', ${comment.commentId})" style="padding: 10px"></i>
+                                <i  id="vote_comment_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
+                                    onclick="voteComment('down', ${comment.commentId})" style="padding: 10px"></i>
+                                <span id="vote_comment_value">${comment.vote}</span>
+                            </div>
+                           <%}%>
+                            <c:if test="${not empty user}">
+                                <c:if test="${user.userId == commentUser.userId && comment.status eq 'active'}">
+                                    <button type="button" class="btn reply-button" data-comment-id="${comment.commentId}" 
+                                            data-toggle="modal" data-target="#editCommentModal">
+                                        Edit
                                     </button>
                                 </c:if>
-                            </div>
-                            <div id="replyComment_${comment.commentId}" class="replyComment justify-content-between align-items-center d-none">
-                                <textarea class="form-control" rows="2" id="msgReply_${comment.commentId}" 
-                                          minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
-                                <button type="button" class="btn btn-success btn-submit-comment"
-                                        data-comment-id="${comment.commentId}" 
-                                        data-reply-user="${commentUser.username}" onclick="sendMsgReply(this)">
-                                    <i class="fas fa-paper-plane fa-2x"></i>
+                                <button class="btn reply-button"  data-comment-id="${comment.commentId}" onclick="toggleReply(this)">
+                                    Reply
                                 </button>
-                            </div>
+                            </c:if>
+                        </div>                         
+                         
+                            <span class="badge badge-secondary">
+                                ${commentDate}
+                            </span>
+                        <div id="replyComment_${comment.commentId}" class="replyComment justify-content-between align-items-center d-none">
+                            <textarea class="form-control" rows="2" id="msgReply_${comment.commentId}" 
+                                      minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
+                            <button type="button" class="btn btn-success btn-submit-comment"
+                                    data-comment-id="${comment.commentId}" onclick="sendMsgReply(this)">
+                                <i class="fas fa-paper-plane fa-2x"></i>
+                            </button>
                         </div>
                     </div>
-                </c:if>
+                </div>
 
-                <c:forEach var="commentReply" items="${commentsList}" varStatus="loop">
-                    <c:set var="commentUser" value="${userComment[loop.index]}" />
-                    <c:set var="commentUserRank" value="${userRank[loop.index]}" />
-                    <c:set var="commentDate" value="${commentTime[loop.index]}" />
-                    <c:if test="${commentReply.parentId !=null && commentReply.parentId == comment.commentId}">
-                        <div class="comment-container media" style="margin-left: 7%">
-                            <div class="comment-avatar ">
-                                <img alt="${commentUser.username}" 
-                                     title="${commentUser.username}" 
-                                     src="${pageContext.request.contextPath}/${commentUser.profilePhoto}" 
-                                     onerror="this.src='assets/images/others/product-3.jpg'">
-                            </div>
-                            <div class="comment-input-block media-body" id="comment_${loop.index}">
-                                <p class="card-text">
-                                    <span class="card-title" data-rank-color=" ${commentUserRank.color}" >
-                                        ${commentUserRank.name}
-                                    </span>
-                                    <span class="text-truncate" title="${commentUser.username}" >
-                                        ${commentUser.username}
-                                    </span>
-
-                                </p>
-                                <div class="card comment-card" data-rank-color="${commentUserRank.color}">
-                                    <div class="card-body">
-                                        <c:choose>
-                                            <c:when test="${commentReply.status eq 'active'}">
-                                                ${commentReply.content}
-                                            </c:when>
-                                            <c:otherwise>
-                                                This comment has been deleted.
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </div>
-                                    <input id="commentId" type="hidden" value="${commentReply.commentId}" >
-                                </div>
-                                <div class="card-text comment-date">
-                                    <span class="badge badge-secondary">
-                                        ${commentDate}
-                                    </span>
-                                    <c:if test="${not empty user && post.status == 'active'}">
-                                        <c:if test="${user.userId == commentUser.userId && comment.status eq 'active'}">
-                                            <button type="button" class="btn reply-button" data-comment-id="${commentReply.commentId}" 
-                                                    data-toggle="modal" data-target="#editCommentModal">
-                                                Edit
-                                            </button>
-                                        </c:if>
-                                        <button class="btn reply-button"  data-comment-id="${commentReply.commentId}" onclick="toggleReply(this)">
-                                            Reply
-                                        </button>
-                                    </c:if>
-                                </div>
-                                <div id="replyComment_${commentReply.commentId}" class="replyComment justify-content-between align-items-center d-none">
-                                    <textarea class="form-control" rows="2" id="msgReply_${commentReply.commentId}" 
-                                              minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
-                                    <button type="button" class="btn btn-success btn-submit-comment"
-                                            data-comment-id="${comment.commentId}" 
-                                            data-reply-user="${commentUser.username}" onclick="sendMsgReply(this)">
-                                        <i class="fas fa-paper-plane fa-2x"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </c:if>
-                </c:forEach>
             </c:forEach>
             <c:if test="${empty commentsList}">
                 <p>No comments found.</p>
@@ -319,10 +286,12 @@
 </div>
 
 <!-- Report Post Modal -->
+
 <div class="modal fade" id="reportPostModal" tabindex="-1" role="dialog" aria-labelledby="reportPostModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                
                 <h5 class="modal-title" id="reportPostModalLabel">Report Post</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -514,7 +483,7 @@
             console.error("postId không tồn tại trong URL");
             return; // Thoát nếu không có postId
         }
-        if (msg.length < 30) {
+        if (msg.length < 1) {
             alert("Enter at least 30 word...");
         } else {
             $.ajax({
@@ -561,8 +530,8 @@
             console.error("postId không tồn tại trong URL");
             return; // Thoát nếu không có postId
         }
-        if (msg.length < 30) {
-            alert("Enter at least 30 word...");
+        if (msg.length < 1) {
+            alert("Empty comment");
         } else {
             $.ajax({
                 type: 'POST',

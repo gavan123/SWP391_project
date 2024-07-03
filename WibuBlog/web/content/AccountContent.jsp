@@ -21,25 +21,23 @@
         </form>
     </c:when>
     <c:otherwise>
-        <% User user = (User)session.getAttribute("user");
-           UserDAO userDAO = new UserDAO();
-           String rank = userDAO.getRankByRankID(user.getRankId());
-           String rankColor = userDAO.getColorByRank(rank);
-           String role = userDAO.getRoleByRoleID(user.getRoleId()); 
-           MediaDAO mediaDAO = new MediaDAO();
-           Media media = mediaDAO.getMedia(user.getProfilePhoto());
-        %>
+        <%                             User user = (User)session.getAttribute("user");
+                               UserDAO userDAO = new UserDAO();                            
+                               String rankColor = userDAO.getColorByRank(userDAO.getRankByUserId(user.getUserId()));
+                               String role = userDAO.getRoleByRoleID(user.getRoleId()); 
+                               
+%>
         <li class="dropdown dropdown-animated scale-left">
             <div class="pointer" data-toggle="dropdown">
                 <div class="avatar avatar-image m-h-10 m-r-15">
                     <c:choose>
-                        <c:when test="<%=media != null%>">
-                            <img src="<%=media.getPath()%>" alt="">
-                        </c:when>
-                        <c:otherwise>
-                            <img src="" alt="">
-                        </c:otherwise>
-                    </c:choose>
+                                <c:when test="${user.profilePhoto != null}">
+                                    <img src="${pageContext.request.contextPath}/images/game/${user.profilePhoto}" alt="">
+                                </c:when>
+                                <c:otherwise>
+                                    <img src="" alt="">
+                                </c:otherwise>
+                            </c:choose>
                 </div>
             </div>
             <div class="p-b-15 p-t-20 dropdown-menu pop-profile">
@@ -47,8 +45,8 @@
                     <div class="d-flex m-r-50">
                         <div class="avatar avatar-lg avatar-image">
                             <c:choose>
-                                <c:when test="<%=media != null%>">
-                                    <img src="<%=media.getPath()%>" alt="">
+                                <c:when test="${user.profilePhoto != null}">
+                                    <img src="${pageContext.request.contextPath}/images/game/${user.profilePhoto}" alt="">
                                 </c:when>
                                 <c:otherwise>
                                     <img src="" alt="">
@@ -57,7 +55,7 @@
                         </div>
                         <div class="m-l-10">
                             <p class="m-b-0 text-dark font-weight-semibold">${user.username}</p>
-                            <p class="m-b-0 opacity-07" style="color:<%=rankColor%>"><%=rank%></p>
+                            <p class="m-b-0 opacity-07" style="color:<%=rankColor%>"><%=userDAO.getRankByUserId(user.getUserId())%></p>
                         </div>
                     </div>
                 </div>

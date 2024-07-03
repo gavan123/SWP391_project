@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.User;
@@ -37,7 +38,7 @@ public class UserDAO extends DBContext {
                         rs.getString("Email"),
                         rs.getString("Fullname"),
                         rs.getInt("RankID"),
-                        rs.getInt("ProfilePhoto"),
+                        rs.getString("ProfilePhoto") != null ? rs.getString("ProfilePhoto") : null,
                         rs.getString("PhoneNumber"),
                         rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
                         rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null);
@@ -50,7 +51,152 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
+    public void setUserStatusByUserId(int userId, String userStatus){
+        try {
+            String sql = "update [user] set Status = ? where userid = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, userStatus);
+            ps.setInt(2, userId);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public ArrayList<User> getTop10User() {
+        try {
+            String sql = "select top(10) * from [user]";
+            ArrayList<User> top10UserList = new ArrayList();
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                top10UserList.add(new User(rs.getInt("UserId"),
+                        rs.getString("Username"),
+                        rs.getString("Password"),
+                        rs.getInt("RoleId"),
+                        rs.getInt("Point"),
+                        rs.getString("Status"),
+                        rs.getString("Email"),
+                        rs.getString("Fullname"),
+                        rs.getInt("RankID"),
+                        rs.getString("ProfilePhoto") != null ? rs.getString("ProfilePhoto") : null,
+                        rs.getString("PhoneNumber") != null ? rs.getString("PhoneNumber") : null,
+                        rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
+                        rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null,
+                        rs.getString("Bio") != null ? rs.getString("Bio") : null));
+            }
+            return top10UserList;
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public void subtractUserPointByUserId(int userId){
+        try {
+            String sql = "update [user] set point = point - 1 where userid = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }     
+    }
+    
+       public void addUserPointByUserId(int userId){
+        try {
+            String sql = "update [user] set point = point + 1 where userid = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }     
+    }
+       
+    public String getUserStatusByUserId(int userId){
+        try {
+            String sql = "select * from [user] where userid = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getString("Status");
+            }     
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    public int getUserTotalPostLast3Days(int userId) {
+        try {
+            int totalUserPost = 0;
+            String sql = "SELECT \n"
+                    + "    [UserID],\n"
+                    + "    COUNT(*) AS TotalPosts\n"
+                    + "FROM \n"
+                    + "    [dbo].[Post]\n"
+                    + "WHERE \n"
+                    + "    [PostTime] >= DATEADD(day, -3, GETDATE()) and userid = ? \n"
+                    + "GROUP BY \n"
+                    + "    [UserID];";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                totalUserPost = rs.getInt("TotalPosts");
+                return totalUserPost;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
 
+    public ArrayList<User> searchUser(String username) {
+        try {
+            String sql = "select * from [user] where username like '%" + username + "%'";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            ArrayList<User> list = new ArrayList();
+            while(rs.next()){
+                list.add(new User(rs.getInt("UserId"),
+                        rs.getString("Username"),
+                        rs.getString("Password"),
+                        rs.getInt("RoleId"),
+                        rs.getInt("Point"),
+                        rs.getString("Status"),
+                        rs.getString("Email"),
+                        rs.getString("Fullname"),
+                        rs.getInt("RankID"),
+                        rs.getString("ProfilePhoto") != null ? rs.getString("ProfilePhoto") : null,
+                        rs.getString("PhoneNumber") != null ? rs.getString("PhoneNumber") : null,
+                        rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
+                        rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null,
+                        rs.getString("Bio") != null ? rs.getString("Bio") : null));
+            }
+            return list;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    public void setUserRoleIdByUserId(int userId,int roleId){
+        try {
+            String sql = "Update [user] set roleid = ? where userid = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, roleId);
+            ps.setInt(2, userId);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
     public User getUserById(int userId) {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -70,7 +216,7 @@ public class UserDAO extends DBContext {
                         rs.getString("Email"),
                         rs.getString("Fullname"),
                         rs.getInt("RankID"),
-                        rs.getInt("ProfilePhoto"),
+                        rs.getString("ProfilePhoto") != null ? rs.getString("ProfilePhoto") : null,
                         rs.getString("PhoneNumber"),
                         rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
                         rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null);
@@ -183,8 +329,43 @@ public class UserDAO extends DBContext {
                         rs.getString("Email"),
                         rs.getString("Fullname"),
                         rs.getInt("RankID"),
-                        rs.getInt("ProfilePhoto"),
-                        rs.getString("PhoneNumber"),
+                        rs.getString("ProfilePhoto") != null ? rs.getString("ProfilePhoto") : null,
+                        rs.getString("PhoneNumber") != null ? rs.getString("PhoneNumber") : null,
+                        rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
+                        rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null,
+                        rs.getString("Bio") != null ? rs.getString("Bio") : null);
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        return null;
+    }
+    
+    public User getUserByUserId(int userId) {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "select * from [user] where userId = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return new User(
+                        rs.getInt("UserID"),
+                        rs.getString("Username"),
+                        rs.getString("Password"),
+                        rs.getInt("RoleID"),
+                        rs.getInt("Point"),
+                        rs.getString("Status"),
+                        rs.getString("Email"),
+                        rs.getString("Fullname"),
+                        rs.getInt("RankID"),
+                        rs.getString("ProfilePhoto") != null ? rs.getString("ProfilePhoto") : null,
+                        rs.getString("PhoneNumber") != null ? rs.getString("PhoneNumber") : null,
                         rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
                         rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null,
                         rs.getString("Bio") != null ? rs.getString("Bio") : null);
@@ -276,12 +457,12 @@ public class UserDAO extends DBContext {
         }
     }
 
-    public void updateProfilePhoto(int userId, int profilePhotoID) {
+    public void updateProfilePhoto(int userId, String profilePhotoID) {
         PreparedStatement ps = null;
         try {
             String sql = "UPDATE [user] SET ProfilePhoto = ? WHERE UserID = ?";
             ps = connection.prepareStatement(sql);
-            ps.setInt(1, profilePhotoID);
+            ps.setString(1, profilePhotoID);
             ps.setInt(2, userId);
             ps.execute();
             ps.close();
@@ -331,6 +512,23 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
+    
+    public String getRankByUserId(int userId){
+        try {
+            String sql = "select * from [rank] where rankid = (select rankid from [user] where userid = ?)";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            String rank = rs.getString("name");
+            return rank;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+   
 
     public String getRoleByRoleID(int roleID) {
         try {
@@ -417,109 +615,5 @@ public class UserDAO extends DBContext {
 
     }
 
-    public boolean checkUserIsActive(int userId) {
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            String sql = "SELECT COUNT(*) FROM [User] WHERE [Status] = 'active' AND [UserID] = ?";
-            ps = connection.prepareStatement(sql);
-            ps.setInt(1, userId);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                int count = rs.getInt(1);
-                return count > 0;
-            }
-            return false;
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        } finally {
-            closeResultSet(rs);
-            closePreparedStatement(ps);
-        }
-    }
 
-    public boolean checkUserIsBan(int userId) {
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            String sql = "SELECT * FROM [UserBan]\n"
-                    + "WHERE [UserID] = ? ";
-            ps = connection.prepareStatement(sql);
-            ps.setInt(1, userId);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                int count = rs.getInt(1);
-                return count > 0;
-            }
-            return false;
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        } finally {
-            closeResultSet(rs);
-            closePreparedStatement(ps);
-        }
-    }
-
-    public boolean isUserBanTimeExpired(int userId) {
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            String sql = "SELECT Count(*) FROM [UserBan]\n"
-                    + "WHERE [UserID] = ? AND GETDATE() > [BanEndDate]";
-            ps = connection.prepareStatement(sql);
-            ps.setInt(1, userId);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                int count = rs.getInt(1);
-                return count > 0;
-            }
-            return false;
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        } finally {
-            closeResultSet(rs);
-            closePreparedStatement(ps);
-        }
-    }
-
-    public void BanUser(int userId, int duration) {
-        String sql = "INSERT INTO [dbo].[UserBan] ([UserID], [BanStartDate], [BanEndDate]) "
-                + "VALUES (?, GETDATE(), DATEADD(DAY, ?, GETDATE()))";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, userId);
-            ps.setInt(2, duration);
-            // Thực thi câu lệnh INSERT
-            ps.executeUpdate();
-            // Hiển thị thông báo thành công
-            System.out.println("User with ID " + userId + " has been banned for " + duration + " hours.");
-        } catch (SQLException ex) {
-            System.err.println("Insert to UserBan failed: " + ex.getMessage());
-        }
-    }
-
-    public boolean RemoveUserFromBan(int userId) {
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            String sql = "DELETE FROM [UserBan] WHERE [UserID] = ?";
-            ps = connection.prepareStatement(sql);
-            ps.setInt(1, userId);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                int count = rs.getInt(1);
-                return count > 0;
-            }
-            return false;
-        } catch (SQLException ex) {
-            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        } finally {
-            closeResultSet(rs);
-            closePreparedStatement(ps);
-        }
-    }
 }

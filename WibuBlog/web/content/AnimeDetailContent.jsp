@@ -38,7 +38,9 @@
               integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
               crossorigin="anonymous">
         <style>
-            .card {
+            .card-img-top {
+                max-width: 500px;
+                margin-right: 1rem;
 
             }
         </style>
@@ -48,7 +50,7 @@
             <div class="row">
                 <div class="col-lg-8">
                     <div class="card mb-3">
-                        <img src="<%= anime.getImageAnime() %>" class="card-img-top" alt="<%= anime.getTitle() %>">
+                        <img src="<%= anime.getImageAnime() %>" class="card-img-top" alt="<%= anime.getTitle() %>" onerror="this.src='assets/images/others/product-3.jpg'">
                         <div class="card-body">
                             <h1 class="card-title"><%= anime.getTitle() %></h1>
                             <h6 class="card-subtitle mb-2 text-muted">
@@ -67,6 +69,10 @@
                             <h6 class="card-subtitle mb-2 text-muted">
                                 <i class="fas fa-info-circle"></i> Status: <%= anime.getStatus() %>
                             </h6>
+                            <form>
+                                <h6><!-- comment -->
+                                </h6>
+                            </form>
                             <p class="card-text">
                                 <%= anime.getSynopsis() %>
                             </p>

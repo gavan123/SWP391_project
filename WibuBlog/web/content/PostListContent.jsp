@@ -11,17 +11,15 @@
         </div>
 
         <c:forEach var="post" items="${allPosts}">
-            <c:if test="${post.status=='active'}">
-                <div class="card mb-2 rounded-2">
-                    <div class="card-body">
-                        <h2 class="card-title">
-                            <a href="postDetail?postId=${post.postId}" />${post.title}</a>
-                        </h2>
-                        <img class="float-left posts-img img-thumbnail mr-2" src="${pageContext.request.contextPath}/images/${post.image}" onerror="this.src='assets/images/others/product-3.jpg'">
-                        <p class="card-text">${post.content}</p>
-                    </div>
+            <div class="card mb-2 rounded-2">
+                <div class="card-body">
+                    <h2 class="card-title">
+                        <a href="postDetail?postId=${post.postId}" />${post.title}</a>
+                    </h2>
+                    <img class="float-left posts-img img-thumbnail mr-2" src="${pageContext.request.contextPath}/images/game/${post.image}" onerror="this.src='assets/images/others/product-3.jpg'">
+                    <p class="card-text">${post.content}</p>
                 </div>
-            </c:if>
+            </div>
         </c:forEach>
 
         <div class="card mb-2 rounded-2">

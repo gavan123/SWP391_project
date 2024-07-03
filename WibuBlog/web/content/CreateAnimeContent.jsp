@@ -63,7 +63,7 @@
                 </div>
                 <div class="form-group">
                     <label for="imageAnime">Image URL:</label>
-                    <input type="text" class="form-control" id="imageAnime" name="imageAnime" required>
+                    <input type="file" class="form-control"name="image" id="image" accept="image/png,image/jpeg,image/jpg,image/bmp,image/gif" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Create Anime</button>
             </form>

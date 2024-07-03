@@ -6,6 +6,7 @@ package controller;
 
 import dal.CategoryDAO;
 import dal.GenreDAO;
+import dal.MediaDAO;
 import dal.PostDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -30,6 +31,7 @@ import model.Genre;
 import model.Post;
 import model.User;
 import utility.ImageHandler;
+import utility.ProfanityFilter;
 
 /**
  *
@@ -112,8 +114,18 @@ public class CreatePost extends HttpServlet {
         String content = request.getParameter("content");
         Part part = request.getPart("image");
         String submittedFileName = part.getSubmittedFileName();
+        MediaDAO mediaDAO = new MediaDAO();
 
         // Kiểm tra nếu nguồn không được cung cấp, mặc định là "Anime Forum"
+        if (ProfanityFilter.checkProfanity(source) || ProfanityFilter.checkProfanity(content)) {
+            PrintWriter out = response.getWriter();
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('Please RECONSIDER YOUR PROFILE');");
+            out.println("location='CreatePost.jsp';");
+            out.println("</script>");
+            response.sendRedirect("CreatePost.jsp");
+            return;
+        }
         if (source == null || source.isEmpty()) {
             source = "Anime Forum";
         }
@@ -134,12 +146,11 @@ public class CreatePost extends HttpServlet {
         
         PostDAO postDAO = new PostDAO();
         // Tạo tên file ảnh mới bằng cách mã hóa và kết hợp với tên gốc
-        String encodedImageName = postDAO.encodeImageName(user.getUserId());
-        String imageFinal = encodedImageName + submittedFileName;
+        String imageFinal = mediaDAO.encodeMediaName(user.getUserId()) + "." + ImageHandler.getExtension(submittedFileName); 
 
         // Tạo đối tượng Post
         Post post = new Post(user.getUserId(), categoryId, title, content,
-                source, "post/" + imageFinal, LocalDateTime.MIN, "active");
+                source, imageFinal, LocalDateTime.MIN, "active");
 
         // Thực hiện lưu bài post vào cơ sở dữ liệu
         boolean isPostCreated = postDAO.createPost(post);

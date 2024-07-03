@@ -15,7 +15,11 @@
             <label for="someId" class="custom-file-upload">Upload Image</label>      
             <span id="fileName" class="file-name"></span><br>
             <p> you can skip this step </p>
+
+
             <button type="submit" >Done</button>
+
+
         </div>    
             </form>
         
@@ -32,12 +36,6 @@
                 });
                 break;
             case 'jpeg':
-                 document.getElementById('someId').addEventListener('change', function(event) {
-                const fileName = this.files[0] ? this.files[0].name : '';
-                document.getElementById('fileName').textContent = fileName;
-                });
-                break;
-            case 'webp':
                  document.getElementById('someId').addEventListener('change', function(event) {
                 const fileName = this.files[0] ? this.files[0].name : '';
                 document.getElementById('fileName').textContent = fileName;

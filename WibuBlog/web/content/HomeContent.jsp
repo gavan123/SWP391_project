@@ -10,14 +10,19 @@
 <%@ page import="dal.GenreDAO" %>
 <%@ page import="model.TopViewedGenre" %>
 <%@ page import="dal.PostDAO" %>
+
+<%                             User user = (User)session.getAttribute("user");
+                               UserDAO ud = new UserDAO();   
+                               PostDAO pd = new PostDAO();
+%>
 <div class="thinking-card">
-    <c:if test="${user.status == 'active'}">
+     <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
     <label for="image">What are your thought?</label>
     <a href="createPost">Create a post</a>
-    </c:if>
-    <c:if test="${user.status == 'deactive'}">
+    <%}%>
+     <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
     <label for="image">You are currently banned please wait for your ban to expire to post</label>
-    </c:if>
+    <%}%>
 </div>
 <c:forEach var="fileName" items="${image}">
     <img src="${pageContext.request.contextPath}/images/game/${fileName}" alt="Uploaded Image">
@@ -36,8 +41,7 @@
                 </tr>
             </thead>
             <tbody>
-                <% UserDAO ud = new UserDAO();
-                   PostDAO pd = new PostDAO();
+               <%
                    int rank = 0;
                    for(User x : pd.getTop10UserByPoint()){%>                                
                 <tr>

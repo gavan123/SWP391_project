@@ -1,7 +1,15 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="model.User" %>
+<%@ page import="model.Media" %>
+<%@ page import="dal.UserDAO" %>
+<%@ page import="dal.MediaDAO" %>
+<%@ page import="dal.PostDAO" %>
 
+<%                             User user = (User)session.getAttribute("user");
+                               UserDAO ud = new UserDAO();                                                        
+%>
 
 
 <style>
@@ -45,10 +53,13 @@
                     </div>
                     <hr>
                     <c:if test="${post.username != user.username}">
+                         <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
                         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
                             <i class="fas fa-flag"></i> Report Post
                         </button>
+                        <%}%>
                     </c:if>
+                     <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
                     <div class="row">
                         <div class="col-lg-4 mb-2 mx-auto">
                             <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
@@ -64,6 +75,10 @@
                             </ul>
                         </div>
                     </div>
+                                    <%}%>
+                                     <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
+                                     <p style="color: red">You are not allowed to vote whilst banned</p>
+                                     <%}%>
                 </div>
             </div>
         </c:when>
@@ -114,6 +129,7 @@
                         </div>
                     </c:when>
                     <c:otherwise>
+                         <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
                         <div class="border-0 bg-none mt-2 media align-items-center">
                             <div class="comment-avatar mr-2">
                                 <img alt="${user.username}" title="${user.username}" 
@@ -130,6 +146,10 @@
                                 </div>
                             </div>
                         </div>
+                                     <%}%>
+                                      <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
+                                      <p style="color: red">You are not allowed to comment whilst banned</p>
+                                     <%}%>
                     </c:otherwise>
                 </c:choose>
             </c:if>
@@ -171,7 +191,7 @@
                             </div>
                             <input id="commentId" type="hidden" value="${comment.commentId}" >
                         </div>
-                             <%if (ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
+                             <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
                         <div class="card-text comment-date">
                             <div class="vote-section vote-section-cmt" id="vote-section-cmt">
                                 <i  id="vote_comment_up" class="anticon anticon_vote anticon-arrow-up mr-2" 
@@ -264,10 +284,12 @@
 </div>
 
 <!-- Report Post Modal -->
+
 <div class="modal fade" id="reportPostModal" tabindex="-1" role="dialog" aria-labelledby="reportPostModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
+                
                 <h5 class="modal-title" id="reportPostModalLabel">Report Post</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>

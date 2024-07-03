@@ -82,7 +82,7 @@
         <img class="img-thumbnail rounded-circle mx-auto d-block mt-2" 
              alt="${post.username}" title="${post.username}" 
              style="width:120px;height:120px" 
-             src="${pageContext.request.contextPath}/${post.image}"
+             src="${pageContext.request.contextPath}/images/game/${post.image}"
              onerror="this.src='assets/images/others/product-3.jpg'">
         <div class="card-body">
             <p class="card-title text-center fw-700 mb-0">
@@ -117,7 +117,7 @@
                         <div class="border-0 bg-none mt-2 media align-items-center">
                             <div class="comment-avatar mr-2">
                                 <img alt="${user.username}" title="${user.username}" 
-                                     src="${pageContext.request.contextPath}/${user.profilePhoto}"
+                                     src="${pageContext.request.contextPath}/images/game/${user.profilePhoto}"
                                      onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
                             </div>
                             <div class="comment-input-block media-body">
@@ -145,7 +145,7 @@
                         <div class="comment-avatar">
                             <img alt="${commentUser.username}" 
                                  title="${commentUser.username}" 
-                                 src="${pageContext.request.contextPath}/${commentUser.profilePhoto}" 
+                                 src="${pageContext.request.contextPath}/images/game/${commentUser.profilePhoto}" 
                                  onerror="this.src='assets/images/others/product-3.jpg'">
                         </div>
                         <div class="comment-input-block media-body" id="comment_${loop.index}">
@@ -208,7 +208,7 @@
                             <div class="comment-avatar ">
                                 <img alt="${commentUser.username}" 
                                      title="${commentUser.username}" 
-                                     src="${pageContext.request.contextPath}/${commentUser.profilePhoto}" 
+                                     src="${pageContext.request.contextPath}/images/game/${commentUser.profilePhoto}" 
                                      onerror="this.src='assets/images/others/product-3.jpg'">
                             </div>
                             <div class="comment-input-block media-body" id="comment_${loop.index}">
@@ -514,7 +514,7 @@
             console.error("postId không tồn tại trong URL");
             return; // Thoát nếu không có postId
         }
-        if (msg.length < 30) {
+        if (msg.length < 1) {
             alert("Enter at least 30 word...");
         } else {
             $.ajax({

@@ -11,13 +11,17 @@
 <%@ page import="model.TopViewedGenre" %>
 <%@ page import="dal.PostDAO" %>
 <div class="thinking-card">
-    <c:if test="${user.status == 'active'}">
     <label for="image">What are your thought?</label>
     <a href="createPost">Create a post</a>
-    </c:if>
-    <c:if test="${user.status == 'deactive'}">
-    <label for="image">You are currently banned please wait for your ban to expire to post</label>
-    </c:if>
+    <!-- Uncomment this form if you need it in the future
+    <form name="imageUpCopy" action="imageUpCopy" method="POST" enctype="multipart/form-data" class="border p-4 mt-4">
+        <div class="form-group">
+            <label for="image">Choose Images:</label>
+            <input type="file" class="form-control-file" name="image" id="image" accept="image/png,image/jpeg,image/jpg,image/bmp,image/gif" multiple>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload Images</button>
+    </form>
+    -->
 </div>
 <c:forEach var="fileName" items="${image}">
     <img src="${pageContext.request.contextPath}/images/game/${fileName}" alt="Uploaded Image">

@@ -97,15 +97,13 @@
                                             <c:forEach items="${notificationList}" var="noti">     
                                                 <c:if test="${noti.sourceUserId != noti.targetUserId}">
                                                 <c:choose>
-                                                <c:when test="${noti.sourcePostId != 0}">
+                                                <c:when test="${noti.sourcePostId != null}">
                                                      <p class="link" style="float:right;margin-right: 30px" onclick="deleteNotification(${noti.notificationId})">x</p>
                                                     
                                                     <a href="postDetail?postId=${noti.sourcePostId}" class="dropdown-item d-block p-15 border-bottom">                                            
                                                 </c:when>
                                                  <c:otherwise>
-                                                     <p class="link" style="float:right;margin-right: 30px" onclick="deleteNotification(${noti.notificationId})">x</p>
                                                     <a href="Profile.jsp" class="dropdown-item d-block p-15 border-bottom">
-                                                    
                                                    </c:otherwise>
                                                 </c:choose>
                                                 <div class="d-flex">
@@ -113,6 +111,7 @@
                                                          <c:choose>
                                                 <c:when test="${noti.sourcePostId != null}">
                                                       <i class="anticon anticon-project">*</i>
+                                                 
                                                 </c:when>
                                                  <c:otherwise>
                                                     <i class="anticon anticon-profile"></i>

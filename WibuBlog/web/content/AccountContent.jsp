@@ -21,12 +21,12 @@
         </form>
     </c:when>
     <c:otherwise>
-        <%                             User user = (User)session.getAttribute("user");
-                               UserDAO userDAO = new UserDAO();                            
-                               String rankColor = userDAO.getColorByRank(userDAO.getRankByUserId(user.getUserId()));
-                               String role = userDAO.getRoleByRoleID(user.getRoleId()); 
-                               
-%>
+        <% User user = (User)session.getAttribute("user");
+           UserDAO userDAO = new UserDAO();
+           String rank = userDAO.getRankByRankID(user.getRankId());
+           String rankColor = userDAO.getColorByRank(rank);
+           String role = userDAO.getRoleByRoleID(user.getRoleId()); 
+        %>
         <li class="dropdown dropdown-animated scale-left">
             <div class="pointer" data-toggle="dropdown">
                 <div class="avatar avatar-image m-h-10 m-r-15">
@@ -55,7 +55,7 @@
                         </div>
                         <div class="m-l-10">
                             <p class="m-b-0 text-dark font-weight-semibold">${user.username}</p>
-                            <p class="m-b-0 opacity-07" style="color:<%=rankColor%>"><%=userDAO.getRankByUserId(user.getUserId())%></p>
+                            <p class="m-b-0 opacity-07" style="color:<%=rankColor%>"><%=rank%></p>
                         </div>
                     </div>
                 </div>

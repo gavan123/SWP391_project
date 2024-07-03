@@ -1,9 +1,3 @@
-<%-- 
-    Document   : QuestionList
-    Created on : Jun 12, 2024, 9:27:16 PM
-    Author     : ADMIN
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>

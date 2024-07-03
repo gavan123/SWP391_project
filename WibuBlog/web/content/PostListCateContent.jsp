@@ -4,10 +4,7 @@
 <jsp:useBean id="c" scope="request" class="dal.CategoryDAO" />
 
 <div class="row pb-6">
-
-
     <div class="col-lg-12">
-
         <div class="card mb-1 rounded-2 border-0">
             <div class="card-header">
                 <h1 class="card-title text-uppercase text-center">

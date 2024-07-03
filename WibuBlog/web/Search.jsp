@@ -1,8 +1,4 @@
-<%-- 
-    Document   : Search
-    Created on : Jun 20, 2024, 2:06:12 AM
-    Author     : minht
---%>
+
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>

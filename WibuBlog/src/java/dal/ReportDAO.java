@@ -14,7 +14,7 @@ import model.Report;
 
 public class ReportDAO extends DBContext {
 
-public List<Report> listReportByID(int reportId) {
+    public List<Report> listReportByID(int reportId) {
         List<Report> reportList = new ArrayList<>();
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -29,16 +29,17 @@ public List<Report> listReportByID(int reportId) {
             ps.setInt(1, reportId);
             rs = ps.executeQuery();
             while (rs.next()) {
-                int userId = rs.getInt("UserID");
-                LocalDateTime postReportTime = rs.getTimestamp("PostReport").toLocalDateTime();
-                String reason = rs.getString("Reason");
-                int postId = rs.getInt("PostID");
-                String status = rs.getString("Status");
-                String titleReport = rs.getString("PostTitle");
-                String usernameReport = rs.getString("Username");
-                String note = rs.getString("Note");
-
-                Report report = new Report(reportId, postReportTime, reason, postId, status, usernameReport, titleReport, note);
+                 Report report = new Report(
+                        rs.getInt("ReportID"),
+                        rs.getInt("UserID"),
+                        rs.getTimestamp("PostReport").toLocalDateTime(),
+                        rs.getString("Reason"),
+                        rs.getInt("PostID"),
+                        rs.getString("Status"),
+                        rs.getString("Username"),
+                        rs.getString("PostTitle"),
+                        rs.getString("Note")
+                );
                 reportList.add(report);
             }
         } catch (SQLException ex) {
@@ -67,6 +68,7 @@ public List<Report> listReportByID(int reportId) {
             if (rs.next()) {
                 return new Report(
                         rs.getInt("ReportID"),
+                        rs.getInt("UserID"),
                         rs.getTimestamp("PostReport").toLocalDateTime(),
                         rs.getString("Reason"),
                         rs.getInt("PostID"),
@@ -103,6 +105,7 @@ public List<Report> listReportByID(int reportId) {
             while (rs.next()) {
                 Report report = new Report(
                         rs.getInt("ReportID"),
+                        rs.getInt("UserID"),
                         rs.getTimestamp("PostReport").toLocalDateTime(),
                         rs.getString("Reason"),
                         rs.getInt("PostID"),
@@ -140,6 +143,7 @@ public List<Report> listReportByID(int reportId) {
             while (rs.next()) {
                 Report report = new Report(
                         rs.getInt("ReportID"),
+                        rs.getInt("UserID"),
                         rs.getTimestamp("PostReport").toLocalDateTime(),
                         rs.getString("Reason"),
                         rs.getInt("PostID"),
@@ -177,6 +181,7 @@ public List<Report> listReportByID(int reportId) {
             while (rs.next()) {
                 Report report = new Report(
                         rs.getInt("ReportID"),
+                        rs.getInt("UserID"),
                         rs.getTimestamp("PostReport").toLocalDateTime(),
                         rs.getString("Reason"),
                         rs.getInt("UserID"),

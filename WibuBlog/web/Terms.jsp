@@ -1,8 +1,4 @@
-<%-- 
-    Document   : terms
-    Created on : May 23, 2024, 6:31:36 PM
-    Author     : user
---%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

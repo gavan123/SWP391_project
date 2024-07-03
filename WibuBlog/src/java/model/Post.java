@@ -24,8 +24,23 @@ public class Post {
     private int vote;
     private int view;
     private int commentCount;
+     private int ReportCount;
 
     public Post() {
+    }
+
+    public Post(int postId, int userId, int categoryId, String title, String source, String image, LocalDateTime postTime, String status, int vote, int view, int ReportCount) {
+        this.postId = postId;
+        this.userId = userId;
+        this.categoryId = categoryId;
+        this.title = title;
+        this.source = source;
+        this.image = image;
+        this.postTime = postTime;
+        this.status = status;
+        this.vote = vote;
+        this.view = view;
+        this.ReportCount = ReportCount;
     }
 
     public Post(int userId, int categoryId, String title, String content, String source, String image, LocalDateTime postTime, String status) {
@@ -175,6 +190,14 @@ public class Post {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getReportCount() {
+        return ReportCount;
+    }
+
+    public void setReportCount(int ReportCount) {
+        this.ReportCount = ReportCount;
     }
 
 }

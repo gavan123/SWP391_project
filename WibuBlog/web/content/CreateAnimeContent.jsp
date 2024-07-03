@@ -62,8 +62,13 @@
                     <input type="text" class="form-control" id="studio" name="studio" required>
                 </div>
                 <div class="form-group">
-                    <label for="imageAnime">Image URL:</label>
-                    <input type="file" class="form-control"name="image" id="image" accept="image/png,image/jpeg,image/jpg,image/bmp,image/gif" required>
+                    <label for="image">Image URL</label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="image" name="image" 
+                               accept="image/png,image/jpeg,image/jpg,image/bmp,image/gif,image/webp" required>
+                        <label class="custom-file-label" for="image">Choose file...</label>
+                        <small class="form-text text-muted">Accepted formats: PNG, JPEG, JPG, BMP, GIF, WEBP</small>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Create Anime</button>
             </form>

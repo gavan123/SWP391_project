@@ -5,9 +5,6 @@
 
 package controller;
 
-import dal.PostDAO;
-import dal.ReportDAO;
-import dal.TicketDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,18 +12,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.time.LocalDateTime;
-import model.Report;
 import model.Ticket;
-import model.User;
+import dal.TicketDAO;
 
 /**
  *
  * @author admin
  */
-@WebServlet(name="CreateTicket", urlPatterns={"/CreateTicket"})
-public class CreateTicket extends HttpServlet {
+@WebServlet(name="TicketDetail", urlPatterns={"/TicketDetail"})
+public class TicketDetail extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -43,10 +37,10 @@ public class CreateTicket extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CreateTicket</title>");  
+            out.println("<title>Servlet TicketDetail</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CreateTicket at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet TicketDetail at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -63,7 +57,21 @@ public class CreateTicket extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        TicketDAO td = new TicketDAO();
+        
+        int ticketId = Integer.parseInt((String)request.getParameter("ticketId"));
+        Ticket ticket = td.getTicketById(ticketId);
+        if (ticket != null) {
+            request.setAttribute("ticket", td);
+            request.getRequestDispatcher("TicketDetail.jsp").forward(request, response);
+        } else {
+            request.setAttribute("errorMessage", "Unable to retrieve ticket.");
+            request.setAttribute("redirectTarget", "Ticket list");
+            request.setAttribute("redirectUrl", "AllTicket.jsp");
+            request.getRequestDispatcher("Error.jsp").forward(request, response);
+        }
+        
+        
     } 
 
     /** 
@@ -76,20 +84,7 @@ public class CreateTicket extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        TicketDAO td = new TicketDAO();
-
-        User user = (User) session.getAttribute("user");
-        String content = request.getParameter("content");
-
-        if (user != null && content.length() > 0) {
-            Ticket ticket = new Ticket(user.getUserId(), LocalDateTime.now(), content);
-            td.addTicket(ticket);
-            request.getRequestDispatcher("Home.jsp").forward(request, response);
-        } else {
-            request.setAttribute("errorMessage", "Something went wrong.");
-            request.getRequestDispatcher("Error.jsp").forward(request, response);
-        }
+        processRequest(request, response);
     }
 
     /** 

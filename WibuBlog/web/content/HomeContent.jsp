@@ -11,7 +11,7 @@
 <%@ page import="model.TopViewedGenre" %>
 <%@ page import="dal.PostDAO" %>
 <div class="thinking-card">
-    <label for="image">What are your thought?</label>
+    <label for="image">What's on your mind?</label>
     <a href="createPost">Create a post</a>
     <!-- Uncomment this form if you need it in the future
     <form name="imageUpCopy" action="imageUpCopy" method="POST" enctype="multipart/form-data" class="border p-4 mt-4">

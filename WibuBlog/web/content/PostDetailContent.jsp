@@ -377,7 +377,7 @@
             }, 200); // Reload sau 0.2 giây 
         });
     };
-
+    
     //Show change upvote downvote
     document.addEventListener('DOMContentLoaded', function () {
         const votePostStatus = `${votePostStatus}`; // Đảm bảo votePostStatus là string
@@ -507,7 +507,7 @@
             return; // Thoát nếu không có postId
         }
         if (msg.length < 30) {
-            alert("Tối thiểu 30 ký tự...");
+            alert("Enter at least 30 word...");
         } else {
             $.ajax({
                 type: 'POST',

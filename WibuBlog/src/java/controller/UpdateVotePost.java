@@ -6,6 +6,7 @@ package controller;
 
 import dal.NotificationDAO;
 import dal.PostDAO;
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -81,7 +82,7 @@ public class UpdateVotePost extends HttpServlet {
         HttpSession session = request.getSession();
         User userSession = (User) session.getAttribute("user");
         NotificationDAO nd = new NotificationDAO();
-        
+        UserDAO ud = new UserDAO();
 
         PostDAO postDAO = new PostDAO();
         // Kiểm tra các tham số từ request
@@ -111,6 +112,14 @@ public class UpdateVotePost extends HttpServlet {
             boolean updateSuccess = postDAO.updateVote(postId, voteValue);
             
             if(updateSuccess){
+                if(voteStatusStr.equals("upvote")){
+                ud.addUserPointByUserId(postDAO.getUserIdByPostId(postId));
+                nd.createUpvoteNotification(postId, userId, postDAO.getUserIdByPostId(postId));
+                }
+                else{
+                    ud.subtractUserPointByUserId(postDAO.getUserIdByPostId(postId));
+                    nd.createDownvoteNotification(postId, userId, postDAO.getUserIdByPostId(postId));
+                }
             response.setStatus(HttpServletResponse.SC_OK);
             }
             else{

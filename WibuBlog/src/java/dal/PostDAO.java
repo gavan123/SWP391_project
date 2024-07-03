@@ -417,7 +417,21 @@ public class PostDAO extends DBContext {
             closePreparedStatement(ps);
         }
     }
-
+    
+    public int getUserIdByPostId(int postid){
+        try {
+            String sql = "select * from [post] where postid = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, postid);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("UserId");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
     public boolean hasUserVoted(int userId, int postId) {
         PreparedStatement ps = null;
         ResultSet rs = null;

@@ -1,8 +1,3 @@
-<%-- 
-    Document   : Header
-    Created on : May 31, 2024, 8:07:48 PM
-    Author     : ADMIN
---%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -21,6 +16,7 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
         <style>
           .logo{width:100%;max-width:300px;margin:0 auto}
 .logo img{width:100%;height:70px;display:block}
@@ -131,7 +127,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            
                             </li>
                             </c:if>
                             <jsp:include page="${param.accountHeader}" />

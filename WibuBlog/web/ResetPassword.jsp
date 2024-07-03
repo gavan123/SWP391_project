@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -6,15 +5,11 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Reset password</title>
-
         <!-- Favicon -->
         <link rel="shortcut icon" href="">
-
         <!-- page css -->
-
         <!-- Core css -->
         <link href="assets/css/app.min.css" rel="stylesheet">
-
     </head>
 
     <body>

@@ -12,9 +12,6 @@
 <%@ page import="java.util.List" %>
 
 
-
-
-
 <%
     String animeIdS = (String)request.getParameter("animeId");
     int animeId = -1;

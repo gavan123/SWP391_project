@@ -278,9 +278,10 @@ public class PostDAO extends DBContext {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM Post WHERE Title LIKE ?";
+            String sql = "SELECT * FROM [dbo].[Post] p INNER JOIN [dbo].[User] u ON p.[UserID] = u.[UserID] WHERE p.[Title] LIKE ? OR u.[Username] LIKE ?";
             ps = connection.prepareStatement(sql);
             ps.setString(1, "%" + name + "%");
+            ps.setString(2, "%" + name + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
                 Post post = new Post(

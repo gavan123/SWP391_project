@@ -11,6 +11,7 @@
 </style>
  <% UserDAO ud = new UserDAO();
     User user = (User)session.getAttribute("user");%>
+    <p>gay</p>
 <div class="col-lg-12 mb-2">
     <div class="card mb-2">
         <div class="card-body">
@@ -19,7 +20,7 @@
                     <a style="float: right" href="#" onclick="confirmDelete(${post.postID})">Delete post</a>
                 </c:if>
                 <h1 class="card-title" style="font-size: 26px;line-height:34px">${post.title}</h1>
-
+                
             </header>
             <h6 class="card-subtitle mb-2 fw-700" style="font-size: small !important;">
                 <i class="fas fa-user"></i> 

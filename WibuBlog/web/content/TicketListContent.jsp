@@ -46,8 +46,8 @@
                 %>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="col-10 text-truncate font-weight-bold">
-                        <a href="javascript:void(0);" onclick="openPopup('<%= user.getUsername() %>', '${ticket.content}')">
-                            <%= user.getUsername() %>: ${ticket.content}
+                        <a href="javascript:void(0);" onclick="openPopup('<%= user1.getUsername() %>', '${ticket.content}')">
+                            <%= user1.getUsername() %>: ${ticket.content}
                         </a>
 
                     </div>

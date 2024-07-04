@@ -24,7 +24,8 @@ public class Post {
     private int vote;
     private int view;
     private int commentCount;
-     private int ReportCount;
+    private int ReportCount;
+    private int VoteCount;
 
     public Post() {
     }
@@ -54,7 +55,7 @@ public class Post {
         this.status = status;
     }
 
-    public Post (int postId, int userId, int categoryId, String title, String content, String source, String image, String status, int vote, int view) {
+    public Post(int postId, int userId, int categoryId, String title, String content, String source, String image, String status, int vote, int view) {
         this.postId = postId;
         this.userId = userId;
         this.categoryId = categoryId;
@@ -199,5 +200,15 @@ public class Post {
     public void setReportCount(int ReportCount) {
         this.ReportCount = ReportCount;
     }
+
+    public int getVoteCount() {
+        return VoteCount;
+    }
+
+    public void setVoteCount(int VoteCount) {
+        this.VoteCount = VoteCount;
+    }
+    
+    
 
 }

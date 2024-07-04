@@ -29,7 +29,7 @@ public class ReportDAO extends DBContext {
             ps.setInt(1, reportId);
             rs = ps.executeQuery();
             while (rs.next()) {
-                 Report report = new Report(
+                Report report = new Report(
                         rs.getInt("ReportID"),
                         rs.getInt("UserID"),
                         rs.getTimestamp("PostReport").toLocalDateTime(),
@@ -128,37 +128,32 @@ public class ReportDAO extends DBContext {
     // Method to retrieve a list of reports by postId
     public List<Report> getReportsByPostId(int postId) {
         List<Report> reportList = new ArrayList<>();
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-        try {
-            String sql = "SELECT rp.ReportID, rp.UserID, rp.PostReport, rp.Reason, rp.PostID, rp.Status, "
-                    + "p.Title AS PostTitle, u.Username AS Username, rp.Note "
-                    + "FROM Report rp "
-                    + "JOIN Post p ON p.PostID = rp.PostID "
-                    + "JOIN [User] u ON u.UserID = rp.UserID "
-                    + "WHERE rp.PostID = ?";
-            ps = connection.prepareStatement(sql);
+        String sql = "SELECT rp.ReportID, rp.UserID, rp.PostReport, rp.Reason, rp.PostID, rp.Status, "
+                + "p.Title AS PostTitle, u.Username AS Username, rp.Note "
+                + "FROM Report rp "
+                + "JOIN Post p ON p.PostID = rp.PostID "
+                + "JOIN [User] u ON u.UserID = rp.UserID "
+                + "WHERE rp.PostID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, postId);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Report report = new Report(
-                        rs.getInt("ReportID"),
-                        rs.getInt("UserID"),
-                        rs.getTimestamp("PostReport").toLocalDateTime(),
-                        rs.getString("Reason"),
-                        rs.getInt("PostID"),
-                        rs.getString("Status"),
-                        rs.getString("Username"),
-                        rs.getString("PostTitle"),
-                        rs.getString("Note")
-                );
-                reportList.add(report);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Report report = new Report(
+                            rs.getInt("ReportID"),
+                            rs.getInt("UserID"),
+                            rs.getTimestamp("PostReport").toLocalDateTime(),
+                            rs.getString("Reason"),
+                            rs.getInt("PostID"),
+                            rs.getString("Status"),
+                            rs.getString("Username"),
+                            rs.getString("PostTitle"),
+                            rs.getString("Note")
+                    );
+                    reportList.add(report);
+                }
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            closeResultSet(rs);
-            closePreparedStatement(ps);
+            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, "Error retrieving reports for postId: " + postId, ex);
         }
         return reportList;
     }

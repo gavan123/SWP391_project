@@ -12,16 +12,20 @@
 
 
         <c:forEach var="post" items="${p.allPostHaveReport}">
-            <c:if test="${post.status eq 'active'}">
+            <c:if test="${post.status eq 'active' && post.userId != user.userId}">
                 <div class="card mb-2 rounded-2" style="border-color:aqua;border-style:double;border-width:medium">
                     <div class="card-body">
+                        <img class="float-left posts-img img-thumbnail mr-2 w-20"
+                             src="${pageContext.request.contextPath}/images/${post.image}" 
+                             onerror="this.src='assets/images/others/product-3.jpg'">
                         <ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between align-items-center" style="background:none;border:none">
-                                <div class="col-10 text-truncate font-weight-bold">
-                                    <a href="postDetail?postId=54">ádasdasdasdsd</a>
+                                <div class="col-10 text-truncate font-weight-bold ">
+                                    <a href="postDetail?postId=${post.postId}">${post.title}</a>
                                 </div>
                                 <div class="col-2 d-flex justify-content-end">
-                                    <button type="button" class="btn btn-warning btn-sm mx-1" data-toggle="tooltip" 
+                                    <button type="button" class="btn btn-warning btn-sm mx-1 view-report-btn" data-id="${post.postId}" 
+                                            data-toggle="tooltip" 
                                             title="View report" data-toggle="modal" data-target="#reportModal">
                                         <i class="anticon anticon-exclamation-circle"></i>
                                     </button>
@@ -64,15 +68,8 @@
                             <th scope="col">Date</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>User123</td>
-                            <td>Inappropriate contentádsadasdasdasdasdasdasdasd ádasdasdasdasdnaskjldnalsndkl</td>
-                            <td>Inappropriate</td>
-                            <td>2024-07-01</td>
-                        </tr>
-                        <!-- More rows as needed -->
+                    <tbody class="table" id="report-details">
+
                     </tbody>
                 </table>
             </div>
@@ -88,8 +85,24 @@
         $('[data-toggle="tooltip"]').tooltip();
 
         // Ensure that the modal is triggered by the button
-        $('[data-target="#reportModal"]').on('click', function () {
-            $('#reportModal').modal('show');
+        $('.view-report-btn').on('click', function () {
+            var postId = $(this).data('id');
+            $.ajax({
+                url: 'viewReportTable', // URL to fetch report details
+                type: 'GET',
+                data: {postId: postId},
+                success: (data) => {
+                    $('#report-details').html(data);
+                    $('#reportModal').modal('show');
+                },
+                error: (xhr, status, error) => {
+                    var errorMessage = xhr.status + ': ' + xhr.statusText;
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage += '\n' + xhr.responseJSON.message;
+                    }
+                    alert('Failed to fetch report details.\nError: ' + errorMessage);
+                }
+            });
         });
     });
 

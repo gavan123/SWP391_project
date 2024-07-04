@@ -18,7 +18,7 @@ public class ReportDAO extends DBContext {
         List<Report> reportList = new ArrayList<>();
         PreparedStatement ps = null;
         ResultSet rs = null;
-        String sql = "SELECT rp.ReportID, rp.UserID, rp.PostReport, rp.Reason, rp.PostID, rp.Status, "
+        String sql = "SELECT rp.ReportID, rp.UserID, rp.TimeCreated, rp.Reason, rp.PostID, rp.Status, "
                 + "p.Title AS PostTitle, u.Username AS Username, rp.Note "
                 + "FROM Report rp "
                 + "JOIN Post p ON p.PostID = rp.PostID "
@@ -32,7 +32,7 @@ public class ReportDAO extends DBContext {
                  Report report = new Report(
                         rs.getInt("ReportID"),
                         rs.getInt("UserID"),
-                        rs.getTimestamp("PostReport").toLocalDateTime(),
+                        rs.getTimestamp("TimeCreated").toLocalDateTime(),
                         rs.getString("Reason"),
                         rs.getInt("PostID"),
                         rs.getString("Status"),
@@ -56,7 +56,7 @@ public class ReportDAO extends DBContext {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT rp.ReportID, rp.UserID, rp.PostReport, rp.Reason, rp.PostID, rp.Status, "
+            String sql = "SELECT rp.ReportID, rp.UserID, rp.TimeCreated, rp.Reason, rp.PostID, rp.Status, "
                     + "p.Title AS PostTitle, u.Username AS Username, rp.Note "
                     + "FROM Report rp "
                     + "JOIN Post p ON p.PostID = rp.PostID "
@@ -69,7 +69,7 @@ public class ReportDAO extends DBContext {
                 return new Report(
                         rs.getInt("ReportID"),
                         rs.getInt("UserID"),
-                        rs.getTimestamp("PostReport").toLocalDateTime(),
+                        rs.getTimestamp("TimeCreated").toLocalDateTime(),
                         rs.getString("Reason"),
                         rs.getInt("PostID"),
                         rs.getString("Status"),
@@ -93,7 +93,7 @@ public class ReportDAO extends DBContext {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT rp.ReportID, rp.PostReport, rp.Reason, rp.PostID, rp.Status, rp.Note, "
+            String sql = "SELECT rp.ReportID, rp.TimeCreated, rp.Reason, rp.PostID, rp.Status, rp.Note, "
                     + "p.Title AS PostTitle, u.Username AS Username "
                     + "FROM Report rp "
                     + "JOIN Post p ON p.PostID = rp.PostID "
@@ -106,7 +106,7 @@ public class ReportDAO extends DBContext {
                 Report report = new Report(
                         rs.getInt("ReportID"),
                         rs.getInt("UserID"),
-                        rs.getTimestamp("PostReport").toLocalDateTime(),
+                        rs.getTimestamp("TimeCreated").toLocalDateTime(),
                         rs.getString("Reason"),
                         rs.getInt("PostID"),
                         rs.getString("Status"),
@@ -131,7 +131,7 @@ public class ReportDAO extends DBContext {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT rp.ReportID, rp.UserID, rp.PostReport, rp.Reason, rp.PostID, rp.Status, "
+            String sql = "SELECT rp.ReportID, rp.UserID, rp.TimeCreated, rp.Reason, rp.PostID, rp.Status, "
                     + "p.Title AS PostTitle, u.Username AS Username, rp.Note "
                     + "FROM Report rp "
                     + "JOIN Post p ON p.PostID = rp.PostID "
@@ -144,7 +144,7 @@ public class ReportDAO extends DBContext {
                 Report report = new Report(
                         rs.getInt("ReportID"),
                         rs.getInt("UserID"),
-                        rs.getTimestamp("PostReport").toLocalDateTime(),
+                        rs.getTimestamp("TimeCreated").toLocalDateTime(),
                         rs.getString("Reason"),
                         rs.getInt("PostID"),
                         rs.getString("Status"),
@@ -169,7 +169,7 @@ public class ReportDAO extends DBContext {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT rp.ReportID, rp.UserID, rp.PostReport, rp.Reason, rp.PostID, rp.Status, rp.Note, "
+            String sql = "SELECT rp.ReportID, rp.UserID, rp.TimeCreated, rp.Reason, rp.PostID, rp.Status, rp.Note, "
                     + "p.Title AS PostTitle, u.Username AS Username "
                     + "FROM Report rp "
                     + "JOIN Post p ON p.PostID = rp.PostID "
@@ -182,7 +182,7 @@ public class ReportDAO extends DBContext {
                 Report report = new Report(
                         rs.getInt("ReportID"),
                         rs.getInt("UserID"),
-                        rs.getTimestamp("PostReport").toLocalDateTime(),
+                        rs.getTimestamp("TimeCreated").toLocalDateTime(),
                         rs.getString("Reason"),
                         rs.getInt("UserID"),
                         rs.getString("Status"),

@@ -1,8 +1,3 @@
-<%-- 
-    Document   : PostDetail
-    Created on : Jun 18, 2024, 10:10:02 PM
-    Author     : ADMIN
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>

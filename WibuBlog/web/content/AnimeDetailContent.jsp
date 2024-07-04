@@ -1,8 +1,4 @@
-<%-- 
-    Document   : AnimeDetailContent
-    Created on : Jun 25, 2024, 4:10:10 PM
-    Author     : minht
---%>
+
 
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

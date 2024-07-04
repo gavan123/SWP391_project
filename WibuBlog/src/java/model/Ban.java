@@ -17,25 +17,37 @@ public class Ban {
     private String banReason;
     private LocalDateTime bannedDate;
     private LocalDateTime expireDate;
+    private int sourcePostId;
 
     public Ban() {
     }
 
-    public Ban(int banId, int bannedUserId, int banSourceId, String banReason, LocalDateTime bannedDate, LocalDateTime expireDate) {
+    public Ban(int banId, int bannedUserId, int banSourceId, String banReason, LocalDateTime bannedDate, LocalDateTime expireDate,int sourcePostId) {
         this.banId = banId;
         this.bannedUserId = bannedUserId;
         this.banSourceId = banSourceId;
         this.banReason = banReason;
         this.bannedDate = bannedDate;
         this.expireDate = expireDate;
+        this.sourcePostId = sourcePostId;
     }
-
-    public Ban(int bannedUserId, int banSourceId, String banReason, LocalDateTime bannedDate, LocalDateTime expireDate) {
+    
+    public Ban( int bannedUserId, int banSourceId, String banReason, LocalDateTime bannedDate, LocalDateTime expireDate) {
         this.bannedUserId = bannedUserId;
         this.banSourceId = banSourceId;
         this.banReason = banReason;
         this.bannedDate = bannedDate;
         this.expireDate = expireDate;
+    }
+
+
+    public Ban(int bannedUserId, int banSourceId, String banReason, LocalDateTime bannedDate, LocalDateTime expireDate,int sourcePostId) {
+        this.bannedUserId = bannedUserId;
+        this.banSourceId = banSourceId;
+        this.banReason = banReason;
+        this.bannedDate = bannedDate;
+        this.expireDate = expireDate;
+        this.sourcePostId = sourcePostId;
     }
    
     public int getBanId() {
@@ -85,6 +97,15 @@ public class Ban {
     public void setExpireDate(LocalDateTime expireDate) {
         this.expireDate = expireDate;
     }
-    
+
+    public int getSourcePostId() {
+        return sourcePostId;
+    }
+
+    public void setSourcePostId(int sourcePostId) {
+        this.sourcePostId = sourcePostId;
+    }
+
+   
     
 }

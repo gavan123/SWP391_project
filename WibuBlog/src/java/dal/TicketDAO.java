@@ -20,6 +20,35 @@ public class TicketDAO extends DBContext {
     public TicketDAO(Connection connection) {
         this.connection = connection;
     }
+    
+    public List<Ticket> getAllTickets() {
+        List<Ticket> ticketList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "select * from [Ticket]";
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Ticket report = new Ticket(
+                        rs.getInt("TicketID"),
+                        rs.getInt("UserID"),
+                        rs.getTimestamp("TimeCreated").toLocalDateTime(),
+                        rs.getString("Content"),
+                        rs.getString("Status"),
+                        rs.getString("Note"));
+                
+                ticketList.add(report);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        return ticketList;
+    }
+
 
     public Ticket getTicketById(int ticketId) {
         PreparedStatement ps = null;
@@ -77,7 +106,7 @@ public class TicketDAO extends DBContext {
     }
 
     public List<Ticket> getTicketsByStatus(String status) {
-        List<Ticket> reportList = new ArrayList<>();
+        List<Ticket> ticketList = new ArrayList<>();
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
@@ -94,7 +123,7 @@ public class TicketDAO extends DBContext {
                         rs.getString("Status"),
                         rs.getString("Note"));
                 
-                reportList.add(report);
+                ticketList.add(report);
             }
         } catch (SQLException ex) {
             Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -102,8 +131,65 @@ public class TicketDAO extends DBContext {
             closeResultSet(rs);
             closePreparedStatement(ps);
         }
-        return reportList;
+        return ticketList;
     }
+    
+    public List<Ticket> getPendingTickets() {
+        List<Ticket> ticketList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "select * from [Ticket] where Status = N'Pending' order by [TimeCreated] desc";
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Ticket report = new Ticket(
+                        rs.getInt("TicketID"),
+                        rs.getInt("UserID"),
+                        rs.getTimestamp("TimeCreated").toLocalDateTime(),
+                        rs.getString("Content"),
+                        rs.getString("Status"),
+                        rs.getString("Note"));
+                
+                ticketList.add(report);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        return ticketList;
+    }
+    
+    public List<Ticket> getResolvedTickets() {
+        List<Ticket> ticketList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "select * from [Ticket] where Status = N'Approved' OR Status = N'Rejected'";
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Ticket report = new Ticket(
+                        rs.getInt("TicketID"),
+                        rs.getInt("UserID"),
+                        rs.getTimestamp("TimeCreated").toLocalDateTime(),
+                        rs.getString("Content"),
+                        rs.getString("Status"),
+                        rs.getString("Note"));
+                
+                ticketList.add(report);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        return ticketList;
+    }
+
 
     public void addTicket(Ticket ticket) {
         PreparedStatement ps = null;

@@ -81,12 +81,11 @@ public class CreateTicket extends HttpServlet {
 
         User user = (User) session.getAttribute("user");
         String content = request.getParameter("content");
-        int postId = Integer.parseInt(request.getParameter("postid"));
 
-        if (user != null && content.length() > 0 && postId > 1) {
+        if (user != null && content.length() > 0) {
             Ticket ticket = new Ticket(user.getUserId(), LocalDateTime.now(), content);
             td.addTicket(ticket);
-            request.getRequestDispatcher("Home.jsp" + postId).forward(request, response);
+            request.getRequestDispatcher("Home.jsp").forward(request, response);
         } else {
             request.setAttribute("errorMessage", "Something went wrong.");
             request.getRequestDispatcher("Error.jsp").forward(request, response);

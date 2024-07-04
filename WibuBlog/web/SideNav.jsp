@@ -5,20 +5,19 @@
     .side-nav{
         background-color: #5ce0e6;
     }
-
 </style>
 <div class="side-nav">
     <div class="side-nav-inner">
         <ul class="side-nav-menu scrollable">
             <c:if test="${user != null}">
-            <li class="nav-item dropdown">
-                <a class="dropdown-toggle" href="DashBoard">
-                    <span class="icon-holder">
-                        <i class="anticon anticon-dashboard"></i>
-                    </span>
-                    <span class="title">Dashboard</span>
-                </a>
-            </li>
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle" href="DashBoard">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-dashboard"></i>
+                        </span>
+                        <span class="title">Dashboard</span>
+                    </a>
+                </li>
             </c:if>
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle" href="javascript:void(0);">
@@ -45,6 +44,24 @@
                     </c:forEach>
                 </ul>
             </li>
+            <c:if test="${user != null && user.roleId ==2}">
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle" href="javascript:void(0);">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-build"></i>
+                        </span>
+                        <span class="title">Mod</span>
+                        <span class="arrow">
+                            <i class="arrow-icon"></i>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="checkReportedPosts">Report Post</a>
+                        </li>
+                    </ul>
+                </li>
+            </c:if>
             <li class="nav-item dropdown">
                 <a class="dropdown-toggle" href="javascript:void(0);">
                     <span class="icon-holder">

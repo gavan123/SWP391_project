@@ -25,6 +25,18 @@ public class Report {
     public Report() {
     }
 
+    public Report(int reportId, int userId, LocalDateTime postReportTime, String reason, int postId, String statusReport, String usernameReport, String titleReport, String note) {
+        this.reportId = reportId;
+        this.userId = userId;
+        this.postReportTime = postReportTime;
+        this.reason = reason;
+        this.postId = postId;
+        this.statusReport = statusReport;
+        this.usernameReport = usernameReport;
+        this.titleReport = titleReport;
+        this.note = note;
+    }
+
     public Report(int userId, LocalDateTime postReportTime, String reason, int postId, String statusReport, String note, String string3, String string4) {
         this.userId = userId;
         this.postReportTime = postReportTime;

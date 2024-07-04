@@ -17,7 +17,7 @@
 %>
  <%if (user != null && ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
 <div class="thinking-card">    
-    <label for="image">What are your thought?</label>
+    <label for="image">What's on your mind?</label>
     <a href="createPost">Create a post</a>
 </div>
     <%}%>

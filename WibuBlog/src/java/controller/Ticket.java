@@ -12,9 +12,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-
-@WebServlet(name = "AccountSetting", urlPatterns = {"/AccountSetting"})
-public class AccountSetting extends HttpServlet {
+/**
+ *
+ * @author admin
+ */
+@WebServlet(name = "Ticket", urlPatterns = {"/Ticket"})
+public class Ticket extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,10 +36,10 @@ public class AccountSetting extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AccountSetting</title>");            
+            out.println("<title>Servlet Ticket</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AccountSetting at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Ticket at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -54,7 +57,7 @@ public class AccountSetting extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect("AccountSetting.jsp");
+        response.sendRedirect("AllTicket.jsp");
     }
 
     /**

@@ -69,8 +69,6 @@ public class PostDAO extends DBContext {
         }
     }
 
-
-
     public void updatePostImage(String url, int postID) {
         try {
             String sql = "update [post] set image = ? where postID = ?";
@@ -127,7 +125,7 @@ public class PostDAO extends DBContext {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Post post = new Post(
-                         rs.getInt("PostID"),
+                        rs.getInt("PostID"),
                         rs.getInt("UserID"),
                         rs.getInt("CategoryID"),
                         rs.getString("Title"),
@@ -280,9 +278,10 @@ public class PostDAO extends DBContext {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT * FROM Post WHERE Title LIKE ?";
+            String sql = "SELECT * FROM [dbo].[Post] p INNER JOIN [dbo].[User] u ON p.[UserID] = u.[UserID] WHERE p.[Title] LIKE ? OR u.[Username] LIKE ?";
             ps = connection.prepareStatement(sql);
             ps.setString(1, "%" + name + "%");
+            ps.setString(2, "%" + name + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
                 Post post = new Post(
@@ -417,14 +416,14 @@ public class PostDAO extends DBContext {
             closePreparedStatement(ps);
         }
     }
-    
-    public int getUserIdByPostId(int postid){
+
+    public int getUserIdByPostId(int postid) {
         try {
             String sql = "select * from [post] where postid = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, postid);
             ResultSet rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 return rs.getInt("UserId");
             }
         } catch (SQLException ex) {
@@ -432,6 +431,7 @@ public class PostDAO extends DBContext {
         }
         return 0;
     }
+
     public boolean hasUserVoted(int userId, int postId) {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -636,7 +636,6 @@ public class PostDAO extends DBContext {
         return null;
     }
 
-
     public boolean deletePost(int postId) {
         PreparedStatement ps = null;
         try {
@@ -660,8 +659,7 @@ public class PostDAO extends DBContext {
         return userID + "_" + formattedDateTime;
     }
 
-
-    public int getUserIdOfPostByPostID(int postId){
+    public int getUserIdOfPostByPostID(int postId) {
         int userId = 0;
         try {
             String sql = "select * from [post] where postid = ?";
@@ -675,16 +673,6 @@ public class PostDAO extends DBContext {
             Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return userId;
-    }    
-
-
-    public static void main(String[] args) {
-        PostDAO postDAO = new PostDAO();
-        List<Post> post = postDAO.getLimitedPosts(10);
-        for (Post post1 : post) {
-            System.out.println(post1.getPostId());
-        }
-
     }
 
     public int getTotalPostLast3Days() {
@@ -793,8 +781,8 @@ public class PostDAO extends DBContext {
         }
         return null;
     }
-    
-     public ArrayList<User> getAllUser() {
+
+    public ArrayList<User> getAllUser() {
         try {
             String sql = "select * from [user]";
             ArrayList<User> userList = new ArrayList();
@@ -822,7 +810,7 @@ public class PostDAO extends DBContext {
         }
         return null;
     }
-       
+
     public ArrayList<User> AllDeactivatedUser() {
         try {
             String sql = "select * from [user] where [status] = 'Deactive' ";
@@ -851,26 +839,26 @@ public class PostDAO extends DBContext {
         }
         return null;
     }
-    
-    public ArrayList<Post> getTop6VotedPost(){
+
+    public ArrayList<Post> getTop6VotedPost() {
         try {
-            String sql = "SELECT TOP 6 * FROM [dbo].[Post] WHERE [PostTime] >= DATEADD(day, -14, GETDATE())\n" +
-                    " ORDER BY [Vote] DESC;";
+            String sql = "SELECT TOP 6 * FROM [dbo].[Post] WHERE [PostTime] >= DATEADD(day, -14, GETDATE())\n"
+                    + " ORDER BY [Vote] DESC;";
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             ArrayList<Post> list = new ArrayList();
-            while(rs.next()){
+            while (rs.next()) {
                 list.add(new Post(rs.getInt("PostId"),
-                                rs.getInt("UserId"),
-                rs.getInt("CategoryID"),
-                rs.getString("Title"),
-                rs.getString("Content"),
-                rs.getString("Source"),
-                rs.getString("Image"),
-                rs.getTimestamp("PostTime").toLocalDateTime(),
-                rs.getString("Status"),
-                rs.getInt("Vote"),
-                rs.getInt("view")));
+                        rs.getInt("UserId"),
+                        rs.getInt("CategoryID"),
+                        rs.getString("Title"),
+                        rs.getString("Content"),
+                        rs.getString("Source"),
+                        rs.getString("Image"),
+                        rs.getTimestamp("PostTime").toLocalDateTime(),
+                        rs.getString("Status"),
+                        rs.getInt("Vote"),
+                        rs.getInt("view")));
             }
             return list;
         } catch (SQLException ex) {
@@ -878,9 +866,61 @@ public class PostDAO extends DBContext {
         }
         return null;
     }
-    
-    public String trimPostTitle(String title){
-        return title.substring(0,12) + "...";
+
+    public String trimPostTitle(String title) {
+        return title.substring(0, 12) + "...";
     }
-   
+
+    public List<Post> getAllPostHaveReport() {
+        List<Post> postList = new ArrayList<>();
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = """
+                         SELECT DISTINCT 
+                             p.PostID, p.UserID, p.CategoryID,CAST(p.Title AS varchar(max)) AS Title,
+                            p.[Source], p.[Image], p.PostTime,p.[Status], p.Vote, p.[View], COUNT(r.ReportID) AS ReportPerPost
+                         FROM Post AS p JOIN Report AS r ON p.PostID = r.PostID  
+                         GROUP BY 
+                             p.PostID, p.UserID, p.CategoryID,CAST(p.Title AS varchar(max)),
+                            p.[Source], p.[Image], p.PostTime,p.[Status], p.Vote, p.[View]
+                         ORDER BY 
+                             ReportPerPost DESC""";
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Post post = new Post(rs.getInt("PostID"), rs.getInt("UserID"),
+                        rs.getInt("CategoryID"),
+                        rs.getString("Title"),
+                        rs.getString("Source"),
+                        rs.getString("Image"),
+                        rs.getTimestamp("PostTime").toLocalDateTime(),
+                        rs.getString("Status"),
+                        rs.getInt("Vote"),
+                        rs.getInt("View"),
+                        rs.getInt("ReportPerPost")
+                );
+                postList.add(post);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            closeResultSet(rs);
+            closePreparedStatement(ps);
+        }
+        return postList;
+    }
+
+    public static void main(String[] args) {
+        PostDAO postDAO = new PostDAO();
+        List<Post> posts = postDAO.getAllPostHaveReport();
+        for (Post post : posts) {
+            System.out.println("Post ID: " + post.getPostId());
+            System.out.println("Title: " + post.getTitle());
+            System.out.println("Report Count: " + post.getReportCount());
+            System.out.println(); // In ra các thông tin cần thiết của từng bài post
+        }
+
+    }
+
 }

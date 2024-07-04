@@ -17,46 +17,16 @@
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <style>
-            body{
-                background-color:#f8f9fa;
-                color:#333
-            }
-            .btn-check{
-                display:none
-            }
-            .btn-check + .btn{
-                cursor:pointer;
-                margin-bottom:10px
-            }
-            .btn-check:checked + .btn{
-                background-color:#007bff;
-                color:#fff
-            }
-            .form-group{
-                margin-bottom:20px
-            }
-            .container{
-                background-color:#fff;
-                padding:20px;
-                border-radius:8px;
-                box-shadow:0 0 10px rgba(0,0,0,0.1)
-            }
-            .btn-primary{
-                background-color:#007bff;
-                border-color:#007bff
-            }
-            .btn-primary:hover{
-                background-color:#0056b3;
-                border-color:#004085
-            }
-            .custom-file-input{
-                cursor:pointer
-            }
-            .custom-file-label{
-                overflow:hidden;
-                white-space:nowrap;
-                text-overflow:ellipsis
-            }
+        body{background-color:#f8f9fa;color:#333}
+.btn-check{display:none}
+.btn-check + .btn{cursor:pointer;margin-bottom:10px}
+.btn-check:checked + .btn{background-color:#007bff;color:#fff}
+.form-group{margin-bottom:20px}
+.container{background-color:#fff;padding:20px;border-radius:8px;box-shadow:0 0 10px rgba(0,0,0,0.1)}
+.btn-primary{background-color:#007bff;border-color:#007bff}
+.btn-primary:hover{background-color:#0056b3;border-color:#004085}
+.custom-file-input{cursor:pointer}
+.custom-file-label{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
         </style>
         <script>
             function validateForm() {
@@ -78,6 +48,9 @@
     </head>
 
     <body>
+        <c:if test="${message != null}">
+            <p>${message}</p>
+        </c:if>
         <div class="container mt-4">
             <h2>Create a New Post</h2>
             <form action="createPost" method="post" id="uploadForm" enctype="multipart/form-data" onsubmit="return validateForm();">
@@ -133,5 +106,14 @@
                 });
 
 
+    </script>
+      <script type="text/javascript">
+        window.onload = function() {
+            // Check if the profanityDetected attribute is set
+            var profanityDetected = "<%= request.getAttribute("profanityDetected") %>";
+            if (profanityDetected === "true") {
+                alert("Please RECONSIDER YOUR POST.");
+            }
+        };
     </script>
 </html>

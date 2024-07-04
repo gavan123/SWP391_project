@@ -80,7 +80,9 @@ public class AddComment extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        PostDAO pd = new PostDAO();
+        PostDAO postDAO = new PostDAO();
+        CommentDAO commentDAO = new CommentDAO();
+        NotificationDAO notificationDAO = new NotificationDAO();
 
         try {
             // Check if user is logged in
@@ -91,34 +93,36 @@ public class AddComment extends HttpServlet {
                 return;
             }
 
-             User userSession = (User) session.getAttribute("user");
-        String content = request.getParameter("content");
-        int postId = Integer.parseInt(request.getParameter("postId")); // Chuyển đổi postId thành kiểu int
-        CommentDAO commentDAO = new CommentDAO();
-        Comment comment = new Comment(postId, userSession.getUserId(), content.trim(), null);
-        commentDAO.addComment(comment);
-        NotificationDAO nd = new NotificationDAO();
-        nd.createCommentNotification(postId, userSession.getUserId(), pd.getUserIdOfPostByPostID(postId));
-        } catch (NumberFormatException e) {
-            // Handle NumberFormatException (e.g., invalid postId or parentId)
-            String errorMessage = "Invalid postId or parentId.";
-            request.setAttribute("errorMessage", errorMessage);
-            request.getRequestDispatcher("Error.jsp").forward(request, response);
-        } catch (ServletException | IOException e) {
-            // Handle any other unexpected exceptions
+            // Retrieve user information from session
+            User userSession = (User) session.getAttribute("user");
+
+            // Retrieve information from request parameters
+            String content = request.getParameter("content");
+            int postId = Integer.parseInt(request.getParameter("postId")); // Convert postId to int
+            int parentId = Integer.parseInt(request.getParameter("parentId"));
+
+            // Create a comment object with the gathered information
+            Comment comment = new Comment(postId, userSession.getUserId(), content.trim(), parentId);
+
+            // Add the comment to the database
+            commentDAO.addComment(comment);
+
+            // Create a notification for the post owner about the new comment
+            int postOwnerId = postDAO.getUserIdOfPostByPostID(postId);
+            notificationDAO.createCommentNotification(postId, userSession.getUserId(), postOwnerId);
+
+        } catch (NumberFormatException | ServletException | IOException e) {
+            // Handle exceptions
             String errorMessage = "Error adding comment: " + e.getMessage();
             request.setAttribute("errorMessage", errorMessage);
             request.getRequestDispatcher("Error.jsp").forward(request, response);
         }
-        // Người dùng đã đăng nhập, tiếp tục quá trình thêm bình luận
 
     }
-
 
     @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 
 }

@@ -29,7 +29,7 @@ public class ReportDAO extends DBContext {
             ps.setInt(1, reportId);
             rs = ps.executeQuery();
             while (rs.next()) {
-                 Report report = new Report(
+                Report report = new Report(
                         rs.getInt("ReportID"),
                         rs.getInt("UserID"),
                         rs.getTimestamp("TimeCreated").toLocalDateTime(),
@@ -153,12 +153,10 @@ public class ReportDAO extends DBContext {
                         rs.getString("Note")
                 );
                 reportList.add(report);
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            closeResultSet(rs);
-            closePreparedStatement(ps);
+            Logger.getLogger(ReportDAO.class.getName()).log(Level.SEVERE, "Error retrieving reports for postId: " + postId, ex);
         }
         return reportList;
     }

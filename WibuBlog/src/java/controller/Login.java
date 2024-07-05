@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
 import dal.LoginDAO;
@@ -14,7 +10,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
 import model.User;
 import security.Hash;
 
@@ -66,9 +61,9 @@ public class Login extends HttpServlet {
 
         // Check if the username or password is empty and set an error message if true
         if (username == null || password == null) {
-
             request.setAttribute("errorMessage", "Username or password is empty!");
             request.getRequestDispatcher("Login.jsp").forward(request, response);
+            return;
         }
 
         // Hash the input password using a utility class
@@ -91,20 +86,23 @@ public class Login extends HttpServlet {
             User user = userdao.getUserByUsername(username);
             if (user != null) {
                 session.setAttribute("user", user);
+                // Set attributes for role checks
+                session.setAttribute("isAdmin", dao.isAdmin(username));
+                session.setAttribute("isMod", dao.isMod(username));
+                session.setAttribute("isMember", dao.isMember(username));
                 // Redirect the user to the appropriate home page based on their role
                 if (userRole != null) {
                     switch (userRole) {
-                        case "Admin" ->
+                        case "Admin":
+                        case "Mod":
+                        case "Member":
                             request.getRequestDispatcher("Home.jsp").forward(request, response);
-                        case "Mod" ->
-                            request.getRequestDispatcher("Home.jsp").forward(request, response);
-                        case "Member" ->
-                            request.getRequestDispatcher("Home.jsp").forward(request, response);
-                        default -> {
+                            break;
+                        default:
                             // Set an error message if the user role is not recognized
                             request.setAttribute("errorMessage", "User role not recognized.");
                             request.getRequestDispatcher("Login.jsp").forward(request, response);
-                        }
+                            break;
                     }
                 }
             }
@@ -112,16 +110,11 @@ public class Login extends HttpServlet {
             // Set an error message if the login fails due to invalid username or password
             request.setAttribute("errorMessage", "Login failed! Invalid username or password.");
             request.getRequestDispatcher("Login.jsp").forward(request, response);
-
-            return;
         }
+    }
 
-    
-}
-
-@Override
-public String getServletInfo() {
+    @Override
+    public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }

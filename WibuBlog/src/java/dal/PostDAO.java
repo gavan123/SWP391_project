@@ -911,6 +911,56 @@ public class PostDAO extends DBContext {
         return postList;
     }
 
+    public int getTotalVoteForPost(int postId) {
+        String sql = "SELECT COUNT(*) AS TotalVotes FROM VoteUserPost WHERE PostID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, postId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("TotalVotes");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    public int getReportCountForPost(int postId) {
+        String sql = "SELECT COUNT(*) AS ReportCount FROM Report WHERE PostID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, postId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("ReportCount");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    public void checkAndSendReportsForPost(int postId) {
+        int reportCount = getReportCountForPost(postId);
+        int voteCount = getTotalVoteForPost(postId);
+
+        if (voteCount == 0) {
+            return;
+        }
+
+        double reportRate = (double) reportCount / voteCount;
+        if (reportRate >= 0.1) {
+            sendPostWithReports(postId);
+        }
+    }
+
+    private void sendPostWithReports(int postId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+   
+
     public static void main(String[] args) {
         PostDAO postDAO = new PostDAO();
         List<Post> posts = postDAO.getAllPostHaveReport();

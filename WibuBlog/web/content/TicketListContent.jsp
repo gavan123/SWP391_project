@@ -88,7 +88,7 @@
             %>
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 <div class="col-10 text-truncate font-weight-bold">
-                    <a href="TicketDetail?ticketId=${ticket.ticketId}"><%= user2.getUsername() %>: ${ticket.content}</a>
+                    <a href="#"><%= user2.getUsername() %>: ${ticket.content}</a>
                 </div>
                 <span class="badge badge-primary badge-pill">
                     <i class="far fa-comment-dots fa-lg"></i>

@@ -196,6 +196,8 @@ public class NotificationDAO extends DBContext {
             Logger.getLogger(NotificationDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
     public static void main(String[] args) {
         NotificationDAO nd = new NotificationDAO();
         ArrayList<Notification> list = nd.getTop10Notification(6);

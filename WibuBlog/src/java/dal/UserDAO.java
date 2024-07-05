@@ -64,6 +64,19 @@ public class UserDAO extends DBContext {
         }
     }
     
+     public void setUserStatusByUsername(String username, String userStatus){
+        try {
+            String sql = "update [user] set Status = ? where username = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, userStatus);
+            ps.setString(2, username);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+     
     public ArrayList<User> getTop10User() {
         try {
             String sql = "select top(10) * from [user]";
@@ -217,7 +230,7 @@ public class UserDAO extends DBContext {
                         rs.getString("Fullname"),
                         rs.getInt("RankID"),
                         rs.getString("ProfilePhoto") != null ? rs.getString("ProfilePhoto") : null,
-                        rs.getString("PhoneNumber"),
+                        rs.getString("PhoneNumber") != null ? rs.getString("ProfilePhoto") : null,
                         rs.getTimestamp("DateOfBirth") != null ? rs.getTimestamp("DateOfBirth").toLocalDateTime() : null,
                         rs.getTimestamp("CreationDate") != null ? rs.getTimestamp("CreationDate").toLocalDateTime() : null);
             }

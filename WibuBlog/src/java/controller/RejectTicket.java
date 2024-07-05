@@ -2,12 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
-import dal.PostDAO;
-import dal.ReportDAO;
 import dal.TicketDAO;
+import dal.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,46 +13,44 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.time.LocalDateTime;
-import model.Report;
-import model.Ticket;
-import model.User;
 
 /**
  *
  * @author admin
  */
-@WebServlet(name="CreateTicket", urlPatterns={"/CreateTicket"})
-public class CreateTicket extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+@WebServlet(name = "RejectTicket", urlPatterns = {"/RejectTicket"})
+public class RejectTicket extends HttpServlet {
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CreateTicket</title>");  
+            out.println("<title>Servlet RejectTicket</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CreateTicket at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet RejectTicket at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -62,12 +58,13 @@ public class CreateTicket extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        response.sendRedirect("CreateTicket.jsp");
-    } 
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -75,25 +72,20 @@ public class CreateTicket extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        HttpSession session = request.getSession();
+            throws ServletException, IOException {
+         String note = request.getParameter("note");
+        int ticketId = Integer.parseInt(request.getParameter("ticketId"));
+//        PrintWriter out = response.getWriter();
+//        out.print(ticketId + " " + note);
         TicketDAO td = new TicketDAO();
-
-        User user = (User) session.getAttribute("user");
-        String content = request.getParameter("content");
-
-        if (user != null && content.length() > 0) {
-            Ticket ticket = new Ticket(user.getUserId(), LocalDateTime.now(), content);
-            td.addTicket(ticket);
-            request.getRequestDispatcher("AllMemberTicket.jsp").forward(request, response);
-        } else {
-            request.setAttribute("errorMessage", "Something went wrong.");
-            request.getRequestDispatcher("Error.jsp").forward(request, response);
-        }
+        td.setStatusRejected(ticketId);
+        td.setNote(ticketId, note);
+        response.sendRedirect("AllTicket.jsp");
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

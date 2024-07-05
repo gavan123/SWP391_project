@@ -203,7 +203,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="m-b-0">Ticket</h5>
                             <div>
-                                <a href="Ticket" class="btn btn-sm btn-default">View All
+                                <a href="Ticket?Dashboard=a" class="btn btn-sm btn-default">View All
                                 </a>
                             </div>
                         </div>
@@ -249,9 +249,9 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="m-b-0">Popular Genre</h5>
-                            <div>
+                           <!-- <div>
                                 <a href="ViewAll?Data=CategoryStat" class="btn btn-sm btn-default">View All</a>
-                            </div>
+                            </div>-->
                         </div>
                         <div class="m-t-30">
                             <% for(TopViewedGenre x: gd.getTop6ViewedGenre()){%>

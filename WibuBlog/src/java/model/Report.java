@@ -14,50 +14,34 @@ public class Report {
 
    private int reportId;
     private int userId;
-    private LocalDateTime postReportTime;
+    private LocalDateTime timeCreated;
     private String reason;
     private int postId;
-    private String statusReport;
-    private String usernameReport;
-    private String titleReport;
+    private String status;
     private String note;
 
     public Report() {
     }
 
-    public Report(int reportId, int userId, LocalDateTime postReportTime, String reason, int postId, String statusReport, String usernameReport, String titleReport, String note) {
+    public Report(int reportId, int userId, LocalDateTime timeCreated, String reason, int postId, String status, String note) {
         this.reportId = reportId;
         this.userId = userId;
-        this.postReportTime = postReportTime;
+        this.timeCreated = timeCreated;
         this.reason = reason;
         this.postId = postId;
-        this.statusReport = statusReport;
-        this.usernameReport = usernameReport;
-        this.titleReport = titleReport;
-        this.note = note;
+        this.status = status;
+        this.note = note.length() > 0 ? note : "";
     }
 
-    public Report(int userId, LocalDateTime postReportTime, String reason, int postId, String statusReport, String note, String string3, String string4) {
+    public Report(int userId, LocalDateTime timeCreated, String reason, int postId, String status, String note) {
         this.userId = userId;
-        this.postReportTime = postReportTime;
+        this.timeCreated = timeCreated;
         this.reason = reason;
         this.postId = postId;
-        this.statusReport = statusReport;
-        this.note = note;
+        this.status = status;
+        this.note = note.length() > 0 ? note : "";
     }
     
-
-    public Report(int reportId, LocalDateTime postReportTime, String reason, String statusReport, String usernameReport, String titleReport, String note) {
-        this.reportId = reportId;
-        this.postReportTime = postReportTime;
-        this.reason = reason;
-        this.statusReport = statusReport;
-        this.usernameReport = usernameReport;
-        this.titleReport = titleReport;
-        this.note = note;
-    }
-
-
     public int getReportId() {
         return reportId;
     }
@@ -74,12 +58,12 @@ public class Report {
         this.userId = userId;
     }
 
-    public LocalDateTime getPostReportTime() {
-        return postReportTime;
+    public LocalDateTime getTimeCreated() {
+        return timeCreated;
     }
 
-    public void setPostReportTime(LocalDateTime postReportTime) {
-        this.postReportTime = postReportTime;
+    public void setTimeCreated(LocalDateTime timeCreated) {
+        this.timeCreated = timeCreated;
     }
 
     public String getReason() {
@@ -98,28 +82,12 @@ public class Report {
         this.postId = postId;
     }
 
-    public String getStatusReport() {
-        return statusReport;
+    public String getStatus() {
+        return status;
     }
 
-    public void setStatusReport(String statusReport) {
-        this.statusReport = statusReport;
-    }
-
-    public String getUsernameReport() {
-        return usernameReport;
-    }
-
-    public void setUsernameReport(String usernameReport) {
-        this.usernameReport = usernameReport;
-    }
-
-    public String getTitleReport() {
-        return titleReport;
-    }
-
-    public void setTitleReport(String titleReport) {
-        this.titleReport = titleReport;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getNote() {

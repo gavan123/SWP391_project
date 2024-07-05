@@ -68,9 +68,8 @@
         <span id="username" style="font-weight: bold; color: #333;"> UserName: ${user.username} </span>
         
         <div class="form-group">
-            <label for="content">Please leave a link to the post (if available)</label>
             <label for="content">If you have any problem or difficulty using WibuForum, please contact us and our support team will reach out to you as soon as possible.</label>
-            <textarea class="form-control" id="content" name="content" rows="5" placeholder="Please describe your problem in detail here..." required></textarea>
+            <textarea class="form-control" id="content" name="content" rows="5" placeholder="Please describe your problem in detail here. You should also include the cause and any relevant links to your problem." required></textarea>
         </div>
         
         <button type="submit" class="btn btn-primary">Submit ticket</button>

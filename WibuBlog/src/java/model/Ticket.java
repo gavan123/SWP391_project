@@ -34,7 +34,7 @@ public class Ticket {
         this.timeCreated = timeCreated;
         this.content = content;
         this.status = status;
-        this.note = note;
+        this.note = note.length() > 0 ? note : "";
     }
 
     public Ticket(int ticketId, int userId, LocalDateTime timeCreated, String content, String status, String note) {
@@ -43,7 +43,7 @@ public class Ticket {
         this.timeCreated = timeCreated;
         this.content = content;
         this.status = status;
-        this.note = note;
+        this.note = note.length() > 0 ? note : "";
     }
 
     public int getTicketId() {

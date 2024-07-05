@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import model.Report;
 import utility.DateConverter;
+import dal.UserDAO;
 
 /**
  *
@@ -65,6 +66,7 @@ public class ViewReportTable extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        UserDAO ud = new UserDAO();
         int postId;
         try {
             postId = Integer.parseInt(request.getParameter("postId"));
@@ -79,7 +81,7 @@ public class ViewReportTable extends HttpServlet {
         List<Report> reports = reportDAO.getReportsByPostId(postId);
 
         // Sort reports by usernameReport
-        reports.sort(Comparator.comparing(Report::getUsernameReport));
+        reports.sort(Comparator.comparing(Report::getUserId));
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
         StringBuilder htmlResponse = new StringBuilder();
@@ -87,10 +89,10 @@ public class ViewReportTable extends HttpServlet {
         if (!reports.isEmpty()) {
             for (int i = 0; i < reports.size(); i++) {
                 Report report = reports.get(i);
-                String formattedDate = dateFormat.format(DateConverter.convertToDateViaSqlTimestamp(report.getPostReportTime()));
+                String formattedDate = dateFormat.format(DateConverter.convertToDateViaSqlTimestamp(report.getTimeCreated()));
                 htmlResponse.append("<tr>")
                         .append("<td>").append(i + 1).append("</td>")
-                        .append("<td>").append(report.getUsernameReport()).append("</td>")
+                        .append("<td>").append(ud.getUserByUserId(report.getUserId()).getUsername()).append("</td>")
                         .append("<td>").append(report.getReason()).append("</td>")
                         .append("<td>").append(report.getNote()).append("</td>")
                         .append("<td>").append(formattedDate).append("</td>")

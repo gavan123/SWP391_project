@@ -1,19 +1,26 @@
+<%-- 
+    Document   : ReportListContent
+    Created on : 3 Jul 2024, 20:10:19
+    Author     : admin
+--%>
+
 <%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<link rel="stylesheet" href="assets/css/testcss6.css">
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <%@ page import="model.User" %>
 <%@ page import="model.Post" %>
 <%@ page import="dal.UserDAO" %>
 <%@ page import="dal.GenreDAO" %>
 <%@ page import="model.TopViewedGenre" %>
-<%@ page import="dal.PostDAO" %>
-<jsp:useBean id="t" scope="request" class="dal.TicketDAO" />
+<%@ page import="dal.ReportDAO" %>
+<jsp:useBean id="r" scope="request" class="dal.ReportDAO" />
 <%@page import="dal.TicketDAO"%>
+<%@page import="dal.ReportDAO"%>
 <%@page import="dal.UserDAO"%>
-<%@page import="model.Ticket"%>
+<%@page import="model.Report"%>
 <%@page import="java.util.ArrayList"%>
 
 <style>
@@ -64,53 +71,43 @@
     UserDAO ud = new UserDAO();
 %>
 
-
 <div class="card mb-2 rounded-5 border-0">
     <div class="card-header">
         <h3 class="card-header-h3 fs-16">
-            Newest pending tickets
+            Newest pending reports
+            <span class="float-right text-uppercase">
+                <a href="question">More</a>
+            </span>
         </h3>
     </div>
     <div class="card-body">
         <ul class="list-group list-group-flush">
             <c:set var="userId1" value="0" />
-            <c:forEach var="ticket" items="${t.getPendingTickets()}">
-                <c:set var="userId" value="${ticket.userId}" />
+            <c:forEach var="report" items="${r.getPendingReports()}">
+                <c:set var="userId1" value="${report.userId}" />
                 <%
-                    Integer userId = (Integer) pageContext.getAttribute("userId");
-                    User user = ud.getUserById(userId);
+                    Integer userId1 = (Integer) pageContext.getAttribute("userId1");
+                    User user1 = ud.getUserById(userId1);
                 %>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="col-10 text-truncate font-weight-bold">
-                        <a href="javascript:void(0);" onclick="openPopup('<%= user.getUsername()%>', '${ticket.content}', '${ticket.ticketId}')">
-                           (${ticket.timeCreated}) <%= user.getUsername()%>: ${ticket.content}
+                        <a href="javascript:void(0);" onclick="openPopup('<%= user1.getUsername()%>', '${report.reason}')">
+                            (${report.timeCreated}) ${report.reason}: <%= user1.getUsername()%>
                         </a>
+
                     </div>
                     <span class="badge badge-primary badge-pill">
                         <i class="far fa-comment-dots fa-lg"></i>
-                        <span style="font-size: larger;">${ticket.status}</span> 
+                        <span style="font-size: larger;">${report.status}</span> 
                     </span>
                 </li>
             </c:forEach>
         </ul>
     </div>
-    <div id="popup-overlay" class="popup-overlay"></div>
-
-    <div id="popup" class="popup">
-        <div class="popup-header" id="popup-header">Username</div>
-        <div class="popup-content" id="popup-content">Ticket Content</div>
-        <div class="popup-note">
-            <textarea id="popup-note" rows="6" style="width: 100%;" placeholder="Enter your note here..."></textarea>
-        </div>
-        <div class="popup-buttons">
-            <button onclick="reject()" class="btn btn-danger">Reject</button>
-            <button onclick="approve()" class="btn btn-success">Approve</button>
-        </div>
-    </div>
-
+            
     <div class="card-header">
         <h3 class="card-header-h3 fs-16">
-            Resolved tickets
+            Resolved reports
             <span class="float-right text-uppercase">
                 <a href="question">More</a>
             </span>
@@ -119,69 +116,69 @@
     <div class="card-body">
         <ul class="list-group list-group-flush">
             <c:set var="userId2" value="0" />
-            <c:forEach var="ticket" items="${t.getResolvedTickets()}">
-                <c:set var="userId2" value="${ticket.userId}" />
+            <c:forEach var="report" items="${r.getResolvedReports()}">
+                <c:set var="userId2" value="${report.userId}" />
                 <%
                     Integer userId2 = (Integer) pageContext.getAttribute("userId2");
                     User user2 = ud.getUserById(userId2);
                 %>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="col-10 text-truncate font-weight-bold">
-                        <a href="TicketDetail?ticketId=${ticket.ticketId}">(${ticket.timeCreated}) <%= user2.getUsername()%>: ${ticket.content}</a>
+                        <a href="javascript:void(0);" onclick="openPopup('<%= user2.getUsername()%>', '${report.reason}')">
+                            (${report.timeCreated}) ${report.reason}: <%= user2.getUsername()%>
+                        </a>
+
                     </div>
                     <span class="badge badge-primary badge-pill">
                         <i class="far fa-comment-dots fa-lg"></i>
-                        <span style="font-size: larger;">${ticket.status}</span> 
+                        <span style="font-size: larger;">${report.status}</span> 
                     </span>
                 </li>
             </c:forEach>
         </ul>
     </div>
-
-</div>
             
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById('popup-overlay').addEventListener('click', closePopup);
-    });
+    <div id="popup-overlay" class="popup-overlay"></div>
 
-    function openPopup(username, content, ticketId) {
-        console.log("openPopup called with username: " + username + ", content: " + content + ", ticketId: " + ticketId);
+    <div id="popup" class="popup">
+        <div class="popup-header" id="popup-header">Username</div>
+        <div class="popup-content" id="popup-content">Report Reason</div>
+        <div class="popup-note">
+            <textarea id="popup-note" rows="6" style="width: 100%;" placeholder="Enter your note here..."></textarea>
+        </div>
+        <div class="popup-buttons">
+            <button onclick="reject()" class="btn btn-danger">Reject</button>
+            <button onclick="approve()" class="btn btn-success">Approve</button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function openPopup(username, content) {
         document.getElementById('popup-header').innerText = username;
         document.getElementById('popup-content').innerText = content;
-        document.getElementById('popup-username').value = username; // Set the username
-        document.getElementById('popup-ticket-id').value = ticketId; // Set the ticket ID
         document.getElementById('popup-overlay').style.display = 'block';
         document.getElementById('popup').style.display = 'block';
     }
 
     function closePopup() {
-        console.log("closePopup called");
         document.getElementById('popup-overlay').style.display = 'none';
         document.getElementById('popup').style.display = 'none';
     }
 
-    function confirmAction(action) {
+    function reject() {
         const note = document.getElementById('popup-note').value;
-        document.getElementById('popup-note-input').value = note;
-
-        Swal.fire({
-            title: `Are you sure you want to ` + action + ` this ticket?`,
-            text: `Note:` + note,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: `Yes, ` + action + ` it!`,
-            cancelButtonText: 'No, cancel!',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const form = document.getElementById('popup-form');
-                form.action = action === 'reject' ? 'RejectTicket' : 'ApproveTicket';
-                form.method = 'POST';
-                form.submit();
-            }
-        });
+        alert('Report Rejected\nNote: ' + note);
+        closePopup();
     }
+
+    function approve() {
+        const note = document.getElementById('popup-note').value;
+        alert('Report Approved\nNote: ' + note);
+        closePopup();
+    }
+
+    document.getElementById('popup-overlay').addEventListener('click', closePopup);
 </script>
-
-
 

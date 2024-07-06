@@ -64,7 +64,6 @@
     UserDAO ud = new UserDAO();
 %>
 
-
 <div class="card mb-2 rounded-5 border-0">
     <div class="card-header">
         <h3 class="card-header-h3 fs-16">
@@ -103,9 +102,13 @@
             <textarea id="popup-note" rows="6" style="width: 100%;" placeholder="Enter your note here..."></textarea>
         </div>
         <div class="popup-buttons">
-            <button onclick="reject()" class="btn btn-danger">Reject</button>
-            <button onclick="approve()" class="btn btn-success">Approve</button>
+            <button onclick="confirmAction('reject')" class="btn btn-danger">Reject</button>
+            <button onclick="confirmAction('approve')" class="btn btn-success">Approve</button>
         </div>
+        <form id="popup-form" method="post">
+            <input type="hidden" id="popup-ticket-id" name="ticketId">
+            <input type="hidden" id="popup-note-input" name="note">
+        </form>
     </div>
 
     <div class="card-header">
@@ -127,7 +130,7 @@
                 %>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="col-10 text-truncate font-weight-bold">
-                        <a href="TicketDetail?ticketId=${ticket.ticketId}">(${ticket.timeCreated}) <%= user2.getUsername()%>: ${ticket.content}</a>
+                        <a href="#">(${ticket.timeCreated}) <%= user2.getUsername()%>: ${ticket.content}</a>
                     </div>
                     <span class="badge badge-primary badge-pill">
                         <i class="far fa-comment-dots fa-lg"></i>
@@ -139,7 +142,7 @@
     </div>
 
 </div>
-            
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('popup-overlay').addEventListener('click', closePopup);
@@ -149,7 +152,6 @@
         console.log("openPopup called with username: " + username + ", content: " + content + ", ticketId: " + ticketId);
         document.getElementById('popup-header').innerText = username;
         document.getElementById('popup-content').innerText = content;
-        document.getElementById('popup-username').value = username; // Set the username
         document.getElementById('popup-ticket-id').value = ticketId; // Set the ticket ID
         document.getElementById('popup-overlay').style.display = 'block';
         document.getElementById('popup').style.display = 'block';
@@ -182,6 +184,3 @@
         });
     }
 </script>
-
-
-

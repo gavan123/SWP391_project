@@ -48,7 +48,34 @@ public class TicketDAO extends DBContext {
         }
         return ticketList;
     }
-
+    
+    public int getAllPendingTicket(){
+        try {
+            String sql = "select count(*) as numberOfPendingTicket from ticket where status = 'Pending'";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numberOfPendingTicket");
+            }
+                    } catch (SQLException ex) {
+            Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+    
+      public int getAllResolvedTicket(){
+        try {
+            String sql = "select count(*) as numberOfResolvedTicket from ticket where status != 'Pending'";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt("numberOfResolvedTicket");
+            }
+                    } catch (SQLException ex) {
+            Logger.getLogger(TicketDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
     public Ticket getTicketById(int ticketId) {
         PreparedStatement ps = null;
         ResultSet rs = null;

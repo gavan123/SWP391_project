@@ -74,10 +74,7 @@
 <div class="card mb-2 rounded-5 border-0">
     <div class="card-header">
         <h3 class="card-header-h3 fs-16">
-            Newest pending reports
-            <span class="float-right text-uppercase">
-                <a href="question">More</a>
-            </span>
+            Newest pending reports           
         </h3>
     </div>
     <div class="card-body">
@@ -91,10 +88,9 @@
                 %>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="col-10 text-truncate font-weight-bold">
-                        <a href="javascript:void(0);" onclick="openPopup('<%= user1.getUsername()%>', '${report.reason}')">
+                        <a href="javascript:void(0);" onclick="openPendingPopup('<%= user1.getUsername()%>', '${report.reason}', '${report.reportId}','${report.postId}')">
                             (${report.timeCreated}) ${report.reason}: <%= user1.getUsername()%>
                         </a>
-
                     </div>
                     <span class="badge badge-primary badge-pill">
                         <i class="far fa-comment-dots fa-lg"></i>
@@ -108,9 +104,6 @@
     <div class="card-header">
         <h3 class="card-header-h3 fs-16">
             Resolved reports
-            <span class="float-right text-uppercase">
-                <a href="question">More</a>
-            </span>
         </h3>
     </div>
     <div class="card-body">
@@ -124,10 +117,9 @@
                 %>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="col-10 text-truncate font-weight-bold">
-                        <a href="javascript:void(0);" onclick="openPopup('<%= user2.getUsername()%>', '${report.reason}')">
+                        <a href="javascript:void(0);" onclick="openResolvedPopup('<%= user2.getUsername()%>', '${report.reason}','${report.postId}', '${report.note}')">
                             (${report.timeCreated}) ${report.reason}: <%= user2.getUsername()%>
                         </a>
-
                     </div>
                     <span class="badge badge-primary badge-pill">
                         <i class="far fa-comment-dots fa-lg"></i>
@@ -139,46 +131,89 @@
     </div>
             
     <div id="popup-overlay" class="popup-overlay"></div>
-
-    <div id="popup" class="popup">
+<% ReportDAO rd = new ReportDAO();%>
+<div id="popup" class="popup">
+    <form id="popup-form" action="ValidateReport" method="post">
+        <a href="#" id="postDetailLink" style="float: right">go to post</a>
         <div class="popup-header" id="popup-header">Username</div>
         <div class="popup-content" id="popup-content">Report Reason</div>
+        <input type="hidden" id="popup-username" name="username">
+        <input type="hidden" id="popup-reason" name="reason">
+        <input type="hidden" id="popup-note-hidden" name="note">
+        <input type="hidden" id="popup-decision" name="choice">
+        <input type="hidden" id="popup-reportId" name="reportId"> <!-- Hidden input for reportId -->
         <div class="popup-note">
             <textarea id="popup-note" rows="6" style="width: 100%;" placeholder="Enter your note here..."></textarea>
         </div>
         <div class="popup-buttons">
-            <button onclick="reject()" class="btn btn-danger">Reject</button>
-            <button onclick="approve()" class="btn btn-success">Approve</button>
+            <button type="button" onclick="reject()" class="btn btn-danger">Reject</button>
+            <button type="button" onclick="approve()" class="btn btn-success">Approve</button>
         </div>
+    </form>
+</div>
+
+<div id="popup-resolved" class="popup">
+     <a href="#" id="postDetailLink2" style="float: right">go to post</a>
+    <div class="popup-header" id="popup-header-resolved">Resolved Report Details</div>
+    <div class="popup-content" id="popup-content-resolved">
+        <p id="popup-resolved-content"></p>
+        <p id="popup-resolved-note"></p>
     </div>
+    <div class="popup-buttons">
+        <button type="button" onclick="closeResolvedPopup()" class="btn btn-secondary">Close</button>
+    </div>
+</div>
+
 </div>
 
 
 <script>
-    function openPopup(username, content) {
-        document.getElementById('popup-header').innerText = username;
-        document.getElementById('popup-content').innerText = content;
-        document.getElementById('popup-overlay').style.display = 'block';
-        document.getElementById('popup').style.display = 'block';
-    }
+  function openPendingPopup(username, content, reportId, postId) {
+    document.getElementById('popup-header').innerText = username;
+    document.getElementById('popup-content').innerText = content;
+    document.getElementById('popup-username').value = username;
+    document.getElementById('popup-reason').value = content;
+    document.getElementById('popup-reportId').value = reportId; // Set reportId
+    document.getElementById('popup-overlay').style.display = 'block';
+    document.getElementById('popup').style.display = 'block';
+    var postDetailLink = document.getElementById('postDetailLink');
+    postDetailLink.href = 'postDetail?postId=' + postId;
+}
 
-    function closePopup() {
-        document.getElementById('popup-overlay').style.display = 'none';
-        document.getElementById('popup').style.display = 'none';
-    }
+function openResolvedPopup(username, content,postId ,note) {
+    document.getElementById('popup-header-resolved').innerText = username;
+    document.getElementById('popup-resolved-content').innerText = content;
+    document.getElementById('popup-resolved-note').innerText = "Note: " + note;
+    document.getElementById('popup-overlay').style.display = 'block';
+    document.getElementById('popup-resolved').style.display = 'block';
+    var postDetailLink2 = document.getElementById('postDetailLink2');
+    postDetailLink2.href = 'postDetail?postId=' + postId;
+}
 
-    function reject() {
-        const note = document.getElementById('popup-note').value;
-        alert('Report Rejected\nNote: ' + note);
-        closePopup();
-    }
+function closePopup() {
+    document.getElementById('popup-overlay').style.display = 'none';
+    document.getElementById('popup').style.display = 'none';
+    document.getElementById('popup-resolved').style.display = 'none';
+}
 
-    function approve() {
-        const note = document.getElementById('popup-note').value;
-        alert('Report Approved\nNote: ' + note);
-        closePopup();
-    }
+function closeResolvedPopup() {
+    document.getElementById('popup-overlay').style.display = 'none';
+    document.getElementById('popup-resolved').style.display = 'none';
+}
 
-    document.getElementById('popup-overlay').addEventListener('click', closePopup);
+function reject() {
+    const note = document.getElementById('popup-note').value;
+    document.getElementById('popup-note-hidden').value = note;
+    document.getElementById('popup-decision').value = false;
+    document.getElementById('popup-form').submit();
+}
+
+function approve() {
+    const note = document.getElementById('popup-note').value;
+    document.getElementById('popup-note-hidden').value = note;
+    document.getElementById('popup-decision').value = true;
+    document.getElementById('popup-form').submit();
+}
+
+document.getElementById('popup-overlay').addEventListener('click', closePopup);
 </script>
-

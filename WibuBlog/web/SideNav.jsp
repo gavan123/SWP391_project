@@ -9,13 +9,23 @@
 <div class="side-nav">
     <div class="side-nav-inner">
         <ul class="side-nav-menu scrollable">
-            <c:if test="${user != null}">
+            <c:if test="${user != null && user.roleId == 1}">
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle" href="DashBoard">
                         <span class="icon-holder">
                             <i class="anticon anticon-dashboard"></i>
                         </span>
                         <span class="title">Dashboard</span>
+                    </a>
+                </li>
+            </c:if>
+                    <c:if test="${user != null && user.roleId == 2}">
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle" href="ListReport">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-dashboard"></i>
+                        </span>
+                        <span class="title">Report Management</span>
                     </a>
                 </li>
             </c:if>

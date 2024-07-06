@@ -77,8 +77,8 @@ public class ValidateReport extends HttpServlet {
         HttpSession session = request.getSession();
         ReportDAO rd = new ReportDAO();
         PostDAO pd = new PostDAO();
-
-        int reportId = Integer.parseInt((String) request.getParameter("reportId"));
+        String note = request.getParameter("note");
+        int reportId = Integer.parseInt(request.getParameter("reportId"));
         boolean approved = Boolean.parseBoolean((String) request.getParameter("choice"));
 
         if (reportId <= 0) {
@@ -88,12 +88,18 @@ public class ValidateReport extends HttpServlet {
 
         if (approved) {
             rd.setStatusApproved(reportId);
+            rd.setNote(note,reportId);
+            rd.DeleteAllReportWithTheSameId(rd.getPostIdByReportId(reportId), "Approved");
             pd.deletePost(rd.getReportById(reportId).getPostId());
+            PrintWriter out = response.getWriter();
+            out.print(rd.getPostIdByReportId(reportId));
         } else {
+            rd.setNote(note,reportId);
+            rd.DeleteAllReportWithTheSameId(rd.getPostIdByReportId(reportId), "Rejected");
             rd.setStatusRejected(reportId);
         }
         
-        request.getRequestDispatcher("ReportDetails").forward(request, response);
+       // request.getRequestDispatcher("ReportList.jsp").forward(request, response);
 
     }
 

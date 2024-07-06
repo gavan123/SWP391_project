@@ -5,6 +5,8 @@
 <%@ page import="model.TopViewedGenre"%>
 <%@ page import="dal.PostDAO" %>
 <%@ page import="java.util.ArrayList"%>
+<%@ page import="dal.TicketDAO" %>
+<%@ page import="model.Ticket" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="page-container">              
     <!-- Content Wrapper START -->
@@ -208,34 +210,26 @@
                             </div>
                         </div>
                         <div class="m-t-30">
-                            <% for(Post x: pd.getTop6VotedPost()){%>
-                            <div class="m-b-25" onclick="redirectToLink('${pageContext.request.contextPath}/postDetail?postId=<%=x.getPostId()%>')">
+                            <%  TicketDAO td = new TicketDAO();
+                                %>
+                            <div class="m-b-25">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <!--start-->
-                                    <div class="avatar avatar-image rounded" onclick="redirectToLink('${pageContext.request.contextPath}/postDetail?postId=<%=x.getPostId()%>')">
-                                        <img src="${pageContext.request.contextPath}/images/game/<%=x.getImage()%>"  onerror="this.src='assets/images/others/product-3.jpg'" alt="${topUser.username}">
-                                    </div>
                                     <div class="m-l-10" >
-                                        <% if(x.getTitle().length() < 12){ %>
-                                        <span><%=x.getTitle()%></span>
-                                        <%}%>
-                                        <% if(x.getTitle().length() >= 12){%>
-                                        <span><%=pd.trimPostTitle(x.getTitle())%></span>
-                                        <%}%>
+                                        
+                                        <span>Pending ticket: <%=td.getAllPendingTicket()%></span>
+                                        <hr>
+                                        <br>
+                                        <span>Resolved Ticket:  <%=td.getAllResolvedTicket()%></span>
+                                       
                                     </div>                                
                                     <div class="scale-left">
 
-                                        <div>
-                                            <i class="anticon anticon-eye"></i>
-                                            <span class="m-l-10">View(<%=x.getView()%>)</span>        
-                                            <i class="anticon anticon-arrow-up"></i>
-                                            <span class="m-l-10">Vote(<%=x.getVote()%>)</span>
-                                        </div>
+                              
                                     </div>
                                 </div>  
                                 <br><hr>   
-                            </div>
-                            <%}%>
+                            </div>                         
                             <!--end-->
 
                         </div>

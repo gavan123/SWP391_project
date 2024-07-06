@@ -3,8 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="model.User" %>
 <%@ page import="dal.PostDAO" %>
-
-
+<%@ page import="dal.ReportDAO" %>
+<%@ page import="model.Report" %>
+<%@ page import="model.PostDetail" %>
 <style>
 
 </style>
@@ -46,9 +47,17 @@
                     </div>
                     <hr>
                     <c:if test="${post.username != user.username && user != null && user.status eq 'active'}">
+                        <%  ReportDAO rd = new ReportDAO();
+                            User user = (User)session.getAttribute("user");
+                            PostDetail post = (PostDetail)request.getAttribute("post");
+                            if(!rd.checkUserReported(user.getUserId(),post.getPostID())){%>
                         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#reportPostModal">
                             <i class="fas fa-flag"></i> Report Post
                         </button>
+                        <%}%>
+                        <%  if(rd.checkUserReported(user.getUserId(),post.getPostID())){%>
+                        <p style="color:blue">You've already reported this post, thanks for your opinion</p>
+                        <%}%>
                     </c:if>
                     <c:choose>
                         <c:when test="${user == null || user.status eq 'active'}">
@@ -340,62 +349,85 @@
 <div class="modal fade" id="reportPostModal" tabindex="-1" role="dialog" aria-labelledby="reportPostModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-
-                <h5 class="modal-title" id="reportPostModalLabel">Report Post</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="reportReasons">Select reasons for reporting:</label>
-                    <div id="reportReasons">
-                        <div class="checkbox-item">
-                            <div class=" checkbox-wrapper-31">
-                                <input class="form-check-input " type="checkbox" name="reasons" id="spam" value="Spam">
-                                <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+            <form id="reportForm" action="CreateReport" method="POST">
+                <input type="hidden" value="${post.postID}" name="postid">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportPostModalLabel">Report Post</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="reportReasons">Select reasons for reporting:</label>
+                        <div id="reportReasons">
+                            <div class="checkbox-item">
+                                <div class=" checkbox-wrapper-31">
+                                    <input class="form-check-input" type="checkbox" name="reasons" id="spam" value="Spam">
+                                    <svg viewBox="0 0 35.6 35.6">
+                                        <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                                        <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                                        <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                                    </svg>
+                                </div>
+                                <label class="form-check-label" for="spam">Spam</label>
                             </div>
-                            <label class="form-check-label" for="spam">spam</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <div class="checkbox-wrapper-31">
-                                <input class="form-check-input" type="checkbox" name="reasons" id="harassment" value="Harassment">
-                                <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                            <div class="checkbox-item">
+                                <div class="checkbox-wrapper-31">
+                                    <input class="form-check-input" type="checkbox" name="reasons" id="harassment" value="Harassment">
+                                    <svg viewBox="0 0 35.6 35.6">
+                                        <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                                        <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                                        <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                                    </svg>
+                                </div>
+                                <label class="form-check-label" for="harassment">Harassment</label>
                             </div>
-                            <label class="form-check-label" for="harassment">Harassment</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <div class="checkbox-wrapper-31">
-                                <input class="form-check-input" type="checkbox" name="reasons" id="hateSpeech" value="Hate Speech">
-                                <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                            <div class="checkbox-item">
+                                <div class="checkbox-wrapper-31">
+                                    <input class="form-check-input" type="checkbox" name="reasons" id="hateSpeech" value="Hate Speech">
+                                    <svg viewBox="0 0 35.6 35.6">
+                                        <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                                        <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                                        <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                                    </svg>
+                                </div>
+                                <label class="form-check-label" for="hateSpeech">Hate Speech</label>
                             </div>
-                            <label class="form-check-label" for="hateSpeech">Hate Speech</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <div class="checkbox-wrapper-31">
-                                <input class="form-check-input" type="checkbox" name="reasons" id="misinformation" value="Misinformation">
-                                <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                            <div class="checkbox-item">
+                                <div class="checkbox-wrapper-31">
+                                    <input class="form-check-input" type="checkbox" name="reasons" id="misinformation" value="Misinformation">
+                                    <svg viewBox="0 0 35.6 35.6">
+                                        <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                                        <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                                        <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                                    </svg>
+                                </div>
+                                <label class="form-check-label" for="misinformation">Misinformation</label>
                             </div>
-                            <label class="form-check-label" for="misinformation">Misinformation</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <div class="checkbox-wrapper-31">
-                                <input class="form-check-input" type="checkbox" name="reasons" id="other" value="Other">
-                                <svg viewBox="0 0 35.6 35.6"> <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle> <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle> <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline> </svg>
+                            <div class="checkbox-item">
+                                <div class="checkbox-wrapper-31">
+                                    <input class="form-check-input" type="checkbox" name="reasons" id="other" value="Other">
+                                    <svg viewBox="0 0 35.6 35.6">
+                                        <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                                        <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                                        <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                                    </svg>
+                                </div>
+                                <label class="form-check-label" for="other">Other</label>
                             </div>
-                            <label class="form-check-label" for="other">Other</label>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button id="cancelReportBtn" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button id="submitReportBtn" type="button" class="btn btn-primary">Submit Report</button>
-            </div>
+                <div class="modal-footer">
+                    <button id="cancelReportBtn" type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button id="submitReportBtn" type="submit" class="btn btn-primary">Submit Report</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
 
 <script>
 
@@ -697,4 +729,25 @@
             }
         });
     });
+</script>
+<script>
+document.getElementById('reportForm').addEventListener('submit', function(event) {
+    const checkboxes = document.querySelectorAll('input[name="reasons"]:checked');
+    let reasons = [];
+    checkboxes.forEach((checkbox) => {
+        reasons.push(checkbox.value);
+    });
+    if (reasons.length === 0) {
+        event.preventDefault();
+        alert('Please select at least one reason.');
+        return;
+    }
+
+    // Convert array to a comma-separated string or any other format you prefer
+    const reasonsInput = document.createElement('input');
+    reasonsInput.type = 'hidden';
+    reasonsInput.name = 'reasons';
+    reasonsInput.value = reasons.join(',');
+    this.appendChild(reasonsInput);
+});
 </script>

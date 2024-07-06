@@ -47,21 +47,13 @@ public class CreateReport extends HttpServlet {
         PostDAO pd = new PostDAO(); // Assuming PostDAO requires a connection parameter in its constructor
 
         User user = (User) session.getAttribute("user");
-        String reason = request.getParameter("reportReasons");
+        String[] reasons = request.getParameterValues("reasons");
+        String reason = reasons[reasons.length-1];
         int postId = Integer.parseInt(request.getParameter("postid"));
-
         if (user != null && reason != null && reason.length() > 0 && postId > 0) {
             String username = user.getUsername();
-            String postTitle = pd.getPostById(postId).getTitle(); // Assuming PostDAO has a method to get post by ID
-
-            boolean reportCreated = rd.createReport(username, postTitle, reason);
-
-            if (reportCreated) {
-                request.getRequestDispatcher("postDetail?postId=" + postId).forward(request, response);
-            } else {
-                request.setAttribute("errorMessage", "Failed to create report.");
-                request.getRequestDispatcher("Error.jsp").forward(request, response);
-            }
+            rd.createReport(username, postId, reason);
+            response.sendRedirect("Home.jsp");
         } else {
             request.setAttribute("errorMessage", "Invalid input parameters.");
             request.getRequestDispatcher("Error.jsp").forward(request, response);

@@ -32,7 +32,7 @@
                 <div class="avatar avatar-image m-h-10 m-r-15">
                     <c:choose>
                                 <c:when test="${user.profilePhoto != null}">
-                                    <img src="${pageContext.request.contextPath}/images/game/${user.profilePhoto}" alt="">
+                                    <img src="${pageContext.request.contextPath}/images/avatar/${user.profilePhoto}" alt="">
                                 </c:when>
                                 <c:otherwise>
                                     <img src="" alt="">
@@ -46,7 +46,7 @@
                         <div class="avatar avatar-lg avatar-image">
                             <c:choose>
                                 <c:when test="${user.profilePhoto != null}">
-                                    <img src="${pageContext.request.contextPath}/images/game/${user.profilePhoto}" alt="">
+                                    <img src="${pageContext.request.contextPath}/images/avatar/${user.profilePhoto}" alt="">
                                 </c:when>
                                 <c:otherwise>
                                     <img src="" alt="">

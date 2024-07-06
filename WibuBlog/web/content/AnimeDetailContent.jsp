@@ -50,7 +50,7 @@
             <div class="row">
                 <div class="col-lg-8">
                     <div class="card mb-3">
-                        <img src="<%= anime.getImageAnime() %>" class="card-img-top" alt="<%= anime.getTitle() %>" onerror="this.src='assets/images/others/product-3.jpg'">
+                        <img src="${pageContext.request.contextPath}/images/anime/<%= anime.getImageAnime() %>" class="card-img-top" alt="<%= anime.getTitle() %>" onerror="this.src='assets/images/others/product-3.jpg'">
                         <div class="card-body">
                             <h1 class="card-title"><%= anime.getTitle() %></h1>
                             <h6 class="card-subtitle mb-2 text-muted">

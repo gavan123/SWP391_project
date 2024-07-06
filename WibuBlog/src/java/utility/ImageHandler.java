@@ -91,7 +91,7 @@ public class ImageHandler {
         return null;
     }
 
-    public String encodeImageName(int userID) {
+     public static String encodeMediaName(int userID) {
         LocalDateTime datetime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_hhmmss");
         String formattedDateTime = datetime.format(formatter);

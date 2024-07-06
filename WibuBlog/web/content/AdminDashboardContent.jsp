@@ -117,7 +117,7 @@
                                                     <td>
                                                         <div class="media align-items-center">
                                                             <div class="avatar avatar-image rounded">
-                                                                <img src="${pageContext.request.contextPath}/images/game/<%=x.getProfilePhoto()%>"  onerror="this.src='assets/images/others/product-3.jpg'" alt="${topUser.username}">
+                                                                <img src="${pageContext.request.contextPath}/images/avatar/<%=x.getProfilePhoto()%>"  onerror="this.src='assets/images/others/product-3.jpg'" alt="${topUser.username}">
                                                             </div>
                                                             <div class="m-l-10">
                                                                 <span><%=x.getUsername()%></span>
@@ -156,7 +156,7 @@
                                                     <td>
                                                         <div class="media align-items-center">
                                                             <div class="avatar avatar-image rounded">
-                                                                <img src="${pageContext.request.contextPath}/images/game/<%=x.getProfilePhoto()%>"  onerror="this.src='assets/images/others/product-3.jpg'" alt="${topUser.username}">
+                                                                <img src="${pageContext.request.contextPath}/images/avatar/<%=x.getProfilePhoto()%>"  onerror="this.src='assets/images/others/product-3.jpg'" alt="${topUser.username}">
                                                             </div>
                                                             <div class="m-l-10">
                                                                 <span><%=x.getUsername()%></span>
@@ -297,7 +297,7 @@
                                  <div class="d-flex align-items-center justify-content-between">
                                     <!--start-->
                                     <div class="avatar avatar-image rounded">
-                                        <img src="${pageContext.request.contextPath}/images/game/<%=x.getProfilePhoto()%>"  onerror="this.src='assets/images/others/product-3.jpg'" alt="${topUser.username}">
+                                        <img src="${pageContext.request.contextPath}/images/avatar/<%=x.getProfilePhoto()%>"  onerror="this.src='assets/images/others/product-3.jpg'" alt="${topUser.username}">
                                     </div>
                                     <div>
                                         <% if(x.getUsername().length() < 12){ %>

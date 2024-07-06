@@ -115,8 +115,7 @@ public class CreatePost extends HttpServlet {
         String content = request.getParameter("content");
         Part part = request.getPart("image");
         String submittedFileName = part.getSubmittedFileName();
-        MediaDAO mediaDAO = new MediaDAO();
-        NotificationDAO nd = new NotificationDAO();
+
         // Kiểm tra nếu nguồn không được cung cấp, mặc định là "Anime Forum"
         if (ProfanityFilter.checkProfanity(source) || ProfanityFilter.checkProfanity(content) || ProfanityFilter.checkProfanity(title)) {
             PrintWriter out = response.getWriter();
@@ -126,7 +125,7 @@ public class CreatePost extends HttpServlet {
             List<Genre> genres = genreDAO.getAllGenres();
             request.setAttribute("categories", categories);
             request.setAttribute("genres", genres);
-            request.setAttribute("profanityDetected", true); 
+            request.setAttribute("profanityDetected", true);
             request.getRequestDispatcher("CreatePost.jsp").forward(request, response);
             return;
         }
@@ -150,7 +149,7 @@ public class CreatePost extends HttpServlet {
 
         PostDAO postDAO = new PostDAO();
         // Tạo tên file ảnh mới bằng cách mã hóa và kết hợp với tên gốc
-        String imageFinal = mediaDAO.encodeMediaName(user.getUserId()) + "." + ImageHandler.getExtension(submittedFileName);
+        String imageFinal = ImageHandler.encodeMediaName(user.getUserId()) + "." + ImageHandler.getExtension(submittedFileName);
 
         // Tạo đối tượng Post
         Post post = new Post(user.getUserId(), categoryId, title, content,
@@ -178,6 +177,8 @@ public class CreatePost extends HttpServlet {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
+            
+            NotificationDAO nd = new NotificationDAO();
             nd.createUploadedPostNotification(postDAO.getPostIDJustInserted(user.getUserId()), user.getUserId());
             response.sendRedirect("Home.jsp"); // Điều hướng tới trang thành công
         } else {

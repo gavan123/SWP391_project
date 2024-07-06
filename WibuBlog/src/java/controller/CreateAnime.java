@@ -71,7 +71,7 @@ public class CreateAnime extends HttpServlet {
         Files.createDirectories(gameDirectory);
 
         MediaDAO mediaDAO = new MediaDAO();
-        String imageFinal = "anime/" + mediaDAO.encodeMediaName(user.getUserId()) + "." + ImageHandler.getExtension(submittedFileName);
+        String imageFinal = mediaDAO.encodeMediaName(user.getUserId()) + "." + ImageHandler.getExtension(submittedFileName);
 
         // Tạo đối tượng Anime từ dữ liệu form
         Anime anime = new Anime(title, synopsis, genre, episodes, status, releaseDate, studio, imageFinal);

@@ -27,7 +27,8 @@
                         <h2 class="card-title">
                             <a href="postDetail?postId=${post.postId}" />${post.title}</a>
                         </h2>
-                        <img class="float-left posts-img img-thumbnail mr-2" src="${pageContext.request.contextPath}/images/${post.image}" onerror="this.src='assets/images/others/product-3.jpg'">
+                        <img class="float-left posts-img img-thumbnail mr-2" 
+                             src="${pageContext.request.contextPath}/images/post/${post.image}" onerror="this.src='assets/images/others/product-3.jpg'">
                         <p class="card-text">${post.content}</p>
                     </div>
                 </div>
@@ -35,25 +36,6 @@
         </c:forEach>
         <!-- End forEach loop -->
 
-        <div class="card mb-2 rounded-2">
-            <div class="card-body">
-                <h2 class="card-title"> 
-                    <a href="//vidian.vn/chi-tiet/bang-xep-hang-nguyet-phieu-qidian-thang-5-nam-2024">Bảng xếp hạng nguyệt phiếu Qidian tháng 5 năm 2024</a>
-                </h2>
-                <img class="float-left posts-img img-thumbnail mr-2" src="////vidian.vn/img-thumbnail/img-thumbnail-1718008088760.webp" onerror="this.src='https:////vidian.vn/img-thumbnail/default-book.png'">
-                <p class="card-text">Bảng xếp hạng nguyệt phiếu tháng 5 xuất hiện nhiều tiểu thuyết đô thị, thể loại cao võ đoạt quán quân nguyệt phiếu.</p>
-            </div>
-        </div>
-
-        <div class="card mb-2 rounded-2">
-            <div class="card-body">
-                <h2 class="card-title"> 
-                    <a href="//vidian.vn/chi-tiet/de-ba-tram-thien">Đế Bá: Trầm Thiên</a>
-                </h2>
-                <img class="float-left posts-img img-thumbnail mr-2" src="////vidian.vn/img-thumbnail/img-thumbnail-1717903641280.jpg" onerror="this.src='https:////vidian.vn/img-thumbnail/default-book.png'">
-                <p class="card-text">Đế Bá: Trầm Thiên&nbsp;là&nbsp;Cứu Cực Tiên&nbsp;và được ca ngợi là&nbsp;Đệ Nhất Tiên Nhân&nbsp;của&nbsp;Thiên Cảnh. Tuy cũng có những tồn tại mạnh hơn như&nbsp;An Nhiên,&nbsp;Bạch Tuộc,&nbsp;Ẩn Tiên&nbsp;...</p>
-            </div>
-        </div>
 
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">

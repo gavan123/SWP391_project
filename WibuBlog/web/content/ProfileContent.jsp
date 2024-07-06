@@ -35,7 +35,7 @@
                                     <c:otherwise>
                                         <form action="UploadPFP" method="post" enctype="multipart/form-data"  >
                                             <input type="file" class="upload-input" onchange="this.form.submit()" name="pfp" id="someId">         
-                                            <img src="${pageContext.request.contextPath}/images/game/${user.profilePhoto}" style="width: 150px; height: 100px">
+                                            <img src="${pageContext.request.contextPath}/images/avatar/${user.profilePhoto}" style="width: 150px; height: 100px">
                                             <div class="upload-text">Upload an image</div>
                                         </form>               
                                     </c:otherwise>

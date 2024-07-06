@@ -26,9 +26,7 @@
     <label for="image">You are currently banned please wait for your ban to expire to post</label>
 </div>
     <%}%>   
-<c:forEach var="fileName" items="${image}">
-    <img src="${pageContext.request.contextPath}/images/post/${fileName}" alt="Uploaded Image">
-</c:forEach>
+
 <div class="m-t-30">
     <div class="table-responsive">
         <table class="table table-hover" style="border: 1px solid black">
@@ -51,7 +49,7 @@
                     <td>
                         <div class="media align-items-center">
                             <div class="avatar avatar-image rounded">
-                                <img src="${pageContext.request.contextPath}/images/game/<%=x.getProfilePhoto()%>"  onerror="this.src='assets/images/others/product-3.jpg'" alt="${topUser.username}">
+                                <img src="${pageContext.request.contextPath}/images/avatar/<%=x.getProfilePhoto()%>"  onerror="this.src='assets/images/others/product-3.jpg'" alt="${topUser.username}">
                             </div>
                             <div class="m-l-10">
                                 <span><%=x.getUsername()%></span>
@@ -117,7 +115,8 @@
                     <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
                         <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
                         <a href="postDetail?postId=${post.postId}" id="new_post0">
-                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${pageContext.request.contextPath}/images/post/${post.image}" 
+                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" 
+                                 src="${pageContext.request.contextPath}/images/post/${post.image}" 
                                  onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
                             <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
                         </a>
@@ -146,7 +145,8 @@
                     <div class="swiper-slide g_thumb" role="group" aria-label="1 / 12" style="width: 135.833px;  margin-right: 15px;">
                         <span class="badge badge-info posts-badge"><%=x.getView()%> <i class="anticon anticon-eye"></i></span>
                         <a href="postDetail?postId=<%=x.getPostId()%>" id="new_post0">
-                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${pageContext.request.contextPath}/images/post/<%=x.getImage()%>" 
+                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" 
+                                 src="${pageContext.request.contextPath}/images/post/<%=x.getImage()%>" 
                                  onerror="this.src='assets/images/others/product-3.jpg'" alt="<%=x.getTitle()%>">
                             <span class="menu-text-sm text-center mt-2 text-truncate-2"><%=x.getTitle()%></span>
                         </a>
@@ -263,7 +263,9 @@
                         <span class="badge badge-info posts-badge">${post.view} <i class="anticon anticon-eye"></i></span>
                         <!--<span class="badge badge-danger posts-badge-2 text-truncate">${post.status}</span>-->
                         <a href="postDetail?postId=${post.postId}">
-                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" src="${pageContext.request.contextPath}/images/post/${post.image}" onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
+                            <img class="swiper-img mx-auto d-block rounded-1" loading="lazy" 
+                                 src="${pageContext.request.contextPath}/images/post/${post.image}" 
+                                 onerror="this.src='assets/images/others/product-3.jpg'" alt="${post.title}">
                             <span class="menu-text-sm text-center mt-2 text-truncate-2">${post.title}</span>
                         </a>
                     </div>

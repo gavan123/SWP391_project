@@ -68,7 +68,9 @@
             <c:forEach var="anime" items="${animeList}">
                 <div class="card">
                     <div class="card-body">
-                        <img class="img-thumbnail" src="${anime.imageAnime}" onerror="this.src='assets/images/others/product-3.jpg'">
+                        <img class="img-thumbnail" 
+                             src="${pageContext.request.contextPath}/images/anime/${anime.imageAnime}" 
+                             onerror="this.src='assets/images/others/product-3.jpg'">
                         <div>
                             <h2 class="card-title">
                                 <a href="AnimeDetail?animeId=${anime.animeId}">${anime.title}</a>

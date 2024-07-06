@@ -66,14 +66,15 @@ public class UploadPFP extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String realPath = request.getServletContext().getRealPath("/");
-        MediaDAO mediaDAO = new MediaDAO();
+
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
+
+        String realPath = request.getServletContext().getRealPath("/");
         // Xây dựng đường dẫn tuyệt đối đến thư mục images và cắt bỏ phần "build" nếu có
         Path gameDirectory = ImageHandler
                 .removeBuildFromPath(Paths.get(realPath, "images"))
-                .resolve("game");
+                .resolve("avatar");
         Files.createDirectories(gameDirectory);
 
 // Lưu danh sách các file ảnh và tên file
@@ -85,16 +86,16 @@ public class UploadPFP extends HttpServlet {
             if (submittedFileName != null && ImageHandler.isImageFile(submittedFileName)) {
                 fileNames.add(submittedFileName);
                 // Encode media name and set image to the post
-                String encodedMediaName = mediaDAO.encodeMediaName(user.getUserId()) + "." + ImageHandler.getExtension(submittedFileName);           
+                String imageFinal = "avatar/" + ImageHandler.encodeMediaName(user.getUserId()) + "." + ImageHandler.getExtension(submittedFileName);
                 UserDAO userDAO = new UserDAO();
-                userDAO.updateProfilePhoto(user.getUserId(), encodedMediaName);
-                user.setProfilePhoto(encodedMediaName);
+                userDAO.updateProfilePhoto(user.getUserId(), imageFinal);
+                user.setProfilePhoto(imageFinal);
 
                 // Đọc và lưu ảnh vào thư mục "game"
                 try (InputStream input = part.getInputStream()) {
                     BufferedImage image = ImageIO.read(input);
                     ImageHandler.saveImage(image, gameDirectory.toString(),
-                            encodedMediaName, ImageHandler.getExtension(encodedMediaName));
+                            imageFinal, ImageHandler.getExtension(submittedFileName));
                     response.getWriter().println("Upload thành công các ảnh vào thư mục: " + gameDirectory.toString());
                 } catch (IOException e) {
                     response.getWriter().println("Error reading or saving image: " + e.getMessage());

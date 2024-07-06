@@ -17,47 +17,13 @@
 <%@page import="java.util.ArrayList"%>
 
 <style>
-    .popup {
-        display: none;
-        position: fixed;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        border: 1px solid #ccc;
-        padding: 30px;
-        background: white;
-        z-index: 1000;
-        width: 500px;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    }
-    .popup-header {
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
-    .popup-content {
-        margin-bottom: 20px;
-    }
-    .popup-note {
-        margin-bottom: 20px;
-    }
-    .popup-buttons {
-        display: flex;
-        justify-content: space-between;
-    }
-    .popup-buttons button {
-        padding: 10px 20px;
-        cursor: pointer;
-    }
-    .popup-overlay {
-        display: none;
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-    }
+   .popup{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);border:1px solid #ccc;padding:30px;background:#fff;z-index:1000;width:500px;box-shadow:0 0 15px rgba(0,0,0,0.2)}
+.popup-header{font-size:24px;margin-bottom:20px}
+.popup-content{margin-bottom:20px}
+.popup-note{margin-bottom:20px}
+.popup-buttons{display:flex;justify-content:space-between}
+.popup-buttons button{padding:10px 20px;cursor:pointer}
+.popup-overlay{display:none;position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:999}
 </style>
 
 <%

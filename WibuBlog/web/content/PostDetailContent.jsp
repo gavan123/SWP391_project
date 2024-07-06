@@ -101,7 +101,7 @@
         <img class="img-thumbnail rounded-circle mx-auto d-block mt-2" 
              alt="${post.username}" title="${post.username}" 
              style="width:120px;height:120px" 
-             src="${pageContext.request.contextPath}/images/game/<%=authorProfilePhoto%>"
+             src="${pageContext.request.contextPath}/images/avatar/<%=authorProfilePhoto%>"
              onerror="this.src='assets/images/others/product-3.jpg'">
         <div class="card-body">
             <p class="card-title text-center fw-700 mb-0">
@@ -137,7 +137,7 @@
                             <div class="border-0 bg-none mt-2 media align-items-center">
                                 <div class="comment-avatar mr-2">
                                     <img alt="${user.username}" title="${user.username}" 
-                                         src="${pageContext.request.contextPath}/images/game/${user.profilePhoto}"
+                                         src="${pageContext.request.contextPath}/images/avatar/${user.profilePhoto}"
                                          onerror="this.src='assets/images/others/product-3.jpg'" width="45" height="45">
                                 </div>
                                 <div class="comment-input-block media-body">
@@ -169,7 +169,7 @@
                         <div class="comment-avatar">
                             <img alt="${commentUser.username}" 
                                  title="${commentUser.username}" 
-                                 src="${pageContext.request.contextPath}/images/game/${commentUser.profilePhoto}" 
+                                 src="${pageContext.request.contextPath}/images/avatar/${commentUser.profilePhoto}" 
                                  onerror="this.src='assets/images/others/product-3.jpg'">
                         </div>
                         <div class="comment-input-block media-body" id="comment_${loop.index}">
@@ -217,7 +217,7 @@
                                 <textarea class="form-control" rows="2" id="msgReply_${comment.commentId}" 
                                           minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
                                 <button type="button" class="btn btn-success btn-submit-comment"
-                                        data-comment-id="${comment.commentId}" onclick="sendMsgReply(this)">
+                                        data-comment-id="${comment.commentId}" data-reply-user="${commentUser.username}" onclick="sendMsgReply(this)">
                                     <i class="fas fa-paper-plane fa-2x"></i>
                                 </button>
                             </div>
@@ -233,7 +233,7 @@
                             <div class="comment-avatar ">
                                 <img alt="${commentUser.username}" 
                                      title="${commentUser.username}" 
-                                     src="${pageContext.request.contextPath}/images/game/${commentUser.profilePhoto}" 
+                                     src="${pageContext.request.contextPath}/images/avatar/${commentUser.profilePhoto}" 
                                      onerror="this.src='assets/images/others/product-3.jpg'">
                             </div>
                             <div class="comment-input-block media-body" id="comment_${loop.index}">
@@ -266,10 +266,7 @@
                                     </span>
                                     <c:if test="${not empty user && post.status == 'active'}">
                                         <c:if test="${user.userId == commentUser.userId && comment.status eq 'active'}">
-                                            <button type="button" class="btn reply-button" data-comment-id="${commentReply.commentId}" 
-                                                    data-toggle="modal" data-target="#editCommentModal">
-                                                Edit
-                                            </button>
+                                            <button type="button" class="btn reply-button" data-comment-id="${commentReply.commentId}" data-toggle="modal" data-target="#editCommentModal"> Edit </button>
                                         </c:if>
                                         <button class="btn reply-button"  data-comment-id="${commentReply.commentId}" onclick="toggleReply(this)">
                                             Reply
@@ -280,7 +277,8 @@
                                     <textarea class="form-control" rows="2" id="msgReply_${commentReply.commentId}" 
                                               minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
                                     <button type="button" class="btn btn-success btn-submit-comment"
-                                            data-comment-id="${comment.commentId}" 
+                                            data-comment-id="${commentReply.commentId}" 
+                                             data-parent-id="${comment.commentId}" 
                                             data-reply-user="${commentUser.username}" onclick="sendMsgReply(this)">
                                         <i class="fas fa-paper-plane fa-2x"></i>
                                     </button>
@@ -294,28 +292,7 @@
                 <p>No comments found.</p>
             </c:if>
 
-
-            <div class="border-0 bg-none media align-items-center mt-3" style="border-top:1px solid #a7acad !important;">
-                <div class="comment-avatar mr-2">
-                    <img alt="Lữ thiên thụ " title="Lữ thiên thụ " src="//vidian.vn/public-img/image-1660494445519.jpg" onerror="this.src='https:////vidian.vn/images/chi-dao-sang-tac.jpg'" width="45" height="45">
-                </div>
-                <div class="comment-input-block media-body" id="comment_0">
-                    <p class="card-text">
-                        <span class="card-title text-capitalize" style="background:#FAF41F -webkit-gradient(linear, left top, right top, from(#FAF41F), to(#FAF41F), color-stop(0.5,#ffffff)) 0 0 no-repeat; color: rgba(255, 255, 255, 0.15); font-weight:800; position: relative; -webkit-animation: shine-data-v-729833f6 1s infinite; -webkit-background-clip: text; -webkit-background-size: 300px;">dục thần</span>
-                        <span class="text-truncate ml-1 font-weight-bold" style="font-size:14px" title="Lữ thiên thụ ">Lữ thiên thụ </span>
-                    </p>
-                    <div class="card" style="border-color:#FAF41F">
-                        <div class="card-body border-0 rounded fw-500" style="box-shadow: 0 0 15px #FAF41F">
-                            Hảo bài hay.................👍
-                        </div>
-                        <input id="input_0" type="text" value="6307298b6a8aa46faf9bd801" hidden="">
-                    </div>
-                    <p class="card-text text-right mt-2 mb-0">
-                        <span class="badge badge-secondary">2 năm trước</span>
-                        <button class="btn border-0 bg-none text-secondary rounded-2" id="button_0" onclick="reply(0)"><i class="mdi mdi-reply text-secondary"></i>Trả lời</button>
-                    </p>
-                </div>
-            </div>
+          
         </div>
     </div>
 </div>
@@ -604,9 +581,10 @@
 
 // Gửi phản hồi
     function sendMsgReply(button) {
-        const parentId = button.getAttribute('data-comment-id');
+        const commentId = button.getAttribute('data-comment-id');
+        const parentId = button.getAttribute('data-parent-id');
         const userReply = button.getAttribute('data-reply-user');
-        const msg = $("#msgReply_" + parentId).val();
+        const msg = $("#msgReply_" + commentId).val();
         const postId = getUrlParameter('postId');
         if (!postId) {
             console.error("postId không tồn tại trong URL");

@@ -16,7 +16,7 @@
                 <div class="card mb-2 rounded-2" style="border-color:aqua;border-style:double;border-width:medium">
                     <div class="card-body">
                         <img class="float-left posts-img img-thumbnail mr-2 w-20"
-                             src="${pageContext.request.contextPath}/images/${post.image}" 
+                             src="${pageContext.request.contextPath}/images/post/${post.image}" 
                              onerror="this.src='assets/images/others/product-3.jpg'">
                         <ul class="list-group">
                             <li class="list-group-item d-flex justify-content-between align-items-center" style="background:none;border:none">

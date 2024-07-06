@@ -30,8 +30,8 @@ public class ProfanityFilter {
     // put words where they belong!
     static {
         try {
-            var profanitiesList = new File("assets\\profanities.txt");
-            var multiWordProfanitiesList = new File("assets\\multiwordprofanities.txt");
+            var profanitiesList = new File("C:\\Users\\admin\\Documents\\GitHub\\SWP391_project\\WibuBlog\\assets\\profanities.txt");
+            var multiWordProfanitiesList = new File("C:\\Users\\admin\\Documents\\GitHub\\SWP391_project\\WibuBlog\\assets\\multiwordprofanities.txt");
 
             Scanner sc1 = new Scanner(profanitiesList);
             Scanner sc2 = new Scanner(multiWordProfanitiesList);

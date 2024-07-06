@@ -101,7 +101,7 @@
         <img class="img-thumbnail rounded-circle mx-auto d-block mt-2" 
              alt="${post.username}" title="${post.username}" 
              style="width:120px;height:120px" 
-             src="${pageContext.request.contextPath}/images/<%=authorProfilePhoto%>"
+             src="${pageContext.request.contextPath}/images/game/<%=authorProfilePhoto%>"
              onerror="this.src='assets/images/others/product-3.jpg'">
         <div class="card-body">
             <p class="card-title text-center fw-700 mb-0">

@@ -7,6 +7,7 @@ package controller;
 import dal.CategoryDAO;
 import dal.GenreDAO;
 import dal.MediaDAO;
+import dal.NotificationDAO;
 import dal.PostDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -115,7 +116,7 @@ public class CreatePost extends HttpServlet {
         Part part = request.getPart("image");
         String submittedFileName = part.getSubmittedFileName();
         MediaDAO mediaDAO = new MediaDAO();
-
+        NotificationDAO nd = new NotificationDAO();
         // Kiểm tra nếu nguồn không được cung cấp, mặc định là "Anime Forum"
         if (ProfanityFilter.checkProfanity(source) || ProfanityFilter.checkProfanity(content) || ProfanityFilter.checkProfanity(title)) {
             PrintWriter out = response.getWriter();
@@ -177,6 +178,7 @@ public class CreatePost extends HttpServlet {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
+            nd.createUploadedPostNotification(postDAO.getPostIDJustInserted(user.getUserId()), user.getUserId());
             response.sendRedirect("Home.jsp"); // Điều hướng tới trang thành công
         } else {
             response.sendRedirect("Error.jsp"); // Điều hướng tới trang lỗi

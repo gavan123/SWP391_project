@@ -66,7 +66,7 @@ public class UserDAO extends DBContext {
     
      public void setUserStatusByUsername(String username, String userStatus){
         try {
-            String sql = "update [user] set Status = ? where username = ?";
+            String sql = "update [user] set [Status] = ? where [username] = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, userStatus);
             ps.setString(2, username);

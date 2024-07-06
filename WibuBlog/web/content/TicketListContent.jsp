@@ -108,6 +108,7 @@
         <form id="popup-form" method="post">
             <input type="hidden" id="popup-ticket-id" name="ticketId">
             <input type="hidden" id="popup-note-input" name="note">
+            <input type="hidden" id="popup-username" name="username">
         </form>
     </div>
 
@@ -154,6 +155,7 @@
         document.getElementById('popup-content').innerText = content;
         document.getElementById('popup-ticket-id').value = ticketId; // Set the ticket ID
         document.getElementById('popup-overlay').style.display = 'block';
+        document.getElementById('popup-username').value = username;
         document.getElementById('popup').style.display = 'block';
     }
 

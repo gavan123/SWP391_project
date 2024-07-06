@@ -92,14 +92,13 @@ public class ValidateReport extends HttpServlet {
             rd.DeleteAllReportWithTheSameId(rd.getPostIdByReportId(reportId), "Approved");
             pd.deletePost(rd.getReportById(reportId).getPostId());
             PrintWriter out = response.getWriter();
-            out.print(rd.getPostIdByReportId(reportId));
         } else {
             rd.setNote(note,reportId);
             rd.DeleteAllReportWithTheSameId(rd.getPostIdByReportId(reportId), "Rejected");
             rd.setStatusRejected(reportId);
         }
         
-       // request.getRequestDispatcher("ReportList.jsp").forward(request, response);
+        request.getRequestDispatcher("ReportList.jsp").forward(request, response);
 
     }
 

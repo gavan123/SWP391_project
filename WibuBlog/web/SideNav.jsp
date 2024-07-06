@@ -18,6 +18,14 @@
                         <span class="title">Dashboard</span>
                     </a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle" href="ListReport">
+                        <span class="icon-holder">
+                            <i class="anticon anticon-alert"></i>
+                        </span>
+                        <span class="title">Report Management</span>
+                    </a>
+                </li>
             </c:if>
                     <c:if test="${user != null && user.roleId == 2}">
                 <li class="nav-item dropdown">

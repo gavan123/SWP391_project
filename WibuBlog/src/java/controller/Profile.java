@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -36,7 +37,7 @@ public class Profile extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Profile</title>");            
+            out.println("<title>Servlet Profile</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet Profile at " + request.getContextPath() + "</h1>");
@@ -57,7 +58,15 @@ public class Profile extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        HttpSession session = request.getSession();
+
+        // Check if the user is logged in by checking the session
+        if (session.getAttribute("user") == null) {
+            String errorMessage = "Session expired!";
+            request.setAttribute("errorMessage", errorMessage);
+            request.getRequestDispatcher("Login.jsp").forward(request, response);
+            return;
+        }
         request.getRequestDispatcher("Profile.jsp").forward(request, response);
     }
 

@@ -45,7 +45,7 @@
                         </div>                                        
                         <div class="text-center text-sm-left m-v-15 p-l-30">
                             <h2 class="m-b-5">${user.username}</h2>
-                            <i class="text-opacity font-size-15" style="color:<%=rankColor%>" ><b><%=userDAO.getRankByUserId(user.getUserId())%>(<%=userDAO.getUserByUserId(user.getUserId()).getPoint()%>)</b></i>
+                            <i class="text-opacity font-size-15" style="color:<%=rankColor%>" ><b><%=userDAO.getRankByUserId(user.getUserId())%>(${user.point})</b></i>
                             <p class="text-dark m-b-20"><%=role%></p>
                         </div>
                     </div>

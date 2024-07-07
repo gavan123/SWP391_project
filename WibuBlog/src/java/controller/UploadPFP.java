@@ -86,7 +86,7 @@ public class UploadPFP extends HttpServlet {
             if (submittedFileName != null && ImageHandler.isImageFile(submittedFileName)) {
                 fileNames.add(submittedFileName);
                 // Encode media name and set image to the post
-                String imageFinal = "avatar/" + ImageHandler.encodeMediaName(user.getUserId()) + "." + ImageHandler.getExtension(submittedFileName);
+                String imageFinal = ImageHandler.encodeMediaName(user.getUserId()) + "." + ImageHandler.getExtension(submittedFileName);
                 UserDAO userDAO = new UserDAO();
                 userDAO.updateProfilePhoto(user.getUserId(), imageFinal);
                 user.setProfilePhoto(imageFinal);

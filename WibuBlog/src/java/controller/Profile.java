@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dal.PostDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,6 +13,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import model.User;
 
 /**
  *
@@ -67,6 +71,7 @@ public class Profile extends HttpServlet {
             request.getRequestDispatcher("Login.jsp").forward(request, response);
             return;
         }
+        
         request.getRequestDispatcher("Profile.jsp").forward(request, response);
     }
 

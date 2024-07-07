@@ -140,28 +140,25 @@
                     <div class="m-t-20">
                         <c:choose>
                             <c:when test="${userPostList.isEmpty}">
-                                <%if (userDAO.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
-                                    <p>You've not posted anything. Get started by <a href="createPost">create a post</a></p>  
-                                     <%}%>
-                                 <%if (userDAO.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
-                                    <label>You are currently banned please wait for your ban to expire to post</label>
-                                <%}%>
-                                    
+                                <c:if test="${user.status == 'active'}">
+                                    <p>You've not posted anything. Get started by <a href="createPost">creating a post</a></p>  
+                                </c:if>
+                                <c:if test="${user.status == 'deactive'}">
+                                    <label>You are currently banned. Please wait for your ban to expire to post.</label>
+                                </c:if>
                             </c:when>
                             <c:otherwise>
-                                 <%if (userDAO.getUserStatusByUserId(user.getUserId()).equals("active")){%>  
+                                <c:if test="${user.status == 'active'}">
                                     <p >What are your thoughts. Don't mind sharing by <a href="createPost">creating a post</a></p>  
-                                <%}%>
-
-                                 <%if (userDAO.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>  
+                                </c:if>
+                                <c:if test="${user.status == 'deactive'}">
                                     <label>You are currently banned please wait for your ban to expire to post</label>
-                                <%}%>
-                               
+                                </c:if>
                                 <hr>
                                 <h5>Your posts</h5>
                                 <c:forEach items="<%=userPostList%>" var="post">
                                     <div class="card mb-2" onclick="redirectToLink('${pageContext.request.contextPath}/postDetail?postId=${post.postID}')">
-                                        <div class="card-body">
+                                        <div class="card-body p-0">
                                             <header>
                                                 <h1 class="card-title" style="font-size: 26px;line-height:34px">${post.title}</h1>
                                             </header>
@@ -169,7 +166,7 @@
                                                 <i class="fas fa-user"></i> 
                                                 <a href="#" style="color:blue" accesskey="a">${post.username}</a> | 
                                                 <i class="fas fa-clock"></i>
-                                                <time datetime="${postTime}">${postTime}</time> | 
+                                                <time datetime="${post.postTime}">${post.postTime}</time> | 
                                                 <i class="fas fa-eye"></i> ${post.view}
                                             </h6>
                                             <h3 class="fs-14 border-bottom-badge-eee">
@@ -180,23 +177,13 @@
                                                     <a class="text-white" href="#">${post.genreName}</a>
                                                 </span>
                                             </h3>
-                                            <div class="card-text fs-content" style="font-size: 18px;">
-                                                ${post.content}
-                                                <br>
-                                                <br>
-                                                <br>
-                                            </div>
                                             <hr>
                                             <div class="row">
                                                 <div class="col-lg-4 mb-2 mx-auto">
                                                     <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
                                                         <li class="d-flex align-items-center mr-4 font-weight-bold">
                                                             <div class="vote-section" id="vote-section">
-                                                                <i id="vote_up" class="anticon anticon_vote anticon-arrow-up mr-2"
-                                                                   onclick="votePost('up', '${votePostStatus}')"></i>
-                                                                <i id="vote_down" class="anticon anticon_vote anticon-arrow-down mr-2" 
-                                                                   onclick="votePost('down', '${votePostStatus}')"></i>
-                                                                <span id="vote_value">${post.vote}</span>
+                                                                <span id="vote_value">Vote: ${post.vote}</span>
                                                             </div>
                                                         </li>
                                                     </ul>
@@ -214,161 +201,161 @@
             </div>
 
         </div>
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5>Connected</h5>
-                    <div class="m-t-30">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar avatar-image">
-                                <img src="assets/images/avatars/thumb-1.jpg" alt="">
-                            </div>
-                            <div class="m-l-10">
-                                <h5 class="m-b-0">
-                                    <a href="" class="text-dark">Erin Gonzales</a>
-                                </h5>
-                                <span class="font-size-13 text-gray">UI/UX Designer</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="m-t-30">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar avatar-image">
-                                <img src="assets/images/avatars/thumb-2.jpg" alt="">
-                            </div>
-                            <div class="m-l-10">
-                                <h5 class="m-b-0">
-                                    <a href="" class="text-dark">Darryl Day</a>
-                                </h5>
-                                <span class="font-size-13 text-gray">Software Engineer</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="m-t-30">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar avatar-image">
-                                <img src="assets/images/avatars/thumb-3.jpg" alt="">
-                            </div>
-                            <div class="m-l-10">
-                                <h5 class="m-b-0">
-                                    <a href="" class="text-dark">Marshall Nichols</a>
-                                </h5>
-                                <span class="font-size-13 text-gray">Product Manager</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="m-t-30">
-                        <div class="d-flex align-items-center">
-                            <div class="avatar avatar-image">
-                                <img src="assets/images/avatars/thumb-6.jpg" alt="">
-                            </div>
-                            <div class="m-l-10">
-                                <h5 class="m-b-0">
-                                    <a href="" class="text-dark">Riley Newman</a>
-                                </h5>
-                                <span class="font-size-13 text-gray">Data Analyst</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h5>Projects</h5>
-                    <div class="m-t-20">
-                        <div class="m-b-20 p-b-20 border-bottom">
-                            <div class="media align-items-center m-b-15">
-                                <div class="avatar avatar-image">
-                                    <img src="assets/images/others/coffee-app-thumb.jpg" alt="">
-                                </div>
-                                <div class="media-body m-l-20">
-                                    <h5 class="m-b-0">
-                                        <a href="" class="text-dark">Coffee Finder App</a>
-                                    </h5>
-                                </div>
-                            </div>
-                            <p>It is a long established fact that a reader will be distracted by the readable content.</p>
-                            <div class="d-inline-block">
-                                <a class="m-r-5" data-toggle="tooltip" title="Eugene Jordan" href="">
-                                    <div class="avatar avatar-image avatar-sm">
-                                        <img src="assets/images/avatars/thumb-6.jpg" alt="">
+        <!--        <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>Connected</h5>
+                            <div class="m-t-30">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar-image">
+                                        <img src="assets/images/avatars/thumb-1.jpg" alt="">
                                     </div>
-                                </a>
-                                <a class="m-r-5" data-toggle="tooltip" title="Pamela" href="">
-                                    <div class="avatar avatar-image avatar-sm">
-                                        <img src="assets/images/avatars/thumb-7.jpg" alt="">
+                                    <div class="m-l-10">
+                                        <h5 class="m-b-0">
+                                            <a href="" class="text-dark">Erin Gonzales</a>
+                                        </h5>
+                                        <span class="font-size-13 text-gray">UI/UX Designer</span>
                                     </div>
-                                </a>
-                            </div>
-                            <div class="float-right">
-                                <span class="badge badge-pill badge-blue font-size-12 p-h-10">In Progress</span>
-                            </div>
-                        </div>
-                        <div class="m-b-20 p-b-20 border-bottom">
-                            <div class="media align-items-center m-b-15">
-                                <div class="avatar avatar-image">
-                                    <img src="assets/images/others/weather-app-thumb.jpg" alt="">
-                                </div>
-                                <div class="media-body m-l-20">
-                                    <h5 class="m-b-0">
-                                        <a href="" class="text-dark">Weather App</a>
-                                    </h5>
                                 </div>
                             </div>
-                            <p>It is a long established fact that a reader will be distracted by the readable content.</p>
-                            <div class="d-inline-block">
-                                <a class="m-r-5" data-toggle="tooltip" title="Lillian Stone" href="">
-                                    <div class="avatar avatar-image avatar-sm">
-                                        <img src="assets/images/avatars/thumb-8.jpg" alt="">
-                                    </div>
-                                </a>
-                                <a class="m-r-5" data-toggle="tooltip" title="Victor Terry" href="">
-                                    <div class="avatar avatar-image avatar-sm">
-                                        <img src="assets/images/avatars/thumb-9.jpg" alt="">
-                                    </div>
-                                </a>
-                                <a class="m-r-5" data-toggle="tooltip" title="Wilma Young" href="">
-                                    <div class="avatar avatar-image avatar-sm">
-                                        <img src="assets/images/avatars/thumb-10.jpg" alt="">
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="float-right">
-                                <span class="badge badge-pill badge-cyan font-size-12 p-h-10">Completed</span>
-                            </div>
-                        </div>
-                        <div class="m-b-20 p-b-20 border-bottom">
-                            <div class="media align-items-center m-b-15">
-                                <div class="avatar avatar-image">
-                                    <img src="assets/images/others/music-app-thumb.jpg" alt="">
-                                </div>
-                                <div class="media-body m-l-20">
-                                    <h5 class="m-b-0">
-                                        <a href="" class="text-dark">Music App</a>
-                                    </h5>
-                                </div>
-                            </div>
-                            <p>Protein, iron, and calcium are some of the nutritional benefits associated with cheeseburgers.</p>
-                            <div class="d-inline-block">
-                                <a class="m-r-5" data-toggle="tooltip" title="Darryl Day" href="">
-                                    <div class="avatar avatar-image avatar-sm">
+                            <div class="m-t-30">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar-image">
                                         <img src="assets/images/avatars/thumb-2.jpg" alt="">
                                     </div>
-                                </a>
-                                <a class="m-r-5" data-toggle="tooltip" title="Virgil Gonzales" href="">
-                                    <div class="avatar avatar-image avatar-sm">
-                                        <img src="assets/images/avatars/thumb-4.jpg" alt="">
+                                    <div class="m-l-10">
+                                        <h5 class="m-b-0">
+                                            <a href="" class="text-dark">Darryl Day</a>
+                                        </h5>
+                                        <span class="font-size-13 text-gray">Software Engineer</span>
                                     </div>
-                                </a>
+                                </div>
                             </div>
-                            <div class="float-right">
-                                <span class="badge badge-pill badge-cyan font-size-12 p-h-10">Completed</span>
+                            <div class="m-t-30">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar-image">
+                                        <img src="assets/images/avatars/thumb-3.jpg" alt="">
+                                    </div>
+                                    <div class="m-l-10">
+                                        <h5 class="m-b-0">
+                                            <a href="" class="text-dark">Marshall Nichols</a>
+                                        </h5>
+                                        <span class="font-size-13 text-gray">Product Manager</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-t-30">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar-image">
+                                        <img src="assets/images/avatars/thumb-6.jpg" alt="">
+                                    </div>
+                                    <div class="m-l-10">
+                                        <h5 class="m-b-0">
+                                            <a href="" class="text-dark">Riley Newman</a>
+                                        </h5>
+                                        <span class="font-size-13 text-gray">Data Analyst</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>Projects</h5>
+                            <div class="m-t-20">
+                                <div class="m-b-20 p-b-20 border-bottom">
+                                    <div class="media align-items-center m-b-15">
+                                        <div class="avatar avatar-image">
+                                            <img src="assets/images/others/coffee-app-thumb.jpg" alt="">
+                                        </div>
+                                        <div class="media-body m-l-20">
+                                            <h5 class="m-b-0">
+                                                <a href="" class="text-dark">Coffee Finder App</a>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                    <p>It is a long established fact that a reader will be distracted by the readable content.</p>
+                                    <div class="d-inline-block">
+                                        <a class="m-r-5" data-toggle="tooltip" title="Eugene Jordan" href="">
+                                            <div class="avatar avatar-image avatar-sm">
+                                                <img src="assets/images/avatars/thumb-6.jpg" alt="">
+                                            </div>
+                                        </a>
+                                        <a class="m-r-5" data-toggle="tooltip" title="Pamela" href="">
+                                            <div class="avatar avatar-image avatar-sm">
+                                                <img src="assets/images/avatars/thumb-7.jpg" alt="">
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="float-right">
+                                        <span class="badge badge-pill badge-blue font-size-12 p-h-10">In Progress</span>
+                                    </div>
+                                </div>
+                                <div class="m-b-20 p-b-20 border-bottom">
+                                    <div class="media align-items-center m-b-15">
+                                        <div class="avatar avatar-image">
+                                            <img src="assets/images/others/weather-app-thumb.jpg" alt="">
+                                        </div>
+                                        <div class="media-body m-l-20">
+                                            <h5 class="m-b-0">
+                                                <a href="" class="text-dark">Weather App</a>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                    <p>It is a long established fact that a reader will be distracted by the readable content.</p>
+                                    <div class="d-inline-block">
+                                        <a class="m-r-5" data-toggle="tooltip" title="Lillian Stone" href="">
+                                            <div class="avatar avatar-image avatar-sm">
+                                                <img src="assets/images/avatars/thumb-8.jpg" alt="">
+                                            </div>
+                                        </a>
+                                        <a class="m-r-5" data-toggle="tooltip" title="Victor Terry" href="">
+                                            <div class="avatar avatar-image avatar-sm">
+                                                <img src="assets/images/avatars/thumb-9.jpg" alt="">
+                                            </div>
+                                        </a>
+                                        <a class="m-r-5" data-toggle="tooltip" title="Wilma Young" href="">
+                                            <div class="avatar avatar-image avatar-sm">
+                                                <img src="assets/images/avatars/thumb-10.jpg" alt="">
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="float-right">
+                                        <span class="badge badge-pill badge-cyan font-size-12 p-h-10">Completed</span>
+                                    </div>
+                                </div>
+                                <div class="m-b-20 p-b-20 border-bottom">
+                                    <div class="media align-items-center m-b-15">
+                                        <div class="avatar avatar-image">
+                                            <img src="assets/images/others/music-app-thumb.jpg" alt="">
+                                        </div>
+                                        <div class="media-body m-l-20">
+                                            <h5 class="m-b-0">
+                                                <a href="" class="text-dark">Music App</a>
+                                            </h5>
+                                        </div>
+                                    </div>
+                                    <p>Protein, iron, and calcium are some of the nutritional benefits associated with cheeseburgers.</p>
+                                    <div class="d-inline-block">
+                                        <a class="m-r-5" data-toggle="tooltip" title="Darryl Day" href="">
+                                            <div class="avatar avatar-image avatar-sm">
+                                                <img src="assets/images/avatars/thumb-2.jpg" alt="">
+                                            </div>
+                                        </a>
+                                        <a class="m-r-5" data-toggle="tooltip" title="Virgil Gonzales" href="">
+                                            <div class="avatar avatar-image avatar-sm">
+                                                <img src="assets/images/avatars/thumb-4.jpg" alt="">
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="float-right">
+                                        <span class="badge badge-pill badge-cyan font-size-12 p-h-10">Completed</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
     </div>
 </div>
 

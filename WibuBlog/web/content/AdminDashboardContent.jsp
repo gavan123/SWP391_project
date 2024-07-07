@@ -211,21 +211,21 @@
                         </div>
                         <div class="m-t-30">
                             <%  TicketDAO td = new TicketDAO();
-                                %>
+                            %>
                             <div class="m-b-25">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <!--start-->
                                     <div class="m-l-10" >
-                                        
+
                                         <span>Pending ticket: <%=td.getAllPendingTicket()%></span>
                                         <hr>
                                         <br>
                                         <span>Resolved Ticket:  <%=td.getAllResolvedTicket()%></span>
-                                       
+
                                     </div>                                
                                     <div class="scale-left">
 
-                              
+
                                     </div>
                                 </div>  
                                 <br><hr>   
@@ -243,9 +243,9 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="m-b-0">Popular Genre</h5>
-                           <!-- <div>
-                                <a href="ViewAll?Data=CategoryStat" class="btn btn-sm btn-default">View All</a>
-                            </div>-->
+                            <!-- <div>
+                                 <a href="ViewAll?Data=CategoryStat" class="btn btn-sm btn-default">View All</a>
+                             </div>-->
                         </div>
                         <div class="m-t-30">
                             <% for(TopViewedGenre x: gd.getTop6ViewedGenre()){%>
@@ -292,9 +292,9 @@
                             </div>
                         </div>
                         <div class="m-t-30">
-                              <% for(User x: ud.getTop10User()){%>
+                            <% for(User x: ud.getTop10User()){%>
                             <div class="m-b-25">
-                                 <div class="d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center justify-content-between">
                                     <!--start-->
                                     <div class="avatar avatar-image rounded">
                                         <img src="${pageContext.request.contextPath}/images/avatar/<%=x.getProfilePhoto()%>"  onerror="this.src='assets/images/others/product-3.jpg'" alt="${topUser.username}">
@@ -312,10 +312,10 @@
                                         <span class="m-l-10">Point(<%=x.getPoint()%>)</span>   
 
                                     </div>                                
-                                   
+
                                 </div>  
                             </div>
-                                        <%}%>
+                            <%}%>
                         </div>
                     </div>
                 </div>

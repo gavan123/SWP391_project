@@ -68,6 +68,13 @@ public class UploadPFP extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
+        // Check if the user is logged in by checking the session
+        if (session.getAttribute("user") == null) {
+            String errorMessage = "Session expired!";
+            request.setAttribute("errorMessage", errorMessage);
+            request.getRequestDispatcher("Login.jsp").forward(request, response);
+            return;
+        }
         User user = (User) session.getAttribute("user");
 
         String realPath = request.getServletContext().getRealPath("/");
@@ -107,7 +114,7 @@ public class UploadPFP extends HttpServlet {
         }
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }

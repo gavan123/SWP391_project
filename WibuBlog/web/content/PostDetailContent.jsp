@@ -61,6 +61,7 @@
                     </c:if>
                     <c:choose>
                         <c:when test="${user == null || user.status eq 'active'}">
+                            <c:if test="${post.username != user.username}">
                             <div class="row">
                                 <div class="col-lg-4 mb-2 mx-auto">
                                     <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
@@ -76,6 +77,7 @@
                                     </ul>
                                 </div>
                             </div>
+                    </c:if>
                         </c:when>
                         <c:when test="${user != null && user.status eq 'deactive'}">
                             <p style="color: red">You are not allowed to vote while banned.</p>

@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 
 @WebServlet(name = "AccountSetting", urlPatterns = {"/AccountSetting"})
@@ -54,6 +55,16 @@ public class AccountSetting extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Get the session from the request
+        HttpSession session = request.getSession();
+
+        // Check if the user is logged in by checking the session
+        if (session.getAttribute("user") == null) {
+            String errorMessage = "Session expired!";
+            request.setAttribute("errorMessage", errorMessage);
+            request.getRequestDispatcher("Login.jsp").forward(request, response);
+            return;
+        }
         response.sendRedirect("AccountSetting.jsp");
     }
 

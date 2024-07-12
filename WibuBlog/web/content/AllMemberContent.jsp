@@ -6,14 +6,14 @@
 <%@ page import="model.TopViewedGenre"%>
 <%@ page import="dal.PostDAO" %>
 <%@ page import="java.util.ArrayList"%>
-<div class="m-t-30">
+<div class="card m-t-30">
     <div class="table-responsive">
         <form action="SearchUser" method="get" style="float: right">
             <i class="anticon anticon-search"></i> <input type="text" name="searchToken" style="width: 250px;height: 25px;font-size:15px" placeholder="Search a member">
             <input type="submit" style="visibility: hidden;" />
             <input type="hidden" value="a" name="flag">
         </form>
-        <table class="table table-hover" style="border: solid 1px black">
+        <table class="table table-hover" >
             <thead>
                 <tr>
                     <th>No</th>

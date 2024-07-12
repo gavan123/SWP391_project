@@ -51,6 +51,20 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
+    public int getUserPointById(int userID){
+        try {
+            String sql = "Select * from [user] where userid = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+            rs.next();
+            int a = rs.getInt("Point");
+            return a;
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
     public void setUserStatusByUserId(int userId, String userStatus){
         try {
             String sql = "update [user] set Status = ? where userid = ?";

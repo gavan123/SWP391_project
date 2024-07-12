@@ -3,7 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="model.User" %>
 <%@ page import="dal.PostDAO" %>
-<%@ page import="dal.UserDAO" %>
 <%@ page import="dal.ReportDAO" %>
 <%@ page import="model.Report" %>
 <%@ page import="model.PostDetail" %>
@@ -61,11 +60,7 @@
                         <%}%>
                     </c:if>
                     <c:choose>
-                        <c:when test="${user == null}">
-                            <c:if test="${post.username != user.username}">
-                                <%UserDAO ud = new UserDAO();
-                        User user = (User)session.getAttribute("user");%>
-                                <%if(ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>
+                        <c:when test="${user == null || user.status eq 'active'}">
                             <div class="row">
                                 <div class="col-lg-4 mb-2 mx-auto">
                                     <ul class="list-unstyled m-0 d-flex flex-wrap justify-content-center">
@@ -81,16 +76,9 @@
                                     </ul>
                                 </div>
                             </div>
-                                            <%}%>
-                    </c:if>
                         </c:when>
-                        <c:when test="${user != null}">
-                               <%UserDAO ud = new UserDAO();
-                        User user = (User)session.getAttribute("user");%>
-                             <%if(ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>
-                          
+                        <c:when test="${user != null && user.status eq 'deactive'}">
                             <p style="color: red">You are not allowed to vote while banned.</p>
-                            <%}%>
                         </c:when>
                     </c:choose>
                 </div>
@@ -145,10 +133,7 @@
                         </div>
                     </c:when>
                     <c:otherwise>
-                         <%UserDAO ud = new UserDAO();
-                        User user = (User)session.getAttribute("user");
-                          %>
-                        <%if(ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>
+                        <c:if test="${user.status eq 'active'}">
                             <div class="border-0 bg-none mt-2 media align-items-center">
                                 <div class="comment-avatar mr-2">
                                     <img alt="${user.username}" title="${user.username}" 
@@ -165,11 +150,10 @@
                                     </div>
                                 </div>
                             </div>
-                        <%}%>
-                       
-                        <%if(ud.getUserStatusByUserId(user.getUserId()).equals("deactive")){%>
+                        </c:if>
+                        <c:if test="${user.status eq 'deactive'}">
                             <p style="color: red">You are not allowed to comment while banned</p>
-                        <%}%>
+                        </c:if>
                     </c:otherwise>
                 </c:choose>
             </c:if>
@@ -220,13 +204,9 @@
                                             Edit
                                         </button>
                                     </c:if>
-                                    <% UserDAO ud = new UserDAO();
-                        User user = (User)session.getAttribute("user");
-                                    if(ud.getUserStatusByUserId(user.getUserId()).equals("active")){%>
                                     <button class="btn reply-button"  data-comment-id="${comment.commentId}" onclick="toggleReply(this)">
                                         Reply
                                     </button>
-                                        <%}%>
                                 </c:if>
                             </div>                         
 
@@ -237,7 +217,9 @@
                                 <textarea class="form-control" rows="2" id="msgReply_${comment.commentId}" 
                                           minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
                                 <button type="button" class="btn btn-success btn-submit-comment"
-                                        data-comment-id="${comment.commentId}"  data-parent-id="${comment.commentId}"  data-reply-user="${commentUser.username}" onclick="sendMsgReply(this)">
+                                        data-comment-id="${comment.commentId}"
+                                        data-parent-id="${comment.commentId}" 
+                                        data-reply-user="${commentUser.username}" onclick="sendMsgReply(this)">
                                     <i class="fas fa-paper-plane fa-2x"></i>
                                 </button>
                             </div>

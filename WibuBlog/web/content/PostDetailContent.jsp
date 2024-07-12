@@ -217,7 +217,9 @@
                                 <textarea class="form-control" rows="2" id="msgReply_${comment.commentId}" 
                                           minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
                                 <button type="button" class="btn btn-success btn-submit-comment"
-                                        data-comment-id="${comment.commentId}" data-reply-user="${commentUser.username}" onclick="sendMsgReply(this)">
+                                        data-comment-id="${comment.commentId}"
+                                        data-parent-id="${comment.commentId}" 
+                                        data-reply-user="${commentUser.username}" onclick="sendMsgReply(this)">
                                     <i class="fas fa-paper-plane fa-2x"></i>
                                 </button>
                             </div>

@@ -27,9 +27,9 @@
 </div>
     <%}%>   
 
-<div class="m-t-30">
+<div class="card m-t-30">
     <div class="table-responsive">
-        <table class="table table-hover" style="border: 1px solid black">
+        <table class="table table-hover">
             <thead>
                 <tr>
                     <th>Rank</th>
@@ -58,7 +58,7 @@
                     </td>
                     <td><%=x.getPoint()%></td>
 
-                    <td style="color:<%=ud.getColorByRank(ud.getRankByRankID(x.getRankId()))%>"><%=ud.getRankByRankID(x.getRankId())%></td>
+                    <td><%=ud.getRankByRankID(x.getRankId())%></td>
                     <td><%=ud.getRoleByRoleID(x.getRoleId())%></td>
                     <td>
                         <div class="d-flex align-items-center">

@@ -25,9 +25,15 @@
                         <time datetime="${postTime}">${postTime}</time> | 
                         <i class="fas fa-eye"></i> ${post.view}
                         <c:if test="${post.username == user.username}">
-                            <button type="button" class="btn btn-danger" id="deletePostButton" style="margin-left: 50%">
-                                <i class="fas fa-trash"></i> Delete Post
-                            </button>
+                            <div class="UD_btn m-10 d-flex justify-content-end" >
+                                <button type="button" class="btn btn-warning mr-2" id="editPostButton" 
+                                        onclick="location.href = 'editPost?postId=${post.postID}'">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button type="button" class="btn btn-danger" id="deletePostButton">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
                         </c:if>
                     </h6>
 
@@ -280,7 +286,7 @@
                                               minlength="30" required placeholder="Ta đến nói hai câu..."></textarea>
                                     <button type="button" class="btn btn-success btn-submit-comment"
                                             data-comment-id="${commentReply.commentId}" 
-                                             data-parent-id="${comment.commentId}" 
+                                            data-parent-id="${comment.commentId}" 
                                             data-reply-user="${commentUser.username}" onclick="sendMsgReply(this)">
                                         <i class="fas fa-paper-plane fa-2x"></i>
                                     </button>
@@ -294,7 +300,7 @@
                 <p>No comments found.</p>
             </c:if>
 
-          
+
         </div>
     </div>
 </div>
@@ -344,9 +350,9 @@
                                 <div class=" checkbox-wrapper-31">
                                     <input class="form-check-input" type="checkbox" name="reasons" id="spam" value="Spam">
                                     <svg viewBox="0 0 35.6 35.6">
-                                        <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
-                                        <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
-                                        <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                                    <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                                    <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                                    <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
                                     </svg>
                                 </div>
                                 <label class="form-check-label" for="spam">Spam</label>
@@ -355,9 +361,9 @@
                                 <div class="checkbox-wrapper-31">
                                     <input class="form-check-input" type="checkbox" name="reasons" id="harassment" value="Harassment">
                                     <svg viewBox="0 0 35.6 35.6">
-                                        <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
-                                        <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
-                                        <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                                    <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                                    <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                                    <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
                                     </svg>
                                 </div>
                                 <label class="form-check-label" for="harassment">Harassment</label>
@@ -366,9 +372,9 @@
                                 <div class="checkbox-wrapper-31">
                                     <input class="form-check-input" type="checkbox" name="reasons" id="hateSpeech" value="Hate Speech">
                                     <svg viewBox="0 0 35.6 35.6">
-                                        <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
-                                        <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
-                                        <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                                    <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                                    <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                                    <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
                                     </svg>
                                 </div>
                                 <label class="form-check-label" for="hateSpeech">Hate Speech</label>
@@ -377,9 +383,9 @@
                                 <div class="checkbox-wrapper-31">
                                     <input class="form-check-input" type="checkbox" name="reasons" id="misinformation" value="Misinformation">
                                     <svg viewBox="0 0 35.6 35.6">
-                                        <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
-                                        <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
-                                        <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                                    <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                                    <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                                    <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
                                     </svg>
                                 </div>
                                 <label class="form-check-label" for="misinformation">Misinformation</label>
@@ -388,9 +394,9 @@
                                 <div class="checkbox-wrapper-31">
                                     <input class="form-check-input" type="checkbox" name="reasons" id="other" value="Other">
                                     <svg viewBox="0 0 35.6 35.6">
-                                        <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
-                                        <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
-                                        <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
+                                    <circle class="background" cx="17.8" cy="17.8" r="17.8"></circle>
+                                    <circle class="stroke" cx="17.8" cy="17.8" r="14.37"></circle>
+                                    <polyline class="check" points="11.78 18.12 15.55 22.23 25.17 12.87"></polyline>
                                     </svg>
                                 </div>
                                 <label class="form-check-label" for="other">Other</label>
@@ -711,23 +717,23 @@
     });
 </script>
 <script>
-document.getElementById('reportForm').addEventListener('submit', function(event) {
-    const checkboxes = document.querySelectorAll('input[name="reasons"]:checked');
-    let reasons = [];
-    checkboxes.forEach((checkbox) => {
-        reasons.push(checkbox.value);
-    });
-    if (reasons.length === 0) {
-        event.preventDefault();
-        alert('Please select at least one reason.');
-        return;
-    }
+    document.getElementById('reportForm').addEventListener('submit', function (event) {
+        const checkboxes = document.querySelectorAll('input[name="reasons"]:checked');
+        let reasons = [];
+        checkboxes.forEach((checkbox) => {
+            reasons.push(checkbox.value);
+        });
+        if (reasons.length === 0) {
+            event.preventDefault();
+            alert('Please select at least one reason.');
+            return;
+        }
 
-    // Convert array to a comma-separated string or any other format you prefer
-    const reasonsInput = document.createElement('input');
-    reasonsInput.type = 'hidden';
-    reasonsInput.name = 'reasons';
-    reasonsInput.value = reasons.join(',');
-    this.appendChild(reasonsInput);
-});
+        // Convert array to a comma-separated string or any other format you prefer
+        const reasonsInput = document.createElement('input');
+        reasonsInput.type = 'hidden';
+        reasonsInput.name = 'reasons';
+        reasonsInput.value = reasons.join(',');
+        this.appendChild(reasonsInput);
+    });
 </script>

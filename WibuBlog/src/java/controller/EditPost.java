@@ -6,13 +6,11 @@ package controller;
 
 import dal.CategoryDAO;
 import dal.GenreDAO;
-import dal.MediaDAO;
 import dal.NotificationDAO;
 import dal.PostDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,11 +34,10 @@ import utility.ProfanityFilter;
 
 /**
  *
- * @author admin
+ * @author ADMIN
  */
-@MultipartConfig
-@WebServlet(name = "createPost2", urlPatterns = {"/createPost"})
-public class CreatePost extends HttpServlet {
+@WebServlet(name = "EditPost", urlPatterns = {"/editPost"})
+public class EditPost extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -59,10 +56,10 @@ public class CreatePost extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet createPost2</title>");
+            out.println("<title>Servlet EditPost</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet createPost2 at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet EditPost at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -80,7 +77,6 @@ public class CreatePost extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         // Get the session from the request
         HttpSession session = request.getSession();
 
@@ -91,17 +87,34 @@ public class CreatePost extends HttpServlet {
             request.getRequestDispatcher("Login.jsp").forward(request, response);
             return;
         }
-        
+
         CategoryDAO categoryDAO = new CategoryDAO();
         GenreDAO genreDAO = new GenreDAO();
+        PostDAO postDAO = new PostDAO();
 
         List<Category> categories = categoryDAO.getCategoryNames();
         List<Genre> genres = genreDAO.getAllGenres();
 
+        // Lấy giá trị postId từ request parameter
+        String postIdStr = request.getParameter("postId");
+
+        // Initialize post to null
+        model.PostDetail postDetail = null;
+
+        // Kiểm tra xem postId có tồn tại và không rỗng
+        if (postIdStr != null && !postIdStr.isEmpty()) {
+            try {
+                int postId = Integer.parseInt(postIdStr);
+                postDetail = postDAO.getPostDetailById(postId);
+            } catch (NumberFormatException e) {
+            }
+        }
+
+        request.setAttribute("post", postDetail);
         request.setAttribute("categories", categories);
         request.setAttribute("genres", genres);
 
-        request.getRequestDispatcher("CreatePost.jsp").forward(request, response);
+        request.getRequestDispatcher("EditPost.jsp").forward(request, response);
     }
 
     /**
@@ -115,22 +128,23 @@ public class CreatePost extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
 
         // Lấy thông tin từ form
+        int postId = Integer.parseInt(request.getParameter("postId"));
         String title = request.getParameter("title");
         int categoryId = Integer.parseInt(request.getParameter("category"));
         int genreId = Integer.parseInt(request.getParameter("genre"));
         String source = request.getParameter("source");
         String content = request.getParameter("content");
+        String imageDB = request.getParameter("imageDB");
+        
         Part part = request.getPart("image");
-        String submittedFileName = part.getSubmittedFileName();
+        String submittedFileName = (part != null && part.getSize() > 0) ? part.getSubmittedFileName() : null;
 
         // Kiểm tra nếu nguồn không được cung cấp, mặc định là "Anime Forum"
         if (ProfanityFilter.checkProfanity(source) || ProfanityFilter.checkProfanity(content) || ProfanityFilter.checkProfanity(title)) {
-            PrintWriter out = response.getWriter();
             CategoryDAO categoryDAO = new CategoryDAO();
             GenreDAO genreDAO = new GenreDAO();
             List<Category> categories = categoryDAO.getCategoryNames();
@@ -138,67 +152,78 @@ public class CreatePost extends HttpServlet {
             request.setAttribute("categories", categories);
             request.setAttribute("genres", genres);
             request.setAttribute("profanityDetected", true);
-            request.getRequestDispatcher("CreatePost.jsp").forward(request, response);
+            request.getRequestDispatcher("EditPost.jsp").forward(request, response);
             return;
         }
         if (source == null || source.isEmpty()) {
             source = "Anime Forum";
         }
 
-        // Kiểm tra nếu không phải là file ảnh
-        if (submittedFileName != null || !ImageHandler.isImageFile(submittedFileName)) {
+        // Kiểm tra nếu không phải là file ảnh hoặc không có file ảnh mới được tải lên
+        if (submittedFileName != null && !ImageHandler.isImageFile(submittedFileName)) {
             response.getWriter().println("File " + submittedFileName + " is not an image.");
             return;
         }
 
-        // Lấy đường dẫn thực tế đến thư mục gốc của ứng dụng web
-        String realPath = request.getServletContext().getRealPath("/");
-        // Xây dựng đường dẫn tuyệt đối đến thư mục images và cắt bỏ phần "build" nếu có
-        Path gameDirectory = ImageHandler
-                .removeBuildFromPath(Paths.get(realPath, "images"))
-                .resolve("post");
-        Files.createDirectories(gameDirectory);
-
         PostDAO postDAO = new PostDAO();
         // Tạo tên file ảnh mới bằng cách mã hóa và kết hợp với tên gốc
-        String imageFinal = ImageHandler.encodeMediaName(user.getUserId()) + "." + ImageHandler.getExtension(submittedFileName);
+        String imageFinal = (submittedFileName != null) ? ImageHandler.encodeMediaName(user.getUserId()) + "." + ImageHandler.getExtension(submittedFileName) : imageDB;
 
         // Tạo đối tượng Post
-        Post post = new Post(user.getUserId(), categoryId, title, content,
-                source, imageFinal, LocalDateTime.MIN, "active");
+        Post post = new Post();
+        post.setPostId(postId);
+        post.setTitle(title);
+        post.setCategoryId(categoryId);
+        post.setSource(source);
+        post.setContent(content);
+        post.setImage(imageFinal);
 
         // Thực hiện lưu bài post vào cơ sở dữ liệu
-        boolean isPostCreated = postDAO.createPost(post);
+        boolean isPostEdited = postDAO.updatePost(post);
 
         // Kiểm tra kết quả và điều hướng người dùng
-        if (isPostCreated) {
+        if (isPostEdited) {
             // Lưu thể loại của post
-            postDAO.insertPostGenre(postDAO.getPostIDJustInserted(user.getUserId()), genreId);
+            postDAO.updatePostGenre(postId, genreId);
 
             // Lưu file ảnh vào thư mục "post"
-            try (InputStream input = part.getInputStream()) {
-                BufferedImage image = ImageIO.read(input);
-                ImageHandler.saveImage(image, gameDirectory.toString(), imageFinal, ImageHandler.getExtension(submittedFileName));
-                response.getWriter().println("Upload thành công ảnh vào thư mục: " + gameDirectory.toString());
-            } catch (IOException e) {
-                response.getWriter().println("Error reading or saving image: " + e.getMessage());
-                return;
-            }
-            try {
-                Thread.sleep(3000); // Giả lập thời gian chờ
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+            if (submittedFileName != null) {
+                // Lấy đường dẫn thực tế đến thư mục gốc của ứng dụng web
+                String realPath = request.getServletContext().getRealPath("/");
+                // Xây dựng đường dẫn tuyệt đối đến thư mục images và cắt bỏ phần "build" nếu có
+                Path gameDirectory = ImageHandler
+                        .removeBuildFromPath(Paths.get(realPath, "images"))
+                        .resolve("post");
+                Files.createDirectories(gameDirectory);
 
+                try (InputStream input = part.getInputStream()) {
+                    BufferedImage image = ImageIO.read(input);
+                    ImageHandler.saveImage(image, gameDirectory.toString(), imageFinal, ImageHandler.getExtension(submittedFileName));
+                    response.getWriter().println("Upload thành công ảnh vào thư mục: " + gameDirectory.toString());
+                } catch (IOException e) {
+                    response.getWriter().println("Error reading or saving image: " + e.getMessage());
+                    return;
+                }
+                try {
+                    Thread.sleep(3000); // Giả lập thời gian chờ
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
             NotificationDAO nd = new NotificationDAO();
-            nd.createUploadedPostNotification(postDAO.getPostIDJustInserted(user.getUserId()), user.getUserId());
-            response.sendRedirect("Home.jsp"); // Điều hướng tới trang thành công
+            nd.createUploadedPostNotification(postId, user.getUserId());
+            response.sendRedirect("postDetail?postId=" + postId);
         } else {
             response.sendRedirect("Error.jsp"); // Điều hướng tới trang lỗi
         }
 
     }
 
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
     @Override
     public String getServletInfo() {
         return "Short description";

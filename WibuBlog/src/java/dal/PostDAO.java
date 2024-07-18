@@ -200,6 +200,19 @@ public class PostDAO extends DBContext {
         }
     }
 
+    public void updatePostGenre(int postID, int genreID) {
+        try {
+            String sql = "UPDATE PostGenre SET GenreID = ? WHERE PostID = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, postID);
+            ps.setInt(2, genreID);
+            ps.execute();
+            ps.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     // Lấy tất cả các bài đăng của một danh mục cụ thể
     public List<Post> getAllPostsByCategory(int categoryId) {
         List<Post> postList = new ArrayList<>();
@@ -607,6 +620,27 @@ public class PostDAO extends DBContext {
         }
     }
 
+    public boolean updatePost(Post post) {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "UPDATE Post SET [CategoryID] = ?, [Title] = ?, "
+                + "[Content] = ?, [Source] = ?, [Image] = ? WHERE [PostID] = ?")) {
+
+            ps.setInt(1, post.getCategoryId());
+            ps.setString(2, post.getTitle());
+            ps.setString(3, post.getContent());
+            ps.setString(4, post.getSource());
+            ps.setString(5, post.getImage());
+            ps.setInt(6, post.getPostId());
+
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
     public ArrayList<Post> getUserPost(int userID) {
         try {
             String sql = "select * from [post] where userid = ?";
@@ -959,17 +993,17 @@ public class PostDAO extends DBContext {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-   
-
     public static void main(String[] args) {
         PostDAO postDAO = new PostDAO();
-        List<Post> posts = postDAO.getAllPostHaveReport();
-        for (Post post : posts) {
-            System.out.println("Post ID: " + post.getPostId());
-            System.out.println("Title: " + post.getTitle());
-            System.out.println("Report Count: " + post.getReportCount());
-            System.out.println(); // In ra các thông tin cần thiết của từng bài post
-        }
+        Post post = new Post();
+         post.setPostId(50);
+        post.setTitle("Community Article: Favorite Anime Memories");
+        post.setCategoryId(11);
+        post.setSource("AnimeMemories");
+        post.setContent("1");
+        post.setImage("favorite-anime-memories.jpg");
+
+        postDAO.updatePost(post);
 
     }
 

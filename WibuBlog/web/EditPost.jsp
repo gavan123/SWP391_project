@@ -53,7 +53,7 @@
         <h2>Edit Post</h2>
         <form id="editPostForm" action="EditPost" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
             <span id="username" style="font-weight: bold; color: #333;"> UserName: ${user.username} </span>
-            <input type="text" id="postId" name="postId" value="${post.postID}">
+            <input type="hidden" id="postId" name="postId" value="${post.postID}">
             <div class="form-group">
                 <label for="title">Title:</label>
                 <input type="text" class="form-control" id="title" name="title" value="${post != null ? post.title : ''}" placeholder="Enter the title" required>
@@ -86,7 +86,7 @@
             </div>
             <div class="form-group">
                 <label for="image">Image:</label>
-                <input type="text" id="imageDB" name="imageDB" value="${post != null ? post.image : ''}">
+                <input type="hidden" id="imageDB" name="imageDB" value="${post != null ? post.image : ''}">
                 <div class="custom-file">
                     <input type="file" class="custom-file-input" id="image" name="image" 
                            accept="image/png,image/jpeg,image/jpg,image/bmp,image/gif,image/webp" ${post.image == null ? 'required' : ''}>

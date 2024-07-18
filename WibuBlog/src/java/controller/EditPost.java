@@ -11,6 +11,7 @@ import dal.PostDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +23,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDateTime;
 import java.util.List;
 import javax.imageio.ImageIO;
 import model.Category;
@@ -36,7 +36,8 @@ import utility.ProfanityFilter;
  *
  * @author ADMIN
  */
-@WebServlet(name = "EditPost", urlPatterns = {"/editPost"})
+@MultipartConfig
+@WebServlet(name = "EditPost", urlPatterns = {"/EditPost"})
 public class EditPost extends HttpServlet {
 
     /**
@@ -132,16 +133,28 @@ public class EditPost extends HttpServlet {
         User user = (User) session.getAttribute("user");
 
         // Lấy thông tin từ form
-        int postId = Integer.parseInt(request.getParameter("postId"));
+        String postIdStr = request.getParameter("postId");
         String title = request.getParameter("title");
-        int categoryId = Integer.parseInt(request.getParameter("category"));
-        int genreId = Integer.parseInt(request.getParameter("genre"));
+        String categoryIdStr = request.getParameter("category");
+        String genreIdStr = request.getParameter("genre");
         String source = request.getParameter("source");
         String content = request.getParameter("content");
         String imageDB = request.getParameter("imageDB");
-        
+
         Part part = request.getPart("image");
         String submittedFileName = (part != null && part.getSize() > 0) ? part.getSubmittedFileName() : null;
+        int postId;
+        int categoryId;
+        int genreId;
+
+        try {
+            postId = Integer.parseInt(postIdStr);
+            categoryId = Integer.parseInt(categoryIdStr);
+            genreId = Integer.parseInt(genreIdStr);
+        } catch (NumberFormatException e) {
+            response.getWriter().println("Invalid input format: " + e.getMessage());
+            return;
+        }
 
         // Kiểm tra nếu nguồn không được cung cấp, mặc định là "Anime Forum"
         if (ProfanityFilter.checkProfanity(source) || ProfanityFilter.checkProfanity(content) || ProfanityFilter.checkProfanity(title)) {
@@ -152,7 +165,7 @@ public class EditPost extends HttpServlet {
             request.setAttribute("categories", categories);
             request.setAttribute("genres", genres);
             request.setAttribute("profanityDetected", true);
-            request.getRequestDispatcher("EditPost.jsp").forward(request, response);
+            request.getRequestDispatcher("EditPost?postId=" + postId).forward(request, response);
             return;
         }
         if (source == null || source.isEmpty()) {
@@ -212,7 +225,15 @@ public class EditPost extends HttpServlet {
             }
             NotificationDAO nd = new NotificationDAO();
             nd.createUploadedPostNotification(postId, user.getUserId());
-            response.sendRedirect("postDetail?postId=" + postId);
+            // Tạo thông báo alert
+            String alertMessage = "Post updated successfully!";
+
+            // Thêm script JavaScript vào response để hiển thị thông báo
+            String script = "<script>alert('" + alertMessage + "');</script>";
+            response.getWriter().println(script);
+
+            // Chuyển hướng sau khi alert được hiển thị
+            response.setHeader("Refresh", "0; URL=postDetail?postId=" + postId);
         } else {
             response.sendRedirect("Error.jsp"); // Điều hướng tới trang lỗi
         }

@@ -6,7 +6,6 @@ package controller;
 
 import dal.CategoryDAO;
 import dal.GenreDAO;
-import dal.MediaDAO;
 import dal.NotificationDAO;
 import dal.PostDAO;
 import java.io.IOException;

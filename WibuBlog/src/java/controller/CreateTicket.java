@@ -5,8 +5,6 @@
 
 package controller;
 
-import dal.PostDAO;
-import dal.ReportDAO;
 import dal.TicketDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,7 +15,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.time.LocalDateTime;
-import model.Report;
 import model.Ticket;
 import model.User;
 

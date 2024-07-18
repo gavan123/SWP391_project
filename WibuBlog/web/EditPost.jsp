@@ -51,7 +51,7 @@
     </c:if>
     <div class="container mt-4">
         <h2>Edit Post</h2>
-        <form id="editPostForm" action="editPost" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
+        <form id="editPostForm" action="EditPost" method="post" enctype="multipart/form-data" onsubmit="return validateForm();">
             <span id="username" style="font-weight: bold; color: #333;"> UserName: ${user.username} </span>
             <input type="text" id="postId" name="postId" value="${post.postID}">
             <div class="form-group">
@@ -108,7 +108,7 @@
                 filebrowserUploadUrl: '/imageUpCopy',
                 filebrowserUploadMethod: 'form'
             });
- 
+
 </script>
 <script type="text/javascript">
     window.onload = function () {

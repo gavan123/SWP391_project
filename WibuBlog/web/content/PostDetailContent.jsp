@@ -27,7 +27,7 @@
                         <c:if test="${post.username == user.username}">
                             <div class="UD_btn m-10 d-flex justify-content-end" >
                                 <button type="button" class="btn btn-warning mr-2" id="editPostButton" 
-                                        onclick="location.href = 'editPost?postId=${post.postID}'">
+                                        onclick="location.href = 'EditPost?postId=${post.postID}'">
                                     <i class="fas fa-edit"></i> Edit
                                 </button>
                                 <button type="button" class="btn btn-danger" id="deletePostButton">

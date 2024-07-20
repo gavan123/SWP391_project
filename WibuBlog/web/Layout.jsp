@@ -18,14 +18,27 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
         <style>
-          .logo{width:100%;max-width:300px;margin:0 auto}
-.logo img{width:100%;height:70px;display:block}
-.app{background-color:#fee2dc}
-::selection{color:#000;background:#fee2dc}
+            .logo{
+                width:100%;
+                max-width:300px;
+                margin:0 auto
+            }
+            .logo img{
+                width:100%;
+                height:70px;
+                display:block
+            }
+            .app{
+                background-color:#fee2dc
+            }
+            ::selection{
+                color:#000;
+                background:#fee2dc
+            }
         </style>
     </head>
     <body>
-        
+
         <div class="app">
             <div class="layout">
                 <!-- Header START -->
@@ -57,77 +70,75 @@
                             <li>
                                 <a>
                                     <form action="SearchContent" method="get">
-                                    <i class="anticon anticon-search"></i> <input type="text" name="searchToken" style="width: 250px;height: 25px;font-size:15px">
-                                    <input type="submit" style="visibility: hidden;" />
+                                        <i class="anticon anticon-search"></i> <input type="text" name="searchToken" style="width: 250px;height: 25px;font-size:15px">
+                                        <input type="submit" style="visibility: hidden;" />
                                     </form>
                                 </a>
                             </li>
                         </ul>
                         <ul class="nav-right">
                             <c:if test="${user != null}">
-                            <li class="dropdown dropdown-animated scale-left">
-                                <a href="javascript:void(0);" data-toggle="dropdown">
-                                    <i class="anticon anticon-bell notification-badge"></i>
-                                </a>
-                              
-                                <div class="dropdown-menu pop-notification">
-                                    <div class="p-v-15 p-h-25 border-bottom d-flex justify-content-between align-items-center">
-                                        <p class="text-dark font-weight-semibold m-b-0">
-                                            <i class="anticon anticon-bell"></i>
-                                            <span class="m-l-10">Notification</span>
-                                        </p>
-                                        <a class="btn-sm btn-default btn" href="javascript:void(0);">
-                                            <small>View All</small>
-                                        </a>
-                                    </div>
-                                    <div class="relative">
-                                        <div class="overflow-y-auto relative scrollable" style="max-height: 300px">
-                                            <c:if test="${user != null}">
-                                               <%      
-                                                    NotificationDAO nd = new NotificationDAO();
-                                                    User user = (User)session.getAttribute("user");
-                                                    ArrayList<Notification> notificationList = nd.getTop10Notification(user.getUserId());
-                                                    pageContext.setAttribute("notificationList", notificationList);
-                                                %>
-                                                </c:if>
-                                            <c:forEach items="${notificationList}" var="noti">     
-                                                <c:if test="${noti.sourceUserId != noti.targetUserId}">
-                                                <c:choose>
-                                                <c:when test="${noti.sourcePostId != 0}">
-                                                     <p class="link" style="float:right;margin-right: 30px" onclick="deleteNotification(${noti.notificationId})">x</p>
-                                                    
-                                                    <a href="postDetail?postId=${noti.sourcePostId}" class="dropdown-item d-block p-15 border-bottom">                                            
-                                                </c:when>
-                                                 <c:otherwise>
-                                                     <p class="link" style="float:right;margin-right: 30px" onclick="deleteNotification(${noti.notificationId})">x</p>
-                                                    <a href="Profile.jsp" class="dropdown-item d-block p-15 border-bottom">
-                                                    
-                                                   </c:otherwise>
-                                                </c:choose>
-                                                <div class="d-flex">
-                                                    <div class="avatar avatar-blue avatar-icon">
-                                                         <c:choose>
-                                                <c:when test="${noti.sourcePostId != null}">
-                                                      <i class="anticon anticon-project">*</i>
-                                                </c:when>
-                                                 <c:otherwise>
-                                                    <i class="anticon anticon-profile"></i>
-                                                   </c:otherwise>
-                                                </c:choose>
-                                                    </div>
-                                                    <div class="m-l-15">
-                                                        <p class="m-b-0 text-dark">${noti.content} 
-                                                        <p class="m-b-0"><small>${noti.postTime}</small></p>  
-                                                      
-                                                    </div>
-                                                </div>
-                                              </a>
-                                                    </c:if>
-                                            </c:forEach> 
+                                <li class="dropdown dropdown-animated scale-left">
+                                    <a href="javascript:void(0);" data-toggle="dropdown">
+                                        <i class="anticon anticon-bell notification-badge"></i>
+                                    </a>
+
+                                    <div class="dropdown-menu pop-notification">
+                                        <div class="p-v-15 p-h-25 border-bottom d-flex justify-content-between align-items-center">
+                                            <p class="text-dark font-weight-semibold m-b-0">
+                                                <i class="anticon anticon-bell"></i>
+                                                <span class="m-l-10">Notification</span>
+                                            </p>
+                                            <a class="btn-sm btn-default btn" href="javascript:void(0);">
+                                                <small>View All</small>
+                                            </a>
                                         </div>
+                                        <div class="relative">
+                                            <div class="overflow-y-auto relative scrollable" style="max-height: 300px">
+                                                <c:if test="${user != null}">
+                                                    <%      
+                                                         NotificationDAO nd = new NotificationDAO();
+                                                         User user = (User)session.getAttribute("user");
+                                                         ArrayList<Notification> notificationList = nd.getTop10Notification(user.getUserId());
+                                                         pageContext.setAttribute("notificationList", notificationList);
+                                                    %>
+                                                </c:if>
+                                                <c:forEach items="${notificationList}" var="noti">     
+                                                    <c:if test="${noti.sourceUserId != noti.targetUserId}">
+                                                        <c:choose>
+                                                            <c:when test="${noti.sourcePostId != 0}">
+                                                                <p class="link" style="float:right;margin-right: 30px" onclick="deleteNotification(${noti.notificationId})">x</p>
+                                                                <a href="postDetail?postId=${noti.sourcePostId}" class="dropdown-item d-block p-15 border-bottom">                                            
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <p class="link" style="float:right;margin-right: 30px" onclick="deleteNotification(${noti.notificationId})">x</p>
+                                                                    <a href="Profile.jsp" class="dropdown-item d-block p-15 border-bottom">
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                                <div class="d-flex">
+                                                                    <div class="avatar avatar-blue avatar-icon">
+                                                                        <c:choose>
+                                                                            <c:when test="${noti.sourcePostId != null}">
+                                                                                <i class="anticon anticon-project">*</i>
+                                                                            </c:when>
+                                                                            <c:otherwise>
+                                                                                <i class="anticon anticon-profile"></i>
+                                                                            </c:otherwise>
+                                                                        </c:choose>
+                                                                    </div>
+                                                                    <div class="m-l-15" style="max-width: 200px; word-wrap: break-word; white-space: normal;">
+                                                                        <p class="m-b-0 text-dark">${noti.content}</p> 
+                                                                        <p class="m-b-0"><small>${noti.postTime}</small></p>  
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+                                                        </c:if>
+                                                    </c:forEach> 
+                                            </div>
+                                        </div>
+
                                     </div>
-                                </div>
-                            </li>
+                                </li>
                             </c:if>
                             <jsp:include page="${param.accountHeader}" />
                             <li>
@@ -235,29 +246,29 @@
         <script src="assets/js/vendors.min.js"></script>
 
         <script src="assets/js/app.min.js"></script>
-         <style>
+        <style>
             .link {
-              color: red;
-              text-decoration: underline;
-              cursor: pointer;
+                color: red;
+                text-decoration: underline;
+                cursor: pointer;
             }
         </style>
-        
-                  <script>
-                function deleteNotification(notificationId) {
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('GET', 'DeleteNotification?NotificationId=' + notificationId, true);
-                    xhr.onreadystatechange = function() {
-                        if (xhr.readyState == 4 && xhr.status == 200) {
-                            // Handle the response from the server
-                            console.log('Notification deleted successfully');
-                            // Refresh the page
-                            window.location.reload();
-                        }
-                    };
-                    xhr.send();
-                }
-                </script>
+
+        <script>
+                                                                        function deleteNotification(notificationId) {
+                                                                            var xhr = new XMLHttpRequest();
+                                                                            xhr.open('GET', 'DeleteNotification?NotificationId=' + notificationId, true);
+                                                                            xhr.onreadystatechange = function () {
+                                                                                if (xhr.readyState == 4 && xhr.status == 200) {
+                                                                                    // Handle the response from the server
+                                                                                    console.log('Notification deleted successfully');
+                                                                                    // Refresh the page
+                                                                                    window.location.reload();
+                                                                                }
+                                                                            };
+                                                                            xhr.send();
+                                                                        }
+        </script>
     </body>
-   
+
 </html>

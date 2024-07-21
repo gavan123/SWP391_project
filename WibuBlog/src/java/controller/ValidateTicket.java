@@ -75,10 +75,7 @@ public class ValidateTicket extends HttpServlet {
         HttpSession session = request.getSession();
         TicketDAO td = new TicketDAO();
         PostDAO pd = new PostDAO();
-
         int ticketId = Integer.parseInt((String) request.getParameter("ticketId"));
-        boolean approved = Boolean.parseBoolean((String) request.getParameter("choice"));
-
         if (ticketId <= 0) {
             request.setAttribute("errorMessage", "Failed to retrieve report ID.");
             request.getRequestDispatcher("Error.jsp").forward(request, response);

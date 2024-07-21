@@ -145,7 +145,7 @@ public class CreatePost extends HttpServlet {
         }
 
         // Kiểm tra nếu không phải là file ảnh
-        if (submittedFileName != null || !ImageHandler.isImageFile(submittedFileName)) {
+        if (submittedFileName == null || !ImageHandler.isImageFile(submittedFileName)) {
             response.getWriter().println("File " + submittedFileName + " is not an image.");
             return;
         }

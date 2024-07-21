@@ -24,10 +24,10 @@
                     <div class="d-md-flex align-items-center">
                         <div class="text-center text-sm-left ">
 
-                            <div class="test avatar avatar-image" style="width: 150px; height: 100px;border: 2px solid grey;">  
+                            <div class="test avatar avatar-image" style="width: 150px; height: 100px;border: 10px solid <%=rankColor%>;">  
                                 <c:choose>
                                     <c:when test="${user.profilePhoto == null}">
-                                        <form action="UploadPFP" method="post" enctype="multipart/form-data"  >
+                                        <form action="UploadPFP" method="post" enctype="multipart/form-data">
                                             <input type="file" class="upload-input" onchange="this.form.submit()" name="pfp" id="someId">                                       
                                             <div class="upload-text">Upload an image</div>
                                         </form>
@@ -45,8 +45,9 @@
                         </div>                                        
                         <div class="text-center text-sm-left m-v-15 p-l-30">
                             <h2 class="m-b-5">${user.username}</h2>
-                            <i class="text-opacity font-size-15" style="color:<%=rankColor%>" ><b><%=userDAO.getRankByUserId(user.getUserId())%>(<%=userDAO.getUserPointById(user.getUserId())%>)</b></i>
-                            <p class="text-dark m-b-20"><%=role%></p>
+                            <i class="text-opacity font-size-15"><b><%=userDAO.getRankByUserId(user.getUserId())%></b></i>
+                            <p class="text-dark m-0">Point: <%=userDAO.getUserPointById(user.getUserId())%></p>
+                            <p class="text-dark "><%=role%></p>
                         </div>
                     </div>
                 </div>

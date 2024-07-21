@@ -20,7 +20,7 @@
                     </header>
                     <h6 class="card-subtitle mb-2 fw-700 " style="font-size: small !important;">
                         <i class="fas fa-user"></i> 
-                        <a href="#" style="color:blue" accesskey="a">${post.username}</a> | 
+                        <a href="ViewMember?member=${post.username}" style="color:blue" accesskey="a">${post.username}</a> | 
                         <i class="fas fa-clock"></i>
                         <time datetime="${postTime}">${postTime}</time> | 
                         <i class="fas fa-eye"></i> ${post.view}
@@ -111,7 +111,7 @@
              onerror="this.src='assets/images/others/product-3.jpg'">
         <div class="card-body">
             <p class="card-title text-center fw-700 mb-0">
-                <a style="color:blue" href="#">${post.username}</a>
+                <a style="color:blue" href="ViewMember?member=${post.username}">${post.username}</a>
             </p>
             <p class="text-center mb-0">
                 <span class="font-status text-capitalize" 

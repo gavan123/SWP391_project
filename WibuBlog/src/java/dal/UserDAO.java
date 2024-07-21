@@ -641,6 +641,12 @@ public class UserDAO extends DBContext {
         }
 
     }
-
+    public static void main(String[] args) {
+          String memberName = "quocanh123";
+        UserDAO userDAO = new UserDAO();
+        User user = userDAO.getUserByUsername(memberName);
+        
+        System.out.println(user.getEmail());
+    }
 
 }

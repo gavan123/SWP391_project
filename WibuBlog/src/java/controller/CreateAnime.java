@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,10 +19,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import model.Anime;
-import model.Media;
 import model.User;
 import utility.ImageHandler;
 
+
+@MultipartConfig
 @WebServlet("/createAnime")
 public class CreateAnime extends HttpServlet {
 

@@ -27,7 +27,7 @@
                     </a>
                 </li>
             </c:if>
-                    <c:if test="${user != null && user.roleId == 2}">
+            <c:if test="${user != null && user.roleId == 2}">
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle" href="ListReport">
                         <span class="icon-holder">
@@ -62,6 +62,18 @@
                     </c:forEach>
                 </ul>
             </li>
+            
+<!--            <li class="nav-item dropdown">
+                <a class="dropdown-toggle" href="ListAnime">
+                    <span class="icon-holder">
+                       <i class="anticon anticon-book"></i>
+                    </span>
+                    <span class="title">List Anime</span>
+                   
+                </a>
+            </li>
+            -->
+            
             <c:if test="${user != null && user.roleId ==2}">
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle" href="javascript:void(0);">
@@ -80,27 +92,27 @@
                     </ul>
                 </li>
             </c:if>
-           
-         
-<!--            <li class="nav-item dropdown">
-                <a class="dropdown-toggle" href="javascript:void(0);">
-                    <span class="icon-holder">
-                        <i class="anticon anticon-lock"></i>
-                    </span>
-                    <span class="title">Authentication</span>
-                    <span class="arrow">
-                        <i class="arrow-icon"></i>
-                    </span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a href="">Login 1</a>
-                    </li>
-                    <li>
-                        <a href="">Login 2</a>
-                    </li>
-                </ul>
-            </li>-->
+
+
+            <!--            <li class="nav-item dropdown">
+                            <a class="dropdown-toggle" href="javascript:void(0);">
+                                <span class="icon-holder">
+                                    <i class="anticon anticon-lock"></i>
+                                </span>
+                                <span class="title">Authentication</span>
+                                <span class="arrow">
+                                    <i class="arrow-icon"></i>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="">Login 1</a>
+                                </li>
+                                <li>
+                                    <a href="">Login 2</a>
+                                </li>
+                            </ul>
+                        </li>-->
         </ul>
     </div>
 </div>

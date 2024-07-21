@@ -2,9 +2,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%@ page import="model.User" %>
-<%@ page import="model.Media" %>
 <%@ page import="dal.UserDAO" %>
-<%@ page import="dal.MediaDAO" %>
 
 
 <c:choose>

@@ -2,9 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="model.User" %>
-<%@ page import="model.Media" %>
 <%@ page import="dal.UserDAO" %>
-<%@ page import="dal.MediaDAO" %>
 <%@ page import="dal.PostDAO" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="model.PostDetail" %>
@@ -23,7 +21,6 @@
                 <div class="col-md-7">
                     <div class="d-md-flex align-items-center">
                         <div class="text-center text-sm-left ">
-
                             <div class="test avatar avatar-image" style="width: 150px; height: 100px;border: 10px solid <%=rankColor%>;">  
                                 <c:choose>
                                     <c:when test="${user.profilePhoto == null}">
@@ -40,7 +37,6 @@
                                         </form>               
                                     </c:otherwise>
                                 </c:choose>
-
                             </div>
                         </div>                                        
                         <div class="text-center text-sm-left m-v-15 p-l-30">

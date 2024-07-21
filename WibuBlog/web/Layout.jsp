@@ -97,17 +97,16 @@
                                             <div class="overflow-y-auto relative scrollable" style="max-height: 300px">
                                                 <c:if test="${user != null}">
                                                     <%      
-                                                         NotificationDAO nd = new NotificationDAO();
-                                                         User user = (User)session.getAttribute("user");
-                                                         ArrayList<Notification> notificationList = nd.getTop10Notification(user.getUserId());
-                                                         pageContext.setAttribute("notificationList", notificationList);
+                                                        NotificationDAO nd = new NotificationDAO();
+                                                        User user = (User)session.getAttribute("user");
+                                                        ArrayList<Notification> notificationList = nd.getTop10Notification(user.getUserId());
+                                                        pageContext.setAttribute("notificationList", notificationList);
                                                     %>
                                                 </c:if>
                                                 <c:forEach items="${notificationList}" var="noti">     
                                                     <c:if test="${noti.sourceUserId != noti.targetUserId}">
                                                         <c:choose>
                                                             <c:when test="${noti.sourcePostId != 0}">
-                                                                <p class="link" style="float:right;margin-right: 30px" onclick="deleteNotification(${noti.notificationId})">x</p>
                                                                 <a href="postDetail?postId=${noti.sourcePostId}" class="dropdown-item d-block p-15 border-bottom">                                            
                                                                 </c:when>
                                                                 <c:otherwise>
@@ -126,10 +125,11 @@
                                                                             </c:otherwise>
                                                                         </c:choose>
                                                                     </div>
-                                                                    <div class="m-l-15" style="max-width: 200px; word-wrap: break-word; white-space: normal;">
+                                                                    <div class="m-l-15" style="max-width: 100%; word-wrap: break-word; white-space: normal;">
                                                                         <p class="m-b-0 text-dark">${noti.content}</p> 
                                                                         <p class="m-b-0"><small>${noti.postTime}</small></p>  
                                                                     </div>
+                                                                    <p class="link" style="margin: 0px 0px 8px 12px"  onclick="deleteNotification(${noti.notificationId})">x</p>
                                                                 </div>
                                                             </a>
                                                         </c:if>

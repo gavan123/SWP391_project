@@ -51,7 +51,8 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    public int getUserPointById(int userID){
+
+    public int getUserPointById(int userID) {
         try {
             String sql = "Select * from [user] where userid = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -65,7 +66,8 @@ public class UserDAO extends DBContext {
         }
         return 0;
     }
-    public void setUserStatusByUserId(int userId, String userStatus){
+
+    public void setUserStatusByUserId(int userId, String userStatus) {
         try {
             String sql = "update [user] set Status = ? where userid = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -77,8 +79,8 @@ public class UserDAO extends DBContext {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-     public void setUserStatusByUsername(String username, String userStatus){
+
+    public void setUserStatusByUsername(String username, String userStatus) {
         try {
             String sql = "update [user] set [Status] = ? where [username] = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -90,7 +92,7 @@ public class UserDAO extends DBContext {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-     
+
     public ArrayList<User> getTop10User() {
         try {
             String sql = "select top(10) * from [user]";
@@ -119,20 +121,25 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    
-    public void subtractUserPointByUserId(int userId){
+
+    public void subtractUserPointByUserId(int userId) {
         try {
-            String sql = "update [user] set point = point - 1 where userid = ?";
+            String sql = "UPDATE [user]\n"
+                    + "SET point = CASE \n"
+                    + "              WHEN point > 0 THEN point - 1 \n"
+                    + "              ELSE 0 \n"
+                    + "            END\n"
+                    + "WHERE userid = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, userId);
             ps.execute();
             ps.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }     
+        }
     }
-    
-       public void addUserPointByUserId(int userId){
+
+    public void addUserPointByUserId(int userId) {
         try {
             String sql = "update [user] set point = point + 1 where userid = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -141,23 +148,24 @@ public class UserDAO extends DBContext {
             ps.close();
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }     
+        }
     }
-       
-    public String getUserStatusByUserId(int userId){
+
+    public String getUserStatusByUserId(int userId) {
         try {
             String sql = "select * from [user] where userid = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 return rs.getString("Status");
-            }     
+            }
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
+
     public int getUserTotalPostLast3Days(int userId) {
         try {
             int totalUserPost = 0;
@@ -189,7 +197,7 @@ public class UserDAO extends DBContext {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             ArrayList<User> list = new ArrayList();
-            while(rs.next()){
+            while (rs.next()) {
                 list.add(new User(rs.getInt("UserId"),
                         rs.getString("Username"),
                         rs.getString("Password"),
@@ -211,7 +219,8 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    public void setUserRoleIdByUserId(int userId,int roleId){
+
+    public void setUserRoleIdByUserId(int userId, int roleId) {
         try {
             String sql = "Update [user] set roleid = ? where userid = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -222,8 +231,9 @@ public class UserDAO extends DBContext {
         } catch (SQLException ex) {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
+
     public User getUserById(int userId) {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -371,7 +381,7 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    
+
     public User getUserByUserId(int userId) {
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -539,8 +549,8 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    
-    public String getRankByUserId(int userId){
+
+    public String getRankByUserId(int userId) {
         try {
             String sql = "select * from [rank] where rankid = (select rankid from [user] where userid = ?)";
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -554,8 +564,6 @@ public class UserDAO extends DBContext {
         }
         return null;
     }
-    
-   
 
     public String getRoleByRoleID(int roleID) {
         try {
@@ -641,11 +649,12 @@ public class UserDAO extends DBContext {
         }
 
     }
+
     public static void main(String[] args) {
-          String memberName = "quocanh123";
+        String memberName = "quocanh123";
         UserDAO userDAO = new UserDAO();
         User user = userDAO.getUserByUsername(memberName);
-        
+
         System.out.println(user.getEmail());
     }
 

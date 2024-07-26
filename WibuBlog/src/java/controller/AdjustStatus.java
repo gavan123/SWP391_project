@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import model.Ban;
 import model.User;
@@ -54,7 +55,8 @@ public class AdjustStatus extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
         UserDAO ud = new UserDAO();
         NotificationDAO nd = new NotificationDAO();
         HttpSession session = request.getSession();
@@ -75,7 +77,7 @@ public class AdjustStatus extends HttpServlet {
                 nd.createBanNotification(currentUser.getUserId(),
                         targetUserId,
                         banReason,
-                        LocalDateTime.now().plus(1, ChronoUnit.HOURS).toString());
+                        LocalDateTime.now().plus(1, ChronoUnit.HOURS).format(formatter));
                 response.sendRedirect("AllMember.jsp");
                 return;
             }
@@ -91,7 +93,7 @@ public class AdjustStatus extends HttpServlet {
                 nd.createBanNotification(currentUser.getUserId(),
                         targetUserId,
                         banReason,
-                        LocalDateTime.now().plus(3, ChronoUnit.HOURS).toString());
+                        LocalDateTime.now().plus(3, ChronoUnit.HOURS).format(formatter));
                 response.sendRedirect("AllMember.jsp");
                 return;
             }
@@ -106,7 +108,7 @@ public class AdjustStatus extends HttpServlet {
                 nd.createBanNotification(currentUser.getUserId(),
                         targetUserId,
                         banReason,
-                        LocalDateTime.now().plus(1, ChronoUnit.DAYS).toString());
+                        LocalDateTime.now().plus(1, ChronoUnit.DAYS).format(formatter));
                 response.sendRedirect("AllMember.jsp");
                 return;
             }
@@ -121,7 +123,7 @@ public class AdjustStatus extends HttpServlet {
                 nd.createBanNotification(currentUser.getUserId(),
                         targetUserId,
                         banReason,
-                        LocalDateTime.now().plus(3, ChronoUnit.DAYS).toString());
+                        LocalDateTime.now().plus(3, ChronoUnit.DAYS).format(formatter));
                 response.sendRedirect("AllMember.jsp");
                 return;
             }
@@ -136,7 +138,7 @@ public class AdjustStatus extends HttpServlet {
                 nd.createBanNotification(currentUser.getUserId(),
                         targetUserId,
                         banReason,
-                        LocalDateTime.now().plus(5, ChronoUnit.DAYS).toString());
+                        LocalDateTime.now().plus(5, ChronoUnit.DAYS).format(formatter));
                 response.sendRedirect("AllMember.jsp");
                 return;
             }
@@ -151,7 +153,7 @@ public class AdjustStatus extends HttpServlet {
                 nd.createBanNotification(currentUser.getUserId(),
                         targetUserId,
                         banReason,
-                        LocalDateTime.now().plus(1, ChronoUnit.WEEKS).toString());
+                        LocalDateTime.now().plus(1, ChronoUnit.WEEKS).format(formatter));
                 response.sendRedirect("AllMember.jsp");
                 return;
             }
@@ -166,11 +168,11 @@ public class AdjustStatus extends HttpServlet {
                 nd.createBanNotification(currentUser.getUserId(),
                         targetUserId,
                         banReason,
-                        LocalDateTime.now().plus(2, ChronoUnit.WEEKS).toString());
+                        LocalDateTime.now().plus(2, ChronoUnit.WEEKS).format(formatter));
                 response.sendRedirect("AllMember.jsp");
                 return;
             }
-        } else if (request.getParameter("Action") != null){
+        } else if (request.getParameter("Action") != null) {
             int targetUserId = Integer.parseInt(request.getParameter("UserId"));
             ud.setUserStatusByUserId(targetUserId, "active");
             response.sendRedirect("AllMember.jsp");

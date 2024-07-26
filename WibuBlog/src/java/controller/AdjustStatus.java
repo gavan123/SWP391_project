@@ -66,6 +66,21 @@ public class AdjustStatus extends HttpServlet {
             String banReason = request.getParameter("banReason");
             int targetUserId = Integer.parseInt(request.getParameter("userId"));
             String banTime = request.getParameter("banTime");
+             if (banTime.equals("1minute")) {
+                Ban ban = new Ban(targetUserId,
+                        currentUser.getUserId(),
+                        banReason,
+                        LocalDateTime.now(),
+                        LocalDateTime.now().plus(1, ChronoUnit.MINUTES));
+                ud.setUserStatusByUserId(targetUserId, "deactive");
+                bd.insertManualBan(ban);
+                nd.createBanNotification(currentUser.getUserId(),
+                        targetUserId,
+                        banReason,
+                        LocalDateTime.now().plus(1, ChronoUnit.MINUTES).format(formatter));
+                response.sendRedirect("AllMember.jsp");
+                return;
+            }
             if (banTime.equals("1hour")) {
                 Ban ban = new Ban(targetUserId,
                         currentUser.getUserId(),

@@ -124,12 +124,13 @@ public class UserDAO extends DBContext {
 
     public void subtractUserPointByUserId(int userId) {
         try {
-            String sql = "UPDATE [user]\n"
-                    + "SET point = CASE \n"
-                    + "              WHEN point > 0 THEN point - 1 \n"
-                    + "              ELSE 0 \n"
-                    + "            END\n"
-                    + "WHERE userid = ?";
+            String sql = """
+                         UPDATE [user]
+                         SET point = CASE 
+                                       WHEN point > 0 THEN point - 1 
+                                       ELSE 0 
+                                     END
+                         WHERE userid = ?""";
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, userId);
             ps.execute();

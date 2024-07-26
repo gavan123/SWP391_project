@@ -89,6 +89,7 @@
                                         <label for="time_interval">Choose a time interval:</label>
                                         <br>
                                         <select name="banTime" required>
+                                            <option value="1minute">1 Minute</option>
                                             <option value="1hour">1 Hour</option>
                                             <option value="3hour">3 Hour</option>
                                             <option value="1day">1 Day</option>

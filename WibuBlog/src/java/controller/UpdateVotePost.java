@@ -118,6 +118,9 @@ public class UpdateVotePost extends HttpServlet {
                     ud.addUserPointByUserId(postOwnerId);
                     nd.createUpvoteNotification(postId, userId, postOwnerId);
                 } else {
+                    if (updateSuccess) {
+                        
+                    }
                     ud.subtractUserPointByUserId(postOwnerId);
                     nd.createDownvoteNotification(postId, userId, postOwnerId);
                 }

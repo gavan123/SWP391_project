@@ -83,52 +83,53 @@ public class UpdateVotePost extends HttpServlet {
         User userSession = (User) session.getAttribute("user");
         NotificationDAO nd = new NotificationDAO();
         UserDAO ud = new UserDAO();
-
         PostDAO postDAO = new PostDAO();
-        // Kiểm tra các tham số từ request
-        if (userSession == null || postIdStr == null || postIdStr.isEmpty()
-                || voteValueStr == null || voteValueStr.isEmpty()) {
+
+// Check request parameters and user session
+        if (userSession == null || postIdStr == null || postIdStr.isEmpty() || voteValueStr == null || voteValueStr.isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
         try {
-            // Chuyển đổi các tham số thành số nguyên
+            // Convert parameters to integers
             int postId = Integer.parseInt(postIdStr);
             int voteValue = Integer.parseInt(voteValueStr);
             int userId = userSession.getUserId();
 
-            // Kiểm tra nếu người dùng đã bầu chọn cho bài đăng này
+            // Check if user has already voted on this post
             boolean isPostVoted = postDAO.hasUserVoted(userId, postId);
             if (!isPostVoted) {
-                // Nếu chưa bầu chọn, thêm phiếu bầu mới
+                // Add new vote
                 postDAO.addUserVote(userId, postId, voteStatusStr);
             } else {
-                // Nếu đã bầu chọn, kiểm tra trạng thái bầu chọn và cập nhật lại
-                postDAO.updateUserVote(userId, postId, voteStatusStr);          
+                // Update existing vote
+                postDAO.updateUserVote(userId, postId, voteStatusStr);
             }
-           
-            // Cập nhật giá trị phiếu bầu của bài đăng
+
+            // Update the vote value of the post
             boolean updateSuccess = postDAO.updateVote(postId, voteValue);
-            
-            if(updateSuccess){
-                if(voteStatusStr.equals("upvote")){
-                ud.addUserPointByUserId(postDAO.getUserIdByPostId(postId));
-                nd.createUpvoteNotification(postId, userId, postDAO.getUserIdByPostId(postId));
+
+            if (updateSuccess) {
+                int postOwnerId = postDAO.getUserIdByPostId(postId);
+
+                // Adjust user points and create notifications based on vote status
+                if (voteStatusStr.equals("upvote")) {
+                    ud.addUserPointByUserId(postOwnerId);
+                    nd.createUpvoteNotification(postId, userId, postOwnerId);
+                } else {
+                    ud.subtractUserPointByUserId(postOwnerId);
+                    nd.createDownvoteNotification(postId, userId, postOwnerId);
                 }
-                else{
-                    ud.subtractUserPointByUserId(postDAO.getUserIdByPostId(postId));
-                    nd.createDownvoteNotification(postId, userId, postDAO.getUserIdByPostId(postId));
-                }
-            response.setStatus(HttpServletResponse.SC_OK);
-            }
-            else{
-               response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
         } catch (NumberFormatException ex) {
-            // Xử lý ngoại lệ nếu không thể chuyển đổi thành số nguyên và thiết lập trạng thái phản hồi là Bad Request
+            // Handle exception if parameters cannot be converted to integers
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
+
     }
 
     @Override

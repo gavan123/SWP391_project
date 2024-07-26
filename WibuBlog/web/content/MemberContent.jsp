@@ -59,7 +59,6 @@
             <div class="card">
                 <div class="card-body">
                     <h5>Bio</h5>     
-
                     <div class="w3-container w3-pale-blue w3-leftbar w3-border-blue">
                         <p>${member.bio}</p>
                         <hr style="color: aqua">

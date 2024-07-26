@@ -110,7 +110,6 @@
                                                                 <a href="postDetail?postId=${noti.sourcePostId}" class="dropdown-item d-block p-15 border-bottom">                                            
                                                                 </c:when>
                                                                 <c:otherwise>
-                                                                    <p class="link" style="float:right;margin-right: 30px" onclick="deleteNotification(${noti.notificationId})">x</p>
                                                                     <a href="Profile.jsp" class="dropdown-item d-block p-15 border-bottom">
                                                                     </c:otherwise>
                                                                 </c:choose>

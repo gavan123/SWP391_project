@@ -57,7 +57,7 @@ public class Ticket extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if(request.getParameter("Dashboard").equals("a")){
+        if(request.getParameter("Dashboard").equals("b")){
         response.sendRedirect("AllTicket.jsp");
         }
         else{

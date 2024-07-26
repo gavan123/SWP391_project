@@ -23,7 +23,6 @@
     <filter-mapping>
         <filter-name>AdminFilter</filter-name>
         <url-pattern>/AdminDashboard.jsp</url-pattern>
-        <url-pattern>/AllMemberTicket.jsp</url-pattern>
         <url-pattern>/AllTicket.jsp</url-pattern>
         <url-pattern>/CreateAnime.jsp</url-pattern>
         <url-pattern>/TicketDetail.jsp</url-pattern>
@@ -32,8 +31,7 @@
         <url-pattern>/ApproveTicket</url-pattern>
         <url-pattern>/createAnime</url-pattern>
         <url-pattern>/DashBoard</url-pattern>
-        <url-pattern>/RejectTicket</url-pattern>
-        <url-pattern>/Ticket</url-pattern>
+        <url-pattern>/RejectTicket</url-pattern>    
         <url-pattern>/TicketDetail</url-pattern>
         <url-pattern>/updateAnime</url-pattern>
         <url-pattern>/ValidateTicket</url-pattern>
@@ -49,6 +47,8 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
+        <url-pattern>/AllMemberTicket.jsp</url-pattern>
+        <url-pattern>/Ticket</url-pattern>
         <url-pattern>/AccountSetting.jsp</url-pattern>
         <url-pattern>/AddPhoneNumber.jsp</url-pattern>
         <url-pattern>/ChangePass</url-pattern>

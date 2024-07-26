@@ -35,6 +35,9 @@
         <h3 class="card-header-h3 fs-16">
             Newest pending tickets
         </h3>
+           <span class="float-right text-uppercase">
+                <a href="CreateTicket">Create ticket</a>
+            </span>
     </div>
     <div class="card-body">
         <ul class="list-group list-group-flush">
@@ -81,9 +84,6 @@
     <div class="card-header">
         <h3 class="card-header-h3 fs-16">
             Resolved tickets
-            <span class="float-right text-uppercase">
-                <a href="question">More</a>
-            </span>
         </h3>
     </div>
     <div class="card-body">

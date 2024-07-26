@@ -193,11 +193,10 @@ public class EditPost extends HttpServlet {
 
         // Thực hiện lưu bài post vào cơ sở dữ liệu
         boolean isPostEdited = postDAO.updatePost(post);
-
+        
+        postDAO.updatePostGenre(postId, genreId);
         // Kiểm tra kết quả và điều hướng người dùng
         if (isPostEdited) {
-            // Lưu thể loại của post
-            postDAO.updatePostGenre(postId, genreId);
 
             // Lưu file ảnh vào thư mục "post"
             if (submittedFileName != null) {
@@ -223,6 +222,7 @@ public class EditPost extends HttpServlet {
                     Thread.currentThread().interrupt();
                 }
             }
+
             NotificationDAO nd = new NotificationDAO();
             nd.createUploadedPostNotification(postId, user.getUserId());
             // Tạo thông báo alert

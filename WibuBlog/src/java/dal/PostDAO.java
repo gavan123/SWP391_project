@@ -201,15 +201,13 @@ public class PostDAO extends DBContext {
     }
 
     public void updatePostGenre(int postID, int genreID) {
-        try {
-            String sql = "UPDATE PostGenre SET GenreID = ? WHERE PostID = ?";
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, postID);
-            ps.setInt(2, genreID);
-            ps.execute();
-            ps.close();
+        String sql = "UPDATE PostGenre SET GenreID = ? WHERE PostID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, genreID);
+            ps.setInt(2, postID);
+            ps.executeUpdate();
         } catch (SQLException ex) {
-            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PostDAO.class.getName()).log(Level.SEVERE, "Error updating PostGenre", ex);
         }
     }
 
@@ -996,7 +994,7 @@ public class PostDAO extends DBContext {
     public static void main(String[] args) {
         PostDAO postDAO = new PostDAO();
         Post post = new Post();
-         post.setPostId(50);
+        post.setPostId(50);
         post.setTitle("Community Article: Favorite Anime Memories");
         post.setCategoryId(11);
         post.setSource("AnimeMemories");
